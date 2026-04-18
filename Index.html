@@ -1,1 +1,828 @@
+<!DOCTYPE html>
 
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>VOYAGR — Premium Travel</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #060810;
+    --bg2: #0b0f1e;
+    --bg3: #101628;
+    --card: rgba(16,22,46,0.72);
+    --border: rgba(120,100,255,0.13);
+    --border2: rgba(80,180,255,0.12);
+    --neon-p: #a259ff;
+    --neon-b: #3ecfff;
+    --neon-g: #39ffbd;
+    --grad: linear-gradient(135deg, #a259ff 0%, #3ecfff 100%);
+    --grad2: linear-gradient(135deg, #3ecfff 0%, #39ffbd 100%);
+    --text: #f0f0ff;
+    --muted: rgba(200,200,255,0.45);
+    --glass: rgba(14,20,48,0.65);
+    --r: 20px;
+    --r2: 14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  html,body{height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--text);overflow:hidden;}
+
+.phone-shell{
+position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+background: radial-gradient(ellipse 80% 60% at 50% 20%, rgba(162,89,255,0.09) 0%, transparent 70%),
+radial-gradient(ellipse 60% 40% at 80% 80%, rgba(62,207,255,0.07) 0%, transparent 60%), #040608;
+}
+.phone{
+width:390px;height:844px;
+background:var(–bg);
+border-radius:50px;
+border:1.5px solid rgba(120,100,255,0.25);
+box-shadow:0 0 0 1px rgba(0,0,0,0.8), 0 40px 120px rgba(0,0,0,0.9),
+inset 0 0 0 1px rgba(255,255,255,0.04),
+0 0 80px rgba(162,89,255,0.15), 0 0 200px rgba(62,207,255,0.06);
+overflow:hidden;position:relative;display:flex;flex-direction:column;
+}
+.island{
+position:absolute;top:13px;left:50%;transform:translateX(-50%);
+width:126px;height:37px;background:#000;border-radius:20px;z-index:100;
+box-shadow:0 0 0 1.5px rgba(255,255,255,0.06);
+}
+
+.screens{display:flex;flex:1;position:relative;overflow:hidden;}
+.screen{
+position:absolute;inset:0;display:flex;flex-direction:column;
+opacity:0;pointer-events:none;transition:opacity .35s cubic-bezier(.4,0,.2,1);
+overflow:hidden;
+}
+.screen.active{opacity:1;pointer-events:all;}
+
+.scroll-area{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:90px;padding-top:60px;}
+.scroll-area::-webkit-scrollbar{display:none;}
+
+.status-bar{
+position:absolute;top:0;left:0;right:0;height:52px;z-index:50;
+display:flex;align-items:flex-end;justify-content:space-between;
+padding:0 28px 8px;
+background:linear-gradient(to bottom, rgba(6,8,16,0.98) 0%, transparent 100%);
+pointer-events:none;
+}
+.status-time{font-family:‘Syne’,sans-serif;font-size:15px;font-weight:700;color:#fff;}
+.status-icons{display:flex;gap:6px;align-items:center;font-size:12px;color:#fff;opacity:.9;}
+
+.nav-bar{
+position:absolute;bottom:0;left:0;right:0;height:84px;z-index:50;
+background:rgba(8,11,24,0.92);
+backdrop-filter:blur(24px) saturate(180%);
+border-top:1px solid var(–border);
+display:flex;align-items:center;justify-content:space-around;
+padding:0 10px 16px;
+box-shadow:0 -1px 0 rgba(162,89,255,0.08), 0 -20px 60px rgba(0,0,0,0.5);
+}
+.nav-item{
+display:flex;flex-direction:column;align-items:center;gap:5px;
+cursor:pointer;padding:8px 18px 0;transition:all .25s ease;
+position:relative;
+}
+.nav-item svg{width:26px;height:26px;transition:all .3s ease;}
+.nav-item span{font-size:10px;font-weight:500;color:var(–muted);transition:color .3s;}
+.nav-item.active span{color:var(–neon-p);}
+.nav-item.active svg{filter:drop-shadow(0 0 8px var(–neon-p));}
+.nav-glow{
+position:absolute;top:-1px;left:50%;transform:translateX(-50%);
+width:40px;height:2px;
+background:var(–grad);border-radius:0 0 4px 4px;
+opacity:0;transition:opacity .3s;box-shadow:0 0 12px var(–neon-p);
+}
+.nav-item.active .nav-glow{opacity:1;}
+
+/* HOME */
+.home-greeting{display:flex;justify-content:space-between;align-items:center;padding:64px 20px 12px;}
+.greeting-text .sub{font-size:12px;color:var(–muted);font-weight:400;text-transform:uppercase;letter-spacing:.12em;}
+.greeting-text .name{font-family:‘Syne’,sans-serif;font-size:22px;font-weight:800;background:var(–grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.notif-btn{
+width:40px;height:40px;border-radius:12px;
+background:var(–card);border:1px solid var(–border);
+display:flex;align-items:center;justify-content:center;
+position:relative;cursor:pointer;
+}
+.notif-dot{position:absolute;top:8px;right:8px;width:7px;height:7px;border-radius:50%;background:var(–neon-p);box-shadow:0 0 8px var(–neon-p);}
+
+.banner{
+margin:0 20px;position:relative;height:210px;overflow:hidden;
+border-radius:var(–r);
+}
+.banner-slide{
+position:absolute;inset:0;opacity:0;transition:opacity .9s ease;
+background-size:cover;background-position:center;
+}
+.banner-slide.active{opacity:1;}
+.banner-slide::after{
+content:’’;position:absolute;inset:0;
+background:linear-gradient(to top, rgba(6,8,16,0.88) 0%, rgba(6,8,16,0.15) 55%, transparent 100%);
+}
+.banner-content{position:absolute;bottom:18px;left:20px;z-index:2;}
+.banner-tag{
+font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;
+color:var(–neon-b);background:rgba(62,207,255,0.12);border:1px solid rgba(62,207,255,0.25);
+padding:3px 10px;border-radius:20px;display:inline-block;margin-bottom:6px;
+}
+.banner-title{font-family:‘Syne’,sans-serif;font-size:22px;font-weight:800;line-height:1.2;color:#fff;}
+.banner-sub{font-size:12px;color:rgba(255,255,255,0.6);margin-top:3px;}
+.banner-dots{position:absolute;bottom:18px;right:18px;display:flex;gap:5px;z-index:2;}
+.banner-dot{height:4px;border-radius:2px;background:rgba(255,255,255,0.3);transition:all .4s ease;}
+.banner-dot.active{width:20px;background:var(–neon-p);box-shadow:0 0 8px var(–neon-p);}
+.banner-dot:not(.active){width:4px;}
+
+.section-label{
+display:flex;justify-content:space-between;align-items:center;
+padding:20px 20px 12px;
+}
+.section-label h3{font-family:‘Syne’,sans-serif;font-size:16px;font-weight:700;}
+.section-label a{font-size:12px;color:var(–neon-p);cursor:pointer;}
+
+.services-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:0 20px;}
+.svc-card{
+display:flex;flex-direction:column;align-items:center;gap:8px;
+padding:14px 8px;background:var(–glass);border:1px solid var(–border);
+border-radius:var(–r2);cursor:pointer;backdrop-filter:blur(12px);
+transition:all .25s ease;position:relative;overflow:hidden;
+}
+.svc-card:active{transform:scale(.95);border-color:rgba(162,89,255,0.4);}
+.svc-icon{width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;}
+.svc-icon svg{width:24px;height:24px;}
+.svc-label{font-size:10px;font-weight:500;color:var(–muted);text-align:center;line-height:1.3;}
+
+.feed-card{
+margin:0 20px 16px;background:var(–card);border:1px solid var(–border);
+border-radius:var(–r);overflow:hidden;backdrop-filter:blur(12px);
+}
+.feed-header{display:flex;align-items:center;gap:10px;padding:14px 14px 10px;}
+.feed-avatar-ring{
+width:40px;height:40px;border-radius:50%;
+background:var(–grad);padding:2px;flex-shrink:0;
+}
+.feed-avatar-inner{
+width:100%;height:100%;border-radius:50%;
+background:var(–bg);display:flex;align-items:center;justify-content:center;
+font-size:18px;border:1.5px solid var(–bg);
+}
+.feed-user{flex:1;}
+.feed-user strong{font-size:13px;font-weight:600;display:block;}
+.feed-user span{font-size:11px;color:var(–muted);}
+.feed-more{color:var(–muted);font-size:20px;cursor:pointer;line-height:1;padding:4px;}
+.feed-visual{
+width:100%;height:200px;
+display:flex;align-items:center;justify-content:center;
+font-size:80px;position:relative;overflow:hidden;
+}
+.feed-body{padding:12px 14px;}
+.feed-desc{font-size:13px;line-height:1.6;color:rgba(220,220,255,0.8);margin-bottom:12px;}
+.feed-actions{display:flex;gap:6px;align-items:center;}
+.feed-action{
+display:flex;align-items:center;gap:5px;padding:7px 12px;border-radius:20px;
+background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);
+cursor:pointer;transition:all .2s;font-size:12px;color:var(–muted);
+}
+.feed-action svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;}
+.feed-action.liked{color:#ff4e8a;border-color:rgba(255,78,138,0.25);background:rgba(255,78,138,0.08);}
+.feed-action.liked svg{fill:#ff4e8a;stroke:#ff4e8a;filter:drop-shadow(0 0 5px #ff4e8a);}
+.feed-loc{font-size:11px;color:var(–neon-b);margin-bottom:6px;display:flex;align-items:center;gap:4px;}
+
+/* MAP */
+.map-container{flex:1;position:relative;background:#080d1e;overflow:hidden;}
+.map-bg{
+position:absolute;inset:0;
+background:radial-gradient(ellipse 50% 40% at 40% 55%, rgba(62,207,255,0.06) 0%, transparent 60%),
+radial-gradient(ellipse 40% 30% at 70% 35%, rgba(162,89,255,0.08) 0%, transparent 55%),#080d1e;
+}
+.map-header{
+position:absolute;top:0;left:0;right:0;z-index:10;
+padding:54px 20px 12px;
+background:linear-gradient(to bottom, rgba(6,8,16,.98) 65%, transparent);
+pointer-events:none;
+}
+.map-search{
+display:flex;align-items:center;gap:10px;pointer-events:all;
+background:rgba(14,20,44,0.85);border:1px solid var(–border);
+border-radius:14px;padding:12px 16px;backdrop-filter:blur(20px);
+}
+.map-search input{flex:1;background:none;border:none;outline:none;font:500 14px ‘DM Sans’,sans-serif;color:var(–text);}
+.map-search input::placeholder{color:var(–muted);}
+.map-search svg{width:18px;height:18px;stroke:var(–muted);fill:none;stroke-width:2;}
+.map-filter-row{display:flex;gap:8px;margin-top:10px;overflow-x:auto;padding-bottom:4px;pointer-events:all;}
+.map-filter-row::-webkit-scrollbar{display:none;}
+.map-chip{
+display:flex;align-items:center;gap:5px;white-space:nowrap;
+padding:6px 14px;border-radius:20px;font-size:12px;font-weight:500;
+border:1px solid var(–border);background:var(–glass);cursor:pointer;
+backdrop-filter:blur(10px);transition:all .2s;color:var(–muted);
+}
+.map-chip.active{background:rgba(162,89,255,0.15);border-color:rgba(162,89,255,0.4);color:var(–neon-p);}
+.pin{position:absolute;cursor:pointer;transform:translate(-50%,-100%);transition:transform .2s;}
+.pin:active{transform:translate(-50%,-108%) scale(1.05);}
+.pin-inner{
+display:flex;align-items:center;gap:5px;padding:6px 11px;border-radius:20px;
+font-size:11px;font-weight:700;color:#fff;
+box-shadow:0 4px 20px rgba(0,0,0,0.5);white-space:nowrap;backdrop-filter:blur(8px);
+}
+.pin-tail{width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;position:absolute;bottom:-8px;left:50%;transform:translateX(-50%);}
+.pin-rest{background:rgba(162,89,255,0.9);}
+.pin-tour{background:rgba(62,207,255,0.9);}
+.pin-gem{background:rgba(57,255,189,0.9);}
+.pin-tail-rest{border-top:8px solid rgba(162,89,255,0.9);}
+.pin-tail-tour{border-top:8px solid rgba(62,207,255,0.9);}
+.pin-tail-gem{border-top:8px solid rgba(57,255,189,0.9);}
+.map-popup{
+position:absolute;bottom:90px;left:20px;right:20px;z-index:20;
+background:rgba(14,20,46,0.95);border:1px solid var(–border);
+border-radius:var(–r);overflow:hidden;backdrop-filter:blur(24px);
+box-shadow:0 20px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(162,89,255,0.1);
+display:none;
+}
+.map-popup.visible{display:block;animation:popUp .3s cubic-bezier(.34,1.56,.64,1);}
+@keyframes popUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.popup-visual{width:100%;height:120px;display:flex;align-items:center;justify-content:center;font-size:56px;background:linear-gradient(135deg,#1a1f3a,#0d1230);}
+.popup-body{padding:14px;}
+.popup-stars{color:#ffcc00;font-size:12px;display:flex;align-items:center;gap:4px;margin-bottom:4px;}
+.popup-name{font-family:‘Syne’,sans-serif;font-size:16px;font-weight:700;margin-bottom:2px;}
+.popup-loc{font-size:11px;color:var(–muted);}
+.popup-close{
+position:absolute;top:10px;right:10px;width:30px;height:30px;border-radius:50%;
+background:rgba(0,0,0,0.5);border:none;cursor:pointer;color:#fff;
+display:flex;align-items:center;justify-content:center;font-size:18px;
+backdrop-filter:blur(8px);
+}
+
+/* REELS */
+.reel{position:absolute;inset:0;display:flex;flex-direction:column;align-items:flex-end;justify-content:flex-end;padding:0 16px 100px 0;}
+.reel-bg{position:absolute;inset:0;background-size:cover;background-position:center;}
+.reel-bg::after{content:’’;position:absolute;inset:0;background:linear-gradient(to top, rgba(5,7,15,0.92) 0%, rgba(5,7,15,0.08) 60%, transparent 100%);}
+.reel-actions{display:flex;flex-direction:column;gap:22px;z-index:2;align-items:center;}
+.reel-action{display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;}
+.reel-action-btn{
+width:48px;height:48px;border-radius:50%;
+background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);
+display:flex;align-items:center;justify-content:center;
+backdrop-filter:blur(8px);transition:all .2s;
+}
+.reel-action-btn:active{transform:scale(.9);}
+.reel-action-btn svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:2;}
+.reel-action span{font-size:12px;color:rgba(255,255,255,0.7);font-weight:500;}
+.reel-info{position:absolute;bottom:90px;left:20px;z-index:2;max-width:70%;}
+.reel-user{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.reel-avi{width:36px;height:36px;border-radius:50%;border:2px solid #fff;background:var(–glass);display:flex;align-items:center;justify-content:center;font-size:16px;}
+.reel-username{font-size:14px;font-weight:600;color:#fff;}
+.reel-follow{font-size:11px;color:var(–neon-b);margin-left:4px;}
+.reel-desc{font-size:13px;color:rgba(255,255,255,0.85);line-height:1.5;margin-bottom:8px;}
+.reel-tag{font-size:12px;color:var(–neon-p);}
+.reel-music{display:flex;align-items:center;gap:7px;font-size:11px;color:rgba(255,255,255,0.6);margin-top:8px;}
+.music-disc{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#a259ff,#3ecfff);display:flex;align-items:center;justify-content:center;animation:spin 3s linear infinite;font-size:12px;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.reel-progress{position:absolute;top:52px;left:0;right:0;z-index:10;display:flex;gap:2px;padding:0 10px;}
+.reel-prog-bar{height:2px;flex:1;background:rgba(255,255,255,0.25);border-radius:1px;overflow:hidden;}
+.reel-prog-fill{height:100%;background:#fff;border-radius:1px;width:0;}
+.reel-prog-fill.done{width:100%;}
+.reel-prog-fill.active{animation:fillBar 6s linear forwards;}
+@keyframes fillBar{from{width:0}to{width:100%}}
+
+/* PROFILE */
+.profile-header-bg{
+height:160px;position:relative;
+background:linear-gradient(135deg, rgba(162,89,255,0.3) 0%, rgba(62,207,255,0.2) 100%);
+overflow:hidden;
+}
+.profile-header-bg::before{
+content:’’;position:absolute;inset:0;
+background:url(“data:image/svg+xml,%3Csvg width=‘60’ height=‘60’ viewBox=‘0 0 60 60’ xmlns=‘http://www.w3.org/2000/svg’%3E%3Cg fill=‘none’%3E%3Cg fill=’%23a259ff’ fill-opacity=‘0.07’%3E%3Cpath d=‘M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z’/%3E%3C/g%3E%3C/g%3E%3C/svg%3E”);
+}
+.profile-avatar-wrap{position:absolute;bottom:-36px;left:24px;}
+.profile-avatar{
+width:72px;height:72px;border-radius:50%;
+border:3px solid var(–bg);background:var(–grad);
+display:flex;align-items:center;justify-content:center;font-size:28px;
+box-shadow:0 0 0 2px var(–neon-p), 0 0 20px rgba(162,89,255,0.5);
+}
+.profile-info-row{padding:44px 24px 16px;display:flex;justify-content:space-between;align-items:flex-start;}
+.profile-name{font-family:‘Syne’,sans-serif;font-size:20px;font-weight:800;}
+.profile-handle{font-size:12px;color:var(–muted);margin-top:2px;}
+.profile-bio{font-size:13px;color:rgba(200,200,255,0.7);margin-top:6px;line-height:1.5;}
+.profile-edit-btn{
+padding:8px 16px;border-radius:10px;border:1px solid var(–border);
+background:var(–glass);font:600 12px ‘DM Sans’,sans-serif;color:var(–text);
+cursor:pointer;backdrop-filter:blur(8px);white-space:nowrap;
+}
+.profile-stats{
+display:flex;margin:0 20px;background:var(–glass);border:1px solid var(–border);
+border-radius:var(–r2);overflow:hidden;backdrop-filter:blur(12px);
+}
+.stat-item{flex:1;text-align:center;padding:14px 8px;position:relative;}
+.stat-item:not(:last-child)::after{content:’’;position:absolute;right:0;top:20%;bottom:20%;width:1px;background:var(–border);}
+.stat-num{font-family:‘Syne’,sans-serif;font-size:18px;font-weight:800;background:var(–grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.stat-lbl{font-size:10px;color:var(–muted);margin-top:2px;text-transform:uppercase;letter-spacing:.06em;}
+.add-post-btn{
+margin:16px 20px 4px;display:flex;align-items:center;justify-content:center;gap:8px;
+padding:14px;border-radius:var(–r2);background:var(–grad);border:none;
+font:700 14px ‘Syne’,sans-serif;color:#fff;cursor:pointer;
+box-shadow:0 8px 30px rgba(162,89,255,0.4);transition:all .2s;
+}
+.add-post-btn:active{transform:scale(.98);}
+.profile-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin:16px 0 0;}
+.grid-cell{
+aspect-ratio:1;display:flex;align-items:center;justify-content:center;
+font-size:30px;cursor:pointer;position:relative;overflow:hidden;
+}
+.grid-label{position:absolute;bottom:6px;left:6px;right:6px;font-size:9px;color:rgba(255,255,255,0.6);text-shadow:0 1px 4px rgba(0,0,0,0.9);font-weight:500;}
+
+/* ADD POST MODAL */
+.add-modal{
+position:absolute;inset:0;z-index:200;
+background:rgba(4,6,14,0.96);backdrop-filter:blur(20px);
+display:none;flex-direction:column;
+}
+.add-modal.visible{display:flex;}
+.modal-header{
+display:flex;align-items:center;justify-content:space-between;
+padding:54px 20px 16px;border-bottom:1px solid var(–border);
+}
+.modal-title{font-family:‘Syne’,sans-serif;font-size:18px;font-weight:700;}
+.modal-close{
+width:36px;height:36px;border-radius:10px;background:var(–card);
+border:1px solid var(–border);cursor:pointer;color:var(–muted);
+display:flex;align-items:center;justify-content:center;font-size:20px;line-height:1;
+}
+.modal-publish{
+padding:8px 18px;border-radius:10px;background:var(–grad);border:none;
+font:700 13px ‘Syne’,sans-serif;color:#fff;cursor:pointer;
+box-shadow:0 4px 16px rgba(162,89,255,0.4);
+}
+.upload-zone{
+margin:20px;border-radius:var(–r);border:1.5px dashed rgba(162,89,255,0.35);
+background:rgba(162,89,255,0.04);height:160px;
+display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;
+transition:all .2s;
+}
+.upload-zone:active{border-color:var(–neon-p);background:rgba(162,89,255,0.1);}
+.upload-icon{width:52px;height:52px;border-radius:14px;background:rgba(162,89,255,0.15);border:1px solid rgba(162,89,255,0.3);display:flex;align-items:center;justify-content:center;}
+.upload-icon svg{width:24px;height:24px;stroke:var(–neon-p);fill:none;stroke-width:2;}
+.post-type-row{display:flex;gap:10px;margin:0 20px 14px;}
+.post-type-btn{
+flex:1;padding:10px;border-radius:10px;background:var(–glass);border:1px solid var(–border);
+color:var(–muted);font:500 12px ‘DM Sans’,sans-serif;cursor:pointer;
+display:flex;align-items:center;justify-content:center;gap:6px;transition:all .2s;
+}
+.post-type-btn.selected{background:rgba(162,89,255,0.15);border-color:rgba(162,89,255,0.4);color:var(–neon-p);}
+.desc-area{
+margin:0 20px;background:var(–glass);border:1px solid var(–border);
+border-radius:var(–r2);padding:14px;font:400 14px ‘DM Sans’,sans-serif;
+color:var(–text);resize:none;height:90px;outline:none;line-height:1.6;width:calc(100% - 40px);
+}
+.desc-area::placeholder{color:var(–muted);}
+.tag-row{display:flex;gap:8px;margin:12px 20px 0;flex-wrap:wrap;}
+.post-tag{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:500;background:rgba(62,207,255,0.1);border:1px solid rgba(62,207,255,0.25);color:var(–neon-b);cursor:pointer;}
+</style>
+
+</head>
+<body>
+
+<div class="phone-shell">
+  <div class="phone">
+    <div class="island"></div>
+
+```
+<div class="status-bar">
+  <span class="status-time">9:41</span>
+  <div class="status-icons">
+    <span>▲▲▲</span>&nbsp;<span>WiFi</span>&nbsp;<span>🔋</span>
+  </div>
+</div>
+
+<div class="screens">
+
+  <!-- HOME -->
+  <div class="screen active" id="screen-home">
+    <div class="scroll-area">
+      <div class="home-greeting">
+        <div class="greeting-text">
+          <div class="sub">Good morning ✦</div>
+          <div class="name">Alex Rivera</div>
+        </div>
+        <div class="notif-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(200,200,255,0.7)" stroke-width="2">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+          <div class="notif-dot"></div>
+        </div>
+      </div>
+
+      <div class="banner" id="banner">
+        <div class="banner-slide active" style="background:linear-gradient(135deg,rgba(10,21,53,0.5),rgba(26,8,64,0.5)),url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80');background-size:cover;background-position:center;">
+          <div class="banner-content">
+            <div class="banner-tag">Featured</div>
+            <div class="banner-title">Swiss Alps<br>Adventure</div>
+            <div class="banner-sub">From $2,400 · 7 nights</div>
+          </div>
+        </div>
+        <div class="banner-slide" style="background:linear-gradient(135deg,rgba(5,10,30,0.5),rgba(5,10,30,0.3)),url('https://images.unsplash.com/photo-1519046904884-53103b34b206?w=800&q=80');background-size:cover;background-position:center;">
+          <div class="banner-content">
+            <div class="banner-tag">Trending</div>
+            <div class="banner-title">Maldives<br>Private Escape</div>
+            <div class="banner-sub">From $5,800 · 5 nights</div>
+          </div>
+        </div>
+        <div class="banner-slide" style="background:linear-gradient(135deg,rgba(8,5,20,0.5),rgba(8,5,20,0.3)),url('https://images.unsplash.com/photo-1555400538-5fd41fe3e7e4?w=800&q=80');background-size:cover;background-position:center;">
+          <div class="banner-content">
+            <div class="banner-tag">New</div>
+            <div class="banner-title">Tokyo<br>Neon City Tour</div>
+            <div class="banner-sub">From $1,900 · 10 nights</div>
+          </div>
+        </div>
+        <div class="banner-dots">
+          <div class="banner-dot active"></div>
+          <div class="banner-dot"></div>
+          <div class="banner-dot"></div>
+        </div>
+      </div>
+
+      <div class="section-label"><h3>Services</h3><a>See all →</a></div>
+      <div class="services-grid">
+        <div class="svc-card">
+          <div class="svc-icon" style="background:rgba(162,89,255,0.15);border:1px solid rgba(162,89,255,0.2);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--neon-p)" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          </div>
+          <div class="svc-label">Villa<br>Booking</div>
+        </div>
+        <div class="svc-card">
+          <div class="svc-icon" style="background:rgba(62,207,255,0.15);border:1px solid rgba(62,207,255,0.2);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--neon-b)" stroke-width="1.5"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01M9 7h6M9 11h4"/></svg>
+          </div>
+          <div class="svc-label">eSIM<br>Purchase</div>
+        </div>
+        <div class="svc-card">
+          <div class="svc-icon" style="background:rgba(57,255,189,0.12);border:1px solid rgba(57,255,189,0.2);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--neon-g)" stroke-width="1.5"><rect x="1" y="9" width="22" height="9" rx="3"/><path d="M3 9V7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg>
+          </div>
+          <div class="svc-label">Car<br>Rental</div>
+        </div>
+        <div class="svc-card">
+          <div class="svc-icon" style="background:rgba(255,160,80,0.12);border:1px solid rgba(255,160,80,0.2);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#ffaa55" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          </div>
+          <div class="svc-label">Guided<br>Tours</div>
+        </div>
+      </div>
+
+      <div class="section-label" style="padding-top:24px;"><h3>Travel Feed</h3><a>Latest →</a></div>
+
+      <div class="feed-card">
+        <div class="feed-header">
+          <div class="feed-avatar-ring">
+            <div class="feed-avatar-inner">🌴</div>
+          </div>
+          <div class="feed-user">
+            <strong>@nomad_zara</strong>
+            <span>Bali, Indonesia · 2h ago</span>
+          </div>
+          <span class="feed-more">···</span>
+        </div>
+        <div class="feed-visual" style="background:linear-gradient(135deg,#0a2040,#1a0840,#001830);">🏔️</div>
+        <div class="feed-body">
+          <div class="feed-loc">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Mount Agung Summit
+          </div>
+          <div class="feed-desc">Sunrise at 3,142m — absolutely breathtaking. No filter needed when the world looks like this ✨ Villa booking available through VOYAGR.</div>
+          <div class="feed-actions">
+            <div class="feed-action liked" onclick="this.classList.toggle('liked')">
+              <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              2.4k
+            </div>
+            <div class="feed-action">
+              <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              186
+            </div>
+            <div class="feed-action" style="margin-left:auto;">
+              <svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="feed-card">
+        <div class="feed-header">
+          <div class="feed-avatar-ring">
+            <div class="feed-avatar-inner">🏄</div>
+          </div>
+          <div class="feed-user">
+            <strong>@wave.chaser</strong>
+            <span>Maldives · 5h ago</span>
+          </div>
+          <span class="feed-more">···</span>
+        </div>
+        <div class="feed-visual" style="background:linear-gradient(160deg,#001840,#00304a,#004040);">🌊</div>
+        <div class="feed-body">
+          <div class="feed-loc">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Overwater Villa, North Malé Atoll
+          </div>
+          <div class="feed-desc">Spent the morning surfing crystal clear waters 🔥 VOYAGR connected me with this insane overwater villa — get the eSIM deal too, connection is flawless.</div>
+          <div class="feed-actions">
+            <div class="feed-action" onclick="this.classList.toggle('liked')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              5.1k
+            </div>
+            <div class="feed-action">
+              <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              342
+            </div>
+            <div class="feed-action" style="margin-left:auto;">
+              <svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MAP -->
+  <div class="screen" id="screen-map">
+    <div class="map-container">
+      <div class="map-bg"></div>
+      <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:.06" xmlns="http://www.w3.org/2000/svg">
+        <defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(62,207,255,1)" stroke-width="0.5"/></pattern></defs>
+        <rect width="100%" height="100%" fill="url(#grid)"/>
+      </svg>
+      <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:.12" viewBox="0 0 390 700">
+        <path d="M20,280 Q100,230 180,300 Q260,370 340,310 Q380,290 390,340 L390,480 Q340,450 280,490 Q200,530 140,480 Q80,430 20,460 Z" fill="rgba(162,89,255,0.4)" stroke="rgba(162,89,255,0.5)" stroke-width="1"/>
+        <path d="M60,400 Q120,380 160,420 Q200,460 240,430 Q280,400 320,440 L320,540 Q260,520 200,550 Q140,580 80,540 Z" fill="rgba(62,207,255,0.3)" stroke="rgba(62,207,255,0.4)" stroke-width="1"/>
+      </svg>
+
+      <div class="pin" style="left:38%;top:43%;" onclick="showPopup('🍜','Yuki Ramen','Shibuya, Tokyo','★ 4.9 · 2.1k reviews')">
+        <div class="pin-inner pin-rest">🍜 Ramen</div>
+        <div class="pin-tail pin-tail-rest"></div>
+      </div>
+      <div class="pin" style="left:62%;top:36%;" onclick="showPopup('⛩️','Fushimi Inari','Kyoto, Japan','★ 4.8 · 18k reviews')">
+        <div class="pin-inner pin-tour">⛩️ Temple</div>
+        <div class="pin-tail pin-tail-tour"></div>
+      </div>
+      <div class="pin" style="left:26%;top:58%;" onclick="showPopup('💎','Secret Cove','Hidden Gem · Okinawa','★ 4.9 · 847 reviews')">
+        <div class="pin-inner pin-gem">💎 Hidden</div>
+        <div class="pin-tail pin-tail-gem"></div>
+      </div>
+      <div class="pin" style="left:72%;top:54%;" onclick="showPopup('🌸','Sakura Garden','Nara Park, Japan','★ 4.7 · 5.3k reviews')">
+        <div class="pin-inner pin-tour">🌸 Garden</div>
+        <div class="pin-tail pin-tail-tour"></div>
+      </div>
+      <div class="pin" style="left:50%;top:70%;" onclick="showPopup('🍣','Sushi Omakase','Ginza, Tokyo','★ 5.0 · 312 reviews')">
+        <div class="pin-inner pin-rest">🍣 Sushi</div>
+        <div class="pin-tail pin-tail-rest"></div>
+      </div>
+
+      <div class="map-header">
+        <div class="map-search">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" placeholder="Search destinations…" readonly>
+          <svg viewBox="0 0 24 24"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="16" y2="12"/><line x1="4" y1="18" x2="12" y2="18"/></svg>
+        </div>
+        <div class="map-filter-row">
+          <div class="map-chip active" onclick="setChip(this)">🗺️ All</div>
+          <div class="map-chip" onclick="setChip(this)">🍽️ Restaurants</div>
+          <div class="map-chip" onclick="setChip(this)">🏛️ Attractions</div>
+          <div class="map-chip" onclick="setChip(this)">💎 Hidden Gems</div>
+          <div class="map-chip" onclick="setChip(this)">🛎️ Villas</div>
+        </div>
+      </div>
+
+      <div class="map-popup" id="map-popup">
+        <div class="popup-visual" id="popup-emoji">⛩️</div>
+        <button class="popup-close" onclick="document.getElementById('map-popup').classList.remove('visible')">×</button>
+        <div class="popup-body">
+          <div class="popup-stars">⭐⭐⭐⭐⭐ <span id="popup-rating" style="color:var(--muted);font-size:11px;"></span></div>
+          <div class="popup-name" id="popup-name">Fushimi Inari</div>
+          <div class="popup-loc" id="popup-loc">Kyoto, Japan</div>
+          <div style="margin-top:12px;display:flex;gap:8px;">
+            <button style="flex:1;padding:10px;border-radius:10px;background:var(--grad);border:none;color:#fff;font:700 12px 'Syne',sans-serif;cursor:pointer;">Book Now</button>
+            <button style="padding:10px 14px;border-radius:10px;background:var(--glass);border:1px solid var(--border);color:var(--muted);font:500 12px 'DM Sans',sans-serif;cursor:pointer;">Save ♡</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REELS -->
+  <div class="screen" id="screen-reels" style="background:#000;">
+    <div style="position:absolute;inset:0;">
+      <div class="reel">
+        <div class="reel-bg" style="background:linear-gradient(160deg,#001028,#040028,#100820,#001428);background-image:linear-gradient(rgba(5,10,30,0.2),rgba(5,10,30,0.2)),url('https://images.unsplash.com/photo-1480796927426-f609979314bd?w=600&q=80');background-size:cover;background-position:center;"></div>
+        <div class="reel-progress">
+          <div class="reel-prog-bar"><div class="reel-prog-fill done"></div></div>
+          <div class="reel-prog-bar"><div class="reel-prog-fill active"></div></div>
+          <div class="reel-prog-bar"><div class="reel-prog-fill"></div></div>
+          <div class="reel-prog-bar"><div class="reel-prog-fill"></div></div>
+        </div>
+        <div class="reel-info">
+          <div class="reel-user">
+            <div class="reel-avi">🏔</div>
+            <span class="reel-username">@summit.chaser</span>
+            <span class="reel-follow">+ Follow</span>
+          </div>
+          <div class="reel-desc">Tokyo at night hits different — every street is a scene from a dream 🌃✨</div>
+          <div class="reel-tag">#tokyo #nightlife #voyagr</div>
+          <div class="reel-music">
+            <div class="music-disc">🎵</div>
+            <span>Midnight Neon · Lo-Fi Beats</span>
+          </div>
+        </div>
+        <div class="reel-actions">
+          <div class="reel-action" onclick="this.querySelector('.reel-action-btn').style.background='rgba(255,78,138,0.3)'">
+            <div class="reel-action-btn"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+            <span>48.2k</span>
+          </div>
+          <div class="reel-action">
+            <div class="reel-action-btn"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+            <span>1.2k</span>
+          </div>
+          <div class="reel-action">
+            <div class="reel-action-btn"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></div>
+            <span>Share</span>
+          </div>
+          <div class="reel-action">
+            <div class="reel-action-btn" style="background:var(--grad);border:none;box-shadow:0 0 20px rgba(162,89,255,0.4);">
+              <svg viewBox="0 0 24 24" style="stroke-width:2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROFILE -->
+  <div class="screen" id="screen-profile">
+    <div class="scroll-area" style="padding-top:0;">
+      <div class="profile-header-bg">
+        <div class="profile-avatar-wrap">
+          <div class="profile-avatar">🌍</div>
+        </div>
+      </div>
+      <div class="profile-info-row">
+        <div>
+          <div class="profile-name">Alex Rivera</div>
+          <div class="profile-handle">@alex.voyagr · ✦ Verified</div>
+          <div class="profile-bio">Chasing sunrises & hidden gems 🌅<br>32 countries · 5 continents</div>
+        </div>
+        <button class="profile-edit-btn">Edit Profile</button>
+      </div>
+      <div class="profile-stats">
+        <div class="stat-item"><div class="stat-num">128</div><div class="stat-lbl">Posts</div></div>
+        <div class="stat-item"><div class="stat-num">48.2k</div><div class="stat-lbl">Followers</div></div>
+        <div class="stat-item"><div class="stat-num">312</div><div class="stat-lbl">Following</div></div>
+        <div class="stat-item"><div class="stat-num">32</div><div class="stat-lbl">Countries</div></div>
+      </div>
+      <button class="add-post-btn" onclick="document.getElementById('add-modal').classList.add('visible')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add New Post
+      </button>
+      <div class="profile-grid">
+        <div class="grid-cell" style="background:linear-gradient(135deg,#0a1830,#180840);">🏔️<div class="grid-label">Swiss Alps</div></div>
+        <div class="grid-cell" style="background:linear-gradient(135deg,#001828,#002838);">🌊<div class="grid-label">Maldives</div></div>
+        <div class="grid-cell" style="background:linear-gradient(135deg,#180820,#080828);">🌸<div class="grid-label">Kyoto</div></div>
+        <div class="grid-cell" style="background:linear-gradient(135deg,#0a2020,#001820);">🌴<div class="grid-label">Bali</div></div>
+        <div class="grid-cell" style="background:linear-gradient(135deg,#1a0810,#280818);">🏜️<div class="grid-label">Sahara</div></div>
+        <div class="grid-cell" style="background:linear-gradient(135deg,#080820,#101030);">🌌<div class="grid-label">Northern Lights</div></div>
+        <div class="grid-cell" style="background:linear-gradient(135deg,#1a1208,#281808);">🗺️<div class="grid-label">Marrakech</div></div>
+        <div class="grid-cell" style="background:linear-gradient(135deg,#001018,#001828);">🐋<div class="grid-label">Iceland</div></div>
+        <div class="grid-cell" style="background:linear-gradient(135deg,#100020,#180030);">🎆<div class="grid-label">Dubai</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- NAV BAR -->
+<nav class="nav-bar">
+  <div class="nav-item active" onclick="switchTab(this,'home')">
+    <div class="nav-glow"></div>
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke="var(--neon-p)">
+      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+      <polyline points="9 22 9 12 15 12 15 22"/>
+    </svg>
+    <span>Home</span>
+  </div>
+  <div class="nav-item" onclick="switchTab(this,'map')">
+    <div class="nav-glow"></div>
+    <svg viewBox="0 0 24 24" fill="none" stroke="rgba(140,140,200,0.6)" stroke-width="1.8">
+      <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/>
+      <line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/>
+    </svg>
+    <span>Map</span>
+  </div>
+  <div class="nav-item" onclick="switchTab(this,'reels')">
+    <div class="nav-glow"></div>
+    <svg viewBox="0 0 24 24" fill="none" stroke="rgba(140,140,200,0.6)" stroke-width="1.8">
+      <rect x="2" y="2" width="20" height="20" rx="5"/>
+      <path d="M10 8l6 4-6 4V8z"/>
+    </svg>
+    <span>Reels</span>
+  </div>
+  <div class="nav-item" onclick="switchTab(this,'profile')">
+    <div class="nav-glow"></div>
+    <svg viewBox="0 0 24 24" fill="none" stroke="rgba(140,140,200,0.6)" stroke-width="1.8">
+      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+      <circle cx="12" cy="7" r="4"/>
+    </svg>
+    <span>Profile</span>
+  </div>
+</nav>
+
+<!-- ADD POST MODAL -->
+<div class="add-modal" id="add-modal">
+  <div class="modal-header">
+    <button class="modal-close" onclick="document.getElementById('add-modal').classList.remove('visible')">×</button>
+    <div class="modal-title">New Post</div>
+    <button class="modal-publish">Publish</button>
+  </div>
+  <div style="overflow-y:auto;flex:1;padding-bottom:20px;">
+    <div class="upload-zone">
+      <div class="upload-icon">
+        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      </div>
+      <div style="font-size:14px;font-weight:600;">Upload Media</div>
+      <div style="font-size:11px;color:var(--muted);">Photo or video up to 100MB</div>
+    </div>
+    <div class="post-type-row">
+      <div class="post-type-btn selected" onclick="selectType(this)">📸 Photo</div>
+      <div class="post-type-btn" onclick="selectType(this)">🎬 Video</div>
+      <div class="post-type-btn" onclick="selectType(this)">🎞️ Reel</div>
+    </div>
+    <textarea class="desc-area" placeholder="Tell your story… where did you go? What made it special?"></textarea>
+    <div class="tag-row">
+      <div class="post-tag">#travel</div>
+      <div class="post-tag">#wanderlust</div>
+      <div class="post-tag">#luxury</div>
+      <div class="post-tag">#voyagr</div>
+      <div class="post-tag">+ tag</div>
+    </div>
+    <div style="margin:14px 20px 0;padding:14px;background:var(--glass);border:1px solid var(--border);border-radius:var(--r2);">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:8px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;">Location</div>
+      <div style="display:flex;align-items:center;gap:8px;font-size:14px;color:var(--muted);">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--neon-b)" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Tag a location…
+      </div>
+    </div>
+  </div>
+</div>
+```
+
+  </div>
+</div>
+
+<script>
+  function switchTab(el, screen) {
+    document.querySelectorAll('.nav-item').forEach(n => {
+      n.classList.remove('active');
+      const svg = n.querySelector('svg');
+      if (svg) svg.setAttribute('stroke','rgba(140,140,200,0.6)');
+    });
+    el.classList.add('active');
+    const svg = el.querySelector('svg');
+    if (svg) svg.setAttribute('stroke','var(--neon-p)');
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-'+screen).classList.add('active');
+  }
+
+  // Banner
+  let slide = 0;
+  const slides = document.querySelectorAll('.banner-slide');
+  const dots = document.querySelectorAll('.banner-dot');
+  setInterval(() => {
+    slides[slide].classList.remove('active');
+    dots[slide].classList.remove('active');
+    slide = (slide + 1) % slides.length;
+    slides[slide].classList.add('active');
+    dots[slide].classList.add('active');
+  }, 4000);
+
+  function showPopup(emoji, name, loc, rating) {
+    document.getElementById('popup-emoji').textContent = emoji;
+    document.getElementById('popup-name').textContent = name;
+    document.getElementById('popup-loc').textContent = loc;
+    document.getElementById('popup-rating').textContent = rating;
+    const p = document.getElementById('map-popup');
+    p.classList.remove('visible');
+    requestAnimationFrame(() => requestAnimationFrame(() => p.classList.add('visible')));
+  }
+
+  function setChip(el) {
+    document.querySelectorAll('.map-chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  function selectType(el) {
+    document.querySelectorAll('.post-type-btn').forEach(b => b.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+</script>
+
+</body>
+</html>
