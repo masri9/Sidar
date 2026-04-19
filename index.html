@@ -216,6 +216,36 @@
                 <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                 <span class="nav-text">Profile</span>
             </div>
+            
+                    <div id="reels-page">
+            <div class="reel-video-container">
+                <video class="reel-video" loop muted playsinline autoplay src="https://assets.mixkit.co/videos/preview/mixkit-traveling-on-a-highway-through-the-mountains-42935-large.mp4"></video>
+                <div class="reel-overlay">
+                    <h3>Mountain Road Trip</h3>
+                    <p>Exploring the unknown 🏔️</p>
+                </div>
+                <div class="reel-actions">
+                    <div class="action-item"><span>❤️</span> 12k</div>
+                    <div class="action-item"><span>💬</span> 450</div>
+                    <div class="action-item"><span>✈️</span> Share</div>
+                </div>
+            </div>
+
+            <div class="reel-video-container">
+                <video class="reel-video" loop muted playsinline src="https://assets.mixkit.co/videos/preview/mixkit-man-walking-on-the-beach-at-sunset-4404-large.mp4"></video>
+                <div class="reel-overlay">
+                    <h3>Sunset Vibes</h3>
+                    <p>Peaceful moments in Bali 🌊</p>
+                </div>
+                <div class="reel-actions">
+                    <div class="action-item"><span>❤️</span> 8k</div>
+                    <div class="action-item"><span>💬</span> 210</div>
+                    <div class="action-item"><span>✈️</span> Share</div>
+                </div>
+            </div>
+        </div>
+
+            
         </nav>
     </div>
 
@@ -290,7 +320,36 @@
         function toggleService(id, element) {
             document.querySelectorAll('.service-item').forEach(i => i.classList.remove('active'));
             element.classList.add('active');
+            
+                    function setActive(el, page) {
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            el.classList.add('active');
+
+            const mainContent = document.querySelector('.main-content');
+            const mapPage = document.getElementById('map-page');
+            const reelsPage = document.getElementById('reels-page');
+
+            // إخفاء كل الصفحات أولاً
+            mainContent.style.display = 'none';
+            mapPage.style.display = 'none';
+            reelsPage.style.display = 'none';
+
+            if (page === 'Map') {
+                mapPage.style.display = 'block';
+                setTimeout(initMap, 100);
+            } else if (page === 'Reels') {
+                reelsPage.style.display = 'block';
+                // تشغيل أول فيديو تلقائياً
+                const firstVideo = reelsPage.querySelector('video');
+                if (firstVideo) firstVideo.play();
+            } else if (page === 'Home') {
+                mainContent.style.display = 'flex';
+            }
+            // لاحظ: Profile لم نقم ببرمجتها بعد
+        }
+
         }
     </script>
+
 </body>
 </html>
