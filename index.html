@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sidarapp - Lava Scroll Edition</title>
+    <title>Sidarapp - Minimalist Scroll Edition</title>
     
     <style>
         :root {
@@ -11,6 +11,7 @@
             --lava-glow: rgba(255, 69, 0, 0.4); 
             --lava-intense-glow: rgba(255, 69, 0, 0.8); 
             --text-main: #0f172a; 
+            --text-sub: #64748b;
         }
 
         body, html { 
@@ -81,53 +82,62 @@
             border-radius: 20px; padding: 12px 18px; display: flex; align-items: center;
             border: 2px solid var(--primary-lava); 
             box-shadow: 0 0 15px var(--lava-glow), 0 10px 30px rgba(0,0,0,0.05);
-            margin-bottom: 35px;
+            margin-bottom: 30px; /* تقليل الهامش قليلاً */
         }
         .search-wrapper input { flex: 1; border: none; background: transparent; outline: none; padding-left: 10px; font-size: 16px; font-weight: 500; }
         .search-wrapper span { color: var(--primary-lava); }
 
-        /* --- Scrolling Services Bar (الشريط المتحرك) --- */
+        /* --- NEW: Minimalist Scrolling Services (شريط خدمات صغير واحترافي) --- */
         .services-scroll-container {
             width: 100%;
             overflow-x: auto;
-            padding: 10px 0 25px;
+            padding: 5px 0 20px; /* تقليل الحشو */
             display: flex;
-            gap: 15px;
-            scrollbar-width: none; /* إخفاء السكرول بار */
+            gap: 12px; /* مسافة أصغر بين العناصر */
+            scrollbar-width: none; 
             -ms-overflow-style: none;
+            position: relative;
         }
         .services-scroll-container::-webkit-scrollbar { display: none; }
 
-        .service-card {
-            min-width: 130px;
-            background: linear-gradient(135deg, #ff4500 0%, #ff8c00 100%);
-            border-radius: 24px;
-            padding: 20px 10px;
-            text-align: center;
-            box-shadow: 0 8px 20px var(--lava-glow);
-            transition: 0.3s;
+        .service-item {
+            min-width: 90px; /* أصغر حجماً */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             flex-shrink: 0;
-            border: 1px solid rgba(255,255,255,0.2);
+            cursor: pointer;
+            transition: 0.2s ease;
         }
 
-        .service-card:active { transform: scale(0.95); }
+        .service-item:active { transform: scale(0.96); }
 
         .service-icon-box {
-            width: 50px; height: 50px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 15px;
+            width: 48px; height: 48px; /* حجم أيقونة أصغر */
+            background: #f1f5f9; /* خلفية رمادية فاتحة جداً */
+            border: 1px solid #e2e8f0; /* حدود دقيقة */
+            border-radius: 16px; /* زوايا أنعم */
             display: flex; align-items: center; justify-content: center;
-            margin: 0 auto 12px;
-            font-size: 24px;
-            color: #fff;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            font-size: 20px; /* أيقونة أصغر */
+            color: #1e293b;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03); /* ظل خفيف جداً */
+            transition: 0.3s;
+        }
+
+        .service-item:active .service-icon-box {
+            background: #e2e8f0;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
         }
 
         .service-label { 
-            color: #fff; 
-            font-weight: 700; 
-            font-size: 13px; 
-            letter-spacing: 0.3px;
+            color: var(--text-sub); /* لون نص فرعي أخف */
+            font-weight: 600; 
+            font-size: 11px; /* نص أصغر بكثير */
+            margin-top: 8px;
+            text-align: center;
+            letter-spacing: 0.2px;
+            text-transform: capitalize; /* تحويل أول حرف فقط للعاصمة */
         }
 
         /* --- Bottom Nav --- */
@@ -172,25 +182,29 @@
         </div>
 
         <div class="services-scroll-container">
-            <div class="service-card">
+            <div class="service-item">
                 <div class="service-icon-box">🎟️</div>
-                <span class="service-label">Book Events</span>
+                <span class="service-label">Events</span>
             </div>
-            <div class="service-card">
+            <div class="service-item">
                 <div class="service-icon-box">📶</div>
                 <span class="service-label">eSIM</span>
             </div>
-            <div class="service-card">
+            <div class="service-item">
                 <div class="service-icon-box">💰</div>
                 <span class="service-label">Change</span>
             </div>
-            <div class="service-card">
+            <div class="service-item">
                 <div class="service-icon-box">🔄</div>
                 <span class="service-label">Transfer</span>
             </div>
-            <div class="service-card">
+            <div class="service-item">
                 <div class="service-icon-box">✈️</div>
                 <span class="service-label">Flights</span>
+            </div>
+            <div class="service-item">
+                <div class="service-icon-box">🏖️</div>
+                <span class="service-label">Travel</span>
             </div>
         </div>
 
