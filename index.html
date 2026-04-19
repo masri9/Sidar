@@ -3,60 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sidar App - Balanced Design</title>
+    <title>Sidar App - Professional Nav</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
-            background-color: #ffffff; /* صفحة بيضاء بالكامل حسب طلبك */
+            background-color: #ffffff; /* صفحة بيضاء بالكامل */
             height: 100vh;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Inter', sans-serif;
         }
 
-        /* حاوية الشريط السفلي */
-        .nav-container {
+        /* حاوية الشريط السفلي الاحترافية */
+        .bottom-nav {
             position: fixed;
             bottom: 0;
             width: 100%;
-            height: 75px;
+            height: 80px;
             background: #ffffff;
             display: flex;
             align-items: center;
             justify-content: space-around;
-            border-top: 1px solid #f0f0f0;
-            padding: 0 10px;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            padding: 0 5px 10px 5px; /* مساحة سفلية بسيطة للتناسق */
             z-index: 1000;
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.03);
         }
 
-        /* تنسيق الأيقونات العادية */
-        .nav-item {
+        /* تنسيق الأيقونات العادية - توازن كامل */
+        .nav-link {
             flex: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            color: #2d3436;
             text-decoration: none;
-            transition: 0.3s;
+            transition: all 0.3s ease;
         }
 
-        .nav-item i, .nav-item img {
+        .nav-link i, .nav-link img {
             width: 24px;
             height: 24px;
             font-size: 22px;
-            opacity: 0.6;
+            color: #2d3436;
+            opacity: 0.5; /* تباين مدروس لراحة العين */
+            transition: 0.3s;
         }
 
-        .nav-item span {
-            font-size: 10px;
+        .nav-link span {
+            font-size: 11px;
             font-weight: 600;
-            margin-top: 4px;
-            opacity: 0.6;
+            color: #2d3436;
+            margin-top: 5px;
+            opacity: 0.5;
         }
 
-        /* --- الأيقونة البارزة (الخريطة) --- */
-        .map-wrapper {
+        /* تأثير التنشيط أو الحوم فوق الأيقونة */
+        .nav-link:hover i, .nav-link:hover span {
+            opacity: 1;
+            color: #2A70DC;
+        }
+
+        /* --- أيقونة الخريطة البارزة (The Centerpiece) --- */
+        .map-holder {
             position: relative;
             flex: 1;
             display: flex;
@@ -64,61 +73,68 @@
             align-items: center;
         }
 
-        .map-btn {
+        .map-action-btn {
             position: absolute;
-            top: -40px; /* الارتفاع لتبدو بارزة */
-            width: 62px;
-            height: 62px;
+            top: -45px; /* رفع الزر ليكون بارزاً بشكل احترافي */
+            width: 64px;
+            height: 64px;
             background: linear-gradient(135deg, #2A70DC, #00C7B7); /* تدرج لوني احترافي */
-            border-radius: 20px; /* شكل Squircle عصري */
+            border-radius: 22px; /* شكل Squircle حديث */
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 10px 20px rgba(42, 112, 220, 0.3);
-            border: 4px solid #ffffff;
-            transition: transform 0.3s ease;
+            box-shadow: 0 12px 25px rgba(42, 112, 220, 0.3);
+            border: 5px solid #ffffff; /* إطار لفصل الزر عن الخلفية */
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .map-btn img {
-            width: 32px;
-            height: 32px;
-            filter: brightness(0) invert(1); /* جعل أيقونة الخريطة بيضاء */
+        .map-action-btn img {
+            width: 30px;
+            height: 30px;
+            filter: brightness(0) invert(1); /* تحويل أيقونة الخريطة للون الأبيض */
             opacity: 1 !important;
         }
 
-        /* حالة التفاعل */
-        .nav-item:hover { opacity: 1; transform: translateY(-2px); }
-        .map-btn:hover { transform: scale(1.1) rotate(5deg); }
+        .map-label {
+            margin-top: 38px; /* محاذاة النص تحت الزر البارز بدقة */
+            font-size: 11px;
+            font-weight: 700;
+            color: #2A70DC;
+        }
 
+        /* أنيميشن عند الحوم فوق الخريطة */
+        .map-action-btn:hover {
+            transform: scale(1.1) rotate(8deg); /* حركة تفاعلية رشيقة */
+        }
     </style>
 </head>
 <body>
 
-    <nav class="nav-container">
-        <a href="#" class="nav-item">
-            <i class="fa-solid fa-house"></i>
+    <nav class="bottom-nav">
+        <a href="#" class="nav-link">
+            <i class="fa-solid fa-house-simple"></i>
             <span>Home</span>
         </a>
 
-        <a href="#" class="nav-item">
+        <a href="#" class="nav-link">
             <img src="https://cdn-icons-png.flaticon.com/512/5948/5948543.png" alt="Reels">
             <span>Reels</span>
         </a>
 
-        <div class="map-wrapper">
-            <a href="#" class="map-btn">
+        <div class="map-holder">
+            <a href="#" class="map-action-btn">
                 <img src="https://cdn-icons-png.flaticon.com/512/854/854878.png" alt="Map">
             </a>
-            <span style="font-size: 10px; font-weight: 600; margin-top: 45px; opacity: 0.6;">Explore</span>
+            <span class="map-label">Explore</span>
         </div>
 
-        <a href="#" class="nav-item">
-            <i class="fa-solid fa-paper-plane"></i>
-            <span>Messages</span>
+        <a href="#" class="nav-link">
+            <i class="fa-solid fa-comment-dots"></i>
+            <span>Chat</span>
         </a>
 
-        <a href="#" class="nav-item">
-            <i class="fa-solid fa-user"></i>
+        <a href="#" class="nav-link">
+            <i class="fa-solid fa-user-circle"></i>
             <span>Profile</span>
         </a>
     </nav>
