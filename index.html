@@ -73,7 +73,7 @@
         .hero-full-title { font-size: 36px; font-weight: 800; line-height: 1.1; margin: 0; color: var(--text-main-color); letter-spacing: -1px; }
         .hero-full-title span.blue-text { color: var(--accent-blue); display: block; }
 
-        /* --- AI Search --- */
+        /* --- AI Search (Main Page) --- */
         .ai-engine-container { width: 100%; max-width: 500px; margin-top: 35px; }
         .ai-input-wrapper { position: relative; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(20px); border-radius: 24px; padding: 8px 15px; display: flex; align-items: center; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); }
         .ai-input-field { flex: 1; border: none; background: transparent; padding: 15px 10px; font-size: 16px; font-weight: 500; outline: none; }
@@ -89,15 +89,35 @@
         .bg-change { background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%); }
         .service-item span { font-size: 13px; font-weight: 700; }
 
-        /* --- Scripts Area --- */
-        .script-container { width: 100%; max-width: 500px; margin-top: 25px; display: none; }
-        .script-container.active { display: block; animation: fadeIn 0.5s; }
-
-        /* --- Map Page Layer --- */
-        #map-page {
-            display: none; height: 100vh; width: 100%; position: absolute; top: 0; left: 0; background: white; z-index: 50;
-        }
+        /* --- Map Page Elements --- */
+        #map-page { display: none; height: 100vh; width: 100%; position: absolute; top: 0; left: 0; background: white; z-index: 50; }
         #map { width: 100%; height: 100%; }
+        
+        .map-search-container {
+            position: absolute; top: 50px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 400px; z-index: 1000;
+        }
+        .map-search-bar {
+            background: white; border-radius: 20px; padding: 12px 20px;
+            display: flex; align-items: center; box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        .map-search-bar input {
+            border: none; outline: none; width: 100%; font-size: 15px; font-weight: 500; margin-left: 10px;
+        }
+
+        .map-filters {
+            display: flex; gap: 8px; margin-top: 12px; overflow-x: auto; padding-bottom: 5px;
+            scrollbar-width: none; /* Hide scrollbar Firefox */
+        }
+        .map-filters::-webkit-scrollbar { display: none; } /* Hide scrollbar Chrome/Safari */
+
+        .filter-btn {
+            background: white; padding: 8px 16px; border-radius: 15px; border: none;
+            white-space: nowrap; font-size: 13px; font-weight: 700; color: #475569;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05); cursor: pointer; transition: 0.3s;
+        }
+        .filter-btn.active { background: var(--primary-blue); color: white; }
+
         .gps-btn {
             position: absolute; bottom: 130px; right: 20px; z-index: 1000;
             background: white; width: 55px; height: 55px; border-radius: 50%;
@@ -112,7 +132,6 @@
             padding: 10px 15px; border-radius: 50px;
             display: flex; justify-content: space-between; align-items: center;
             box-shadow: 0 10px 30px rgba(0,0,0,0.08); z-index: 1000;
-            border: 1px solid rgba(0,0,0,0.03);
         }
         .nav-item { display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease; padding: 10px 15px; color: var(--inactive-gray); }
         .nav-item svg { width: 24px; height: 24px; stroke: currentColor; stroke-width: 2.2; fill: none; }
@@ -133,7 +152,6 @@
     <div class="background-overlay"></div>
     
     <div class="app-container" id="main-app">
-        
         <header class="header">
             <div class="menu-icon">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="2.5"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
@@ -145,12 +163,9 @@
             <div class="ai-engine-container">
                 <div class="ai-input-wrapper">
                     <input type="text" class="ai-input-field" placeholder="Ask Sidar AI anything...">
-                    <div class="ai-icon">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path><path d="M9 12l2 2 4-4"></path></svg>
-                    </div>
+                    <div class="ai-icon">🔍</div>
                 </div>
             </div>
-
             <div class="services-grid">
                 <div class="service-item active" onclick="toggleService('esim-script', this)">
                     <div class="service-icon-box bg-esim">🌐</div>
@@ -165,13 +180,21 @@
                     <span>Change</span>
                 </div>
             </div>
-
-            <div id="esim-script" class="script-container active"> <div style="padding:20px; color:#64748b;">eSIM Widget Area</div> </div>
-            <div id="events-script" class="script-container"> <div style="padding:20px; color:#64748b;">Events Widget Area</div> </div>
-            <div id="change-script" class="script-container"> <div style="padding:20px; color:#64748b;">Currency Widget Area</div> </div>
         </main>
 
         <div id="map-page">
+            <div class="map-search-container">
+                <div class="map-search-bar">
+                    <span>🔍</span>
+                    <input type="text" placeholder="Search hotels, restaurants...">
+                </div>
+                <div class="map-filters">
+                    <button class="filter-btn active" onclick="filterMap('All', this)">All</button>
+                    <button class="filter-btn" onclick="filterMap('Hotels', this)">🏨 Hotels</button>
+                    <button class="filter-btn" onclick="filterMap('Restaurants', this)">🍴 Restaurants</button>
+                    <button class="filter-btn" onclick="filterMap('Cafes', this)">☕ Cafes</button>
+                </div>
+            </div>
             <div id="map"></div>
             <button class="gps-btn" onclick="locateUser()">🎯</button>
         </div>
@@ -209,28 +232,51 @@
         // Map logic
         let map;
         let userMarker;
+        let markersGroup = L.layerGroup();
 
         function initMap() {
             if (map) return;
+            // استخدام ستايل Positron الفخم والنظيف من CartoDB
             map = L.map('map', { zoomControl: false }).setView([25.2048, 55.2708], 13);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; CARTO'
+            }).addTo(map);
+            markersGroup.addTo(map);
+            
+            // إضافة عينات Pins افتراضية للمطاعم والفنادق
+            addSampleMarkers();
+        }
 
-            // مثال لإضافة Pin مفضل
-            L.marker([25.2048, 55.2708]).addTo(map).bindPopup("Dubai Center").openPopup();
+        function addSampleMarkers() {
+            markersGroup.clearLayers();
+            // مثال لفندق
+            L.marker([25.2048, 55.2708]).addTo(markersGroup).bindPopup("<b>Luxury Hotel</b><br>Featured Stay");
+            // مثال لمطعم
+            L.marker([25.2148, 55.2808]).addTo(markersGroup).bindPopup("<b>Top Restaurant</b><br>Delicious local food");
+        }
+
+        function filterMap(category, btn) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            // هنا يمكنك مستقبلاً فلترة البيانات بناءً على النوع
+            console.log("Filtering for: " + category);
         }
 
         function locateUser() {
             map.locate({setView: true, maxZoom: 16});
         }
 
-        // Navigation and Pages logic
+        map && map.on('locationfound', function(e) {
+            if (userMarker) map.removeLayer(userMarker);
+            userMarker = L.circleMarker(e.latlng, {radius: 8, color: '#2563eb', fillColor: '#3b82f6', fillOpacity: 1}).addTo(map);
+        });
+
+        // App logic
         function setActive(el, page) {
             document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
             el.classList.add('active');
-
             const mainContent = document.querySelector('.main-content');
             const mapPage = document.getElementById('map-page');
-
             if (page === 'Map') {
                 mainContent.style.display = 'none';
                 mapPage.style.display = 'block';
@@ -242,9 +288,7 @@
         }
 
         function toggleService(id, element) {
-            document.querySelectorAll('.script-container').forEach(c => c.classList.remove('active'));
             document.querySelectorAll('.service-item').forEach(i => i.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
             element.classList.add('active');
         }
     </script>
