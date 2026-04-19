@@ -2,96 +2,124 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>VOYAGR — Light Edition</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>VOYAGR — Light Premium</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #FFFFFF;
-    --bg-alt: #F8F9FD;
-    --card: #FFFFFF;
-    --border: rgba(0,0,0,0.06);
-    --primary: #6366F1; /* لون بنفسجي عصري */
-    --accent: #3ECFFF;
-    --text: #1A1C21;
-    --muted: #8E94A3;
+    /* تحويل الألوان للفواتح مع الحفاظ على الأناقة */
+    --bg: #F8F9FD; /* خلفية فاتحة مريحة */
+    --bg2: #FFFFFF;
+    --bg3: #F0F2F9;
+    --card: rgba(255, 255, 255, 0.85);
+    --border: rgba(99, 102, 241, 0.15); /* حدود ناعمة بلون خفيف */
+    --border2: rgba(0, 0, 0, 0.05);
+    --neon-p: #6366F1; /* بنفسجي مشرق للفواتح */
+    --neon-b: #0EA5E9; /* أزرق سماوي */
+    --neon-g: #10B981;
     --grad: linear-gradient(135deg, #6366F1 0%, #A855F7 100%);
-    --shadow: 0 10px 25px rgba(0,0,0,0.05);
+    --grad2: linear-gradient(135deg, #0EA5E9 0%, #10B981 100%);
+    --text: #1E293B; /* نص داكن للقراءة */
+    --muted: #64748B;
+    --glass: rgba(255, 255, 255, 0.7);
+    --r: 20px;
+    --r2: 14px;
   }
+  
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  html,body{height:100%;background:#E2E8F0;font-family:'DM Sans',sans-serif;color:var(--text);overflow:hidden; display:flex; align-items:center; justify-content:center;}
 
-  *{box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent;}
-  body{ height:100%; background:#E2E8F0; font-family:'DM Sans',sans-serif; color:var(--text); display:flex; align-items:center; justify-content:center; overflow:hidden;}
-
-  /* هيكل الهاتف */
   .phone{
-    width:375px; height:812px; 
+    width:390px;height:844px;
     background:var(--bg);
-    border-radius:45px;
-    border:10px solid #1A1C21;
-    box-shadow: 0 40px 80px -20px rgba(0,0,0,0.2);
-    position:relative; overflow:hidden; display:flex; flex-direction:column;
+    border-radius:50px;
+    border:12px solid #1A1C21; /* إطار الهاتف الخارجي */
+    box-shadow:0 40px 100px rgba(0,0,0,0.15);
+    overflow:hidden;position:relative;display:flex;flex-direction:column;
   }
 
   .island{
-    position:absolute; top:8px; left:50%; transform:translateX(-50%);
-    width:110px; height:30px; background:#1A1C21; border-radius:20px; z-index:100;
+    position:absolute;top:13px;left:50%;transform:translateX(-50%);
+    width:126px;height:37px;background:#1A1C21;border-radius:20px;z-index:100;
   }
 
-  .screens { flex:1; position:relative; background: var(--bg-alt); }
-  .screen {
-    position:absolute; inset:0; opacity:0; transform: scale(0.98); pointer-events:none; 
-    transition: all .4s cubic-bezier(.4,0,.2,1);
+  .screens{display:flex;flex:1;position:relative;overflow:hidden; background: var(--bg);}
+  .screen{
+    position:absolute;inset:0;display:flex;flex-direction:column;
+    opacity:0;pointer-events:none;transition:opacity .35s cubic-bezier(.4,0,.2,1);
   }
-  .screen.active { opacity:1; transform: scale(1); pointer-events:all; }
+  .screen.active{opacity:1;pointer-events:all;}
 
-  .scroll-area { flex:1; overflow-y:auto; padding-bottom:120px; padding-top:45px; }
-  .scroll-area::-webkit-scrollbar { display:none; }
+  .scroll-area{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:120px;padding-top:60px;}
+  .scroll-area::-webkit-scrollbar{display:none;}
 
-  /* رفع أزرار التنقل وتحسين ظهورها */
-  .nav-bar {
-    position:absolute; bottom:25px; /* رفعناها عن الحافة */
-    left:15px; right:15px; height:70px; 
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(15px);
-    border-radius: 25px;
-    border: 1px solid var(--border);
-    display:flex; align-items:center; justify-content:space-around;
-    z-index:100;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+  .status-bar{
+    position:absolute;top:0;left:0;right:0;height:52px;z-index:50;
+    display:flex;align-items:flex-end;justify-content:space-between;
+    padding:0 28px 8px; color: var(--text);
   }
+
+  /* --- الملاحة السفلية (تم الرفع والتحسين) --- */
+  .nav-bar{
+    position:absolute;bottom:25px; /* تم رفعها عن الحافة */
+    left:15px;right:15px;height:75px;z-index:50;
+    background:rgba(255, 255, 255, 0.9);
+    backdrop-filter:blur(20px);
+    border:1px solid var(--border);
+    border-radius: 25px; /* شكل عصري مرفوع */
+    display:flex;align-items:center;justify-content:space-around;
+    padding:0 10px;
+    box-shadow:0 15px 35px rgba(0,0,0,0.08);
+  }
+  .nav-item{
+    display:flex;flex-direction:column;align-items:center;gap:4px;
+    cursor:pointer; transition:0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  .nav-item:active { transform: scale(0.9); }
+  .nav-item svg{width:24px;height:24px; stroke: var(--muted); fill: none; stroke-width: 1.8;}
+  .nav-item span{font-size:10px;font-weight:700;color:var(--muted);}
+  .nav-item.active svg{stroke: var(--neon-p); filter:drop-shadow(0 2px 5px rgba(99,102,241,0.3));}
+  .nav-item.active span{color:var(--neon-p);}
+
+  /* --- تعديل الثلاث نقاط --- */
+  .notif-btn{
+    width:42px;height:42px;border-radius:14px;
+    background:var(--bg2);border:1px solid var(--border);
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer; transition: 0.2s;
+  }
+  .notif-btn:active { background: var(--bg3); transform: scale(0.95); }
+
+  /* --- البطاقات والخدمات (تفاعلية) --- */
+  .action-item {
+    background: var(--bg2); border: 1px solid var(--border); border-radius: 18px;
+    padding: 14px; display: flex; align-items: center; gap: 12px; cursor: pointer;
+    transition: 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  }
+  .action-item:active { transform: scale(0.96); background: var(--bg3); }
   
-  .nav-item { display:flex; flex-direction:column; align-items:center; gap:4px; opacity:0.4; transition:0.3s; cursor:pointer;}
-  .nav-item.active { opacity:1; transform: translateY(-2px); }
-  .nav-item svg { width:22px; height:22px; stroke: #1A1C21; fill:none; stroke-width:2; }
-  .nav-item.active svg { stroke: var(--primary); filter: drop-shadow(0 2px 4px rgba(99,102,241,0.3)); }
-  .nav-item span { font-size:10px; font-weight:700; color: #1A1C21; }
-
-  /* تحسين الثلاث نقاط */
-  .more-options {
-    width: 36px; height: 36px; border-radius: 10px;
-    background: var(--bg); border: 1px solid var(--border);
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer; transition: 0.2s;
-  }
-  .more-options:active { background: #F1F5F9; transform: scale(0.9); }
-
-  /* الخدمات (تفاعلية) */
   .svc-card {
-    background: var(--card); border: 1px solid var(--border);
-    border-radius: 20px; padding: 15px 10px; text-align:center;
-    transition: 0.2s; box-shadow: var(--shadow);
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: var(--r2); padding: 15px 5px; transition: 0.2s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.02);
   }
-  .svc-card:active { transform: scale(0.92); background: #F1F5F9; }
-  .svc-icon { font-size: 24px; margin-bottom: 8px; display: block; }
+  .svc-card:active { transform: translateY(-3px); box-shadow: 0 8px 15px rgba(0,0,0,0.06); }
 
-  /* البانر المحسن */
+  .home-greeting .name {
+    font-family:'Syne',sans-serif;font-size:24px;font-weight:800;
+    color: var(--text);
+  }
+
   .banner {
-    margin:15px 20px; height:160px; border-radius:24px; 
-    background: var(--grad); color: white; padding: 25px;
-    display:flex; flex-direction: column; justify-content: flex-end;
-    box-shadow: 0 15px 30px rgba(99,102,241,0.2);
+    margin:0 20px; height:200px; border-radius:var(--r);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
   }
 
+  /* تغذية السفر (تفاعلية) */
+  .feed-card {
+    margin:0 20px 16px; background: #FFF; border: 1px solid var(--border);
+    border-radius: var(--r); box-shadow: 0 8px 20px rgba(0,0,0,0.04);
+  }
 </style>
 </head>
 <body>
@@ -99,81 +127,69 @@
 <div class="phone">
   <div class="island"></div>
 
+  <div class="status-bar">
+    <span style="font-weight:700;">9:41</span>
+    <div style="display:flex; gap:5px;">📶 🔋</div>
+  </div>
+
   <div class="screens">
     <div class="screen active" id="screen-home">
       <div class="scroll-area">
-        <div style="padding:25px 20px 10px; display:flex; justify-content:space-between; align-items:center;">
-          <div>
-            <h4 style="color:var(--muted); font-size:11px; letter-spacing:1px; font-weight:700;">EXPLORE</h4>
-            <h1 style="font-family:'Syne'; font-size:26px;">Hello, Alex!</h1>
+        <div class="home-greeting" style="display:flex;justify-content:space-between;align-items:center;padding:25px 20px 15px;">
+          <div class="greeting-text">
+            <div style="font-size:12px; color:var(--muted);">EXPLORE WORLD ✦</div>
+            <div class="name">Alex Rivera</div>
           </div>
-          <div class="more-options">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <div class="notif-btn">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="2.5">
               <circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/>
             </svg>
           </div>
         </div>
 
-        <div class="banner">
-           <span style="background:rgba(255,255,255,0.2); width:fit-content; padding:4px 12px; border-radius:12px; font-size:10px; font-weight:700;">WEEKLY DEAL</span>
-           <h2 style="font-family:'Syne'; margin-top:8px; font-size:22px;">Swiss Alps Tour</h2>
-           <p style="font-size:12px; opacity:0.9;">Starting from $1,200</p>
+        <div class="banner" style="background: var(--grad); color:white; padding:25px; display:flex; flex-direction:column; justify-content:flex-end; position:relative; overflow:hidden;">
+            <div style="position:absolute; top:20px; right:20px; background:rgba(255,255,255,0.2); padding:5px 12px; border-radius:20px; font-size:10px; font-weight:700;">PROMO</div>
+            <h2 style="font-family:'Syne'; font-size:24px;">Swiss Alps</h2>
+            <p style="opacity:0.9; font-size:13px;">Experience the winter magic</p>
         </div>
 
-        <div style="padding:10px 20px; display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:12px;">
-          <div class="svc-card"><span class="svc-icon">🏨</span><small style="font-weight:600;">Villa</small></div>
-          <div class="svc-card"><span class="svc-icon">✈️</span><small style="font-weight:600;">Flight</small></div>
-          <div class="svc-card"> <span class="svc-icon">🚗</span><small style="font-weight:600;">Cars</small></div>
-          <div class="svc-card"><span class="svc-icon">🎟️</span><small style="font-weight:600;">Ticket</small></div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 20px;">
+          <div class="action-item">
+            <div style="width:35px; height:35px; border-radius:10px; background:var(--grad); display:flex; align-items:center; justify-content:center; color:white;">✈️</div>
+            <div><h4 style="font-size:13px;">Flights</h4><p style="font-size:10px; color:var(--muted);">Best prices</p></div>
+          </div>
+          <div class="action-item">
+            <div style="width:35px; height:35px; border-radius:10px; background:var(--grad2); display:flex; align-items:center; justify-content:center; color:white;">🏨</div>
+            <div><h4 style="font-size:13px;">Villas</h4><p style="font-size:10px; color:var(--muted);">Luxury stays</p></div>
+          </div>
         </div>
 
-        <div style="padding:25px 20px 10px;"><h3 style="font-family:'Syne'; font-size:18px;">Travel Feed</h3></div>
-        
-        <div style="margin:10px 20px; background:var(--card); border-radius:24px; overflow:hidden; border:1px solid var(--border); box-shadow: var(--shadow);">
-          <div style="height:200px; background:#E2E8F0; display:flex; align-items:center; justify-content:center; font-size:40px;">🏝️</div>
-          <div style="padding:15px;">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-              <span style="font-weight:700; font-size:14px;">Bali, Indonesia</span>
-              <span style="color:var(--primary); font-weight:700;">$850</span>
+        <div style="padding:0 20px 15px; display:flex; justify-content:space-between; align-items:center;">
+            <h3 style="font-family:'Syne'; font-size:18px;">Travel Feed</h3>
+            <span style="color:var(--neon-p); font-size:12px; font-weight:700;">View All</span>
+        </div>
+
+        <div class="feed-card">
+            <div style="padding:15px; display:flex; align-items:center; gap:10px;">
+                <div style="width:35px; height:35px; border-radius:50%; background:#DDD; display:flex; align-items:center; justify-content:center;">📸</div>
+                <div style="flex:1;"><strong style="font-size:13px;">@nomad_zara</strong><p style="font-size:10px; color:var(--muted);">Bali, Indonesia</p></div>
+                <span style="color:var(--muted);">···</span>
             </div>
-            <p style="color:var(--muted); font-size:12px; margin-top:5px;">5 Days Luxury Villa Stay</p>
-          </div>
+            <div style="height:200px; background:#F1F5F9; display:flex; align-items:center; justify-content:center; font-size:50px;">🏝️</div>
+            <div style="padding:15px;">
+                <p style="font-size:13px; line-height:1.5;">The most incredible sunset I've ever seen! Highly recommend this spot. ✨</p>
+                <div style="margin-top:12px; display:flex; gap:10px;">
+                    <span style="font-size:12px;">❤️ 2.4k</span>
+                    <span style="font-size:12px;">💬 156</span>
+                </div>
+            </div>
         </div>
       </div>
     </div>
 
-    <div class="screen" id="screen-map">
-       <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:20px; text-align:center;">
-          <div style="font-size:50px; margin-bottom:15px;">📍</div>
-          <h2 style="font-family:'Syne'">Nearby Places</h2>
-          <p style="color:var(--muted); margin-top:10px;">Find the best gems around you.</p>
-       </div>
-    </div>
-
-    <div class="screen" id="screen-reels" style="background:#000;">
-       <div style="flex:1; position:relative; display:flex; align-items:center; justify-content:center;">
-          <div style="font-size:60px;">📸</div>
-          <div style="position:absolute; bottom:130px; left:20px; color:white;">
-            <h4 style="font-family:'Syne'">@world_explorer</h4>
-            <p style="font-size:12px; opacity:0.8;">Tokyo Nights are magical 🇯🇵</p>
-          </div>
-       </div>
-    </div>
-
-    <div class="screen" id="screen-profile">
-      <div class="scroll-area">
-        <div style="text-align:center; padding:50px 20px 30px;">
-          <div style="width:90px; height:90px; border-radius:30px; background:var(--grad); margin:0 auto 15px; display:flex; align-items:center; justify-content:center; font-size:35px; transform: rotate(-5deg);">🙋‍♂️</div>
-          <h2 style="font-family:'Syne'; font-size:22px;">Alex Rivera</h2>
-          <p style="color:var(--muted); font-size:13px; margin-top:4px;">Adventure Seeker</p>
-        </div>
-        <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:2px; padding:0 20px;">
-           <div style="aspect-ratio:1; background:#F1F5F9; border-radius:12px;"></div>
-           <div style="aspect-ratio:1; background:#F1F5F9; border-radius:12px;"></div>
-           <div style="aspect-ratio:1; background:#F1F5F9; border-radius:12px;"></div>
-        </div>
-      </div>
-    </div>
+    <div class="screen" id="screen-map" style="justify-content:center; align-items:center;"><h2>Map Screen</h2></div>
+    <div class="screen" id="screen-reels" style="justify-content:center; align-items:center;"><h2>Reels Screen</h2></div>
+    <div class="screen" id="screen-profile" style="justify-content:center; align-items:center;"><h2>Profile Screen</h2></div>
   </div>
 
   <nav class="nav-bar">
@@ -182,8 +198,8 @@
       <span>Home</span>
     </div>
     <div class="nav-item" onclick="switchTab(this,'map')">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v8M8 12h8"></path></svg>
-      <span>Explore</span>
+      <svg viewBox="0 0 24 24"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon></svg>
+      <span>Map</span>
     </div>
     <div class="nav-item" onclick="switchTab(this,'reels')">
       <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"></rect><path d="M10 8l6 4-6 4V8z"></path></svg>
@@ -191,21 +207,17 @@
     </div>
     <div class="nav-item" onclick="switchTab(this,'profile')">
       <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-      <span>Account</span>
+      <span>Profile</span>
     </div>
   </nav>
 </div>
 
 <script>
   function switchTab(el, screenId) {
-    document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-    document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
-    
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     el.classList.add('active');
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById('screen-' + screenId).classList.add('active');
-    
-    // إضافة اهتزاز خفيف عند التبديل (تفاعلية)
-    if (window.navigator.vibrate) window.navigator.vibrate(10);
   }
 </script>
 
