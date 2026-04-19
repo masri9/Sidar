@@ -1,24 +1,44 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sidarapp - Travel Hub</title>
     <style>
         :root {
             --accent: #6c5ce7;
             --nav-bg: #ffffff;
+            --bg-light: #f8faff;
         }
 
-        body { margin: 0; background-color: #f8faff; font-family: sans-serif; }
+        body { 
+            margin: 0; 
+            background-color: var(--bg-light); 
+            font-family: 'Segoe UI', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            padding: 25px 20px 120px 20px;
+        }
+
+        /* الهيدر العلوي */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        .greeting { font-size: 12px; color: #8e8e8e; text-transform: uppercase; font-weight: bold; }
+        .user-name { font-size: 26px; font-weight: 800; color: #1a1a1a; }
 
         /* 1. البانر الإعلاني - 3 صور تتبدل تلقائياً */
         .banner-container {
-            margin: 20px;
-            height: 180px;
+            height: 200px;
             position: relative;
             overflow: hidden;
             border-radius: 25px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.06);
         }
 
         .slide {
@@ -32,20 +52,28 @@
 
         .slide.active { opacity: 1; }
 
-        /* 2. شريط التنقل السفلي - حجم أصغر وتحريك جميل */
+        .slide::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.4), transparent);
+        }
+
+        /* 2. شريط التنقل السفلي - ثابت، صغير، ومتحرك */
         .bottom-nav {
             position: fixed;
-            bottom: 20px; /* مرتفع قليلاً ليعطي شعوراً بالطفو */
+            bottom: 25px; 
             left: 50%;
             transform: translateX(-50%);
-            width: 85%; /* أصغر عرضاً */
-            max-width: 400px;
+            width: 80%; 
+            max-width: 350px;
             background: var(--nav-bg);
             display: flex;
             justify-content: space-around;
-            padding: 12px 0; /* حجم أصغر */
+            padding: 10px 0;
             border-radius: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.1);
+            z-index: 1000;
         }
 
         .nav-item {
@@ -53,14 +81,15 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 45px;
-            height: 45px;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
+            cursor: pointer;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .nav-icon {
-            width: 22px; /* حجم أيقونات أصغر */
+            width: 22px;
             height: 22px;
             stroke: #b2bec3;
             stroke-width: 2;
@@ -68,25 +97,44 @@
             transition: 0.3s;
         }
 
-        /* تأثير التحريك عند النقر أو النشاط */
+        /* حركة الأيقونة النشطة */
         .nav-item.active {
-            background: rgba(108, 92, 231, 0.1);
-            transform: translateY(-5px); /* حركة قفز بسيطة للأعلى */
+            background: rgba(108, 92, 231, 0.08);
+            transform: translateY(-6px);
         }
 
         .nav-item.active .nav-icon {
             stroke: var(--accent);
-            filter: drop-shadow(0 0 5px rgba(108, 92, 231, 0.4));
+            filter: drop-shadow(0 0 5px rgba(108, 92, 231, 0.3));
         }
 
+        .nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            width: 4px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 50%;
+        }
     </style>
 </head>
 <body>
 
-    <div class="banner-container">
-        <div class="slide active" style="background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800');"></div>
-        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1519046904884-53103b34b206?w=800');"></div>
-        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1555400538-5fd41fe3e7e4?w=800');"></div>
+    <div class="app-container">
+        <header class="header">
+            <div>
+                <div id="greeting" class="greeting">GOOD MORNING</div>
+                <div class="user-name">Alex Rivera</div>
+            </div>
+            <div style="background: white; padding: 10px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.03);">🔔</div>
+        </header>
+
+        <div class="banner-container">
+            <div class="slide active" style="background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800');"></div>
+            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1519046904884-53103b34b206?w=800');"></div>
+            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1555400538-5fd41fe3e7e4?w=800');"></div>
+        </div>
     </div>
 
     <nav class="bottom-nav">
@@ -102,21 +150,27 @@
     </nav>
 
     <script>
-        // 1. منطق تبديل صور البانر كل 4 ثوانٍ
+        // تبديل البانر كل 4 ثوانٍ
         let currentSlide = 0;
         const slides = document.querySelectorAll('.slide');
-
         setInterval(() => {
             slides[currentSlide].classList.remove('active');
             currentSlide = (currentSlide + 1) % slides.length;
             slides[currentSlide].classList.add('active');
         }, 4000);
 
-        // 2. منطق تحريك الأيقونات عند النقر
+        // تحريك أيقونات التنقل
         function setActive(el) {
             document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
             el.classList.add('active');
         }
+
+        // تحية ذكية بالإنجليزية
+        const hours = new Date().getHours();
+        const gText = document.getElementById('greeting');
+        if (hours < 12) gText.innerText = "GOOD MORNING";
+        else if (hours < 17) gText.innerText = "GOOD AFTERNOON";
+        else gText.innerText = "GOOD EVENING";
     </script>
 </body>
 </html>
