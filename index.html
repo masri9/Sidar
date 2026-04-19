@@ -16,23 +16,9 @@
         body, html { 
             margin: 0; padding: 0;
             font-family: 'Segoe UI', Roboto, -apple-system, sans-serif;
-            overflow: hidden;
+            overflow-x: hidden;
             height: 100vh;
             -webkit-font-smoothing: antialiased;
-        }
-
-        /* --- Splash Screen --- */
-        #splash-screen {
-            position: fixed; inset: 0; background: #ffffff;
-            display: flex; justify-content: center; align-items: center;
-            z-index: 9999;
-            transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1), visibility 1s;
-        }
-        .splash-image { width: 180px; height: auto; animation: splashEntrance 1.5s ease-out forwards; }
-
-        @keyframes splashEntrance {
-            0% { transform: scale(0.8); opacity: 0; filter: blur(10px); }
-            100% { transform: scale(1); opacity: 1; filter: blur(0); }
         }
 
         /* --- Background --- */
@@ -50,265 +36,146 @@
         .app-container {
             height: 100vh; padding: 25px;
             display: flex; flex-direction: column;
-            box-sizing: border-box; opacity: 0; 
-            transition: opacity 1.2s ease;
+            box-sizing: border-box;
         }
 
         /* --- Header --- */
-        .header {
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            margin-bottom: 5px;
-        }
-
-        .menu-icon {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 12px;
-            border-radius: 16px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            cursor: pointer;
-            border: 1px solid rgba(0,0,0,0.05);
-        }
+        .header { height: 60px; display: flex; align-items: center; margin-bottom: 5px; }
+        .menu-icon { background: white; padding: 12px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); cursor: pointer; }
 
         /* --- Main Content --- */
         .main-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start; 
-            align-items: center;
-            padding-top: 30px; 
-            text-align: center;
+            flex: 1; display: flex; flex-direction: column;
+            align-items: center; padding-top: 20px; text-align: center;
+            overflow-y: auto; padding-bottom: 100px;
         }
 
-        .hero-text-container {
-            width: 90%;
-            max-width: 550px;
-            opacity: 0;
-            transform: translateY(20px);
-            animation: textSlideUp 1s ease-out 2.8s forwards;
+        .hero-full-title { font-size: 32px; font-weight: 800; color: var(--text-main-color); margin-bottom: 25px; }
+        .hero-full-title span.blue-text { color: var(--accent-blue); display: block; }
+
+        /* --- Services Tabs --- */
+        .services-tabs {
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 12px; width: 100%; max-width: 500px; margin-bottom: 20px;
         }
 
-        @keyframes textSlideUp {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .hero-full-title {
-            font-size: 36px;
-            font-weight: 800;
-            line-height: 1.1;
-            margin: 0;
-            color: var(--text-main-color);
-            letter-spacing: -1px;
-        }
-
-        .hero-full-title span.blue-text {
-            color: var(--accent-blue);
-            display: block;
-        }
-
-        /* --- AI Search Engine --- */
-        .ai-engine-container {
-            width: 100%;
-            max-width: 500px;
-            margin-top: 35px;
-            opacity: 0;
-            animation: textSlideUp 1s ease-out 3.2s forwards;
-        }
-
-        .ai-input-wrapper {
-            position: relative;
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-            border-radius: 24px;
-            padding: 8px 15px;
-            display: flex;
-            align-items: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-        }
-
-        .ai-input-field {
-            flex: 1; border: none; background: transparent; padding: 15px 10px;
-            font-size: 16px; font-weight: 500; color: var(--text-main-color); outline: none;
-        }
-
-        .ai-icon {
-            width: 40px; height: 40px;
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-            border-radius: 16px; display: flex; align-items: center; justify-content: center;
-        }
-
-        /* --- الخدمات الجديدة بأيقونات نيون ملونة ثلاثية الأبعاد --- */
-        .services-grid {
-            margin-top: 30px;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            width: 100%;
-            max-width: 500px;
-            opacity: 0;
-            animation: textSlideUp 1s ease-out 3.5s forwards;
-        }
-
-        .service-item {
+        .tab-item {
             background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(15px);
+            backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.4);
-            border-radius: 24px;
-            padding: 20px 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 20px; padding: 15px 5px;
+            display: flex; flex-direction: column; align-items: center;
+            gap: 8px; cursor: pointer; transition: all 0.3s ease;
         }
 
-        .service-item:hover {
+        .tab-item.active {
             background: white;
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            border-color: var(--primary-blue);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.1);
         }
 
-        .service-icon-box {
-            width: 48px;
-            height: 48px;
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 2px;
+        .icon-box { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+        .bg-esim { background: #eff6ff; color: #3b82f6; }
+        .bg-events { background: #fef2f2; color: #ef4444; }
+        .bg-change { background: #f0fdf4; color: #22c55e; }
+
+        .tab-item span { font-size: 12px; font-weight: 700; color: #475569; }
+        .tab-item.active span { color: var(--primary-blue); }
+
+        /* --- Affiliate Script Container --- */
+        .script-viewport {
+            width: 100%; max-width: 500px; min-height: 300px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 24px; border: 1px dashed rgba(0,0,0,0.1);
+            padding: 10px; display: none; /* مخفي افتراضياً */
+            animation: fadeIn 0.5s ease;
         }
 
-        /* ألوان أيقونات نيون ملونة احترافية ومميزة */
-        .bg-esim { background: #eff6ff; color: #3b82f6; box-shadow: 0 0 10px rgba(59, 130, 246, 0.2); }
-        .bg-events { background: #fef2f2; color: #ef4444; box-shadow: 0 0 10px rgba(239, 68, 68, 0.2); }
-        .bg-change { background: #f0fdf4; color: #22c55e; box-shadow: 0 0 10px rgba(34, 197, 94, 0.2); }
+        .script-viewport.active { display: block; }
 
-        .service-item span {
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--text-main-color);
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- Bottom Navigation --- */
+        /* --- Bottom Nav --- */
         .bottom-nav-container {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            width: 90%; max-width: 420px;
-            background: var(--nav-bg); backdrop-filter: blur(25px);
-            padding: 8px 12px; border-radius: 30px;
-            display: flex; justify-content: space-around; align-items: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.03);
-            z-index: 100;
+            position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 420px; background: var(--nav-bg);
+            backdrop-filter: blur(25px); padding: 8px 12px; border-radius: 30px;
+            display: flex; justify-content: space-around; z-index: 100;
         }
-
-        .nav-item {
-            display: flex; align-items: center; justify-content: center;
-            padding: 10px 16px; cursor: pointer; transition: all 0.3s ease;
-            border-radius: 22px; color: #64748b;
-        }
-        .nav-item svg { width: 24px; height: 24px; stroke: currentColor; stroke-width: 2.2; fill: none; }
-        .nav-item.active { background: var(--light-blue); color: var(--primary-blue); }
-        .nav-text { max-width: 0; overflow: hidden; white-space: nowrap; font-size: 14px; font-weight: 700; transition: all 0.3s ease; opacity: 0; }
-        .nav-item.active .nav-text { max-width: 80px; margin-left: 10px; opacity: 1; }
-
     </style>
 </head>
 <body>
 
-    <div id="splash-screen">
-        <img src="https://plain-eeur-prod-public.komododecks.com/202604/19/y0zyi6uOKg2CaNATvHPZ/image.png" alt="Sidarapp Logo" class="splash-image">
-    </div>
-
     <div class="background-container"></div>
     <div class="background-overlay"></div>
     
-    <div class="app-container" id="main-app">
-        
+    <div class="app-container">
         <header class="header">
             <div class="menu-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
             </div>
         </header>
 
         <main class="main-content">
-            <div class="hero-text-container">
-                <h1 class="hero-full-title">
-                    Your Journey 
-                    <span class="blue-text">Starts Before</span> 
-                    You Even Arrive.
-                </h1>
-            </div>
+            <h1 class="hero-full-title">Your Journey <span class="blue-text">Starts Before</span> You Arrive.</h1>
 
-            <div class="ai-engine-container">
-                <div class="ai-input-wrapper">
-                    <input type="text" class="ai-input-field" placeholder="Ask Sidar AI anything...">
-                    <div class="ai-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path><path d="M9 12l2 2 4-4"></path></svg>
-                    </div>
-                </div>
-            </div>
-
-            <div class="services-grid">
-                <div class="service-item">
-                    <div class="service-icon-box bg-esim">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="10" width="18" height="11" rx="2" ry="2"></rect><path d="M7 10V6a5 5 0 0 1 10 0v4"></path><path d="M12 18h.01"></path><path d="M12 14h.01"></path><path d="M8 18h.01"></path><path d="M8 14h.01"></path><path d="M16 18h.01"></path><path d="M16 14h.01"></path></svg>
+            <div class="services-tabs">
+                <div class="tab-item active" onclick="showService('esim-content', this)">
+                    <div class="icon-box bg-esim">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/><path d="M9 7h6"/><path d="M9 11h6"/></svg>
                     </div>
                     <span>eSIM</span>
                 </div>
-                <div class="service-item">
-                    <div class="service-icon-box bg-events">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line><path d="M12 14l2 2 4-4"></path><path d="M12 18h.01"></path><path d="M8 14h.01"></path><path d="M8 18h.01"></path></svg>
+                
+                <div class="tab-item" onclick="showService('events-content', this)">
+                    <div class="icon-box bg-events">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
                     </div>
                     <span>Events</span>
                 </div>
-                <div class="service-item">
-                    <div class="service-icon-box bg-change">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"></path><path d="M8 21H3v-5"></path><path d="M12 3c7.2 0 9 1.8 9 9s-1.8 9-9 9-9-1.8-9-9 1.8-9 9-9z"></path><path d="M12 8v10"></path><path d="M12 14l-4 4"></path><path d="M16 12l-4-4"></path></svg>
+
+                <div class="tab-item" onclick="showService('change-content', this)">
+                    <div class="icon-box bg-change">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 8l-8 8"/><path d="M8 8l8 8"/></svg>
                     </div>
                     <span>Change</span>
                 </div>
+            </div>
+
+            <div id="esim-content" class="script-viewport active">
+                <p style="color: #64748b; font-size: 14px;">eSIM Affiliate Widget Loading...</p>
+            </div>
+
+            <div id="events-content" class="script-viewport">
+                <p style="color: #64748b; font-size: 14px;">Tours & Events Widget Loading...</p>
+            </div>
+
+            <div id="change-content" class="script-viewport">
+                <p style="color: #64748b; font-size: 14px;">Currency Exchange Widget Loading...</p>
             </div>
             
         </main>
 
         <nav class="bottom-nav-container">
-            <div class="nav-item active" onclick="setActive(this)">
-                <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
-                <span class="nav-text">Home</span>
-            </div>
-            <div class="nav-item" onclick="setActive(this)">
-                <svg viewBox="0 0 24 24"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon></svg>
-                <span class="nav-text">Map</span>
-            </div>
-            <div class="nav-item" onclick="setActive(this)">
-                <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"></rect></svg>
-                <span class="nav-text">Reels</span>
-            </div>
-            <div class="nav-item" onclick="setActive(this)">
-                <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                <span class="nav-text">Profile</span>
-            </div>
+            <div style="color: var(--primary-blue); font-weight: bold;">Home</div>
+            <div style="color: #64748b;">Map</div>
+            <div style="color: #64748b;">Reels</div>
+            <div style="color: #64748b;">Profile</div>
         </nav>
     </div>
 
     <script>
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                const splash = document.getElementById('splash-screen');
-                const mainApp = document.getElementById('main-app');
-                splash.style.opacity = '0';
-                setTimeout(() => splash.style.visibility = 'hidden', 1000);
-                mainApp.style.opacity = '1';
-            }, 2500);
-        });
-
-        function setActive(el) {
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-            el.classList.add('active');
+        function showService(serviceId, element) {
+            // إخفاء كل المحتويات
+            document.querySelectorAll('.script-viewport').forEach(v => v.classList.remove('active'));
+            // إزالة الحالة النشطة من كل التبويبات
+            document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+            
+            // إظهار المحتوى المختار
+            document.getElementById(serviceId).classList.add('active');
+            // تفعيل التبويب المختار
+            element.classList.add('active');
         }
     </script>
 </body>
