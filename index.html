@@ -3,21 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>VOYAGR — Premium Travel</title>
+<title>VOYAGR — Travel App</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #060810;
-    --bg2: #0b0f1e;
     --bg3: #101628;
     --card: rgba(16,22,46,0.72);
     --border: rgba(120,100,255,0.13);
-    --border2: rgba(80,180,255,0.12);
     --neon-p: #a259ff;
     --neon-b: #3ecfff;
     --neon-g: #39ffbd;
     --grad: linear-gradient(135deg, #a259ff 0%, #3ecfff 100%);
-    --grad2: linear-gradient(135deg, #3ecfff 0%, #39ffbd 100%);
     --text: #f0f0ff;
     --muted: rgba(200,200,255,0.45);
     --glass: rgba(14,20,48,0.65);
@@ -26,125 +23,63 @@
     --ai-grad: linear-gradient(135deg, #0EA5E9 0%, #6366F1 100%);
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-  html,body{height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--text);overflow:hidden;}
+  html,body{height:100%;background:#040608;font-family:'DM Sans',sans-serif;color:var(--text);overflow:hidden;}
 
-.phone-shell{
-position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
-background: radial-gradient(ellipse 80% 60% at 50% 20%, rgba(162,89,255,0.09) 0%, transparent 70%),
-radial-gradient(ellipse 60% 40% at 80% 80%, rgba(62,207,255,0.07) 0%, transparent 60%), #040608;
-}
-.phone{
-width:390px;height:844px;
-background:var(--bg);
-border-radius:50px;
-border:1.5px solid rgba(120,100,255,0.25);
-box-shadow:0 0 0 1px rgba(0,0,0,0.8), 0 40px 120px rgba(0,0,0,0.9),
-inset 0 0 0 1px rgba(255,255,255,0.04),
-0 0 80px rgba(162,89,255,0.15), 0 0 200px rgba(62,207,255,0.06);
-overflow:hidden;position:relative;display:flex;flex-direction:column;
-}
-.island{
-position:absolute;top:13px;left:50%;transform:translateX(-50%);
-width:126px;height:37px;background:#000;border-radius:20px;z-index:100;
-box-shadow:0 0 0 1.5px rgba(255,255,255,0.06);
-}
+  .phone-shell{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;}
+  .phone{
+    width:390px;height:844px;background:var(--bg);border-radius:50px;
+    border:1.5px solid rgba(120,100,255,0.25);overflow:hidden;position:relative;display:flex;flex-direction:column;
+  }
+  .island{position:absolute;top:13px;left:50%;transform:translateX(-50%);width:126px;height:37px;background:#000;border-radius:20px;z-index:100;}
 
-.screens{display:flex;flex:1;position:relative;overflow:hidden;}
-.screen{
-position:absolute;inset:0;display:flex;flex-direction:column;
-opacity:0;pointer-events:none;transition:opacity .35s cubic-bezier(.4,0,.2,1);
-overflow:hidden;
-}
-.screen.active{opacity:1;pointer-events:all;}
+  .scroll-area{flex:1;overflow-y:auto;padding-bottom:100px;padding-top:20px;}
+  .scroll-area::-webkit-scrollbar{display:none;}
 
-.scroll-area{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:100px;padding-top:60px;}
-.scroll-area::-webkit-scrollbar{display:none;}
+  /* 1. الترحيب والاسم */
+  .home-greeting{padding:40px 20px 15px; display:flex; justify-content:space-between; align-items:center;}
+  .greeting-text .sub{font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.1em;}
+  .greeting-text .name{font-family:'Syne',sans-serif; font-size:24px; font-weight:800; color:#fff;}
 
-.status-bar{
-position:absolute;top:0;left:0;right:0;height:52px;z-index:50;
-display:flex;align-items:flex-end;justify-content:space-between;
-padding:0 28px 8px;
-background:linear-gradient(to bottom, rgba(6,8,16,0.98) 0%, transparent 100%);
-pointer-events:none;
-}
-.status-time{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:#fff;}
-.status-icons{display:flex;gap:6px;align-items:center;font-size:12px;color:#fff;opacity:.9;}
+  /* 2. البانر الإعلاني المتحرك */
+  .banner-container{margin:0 20px; height:180px; border-radius:var(--r); overflow:hidden; position:relative;}
+  .banner-slide{position:absolute; inset:0; background-size:cover; background-position:center; opacity:0; transition:opacity 1s ease-in-out;}
+  .banner-slide.active{opacity:1;}
+  .banner-overlay{position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,0.7), transparent); display:flex; align-items:flex-end; padding:15px;}
+  .banner-text{font-family:'Syne'; font-weight:700; font-size:18px; color:white;}
 
-.nav-bar{
-position:absolute;bottom:0;left:0;right:0;height:84px;z-index:50;
-background:rgba(8,11,24,0.92);
-backdrop-filter:blur(24px) saturate(180%);
-border-top:1px solid var(--border);
-display:flex;align-items:center;justify-content:space-around;
-padding:0 10px 16px;
-box-shadow:0 -1px 0 rgba(162,89,255,0.08), 0 -20px 60px rgba(0,0,0,0.5);
-}
-.nav-item{
-display:flex;flex-direction:column;align-items:center;gap:5px;
-cursor:pointer;padding:8px 18px 0;transition:all .25s ease;
-position:relative;
-}
-.nav-item svg{width:26px;height:26px;transition:all .3s ease;}
-.nav-item span{font-size:10px;font-weight:500;color:var(--muted);transition:color .3s;}
-.nav-item.active span{color:var(--neon-p);}
-.nav-item.active svg{filter:drop-shadow(0 0 8px var(--neon-p));}
-.nav-glow{
-position:absolute;top:-1px;left:50%;transform:translateX(-50%);
-width:40px;height:2px;
-background:var(--grad);border-radius:0 0 4px 4px;
-opacity:0;transition:opacity .3s;box-shadow:0 0 12px var(--neon-p);
-}
-.nav-item.active .nav-glow{opacity:1;}
+  /* 3. الخدمات (eSIM والفعاليات) */
+  .services-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:20px;}
+  .svc-card{
+    background:var(--glass); border:1px solid var(--border); border-radius:var(--r2);
+    padding:12px 5px; display:flex; flex-direction:column; align-items:center; gap:8px;
+  }
+  .svc-icon{width:40px; height:40px; display:flex; align-items:center; justify-content:center;}
+  .svc-label{font-size:11px; color:var(--muted); font-weight:500;}
 
-/* HOME STYLES */
-.home-greeting{display:flex;justify-content:space-between;align-items:center;padding:64px 20px 12px;}
-.greeting-text .sub{font-size:12px;color:var(--muted);font-weight:400;text-transform:uppercase;letter-spacing:.12em;}
-.greeting-text .name{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  /* 4. AI Chat Panel (مثل الصورة الثالثة) */
+  .ai-panel{
+    margin:10px 20px; background:#0b0f1e; border:1.5px solid rgba(255,255,255,0.05);
+    border-radius:24px; padding:20px; position:relative;
+  }
+  .ai-panel h2{font-family:'Syne'; font-size:22px; margin-bottom:5px; line-height:1.2;}
+  .ai-panel h2 span{color:#3ecfff;}
+  .ai-panel p{font-size:13px; color:var(--muted); margin-bottom:15px;}
+  
+  .ai-input-box{
+    background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);
+    border-radius:15px; padding:12px 15px; display:flex; align-items:center; gap:10px;
+  }
+  .ai-input-box input{background:none; border:none; color:#fff; flex:1; outline:none; font-size:14px;}
+  .ai-btn{width:32px; height:32px; background:var(--grad); border-radius:50%; border:none; color:white; cursor:pointer;}
 
-.banner{margin:0 20px;position:relative;height:210px;overflow:hidden;border-radius:var(--r);}
-.banner-slide{position:absolute;inset:0;opacity:0;transition:opacity .9s ease;background-size:cover;background-position:center;}
-.banner-slide.active{opacity:1;}
-.banner-slide::after{content:'';position:absolute;inset:0;background:linear-gradient(to top, rgba(6,8,16,0.88) 0%, rgba(6,8,16,0.15) 55%, transparent 100%);}
-.banner-content{position:absolute;bottom:18px;left:20px;z-index:2;}
-.banner-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;line-height:1.2;color:#fff;}
+  /* البانر السفلي (var banner) */
+  .feed-card{margin:15px 20px; border-radius:var(--r); overflow:hidden; border:1px solid var(--border); background:var(--card);}
+  .feed-img{height:150px; background:#1a1a2e; display:flex; align-items:center; justify-content:center; font-size:40px;}
 
-.services-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:0 20px;}
-.svc-card{
-display:flex;flex-direction:column;align-items:center;gap:8px;
-padding:14px 8px;background:var(--glass);border:1px solid var(--border);
-border-radius:var(--r2);cursor:pointer;backdrop-filter:blur(12px);
-transition:all .25s ease;
-}
-.svc-card:active{transform:scale(.95);}
-.svc-icon{width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;}
-.svc-label{font-size:10px;font-weight:500;color:var(--muted);text-align:center;line-height:1.3;}
-
-/* AI SEARCH & CHAT STYLES */
-.ai-search-container {
-  margin: 20px; padding: 15px; border-radius: 18px;
-  background: rgba(120, 100, 255, 0.08); border: 1px solid rgba(162, 89, 255, 0.2);
-  display: flex; align-items: center; gap: 12px; cursor: pointer;
-}
-.ai-orb {
-  width: 32px; height: 32px; border-radius: 50%;
-  background: var(--ai-grad); box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
-  display: flex; align-items: center; justify-content: center; font-size: 14px;
-}
-.ai-chat-screen {
-  position: absolute; inset: 0; background: var(--bg); z-index: 300;
-  display: none; flex-direction: column; animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-
-.chat-header { padding: 60px 20px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-.chat-body { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
-.ai-msg { background: var(--bg3); border: 1px solid var(--border); padding: 12px 16px; border-radius: 18px 18px 18px 4px; max-width: 80%; font-size: 14px; line-height: 1.5; color: #e0e0ff; }
-.chat-input-row { padding: 20px 20px 40px; display: flex; gap: 10px; }
-.chat-input { flex: 1; background: var(--bg3); border: 1px solid var(--border); border-radius: 14px; padding: 12px 16px; color: white; outline: none; }
-
-.feed-card { margin: 0 20px 16px; background: var(--card); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; }
-.feed-header { padding: 14px; display: flex; align-items: center; gap: 10px; }
-.feed-visual { height: 200px; display: flex; align-items: center; justify-content: center; font-size: 60px; background: #0f172a; }
+  .nav-bar{
+    position:absolute; bottom:0; width:100%; height:80px; background:rgba(8,11,24,0.95);
+    backdrop-filter:blur(10px); border-top:1px solid var(--border); display:flex; justify-content:space-around; align-items:center;
+  }
 </style>
 </head>
 <body>
@@ -152,131 +87,100 @@ transition:all .25s ease;
 <div class="phone-shell">
   <div class="phone">
     <div class="island"></div>
-
-    <div class="ai-chat-screen" id="ai-chat">
-      <div class="chat-header">
-        <div style="display:flex; align-items:center; gap:10px;">
-          <div class="ai-orb">✦</div>
-          <span style="font-family:'Syne'; font-weight:700;">Voyagr AI</span>
+    
+    <div class="scroll-area">
+      <div class="home-greeting">
+        <div class="greeting-text">
+          <div class="sub">صباح الخير ✦</div>
+          <div class="name">أليكس ريفيرا</div>
         </div>
-        <button onclick="toggleChat(false)" style="background:none; border:none; color:var(--muted); font-size:24px;">×</button>
+        <div style="font-size:20px;">🔔</div>
       </div>
-      <div class="chat-body">
-        <div class="ai-msg">مرحباً! أنا مساعدك الذكي. كيف يمكنني مساعدتك في تخطيط رحلتك القادمة؟</div>
-      </div>
-      <div class="chat-input-row">
-        <input type="text" class="chat-input" placeholder="اكتب سؤالك هنا...">
-        <button style="width:45px; border-radius:12px; border:none; background:var(--grad); color:white;">➔</button>
-      </div>
-    </div>
 
-    <div class="status-bar">
-      <span class="status-time">9:41</span>
-      <div class="status-icons">▲▲▲ WiFi 🔋</div>
-    </div>
-
-    <div class="screens">
-      <div class="screen active" id="screen-home">
-        <div class="scroll-area">
-          <div class="home-greeting">
-            <div class="greeting-text">
-              <div class="sub">Good morning ✦</div>
-              <div class="name">Alex Rivera</div>
-            </div>
-            <div style="width:40px;height:40px;border-radius:12px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;">🔔</div>
-          </div>
-
-          <div class="banner">
-            <div class="banner-slide active" style="background-image:url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800');">
-              <div class="banner-content">
-                <div class="banner-title">Swiss Alps Adventure</div>
-              </div>
-            </div>
-          </div>
-
-          <div style="padding: 20px 20px 10px;"><h3 style="font-family:'Syne'; font-size:16px;">Services</h3></div>
-          
-          <div class="services-grid">
-            <div class="svc-card">
-              <div class="svc-icon" style="background:rgba(162,89,255,0.15);"><svg viewBox="0 0 24 24" fill="none" stroke="var(--neon-p)" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
-              <div class="svc-label">Villas</div>
-            </div>
-            <div class="svc-card">
-              <div class="svc-icon" style="background:rgba(62,207,255,0.15);"><svg viewBox="0 0 24 24" fill="none" stroke="var(--neon-b)" stroke-width="1.5"><rect x="5" y="2" width="14" height="20" rx="2"/></svg></div>
-              <div class="svc-label">eSIM</div>
-            </div>
-            <div class="svc-card">
-              <div class="svc-icon" style="background:rgba(57,255,189,0.12);"><svg viewBox="0 0 24 24" fill="none" stroke="var(--neon-g)" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg></div>
-              <div class="svc-label">Events</div>
-            </div>
-            <div class="svc-card">
-              <div class="svc-icon" style="background:rgba(255,160,80,0.12);"><svg viewBox="0 0 24 24" fill="none" stroke="#ffaa55" stroke-width="1.5"><path d="M1 9h22M3 9V7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2"/></svg></div>
-              <div class="svc-label">Car Rent</div>
-            </div>
-          </div>
-
-          <div class="ai-search-container" onclick="toggleChat(true)">
-            <div class="ai-orb">✦</div>
-            <div style="flex:1;">
-              <div style="font-size:13px; font-weight:600;">Ask Voyagr AI</div>
-              <div style="font-size:10px; color:var(--muted);">خطط لرحلتك القادمة بمساعدة الذكاء الاصطناعي</div>
-            </div>
-            <span style="color:var(--muted);">🎤</span>
-          </div>
-
-          <div class="feed-card">
-            <div class="feed-header"><strong>@nomad_zara</strong></div>
-            <div class="feed-visual">🏔️</div>
-          </div>
+      <div class="banner-container">
+        <div class="banner-slide active" style="background-image:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=500')">
+          <div class="banner-overlay"><div class="banner-text">اكتشف شواطئ المالديف</div></div>
+        </div>
+        <div class="banner-slide" style="background-image:url('https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=500')">
+          <div class="banner-overlay"><div class="banner-text">مغامرات الجبال في سويسرا</div></div>
+        </div>
+        <div class="banner-slide" style="background-image:url('https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=500')">
+          <div class="banner-overlay"><div class="banner-text">جمال باريس الساحر</div></div>
         </div>
       </div>
 
-      <div class="screen" id="screen-map"></div>
-      <div class="screen" id="screen-reels"></div>
-      <div class="screen" id="screen-profile"></div>
+      <div class="services-grid">
+        <div class="svc-card">
+          <div class="svc-icon">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#3ecfff" stroke-width="2">
+              <rect x="5" y="5" width="14" height="14" rx="2"/>
+              <path d="M9 5v-2M15 5v-2M19 9h2M19 15h2M15 19v2M9 19v2M3 15h2M3 9h2"/>
+              <text x="7" y="15" font-size="6" fill="#3ecfff" font-family="Arial" stroke-width="0">eSIM</text>
+            </svg>
+          </div>
+          <div class="svc-label">eSIM</div>
+        </div>
+        <div class="svc-card">
+          <div class="svc-icon">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#39ffbd" stroke-width="2">
+              <path d="M3 20l7-10 4 6 2-3 5 7H3z"/>
+              <circle cx="18" cy="7" r="2" fill="#39ffbd"/>
+            </svg>
+          </div>
+          <div class="svc-label">الفعاليات</div>
+        </div>
+        <div class="svc-card">
+          <div class="svc-icon">🏨</div>
+          <div class="svc-label">فنادق</div>
+        </div>
+        <div class="svc-card">
+          <div class="svc-icon">🚗</div>
+          <div class="svc-label">سيارات</div>
+        </div>
+      </div>
+
+      <div class="ai-panel">
+        <h2>What will you <span>build</span> today?</h2>
+        <p>اسأل مساعد السفر الذكي عن وجهتك القادمة، الفنادق، أو حتى أفضل المطاعم.</p>
+        <div class="ai-input-box">
+          <span style="opacity:0.5">✦</span>
+          <input type="text" placeholder="اكتب سؤالك عن السفر...">
+          <button class="ai-btn">➔</button>
+        </div>
+        <div style="display:flex; gap:5px; margin-top:12px;">
+           <span style="font-size:10px; background:rgba(255,255,255,0.05); padding:4px 8px; border-radius:10px; color:var(--muted);">#سياحة</span>
+           <span style="font-size:10px; background:rgba(255,255,255,0.05); padding:4px 8px; border-radius:10px; color:var(--muted);">#أفضل_فنادق</span>
+        </div>
+      </div>
+
+      <div class="feed-card">
+        <div style="padding:10px; font-size:12px; font-weight:bold;">آخر العروض</div>
+        <div class="feed-img">🌍</div>
+      </div>
+
     </div>
 
     <nav class="nav-bar">
-      <div class="nav-item active" onclick="switchTab(this,'home')">
-        <div class="nav-glow"></div>
-        <svg viewBox="0 0 24 24" fill="none" stroke="var(--neon-p)" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
-        <span>Home</span>
-      </div>
-      <div class="nav-item" onclick="switchTab(this,'map')">
-        <div class="nav-glow"></div>
-        <svg viewBox="0 0 24 24" fill="none" stroke="rgba(140,140,200,0.6)" stroke-width="1.8"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/></svg>
-        <span>Map</span>
-      </div>
-      <div class="nav-item" onclick="switchTab(this,'reels')">
-        <div class="nav-glow"></div>
-        <svg viewBox="0 0 24 24" fill="none" stroke="rgba(140,140,200,0.6)" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M10 8l6 4-6 4V8z"/></svg>
-        <span>Reels</span>
-      </div>
-      <div class="nav-item" onclick="switchTab(this,'profile')">
-        <div class="nav-glow"></div>
-        <svg viewBox="0 0 24 24" fill="none" stroke="rgba(140,140,200,0.6)" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/></svg>
-        <span>Profile</span>
-      </div>
+      <div style="color:var(--neon-p); font-size:24px;">🏠</div>
+      <div style="opacity:0.4; font-size:24px;">📍</div>
+      <div style="opacity:0.4; font-size:24px;">🎬</div>
+      <div style="opacity:0.4; font-size:24px;">👤</div>
     </nav>
   </div>
 </div>
 
 <script>
-  function switchTab(el, screen) {
-    document.querySelectorAll('.nav-item').forEach(n => {
-      n.classList.remove('active');
-      n.querySelector('svg').setAttribute('stroke','rgba(140,140,200,0.6)');
-    });
-    el.classList.add('active');
-    el.querySelector('svg').setAttribute('stroke','var(--neon-p)');
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    const target = document.getElementById('screen-'+screen);
-    if(target) target.classList.add('active');
+  // كود تحريك البانر تلقائياً
+  let currentSlide = 0;
+  const slides = document.querySelectorAll('.banner-slide');
+  
+  function nextSlide() {
+    slides[currentSlide].classList.remove('active');
+    currentSlide = (currentSlide + 1) % slides.length;
+    slides[currentSlide].classList.add('active');
   }
 
-  function toggleChat(show) {
-    document.getElementById('ai-chat').style.display = show ? 'flex' : 'none';
-  }
+  setInterval(nextSlide, 3000); // تغيير الصورة كل 3 ثواني
 </script>
 
 </body>
