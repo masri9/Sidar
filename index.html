@@ -11,6 +11,7 @@
             --bg-light: #f8faff;
             --text-main: #1a1a1a;
             --text-sub: #8e8e8e;
+            --esim-gradient: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
         }
 
         body { 
@@ -34,7 +35,7 @@
         .greeting { font-size: 12px; color: var(--text-sub); text-transform: uppercase; font-weight: bold; }
         .user-name { font-size: 26px; font-weight: 800; color: var(--text-main); }
 
-        /* --- Banner Carousel (Fixed with Dots) --- */
+        /* --- Banner Carousel (Fixed) --- */
         .banner-carousel {
             height: 180px;
             position: relative;
@@ -49,10 +50,10 @@
             position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
             display: flex; gap: 6px;
         }
-        .dot { width: 6px; height: 6px; background: rgba(255,255,255,0.5); border-radius: 50%; transition: 0.3s; }
+        .dot { width: 6px; height: 6px; background: rgba(255,255,255,0.5); border-radius: 50%; }
         .dot.active { background: white; width: 15px; border-radius: 4px; }
 
-        /* --- New: Services Section (Activities & E-sim) --- */
+        /* --- Services Section --- */
         .section-title {
             font-size: 18px;
             font-weight: 700;
@@ -62,31 +63,55 @@
 
         .services-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: 1fr 1fr;
             gap: 15px;
         }
 
+        /* تصميم الكرت العام (Activities) */
         .service-card {
             background: white;
             padding: 20px;
-            border-radius: 22px;
+            border-radius: 25px;
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
             box-shadow: 0 4px 15px rgba(0,0,0,0.02);
-            transition: transform 0.3s ease;
             cursor: pointer;
-            border: 1px solid rgba(0,0,0,0.02);
+            transition: transform 0.2s ease;
         }
 
-        .service-card:active { transform: scale(0.95); }
+        /* شكل كرت الـ E-sim المخصص (كما في الصورة) */
+        .esim-card {
+            background: var(--esim-gradient);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .esim-card .service-icon-box {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .esim-card .service-icon {
+            stroke: white;
+        }
+
+        .esim-card .service-name {
+            color: white;
+            font-weight: 700;
+        }
+
+        /* تأثير الضغط */
+        .service-card:active {
+            transform: scale(0.95);
+        }
 
         .service-icon-box {
-            width: 50px;
-            height: 50px;
+            width: 55px;
+            height: 55px;
             background: rgba(108, 92, 231, 0.08);
-            border-radius: 15px;
+            border-radius: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -94,15 +119,15 @@
         }
 
         .service-icon {
-            width: 26px;
-            height: 26px;
+            width: 28px;
+            height: 28px;
             stroke: var(--accent);
             stroke-width: 2;
             fill: none;
         }
 
         .service-name {
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 600;
             color: var(--text-main);
         }
@@ -115,9 +140,10 @@
             border-radius: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); z-index: 1000;
         }
         .nav-item { position: relative; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; transition: 0.4s; }
-        .nav-icon { width: 24px; height: 24px; stroke: #b2bec3; stroke-width: 2; fill: none; transition: 0.3s; }
+        .nav-icon { width: 24px; height: 24px; stroke: #b2bec3; stroke-width: 2; fill: none; }
         .nav-item.active { background: rgba(108, 92, 231, 0.08); transform: translateY(-8px); }
         .nav-item.active .nav-icon { stroke: var(--accent); }
+
     </style>
 </head>
 <body>
@@ -146,17 +172,22 @@
 
         <h2 class="section-title">Our Services</h2>
         <div class="services-grid">
-            <div class="service-card">
+            <div class="service-card" onclick="location.href='#activities'">
                 <div class="service-icon-box">
                     <svg class="service-icon" viewBox="0 0 24 24"><path d="M14.5 21l-5-5 5-5M8.5 21l-5-5 5-5M21 16H9"></path><circle cx="18" cy="6" r="3"></circle></svg>
                 </div>
                 <div class="service-name">Activities</div>
             </div>
-            <div class="service-card">
+            
+            <div class="service-card esim-card" onclick="alert('E-sim Clicked!')">
                 <div class="service-icon-box">
-                    <svg class="service-icon" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line><path d="M9 7h6"></path><path d="M9 11h6"></path></svg>
+                    <svg class="service-icon" viewBox="0 0 24 24">
+                        <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                        <path d="M9 7h6M9 11h6"></path>
+                        <circle cx="12" cy="17" r="1"></circle>
+                    </svg>
                 </div>
-                <div class="service-name">E-sim</div>
+                <div class="service-name">Get E-sim</div>
             </div>
         </div>
     </div>
