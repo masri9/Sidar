@@ -3,230 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sidarapp - Premium Chat Panel</title>
+    <title>Sidarapp - Official</title>
     <style>
         :root {
             --primary-blue: #2563eb;
-            --ai-dark: #0f1115;
-            --chat-bg: #1a1d23;
-            --user-bubble: #2563eb;
-            --bot-bubble: #2d323a;
-            --text-gray: #9ca3af;
+            --light-blue: #dbeafe;
+            --text-main: #1e293b;
+            --text-sub: #64748b;
+            --nav-bg: rgba(255, 255, 255, 0.95);
         }
 
         body, html { 
             margin: 0; padding: 0;
             font-family: 'Segoe UI', Roboto, sans-serif;
-            background-color: #050505;
-            color: white;
-            height: 100vh;
             overflow: hidden;
-        }
-
-        /* حاوية الدردشة الرئيسية */
-        .chat-container {
-            display: flex;
-            flex-direction: column;
             height: 100vh;
-            max-width: 500px;
-            margin: 0 auto;
-            background: linear-gradient(180deg, #0f1115 0%, #050505 100%);
-            position: relative;
         }
 
-        /* الهيدر العلوي */
-        .chat-header {
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            background: rgba(15, 17, 21, 0.8);
-        }
-
-        .bot-info { display: flex; align-items: center; gap: 12px; }
-        .bot-avatar {
-            width: 40px; height: 40px;
-            background: linear-gradient(135deg, var(--primary-blue), #60a5fa);
-            border-radius: 12px;
+        /* --- شاشة الـ Splash (ثابتة) --- */
+        #splash-screen {
+            position: fixed; inset: 0; background: #ffffff;
             display: flex; justify-content: center; align-items: center;
-            box-shadow: 0 0 15px rgba(37, 99, 235, 0.3);
+            z-index: 9999;
+            transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1), visibility 1s;
+        }
+        .splash-image { width: 180px; height: auto; animation: splashEntrance 1.5s ease-out forwards; }
+
+        @keyframes splashEntrance {
+            0% { transform: scale(0.8); opacity: 0; filter: blur(10px); }
+            100% { transform: scale(1); opacity: 1; filter: blur(0); }
         }
 
-        .bot-status { font-size: 14px; font-weight: 700; }
-        .online-dot { width: 8px; height: 8px; background: #10b981; border-radius: 50%; display: inline-block; margin-right: 5px; }
+        /* --- واجهة الـ Home (ثابتة تماماً) --- */
+        .background-container {
+            position: fixed; inset: 0; z-index: -1;
+            background-image: url('https://plain-eeur-prod-public.komododecks.com/202604/19/FtJXvAZvXREKew6PJ3ew/image.png'); 
+            background-size: cover; background-position: center;
+        }
 
-        /* منطقة الرسائل */
-        .messages-area {
+        .app-container {
+            height: 100vh; padding: 30px 25px;
+            display: flex; flex-direction: column; justify-content: space-between;
+            box-sizing: border-box; opacity: 0; 
+            transition: opacity 1.2s ease;
+        }
+
+        .header { display: flex; justify-content: space-between; align-items: center; }
+        .greeting { font-size: 14px; color: var(--text-sub); font-weight: 600; }
+        .user-name { font-size: 28px; font-weight: 800; color: var(--text-main); margin-top: 4px; }
+        .notif-icon { background: white; padding: 12px; border-radius: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+
+        /* --- إضافة قسم جديد في الوسط (بدون تغيير القديم) --- */
+        .main-content {
             flex: 1;
-            padding: 20px;
-            overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 15px;
-        }
-
-        /* ستايل الفقاعات */
-        .message { max-width: 80%; padding: 12px 16px; border-radius: 20px; font-size: 15px; line-height: 1.5; position: relative; }
-        
-        .bot-msg {
-            align-self: flex-start;
-            background: var(--bot-bubble);
-            color: #e5e7eb;
-            border-bottom-left-radius: 4px;
-        }
-
-        .user-msg {
-            align-self: flex-end;
-            background: var(--user-bubble);
-            color: white;
-            border-bottom-right-radius: 4px;
-            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2);
-        }
-
-        .time { font-size: 10px; color: var(--text-gray); margin-top: 5px; display: block; }
-
-        /* منطقة الإدخال السفلية (كما في الصورة السابقة) */
-        .input-panel {
-            padding: 20px;
-            background: rgba(15, 17, 21, 0.95);
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .input-wrapper {
-            background: #1a1d23;
-            border-radius: 24px;
-            padding: 10px 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .input-top {
-            display: flex;
+            justify-content: center;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
+            text-align: center;
         }
 
-        input {
-            background: transparent;
-            border: none;
-            color: white;
-            flex: 1;
-            font-size: 15px;
-            outline: none;
+        .hero-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(15px);
+            padding: 25px;
+            border-radius: 30px;
+            width: 85%;
+            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            animation: slideUp 1s ease-out 2.5s forwards;
+            opacity: 0;
+            transform: translateY(30px);
         }
 
-        .input-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        @keyframes slideUp {
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .tools { display: flex; gap: 12px; }
-        .tool-btn { color: var(--text-gray); cursor: pointer; transition: 0.3s; }
-        .tool-btn:hover { color: var(--primary-blue); }
+        .hero-card h3 { color: var(--primary-blue); margin: 0; font-size: 18px; }
+        .hero-card p { color: var(--text-sub); font-size: 14px; margin: 10px 0 0 0; line-height: 1.5; }
 
-        .send-btn {
-            background: var(--primary-blue);
-            width: 42px; height: 42px;
-            border-radius: 50%;
-            display: flex; justify-content: center; align-items: center;
-            border: none; cursor: pointer;
-            box-shadow: 0 0 15px rgba(37, 99, 235, 0.4);
+        /* --- شريط التنقل (ثابت تماماً) --- */
+        .bottom-nav-container {
+            align-self: center; margin-bottom: 30px;
+            width: 92%; max-width: 420px;
+            background: var(--nav-bg); backdrop-filter: blur(25px);
+            padding: 8px 12px; border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(37, 99, 235, 0.15);
+            display: flex; justify-content: space-around; align-items: center;
+            border: 1px solid rgba(255,255,255,0.3);
         }
 
-        /* تحسين السكرول */
-        .messages-area::-webkit-scrollbar { width: 4px; }
-        .messages-area::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+        .nav-item {
+            display: flex; align-items: center; justify-content: center;
+            padding: 10px 16px; cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 22px; color: var(--text-sub);
+        }
+        .nav-item svg { width: 24px; height: 24px; stroke: currentColor; stroke-width: 2.2; fill: none; }
+        .nav-item.active { background: var(--light-blue); color: var(--primary-blue); }
+        .nav-text { max-width: 0; overflow: hidden; white-space: nowrap; font-size: 14px; font-weight: 700; transition: all 0.4s ease; opacity: 0; }
+        .nav-item.active .nav-text { max-width: 80px; margin-left: 10px; opacity: 1; }
 
     </style>
 </head>
 <body>
 
-    <div class="chat-container">
-        <header class="chat-header">
-            <div class="bot-info">
-                <div class="bot-avatar">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/><path d="M12 6a1 1 0 0 0-1 1v5a1 1 0 0 0 .293.707l3 3a1 1 0 0 0 1.414-1.414L13 11.586V7a1 1 0 0 0-1-1z"/></svg>
-                </div>
-                <div>
-                    <div class="bot-status">Sidar AI Assistant</div>
-                    <div style="font-size: 11px; color: #10b981;"><span class="online-dot"></span>Active Now</div>
-                </div>
+    <div id="splash-screen">
+        <img src="https://plain-eeur-prod-public.komododecks.com/202604/19/y0zyi6uOKg2CaNATvHPZ/image.png" alt="Sidarapp Logo" class="splash-image">
+    </div>
+
+    <div class="background-container"></div>
+    <div class="app-container" id="main-app">
+        <header class="header">
+            <div>
+                <div id="greeting" class="greeting">WELCOME BACK</div>
+                <div class="user-name">Alex Rivera</div>
             </div>
-            <div class="tool-btn">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+            <div class="notif-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
             </div>
         </header>
 
-        <main class="messages-area" id="chatBox">
-            <div class="message bot-msg">
-                Hello Alex! 👋 I'm your Sidar Travel Assistant. How can I help you plan your journey today?
-                <span class="time">09:41 AM</span>
-            </div>
-            
-            <div class="message user-msg">
-                I want to check the best events in Switzerland next week.
-                <span class="time">09:42 AM</span>
-            </div>
-
-            <div class="message bot-msg">
-                Great choice! 🇨🇭 Next week in Switzerland, there's the Lucerne Festival and some amazing mountain exhibitions. Would you like me to book a ticket or check the exchange rate?
-                <span class="time">09:42 AM</span>
+        <main class="main-content">
+            <div class="hero-card">
+                <h3>Ready for Adventure?</h3>
+                <p>Explore the world with Sidarapp. Your next journey starts here.</p>
             </div>
         </main>
 
-        <footer class="input-panel">
-            <div class="input-wrapper">
-                <div class="input-top">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4b5563" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-                    <input type="text" placeholder="Type your message..." id="userInput">
-                </div>
-                <div class="input-footer">
-                    <div class="tools">
-                        <div class="tool-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg></div>
-                        <div class="tool-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg></div>
-                    </div>
-                    <button class="send-btn" onclick="sendMessage()">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-                    </button>
-                </div>
+        <nav class="bottom-nav-container">
+            <div class="nav-item active" onclick="setActive(this)">
+                <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                <span class="nav-text">Home</span>
             </div>
-        </footer>
+            <div class="nav-item" onclick="setActive(this)">
+                <svg viewBox="0 0 24 24"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon></svg>
+                <span class="nav-text">Map</span>
+            </div>
+            <div class="nav-item" onclick="setActive(this)">
+                <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"></rect><path d="M10 8l6 4-6 4V8z" fill="currentColor" opacity="0.3"></path></svg>
+                <span class="nav-text">Reels</span>
+            </div>
+            <div class="nav-item" onclick="setActive(this)">
+                <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                <span class="nav-text">Profile</span>
+            </div>
+        </nav>
     </div>
 
     <script>
-        function sendMessage() {
-            const input = document.getElementById('userInput');
-            const chatBox = document.getElementById('chatBox');
-            
-            if (input.value.trim() !== "") {
-                // إضافة رسالة المستخدم
-                const userDiv = document.createElement('div');
-                userDiv.className = 'message user-msg';
-                userDiv.innerHTML = input.value + '<span class="time">' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + '</span>';
-                chatBox.appendChild(userDiv);
-                
-                // تفريغ المدخل والسكرول لأسفل
-                input.value = "";
-                chatBox.scrollTop = chatBox.scrollHeight;
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const splash = document.getElementById('splash-screen');
+                const mainApp = document.getElementById('main-app');
+                splash.style.opacity = '0';
+                splash.style.visibility = 'hidden';
+                mainApp.style.opacity = '1';
+            }, 2500);
+        });
 
-                // محاكاة رد البوت بعد ثانية
-                setTimeout(() => {
-                    const botDiv = document.createElement('div');
-                    botDiv.className = 'message bot-msg';
-                    botDiv.innerHTML = "I'm processing your request... ✨" + '<span class="time">Just now</span>';
-                    chatBox.appendChild(botDiv);
-                    chatBox.scrollTop = chatBox.scrollHeight;
-                }, 1000);
-            }
+        function setActive(el) {
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            el.classList.add('active');
         }
 
-        // إرسال عند ضغط Enter
-        document.getElementById('userInput').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') sendMessage();
-        });
+        const hours = new Date().getHours();
+        const g = document.getElementById('greeting');
+        if (hours < 12) g.innerText = "GOOD MORNING ☀️";
+        else if (hours < 17) g.innerText = "GOOD AFTERNOON 🌤️";
+        else g.innerText = "GOOD EVENING ✨";
     </script>
 </body>
-</html>
+- [ ] </html>
