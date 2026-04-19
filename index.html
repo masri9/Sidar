@@ -61,12 +61,49 @@
         .hero-title { font-size: 34px; font-weight: 800; line-height: 1.1; color: var(--text-main); margin-bottom: 25px; }
         .hero-title span { color: var(--primary-lava); }
 
+        /* 🆕 تعديل تصميم مربع البحث لدعم التلوين 🆕 */
         .search-wrapper {
             background: rgba(255,255,255,0.9); backdrop-filter: blur(15px);
             border-radius: 20px; padding: 12px 18px; display: flex; align-items: center;
             border: 2px solid var(--primary-lava); margin-bottom: 25px;
+            position: relative; /* مهم للتموضع */
         }
-        .search-wrapper input { flex: 1; border: none; background: transparent; outline: none; padding-left: 10px; font-size: 16px; width: 100%; }
+        
+        /* أيقونة البحث */
+        .search-icon { z-index: 2; margin-right: 10px; font-size: 18px; }
+
+        .search-wrapper input { 
+            flex: 1; border: none; background: transparent; outline: none; 
+            font-size: 16px; width: 100%; 
+            position: relative; z-index: 2; /* فوق النص الملون */
+            color: var(--text-main);
+        }
+
+        /* 🆕 النص الخلفي الملون (الذي يظهر كـ placeholder) 🆕 */
+        .fake-placeholder {
+            position: absolute;
+            left: 45px; /* بعد الأيقونة */
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8; /* لون placeholder الافتراضي */
+            font-size: 16px;
+            pointer-events: none; /* لا يتفاعل مع اللمس */
+            z-index: 1; /* خلف حقل الإدخال */
+            transition: opacity 0.2s;
+            white-space: nowrap;
+        }
+
+        /* إخفاء النص الخلفي عند التركيز أو الكتابة */
+        .search-wrapper input:focus + .fake-placeholder,
+        .search-wrapper input:not(:placeholder-shown) + .fake-placeholder {
+            opacity: 0;
+        }
+
+        /* إخفاء الـ placeholder الأصلي تماماً */
+        .search-wrapper input::placeholder {
+            color: transparent;
+        }
+        /* 🆕 نهاية تعديلات مربع البحث 🆕 */
 
         .services-scroll-container {
             display: flex; gap: 10px; overflow-x: auto; padding-bottom: 25px; scrollbar-width: none;
@@ -173,10 +210,10 @@
         <h1 class="hero-title">Where do you <br><span>wanna go?</span></h1>
 
         <div class="search-wrapper">
-            <span>🔍</span>
-            <input type="text" id="searchField" placeholder="Ask Sidar any thing...">
+            <span class="search-icon">🔍</span>
+            <input type="text" placeholder=" ">
+            <div class="fake-placeholder">Ask <span class="lava-text">Sidar</span> any thing...</div>
         </div>
-
         <div class="services-scroll-container">
             <div class="service-pill" onclick="activatePill(this)"><span>🎟️ Events</span></div>
             <div class="service-pill" onclick="activatePill(this)"><span>📶 eSIM</span></div>
@@ -272,12 +309,7 @@
         window.addEventListener('load', () => {
             applyImages();
 
-            // تلوين كلمة Sidar داخل Placeholder
-            const targetWord = 'Sidar';
-            const searchField = document.getElementById('searchField');
-            const originalPlaceholder = searchField.getAttribute('placeholder');
-            const coloredPlaceholder = originalPlaceholder.replace(targetWord, `<span class="lava-text">${targetWord}</span>`);
-            searchField.setAttribute('placeholder', coloredPlaceholder);
+            // 🆕 إزالة كود JavaScript القديم الخاص بتلوين Placeholder لأنه لم يعد مطلوباً 🆕
 
             setTimeout(() => {
                 document.getElementById('splash-screen').style.opacity = '0';
