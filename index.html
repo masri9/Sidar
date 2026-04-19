@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sidarapp - Modern Pill Edition</title>
+    <title>Sidarapp - Active Pill Edition</title>
     
     <style>
         :root {
@@ -86,7 +86,7 @@
         .search-wrapper input { flex: 1; border: none; background: transparent; outline: none; padding-left: 10px; font-size: 16px; font-weight: 500; }
         .search-wrapper span { color: var(--primary-lava); }
 
-        /* --- NEW: Minimalist Pill Services (شريط الكبسولات العصري) --- */
+        /* --- Scrolling Pill Services (التفاعل البرتقالي) --- */
         .services-scroll-container {
             width: 100%;
             overflow-x: auto;
@@ -104,22 +104,34 @@
             background: #ffffff;
             border: 1.5px solid #f1f5f9;
             padding: 8px 16px;
-            border-radius: 50px; /* شكل كبسولة */
+            border-radius: 50px;
             flex-shrink: 0;
-            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s ease;
             box-shadow: 0 4px 12px rgba(0,0,0,0.03);
             cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .service-pill:active {
-            transform: scale(0.95);
-            background: #f8fafc;
+        /* التفاعل عند الضغط (Active State) */
+        .service-pill.active {
             border-color: var(--primary-lava);
+            background: rgba(255, 69, 0, 0.05);
+            box-shadow: 0 4px 15px var(--lava-glow);
+            transform: scale(0.95);
+        }
+
+        .service-pill.active .pill-icon {
+            filter: drop-shadow(0 0 5px var(--lava-glow));
+        }
+
+        .service-pill.active .pill-label {
+            color: var(--primary-lava);
         }
 
         .pill-icon {
             font-size: 18px;
             margin-right: 8px;
+            transition: 0.3s;
         }
 
         .pill-label {
@@ -127,6 +139,7 @@
             font-weight: 600;
             font-size: 13px;
             white-space: nowrap;
+            transition: 0.3s;
         }
 
         /* --- Bottom Nav --- */
@@ -171,23 +184,23 @@
         </div>
 
         <div class="services-scroll-container">
-            <div class="service-pill">
+            <div class="service-pill" onclick="activatePill(this)">
                 <span class="pill-icon">🎟️</span>
                 <span class="pill-label">Events</span>
             </div>
-            <div class="service-pill">
+            <div class="service-pill" onclick="activatePill(this)">
                 <span class="pill-icon">📶</span>
                 <span class="pill-label">eSIM</span>
             </div>
-            <div class="service-pill">
+            <div class="service-pill" onclick="activatePill(this)">
                 <span class="pill-icon">💱</span>
                 <span class="pill-label">Currency</span>
             </div>
-            <div class="service-pill">
+            <div class="service-pill" onclick="activatePill(this)">
                 <span class="pill-icon">💸</span>
                 <span class="pill-label">Transfer</span>
             </div>
-            <div class="service-pill">
+            <div class="service-pill" onclick="activatePill(this)">
                 <span class="pill-icon">✈️</span>
                 <span class="pill-label">Flights</span>
             </div>
@@ -224,6 +237,12 @@
                 }, 500);
             }, 2500);
         });
+
+        // وظيفة تفعيل الكبسولة وتغيير لونها للبرتقالي
+        function activatePill(el) {
+            document.querySelectorAll('.service-pill').forEach(p => p.classList.remove('active'));
+            el.classList.add('active');
+        }
 
         function tab(el) {
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
