@@ -3,134 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sidar App</title>
+    <title>Sidar App - Premium Nav</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        :root {
+            --primary-grad: linear-gradient(135deg, #2A70DC, #00C7B7);
+            --nav-bg: rgba(255, 255, 255, 0.95);
+            --icon-color: #2d3436;
         }
 
         body {
-            background-color: #ffffff; /* صفحة بيضاء بالكامل */
+            margin: 0;
+            background-color: #ffffff;
             height: 100vh;
-            display: flex;
-            flex-direction: column;
+            font-family: 'Inter', sans-serif;
         }
 
-        /* محتوى الصفحة الرئيسي */
-        .main-content {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* الشريط السفلي */
         .bottom-nav {
             position: fixed;
             bottom: 0;
-            left: 0;
-            right: 0;
-            height: 70px;
-            background: #fff;
+            width: 100%;
+            height: 85px;
+            background: var(--nav-bg);
+            backdrop-filter: blur(15px); /* تأثير زجاجي ناعم */
             display: flex;
             justify-content: space-around;
             align-items: center;
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
-            padding: 0 10px;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            padding-bottom: 15px; /* مساحة لأجهزة الآيفون الحديثة */
             z-index: 1000;
         }
 
         .nav-item {
-            text-decoration: none;
-            color: #666;
+            flex: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            flex: 1;
+            text-decoration: none;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* تصميم الأيقونات العادية */
+        .nav-item img, .nav-item i {
+            width: 26px;
+            height: 26px;
+            object-fit: contain;
+            color: var(--icon-color);
+            margin-bottom: 4px;
+            opacity: 0.7;
             transition: 0.3s;
         }
 
-        .nav-item i {
-            font-size: 20px;
-            margin-bottom: 4px;
+        /* أيقونة الريلز (صورة مخصصة كما في طلبك) */
+        .reels-icon {
+            width: 28px !important;
+            height: 28px !important;
         }
 
-        .nav-item span {
-            font-size: 10px;
-            font-weight: 600;
-        }
-
-        /* الزر الأوسط البارز (الخريطة) */
-        .nav-item.map-center {
+        /* الخريطة - التصميم الاحترافي البارز */
+        .map-center {
             position: relative;
             z-index: 1001;
+            margin-top: -40px; /* رفع العنصر بالكامل */
         }
 
         .map-circle {
-            position: absolute;
-            top: -45px; /* رفع الدائرة للأعلى */
-            width: 65px;
-            height: 65px;
-            background: linear-gradient(135deg, #2A70DC, #00C7B7); /* دائرة ملونة بارزة */
-            border-radius: 50%;
+            width: 68px;
+            height: 68px;
+            background: var(--primary-grad);
+            border-radius: 22px; /* زوايا دائرية ناعمة وليست دائرة كاملة لتعطي شكل عصري */
             display: flex;
             justify-content: center;
             align-items: center;
-            color: white;
-            box-shadow: 0 8px 15px rgba(42, 112, 220, 0.3);
-            border: 5px solid #fff; /* إطار أبيض لفصله عن الخلفية */
-            transition: transform 0.3s ease;
+            box-shadow: 0 12px 24px rgba(42, 112, 220, 0.35);
+            border: 4px solid #fff;
+            transform: rotate(-5deg); /* ميلان خفيف جداً للحيوية */
+            transition: 0.4s;
         }
 
-        .map-circle i {
-            font-size: 24px;
-            margin: 0;
+        .map-circle img {
+            width: 35px;
+            height: 35px;
+            filter: brightness(0) invert(1); /* تحويل الأيقونة للون الأبيض */
         }
 
-        .map-circle:hover {
-            transform: scale(1.1);
+        /* تأثيرات التفاعل */
+        .nav-item:hover {
+            transform: translateY(-3px);
         }
 
-        /* تفاعل الأزرار */
-        .nav-item:active {
-            transform: scale(0.9);
+        .nav-item:hover img, .nav-item:hover i {
+            opacity: 1;
+            color: #2A70DC;
+        }
+
+        .map-center:hover .map-circle {
+            transform: rotate(0deg) scale(1.1);
+            box-shadow: 0 15px 30px rgba(42, 112, 220, 0.45);
+        }
+
+        /* نصوص صغيرة تحت الأيقونات */
+        .nav-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: #b2bec3;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .active-label {
+            color: #2A70DC;
         }
     </style>
 </head>
 <body>
 
-    <div class="main-content">
-        </div>
-
     <nav class="bottom-nav">
         <a href="#" class="nav-item">
-            <i class="fa-solid fa-house"></i>
-            <span>Home</span>
+            <i class="fa-solid fa-house-chimney"></i>
+            <span class="nav-label">Home</span>
         </a>
+
         <a href="#" class="nav-item">
-            <i class="fa-solid fa-play"></i>
-            <span>Reels</span>
+            <img src="https://cdn-icons-png.flaticon.com/512/5948/5948543.png" class="reels-icon" alt="Reels">
+            <span class="nav-label">Reels</span>
         </a>
 
         <a href="#" class="nav-item map-center">
             <div class="map-circle">
-                <i class="fa-solid fa-map-location-dot"></i>
+                <img src="https://cdn-icons-png.flaticon.com/512/854/854878.png" alt="Map">
             </div>
-            <span style="margin-top: 35px;">Map</span>
+            <span class="nav-label" style="margin-top: 10px;">Explore</span>
         </a>
 
         <a href="#" class="nav-item">
             <i class="fa-solid fa-comment-dots"></i>
-            <span>Messages</span>
+            <span class="nav-label">Inbox</span>
         </a>
+
         <a href="#" class="nav-item">
-            <i class="fa-solid fa-user"></i>
-            <span>Profile</span>
+            <i class="fa-solid fa-circle-user"></i>
+            <span class="nav-label">Profile</span>
         </a>
     </nav>
 
