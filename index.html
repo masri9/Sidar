@@ -3,37 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sidarapp - Travel Explorer</title>
+    <title>Sidarapp - Travel App</title>
     <style>
         :root {
-            --bg-light: #f8f9fa; /* لون خلفية فاتح لتقليل إجهاد العين */
-            --text-dark: #2d3436; /* لون نصوص هادئ */
-            --accent-purple: #a29bfe;
-            --neon-b: #3ecfff;
-            --neon-p: #a29bfe;
-            --r: 20px;
+            --bg-light: #f8f9fa; /* خلفية فاتحة مريحة للعين */
+            --text-dark: #2d3436;
+            --accent-blue: #5f5ce5; /* لون الأيقونات من الصورة */
+            --r: 25px;
         }
 
         body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            font-family: 'Segoe UI', sans-serif;
+            margin: 0; padding: 0;
+            height: 100%; font-family: 'Segoe UI', sans-serif;
             background-color: var(--bg-light);
             overflow-x: hidden;
         }
 
-        /* خلفية تفاعلية متحركة بهدوء */
+        /* خلفية تفاعلية متحركة */
         .background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: linear-gradient(45deg, #ffffff, #e3f2fd, #f5f5f5);
-            background-size: 400% 400%;
-            animation: gradientBG 10s ease infinite;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; background: linear-gradient(45deg, #ffffff, #f0f4ff, #fdfbfb);
+            background-size: 400% 400%; animation: gradientBG 12s ease infinite;
         }
 
         @keyframes gradientBG {
@@ -42,157 +32,54 @@
             100% { background-position: 0% 50%; }
         }
 
-        .app-container {
-            padding: 25px 0 100px 0;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            box-sizing: border-box;
-        }
+        .app-container { padding: 30px 0 110px 0; min-height: 100vh; box-sizing: border-box; }
 
-        /* الهيدر العلوي بنظام التحية الذكي */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 25px 25px 25px;
-        }
-
-        .greeting-text {
-            font-size: 12px;
-            color: #636e72;
-            letter-spacing: 1px;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-
-        .user-name {
-            font-size: 26px;
-            font-weight: 900;
-            color: var(--text-dark);
-            margin-top: 5px;
-        }
-
+        /* الهيدر العلوي بنظام التحية */
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 0 25px 25px; }
+        .greeting-text { font-size: 13px; color: #888; letter-spacing: 1px; font-weight: 600; text-transform: uppercase; }
+        .user-name { font-size: 28px; font-weight: 900; color: var(--text-dark); margin-top: 4px; }
+        
         .notif-box {
-            position: relative;
-            background: rgba(0, 0, 0, 0.05);
-            padding: 12px;
-            border-radius: 15px;
+            position: relative; background: white; padding: 12px;
+            border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.03);
         }
-
         .notif-dot {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            width: 8px;
-            height: 8px;
-            background-color: var(--accent-purple);
-            border-radius: 50%;
+            position: absolute; top: 10px; right: 10px; width: 8px; height: 8px;
+            background-color: #a29bfe; border-radius: 50%; border: 2px solid white;
         }
 
-        /* تنسيق الـ Banner التفاعلي */
+        /* البانر التفاعلي المدمج */
         .banner {
-            margin: 0 20px;
-            position: relative;
-            height: 210px;
-            overflow: hidden;
-            border-radius: var(--r);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+            margin: 0 20px; position: relative; height: 220px;
+            overflow: hidden; border-radius: var(--r);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.06);
         }
-
         .banner-slide {
-            position: absolute;
-            inset: 0;
-            opacity: 0;
-            transition: opacity .9s ease;
-            background-size: cover;
-            background-position: center;
+            position: absolute; inset: 0; opacity: 0;
+            transition: opacity 1s ease; background-size: cover; background-position: center;
         }
-
         .banner-slide.active { opacity: 1; }
-
         .banner-slide::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%);
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 70%);
         }
+        .banner-content { position: absolute; bottom: 25px; left: 20px; z-index: 2; }
+        .banner-title { font-size: 24px; font-weight: 800; color: #fff; line-height: 1.2; }
 
-        .banner-content {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            z-index: 2;
-        }
-
-        .banner-tag {
-            font-size: 10px;
-            font-weight: 700;
-            color: white;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(8px);
-            padding: 4px 12px;
-            border-radius: 20px;
-            display: inline-block;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-        }
-
-        .banner-title {
-            font-size: 24px;
-            font-weight: 800;
-            color: #fff;
-            line-height: 1.1;
-        }
-
-        .banner-dots {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            display: flex;
-            gap: 6px;
-            z-index: 2;
-        }
-
-        .banner-dot {
-            height: 5px;
-            background: rgba(255,255,255,0.4);
-            transition: all .4s ease;
-            width: 5px;
-            border-radius: 3px;
-        }
-
-        .banner-dot.active {
-            width: 22px;
-            background: #fff;
-        }
-
-        /* شريط التنقل السفلي */
+        /* شريط التنقل السفلي بالأشكال المطلوبة من الصورة */
         .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            display: flex;
-            justify-content: space-around;
-            padding: 15px 0;
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
-            border-radius: 30px 30px 0 0;
-            z-index: 100;
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: white; display: flex; justify-content: space-around;
+            padding: 20px 0; box-shadow: 0 -10px 30px rgba(0,0,0,0.05);
+            border-radius: 35px 35px 0 0; z-index: 1000;
         }
 
-        .nav-item {
-            text-align: center;
-            color: #b2bec3;
-            font-size: 11px;
-            text-decoration: none;
-            transition: 0.3s;
-        }
+        .nav-item { cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
+        
+        /* رسم الأيقونات باستخدام SVG لمحاكاة الشكل في الصورة */
+        .icon { width: 28px; height: 28px; stroke: #95a5a6; stroke-width: 2; fill: none; transition: 0.3s; }
+        .nav-item.active .icon { stroke: var(--accent-blue); }
 
-        .nav-item.active { color: #0984e3; }
-        .nav-icon { font-size: 22px; display: block; margin-bottom: 5px; }
     </style>
 </head>
 <body>
@@ -207,66 +94,52 @@
             </div>
             <div class="notif-box">
                 <span class="notif-dot"></span>
-                <span style="font-size: 20px;">🔔</span>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
             </div>
         </header>
 
-        <section class="banner" id="banner">
-            <div class="banner-slide active" style="background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80');">
+        <section class="banner">
+            <div class="banner-slide active" style="background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800');">
                 <div class="banner-content">
-                    <div class="banner-tag">Featured</div>
                     <div class="banner-title">Swiss Alps<br>Adventure</div>
                 </div>
             </div>
-            
-            <div class="banner-slide" style="background-image: url('https://images.unsplash.com/photo-1519046904884-53103b34b206?w=800&q=80');">
+            <div class="banner-slide" style="background-image: url('https://images.unsplash.com/photo-1519046904884-53103b34b206?w=800');">
                 <div class="banner-content">
-                    <div class="banner-tag">Trending</div>
-                    <div class="banner-title">Maldives<br>Private Escape</div>
+                    <div class="banner-title">Maldives<br>Escape</div>
                 </div>
             </div>
-
-            <div class="banner-dots">
-                <div class="banner-dot active"></div>
-                <div class="banner-dot"></div>
-            </div>
         </section>
-
-        <div style="flex-grow: 1;"></div>
     </div>
 
     <nav class="bottom-nav">
-        <a href="#" class="nav-item active"><span class="nav-icon">🏠</span>Home</a>
-        <a href="#" class="nav-item"><span class="nav-icon">📍</span>Map</a>
-        <a href="#" class="nav-item"><span class="nav-icon">🎬</span>Reels</a>
-        <a href="#" class="nav-item"><span class="nav-icon">👤</span>Profile</a>
+        <div class="nav-item active">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+        </div>
+        <div class="nav-item">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M1 6v16l7-4 8 4 7-4V2l-7 4-8-4-7 4z"></path></svg>
+        </div>
+        <div class="nav-item">
+            <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"></circle><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path></svg>
+        </div>
     </nav>
 
     <script>
-        // تحديث التحية تلقائياً بالإنجليزية
-        function updateGreeting() {
-            const hours = new Date().getHours();
-            const greeting = document.getElementById('greeting');
-            if (hours < 12) greeting.innerText = "GOOD MORNING";
-            else if (hours < 17) greeting.innerText = "GOOD AFTERNOON";
-            else greeting.innerText = "GOOD EVENING";
-        }
-        updateGreeting();
+        // تحديث وقت التحية
+        const hours = new Date().getHours();
+        const greeting = document.getElementById('greeting');
+        if (hours < 12) greeting.innerText = "GOOD MORNING";
+        else if (hours < 17) greeting.innerText = "GOOD AFTERNOON";
+        else greeting.innerText = "GOOD EVENING";
 
-        // منطق تبديل الـ Banner التفاعلي كل 4 ثوانٍ
-        let currentSlide = 0;
+        // تبديل البانر
+        let current = 0;
         const slides = document.querySelectorAll('.banner-slide');
-        const dots = document.querySelectorAll('.banner-dot');
-
-        function nextSlide() {
-            slides[currentSlide].classList.remove('active');
-            dots[currentSlide].classList.remove('active');
-            currentSlide = (currentSlide + 1) % slides.length;
-            slides[currentSlide].classList.add('active');
-            dots[currentSlide].classList.add('active');
-        }
-
-        setInterval(nextSlide, 4000);
+        setInterval(() => {
+            slides[current].classList.remove('active');
+            current = (current + 1) % slides.length;
+            slides[current].classList.add('active');
+        }, 4000);
     </script>
 </body>
 </html>
