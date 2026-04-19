@@ -3,76 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sidarapp - Travel Hub</title>
+    <title>Sidarapp - Travel Home</title>
     <style>
+        /* المتغيرات الأساسية والألوان الفاتحة */
         :root {
-            --accent: #6c5ce7;
+            --accent: #6c5ce7; /* لون الـ Purple النشط من الصورة */
             --nav-bg: #ffffff;
-            --bg-light: #f8faff;
+            --bg-light: #f8faff; /* خلفية فاتحة لراحة العين */
+            --text-main: #1a1a1a;
+            --text-sub: #8e8e8e;
         }
 
         body { 
             margin: 0; 
             background-color: var(--bg-light); 
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             overflow-x: hidden;
         }
 
+        /* حاوية التطبيق الرئيسية بمسافات مناسبة */
         .app-container {
-            padding: 25px 20px 120px 20px;
+            padding: 25px 20px 120px 20px; /* مسافة سفلية كافية للشريط */
         }
 
-        /* الهيدر العلوي */
+        /* --- قسم الترحيب العلوي (ثابت) --- */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
         }
-        .greeting { font-size: 12px; color: #8e8e8e; text-transform: uppercase; font-weight: bold; }
-        .user-name { font-size: 26px; font-weight: 800; color: #1a1a1a; }
+        .greeting-group { display: flex; flex-direction: column; }
+        .greeting { 
+            font-size: 12px; 
+            color: var(--text-sub); 
+            text-transform: uppercase; 
+            font-weight: bold; 
+            letter-spacing: 1px;
+        }
+        .user-name { 
+            font-size: 28px; 
+            font-weight: 800; 
+            color: var(--text-main); 
+            margin-top: 4px;
+        }
+        .notif-icon {
+            background: white; 
+            padding: 12px; 
+            border-radius: 15px; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.04);
+            cursor: pointer;
+        }
 
-        /* 1. البانر الإعلاني - 3 صور تتبدل تلقائياً */
-        .banner-container {
+        /* --- البانر الإعلاني التفاعلي (الجديد) --- */
+        .banner-carousel {
             height: 200px;
             position: relative;
             overflow: hidden;
             border-radius: 25px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.07);
+        }
+
+        /* حاوية الصور */
+        .slides-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); /* تحريك سلس */
         }
 
         .slide {
-            position: absolute;
-            inset: 0;
-            opacity: 0;
-            transition: opacity 1s ease-in-out;
+            min-width: 100%;
+            height: 100%;
             background-size: cover;
             background-position: center;
+            position: relative;
         }
 
-        .slide.active { opacity: 1; }
-
+        /* طبقة تظليل خفيفة لقراءة النص */
         .slide::after {
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.4), transparent);
+            background: linear-gradient(to top, rgba(0,0,0,0.5), transparent 70%);
         }
 
-        /* 2. شريط التنقل السفلي - ثابت، صغير، ومتحرك */
+        .slide-content {
+            position: absolute;
+            bottom: 25px;
+            left: 20px;
+            color: white;
+            z-index: 2;
+        }
+        .slide-title { font-size: 24px; font-weight: 700; line-height: 1.2; }
+
+        /* --- المؤشرات السفلية للبانر (Dots) --- */
+        .banner-dots {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background-color: white;
+            width: 20px; /* استطالة النقطة النشطة */
+            border-radius: 4px;
+        }
+
+        /* --- شريط التنقل السفلي (ثابت ومتحرك) --- */
         .bottom-nav {
             position: fixed;
             bottom: 25px; 
             left: 50%;
             transform: translateX(-50%);
             width: 80%; 
-            max-width: 350px;
+            max-width: 340px; /* حجم أصغر ومناسب */
             background: var(--nav-bg);
             display: flex;
             justify-content: space-around;
-            padding: 10px 0;
+            padding: 12px 0;
             border-radius: 30px;
-            box-shadow: 0 12px 35px rgba(0,0,0,0.1);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
             z-index: 1000;
         }
 
@@ -81,26 +145,26 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 42px;
-            height: 42px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* حركة جميلة */
         }
 
         .nav-icon {
-            width: 22px;
-            height: 22px;
-            stroke: #b2bec3;
+            width: 24px;
+            height: 24px;
+            stroke: #b2bec3; /* لون غير نشط */
             stroke-width: 2;
             fill: none;
             transition: 0.3s;
         }
 
-        /* حركة الأيقونة النشطة */
+        /* تحريك قفزة للأعلى للأيقونة النشطة */
         .nav-item.active {
             background: rgba(108, 92, 231, 0.08);
-            transform: translateY(-6px);
+            transform: translateY(-8px);
         }
 
         .nav-item.active .nav-icon {
@@ -108,10 +172,11 @@
             filter: drop-shadow(0 0 5px rgba(108, 92, 231, 0.3));
         }
 
+        /* النقطة الصغيرة تحت الأيقونة النشطة */
         .nav-item.active::after {
             content: '';
             position: absolute;
-            bottom: -8px;
+            bottom: -6px;
             width: 4px;
             height: 4px;
             background: var(--accent);
@@ -123,18 +188,38 @@
 
     <div class="app-container">
         <header class="header">
-            <div>
+            <div class="greeting-group">
                 <div id="greeting" class="greeting">GOOD MORNING</div>
                 <div class="user-name">Alex Rivera</div>
             </div>
-            <div style="background: white; padding: 10px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.03);">🔔</div>
+            <div class="notif-icon">🔔</div>
         </header>
 
-        <div class="banner-container">
-            <div class="slide active" style="background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800');"></div>
-            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1519046904884-53103b34b206?w=800');"></div>
-            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1555400538-5fd41fe3e7e4?w=800');"></div>
-        </div>
+        <section class="banner-carousel">
+            <div class="slides-container" id="slidesContainer">
+                <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800');">
+                    <div class="slide-content">
+                        <div class="slide-title">Swiss Alps<br>Adventure</div>
+                    </div>
+                </div>
+                <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1519046904884-53103b34b206?w=800');">
+                    <div class="slide-content">
+                        <div class="slide-title">Maldives<br>Luxury Escape</div>
+                    </div>
+                </div>
+                <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1555400538-5fd41fe3e7e4?w=800');">
+                    <div class="slide-content">
+                        <div class="slide-title">Tokyo<br>City Tour</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="banner-dots">
+                <div class="dot active" onclick="goToSlide(0)"></div>
+                <div class="dot" onclick="goToSlide(1)"></div>
+                <div class="dot" onclick="goToSlide(2)"></div>
+            </div>
+        </section>
     </div>
 
     <nav class="bottom-nav">
@@ -150,27 +235,68 @@
     </nav>
 
     <script>
-        // تبديل البانر كل 4 ثوانٍ
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.slide');
-        setInterval(() => {
-            slides[currentSlide].classList.remove('active');
-            currentSlide = (currentSlide + 1) % slides.length;
-            slides[currentSlide].classList.add('active');
-        }, 4000);
+        // --- أولاً: تحضير العناصر العامة ---
+        const greetingText = document.getElementById('greeting');
+        const userName = "Alex Rivera"; // يمكن جلبها ديناميكياً لاحقاً
 
-        // تحريك أيقونات التنقل
-        function setActive(el) {
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-            el.classList.add('active');
+        // --- ثانياً: منطق التحية الذكية بالإنجليزية ---
+        function updateGreeting() {
+            const hours = new Date().getHours();
+            if (hours < 12) greetingText.innerText = "GOOD MORNING";
+            else if (hours < 17) greetingText.innerText = "GOOD AFTERNOON";
+            else greetingText.innerText = "GOOD EVENING";
+        }
+        updateGreeting();
+
+        // --- ثالثاً: منطق البانر التفاعلي (Carousel) ---
+        let currentSlide = 0;
+        const totalSlides = 3; // عدد الصور
+        const container = document.getElementById('slidesContainer');
+        const dots = document.querySelectorAll('.dot');
+
+        // دالة للانتقال لصورة محددة
+        function goToSlide(slideIndex) {
+            currentSlide = slideIndex;
+            // تحريك الحاوية أفقياً بناءً على المؤشر
+            container.style.transform = `translateX(-${currentSlide * 100}%)`;
+            
+            // تحديث حالة النقاط (Dots)
+            dots.forEach(dot => dot.classList.remove('active'));
+            dots[currentSlide].classList.add('active');
         }
 
-        // تحية ذكية بالإنجليزية
-        const hours = new Date().getHours();
-        const gText = document.getElementById('greeting');
-        if (hours < 12) gText.innerText = "GOOD MORNING";
-        else if (hours < 17) gText.innerText = "GOOD AFTERNOON";
-        else gText.innerText = "GOOD EVENING";
+        // دالة للانتقال التلقائي كل 4 ثوانٍ
+        function autoSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            goToSlide(currentSlide);
+        }
+
+        // تشغيل المؤقت التلقائي
+        let slideInterval = setInterval(autoSlide, 4000);
+
+        // إعادة ضبط المؤقت عند النقر اليدوي على النقاط
+        function resetInterval() {
+            clearInterval(slideInterval);
+            slideInterval = setInterval(autoSlide, 4000);
+        }
+        
+        // إضافة مستمعي النقر للنقاط اليدوية
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                goToSlide(index);
+                resetInterval();
+            });
+        });
+
+        // --- رابعاً: تحريك شريط التنقل السفلي عند النقر ---
+        function setActive(clickedItem) {
+            // إزالة حالة النشاط من جميع العناصر
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            // إضافة حالة النشاط للعنصر الذي تم النقر عليه
+            clickedItem.classList.add('active');
+        }
     </script>
 </body>
 </html>
