@@ -21,7 +21,7 @@
             background-color: white;
         }
 
-        /* --- شاشة الـ Splash (عادت كما كانت) --- */
+        /* --- شاشة الـ Splash --- */
         #splash-screen {
             position: fixed; inset: 0; background: #ffffff;
             display: flex; justify-content: center; align-items: center;
@@ -41,7 +41,7 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 45vh; /* يغطي الربع الأول مع مساحة للتلاشي */
+            height: 45vh; 
             z-index: -1;
             background: linear-gradient(to bottom, 
                 transparent 70%, 
@@ -61,7 +61,7 @@
             z-index: 10;
         }
 
-        /* --- الهيدر المحدث --- */
+        /* --- الهيدر (الشعار على اليسار والجرس على اليمين) --- */
         .header { 
             display: flex; 
             justify-content: space-between; 
@@ -73,7 +73,7 @@
             width: 45px;
             height: 45px;
             border-radius: 12px;
-            object-fit: cover;
+            object-fit: contain; /* للحفاظ على أبعاد الشعار */
         }
 
         .notif-icon { 
@@ -86,7 +86,7 @@
             justify-content: center;
         }
 
-        /* --- شريط التنقل السفلي (بدون تغيير) --- */
+        /* --- شريط التنقل السفلي --- */
         .bottom-nav-container {
             position: absolute;
             bottom: 30px;
@@ -129,7 +129,7 @@
     <div class="app-container" id="main-app">
         <header class="header">
             <div class="logo-area">
-                <img src="https://plain-eeur-prod-public.komododecks.com/202604/19/jYUeKR2ZhZt36zJiEWGu/image.jpg" alt="Logo" class="logo-img">
+                <img src="https://plain-eeur-prod-public.komododecks.com/202604/19/BSGZvRlz30cMkZM3USiS/image.png" alt="Logo" class="logo-img">
             </div>
             <div class="notif-icon">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2">
