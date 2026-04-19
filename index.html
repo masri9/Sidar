@@ -1,187 +1,115 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>VOYAGR — Travel App</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #060810;
-    --bg3: #101628;
-    --card: rgba(16,22,46,0.72);
-    --border: rgba(120,100,255,0.13);
-    --neon-p: #a259ff;
-    --neon-b: #3ecfff;
-    --neon-g: #39ffbd;
-    --grad: linear-gradient(135deg, #a259ff 0%, #3ecfff 100%);
-    --text: #f0f0ff;
-    --muted: rgba(200,200,255,0.45);
-    --glass: rgba(14,20,48,0.65);
-    --r: 20px;
-    --r2: 14px;
-    --ai-grad: linear-gradient(135deg, #0EA5E9 0%, #6366F1 100%);
+import 'dart:async';
+import 'package:flutter/material.dart';
+
+void main() => runApp(const SidarTravelApp());
+
+class SidarTravelApp extends StatelessWidget {
+  const SidarTravelApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: HomePage(),
+    );
   }
-  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-  html,body{height:100%;background:#040608;font-family:'DM Sans',sans-serif;color:var(--text);overflow:hidden;}
+}
 
-  .phone-shell{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;}
-  .phone{
-    width:390px;height:844px;background:var(--bg);border-radius:50px;
-    border:1.5px solid rgba(120,100,255,0.25);overflow:hidden;position:relative;display:flex;flex-direction:column;
-  }
-  .island{position:absolute;top:13px;left:50%;transform:translateX(-50%);width:126px;height:37px;background:#000;border-radius:20px;z-index:100;}
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
 
-  .scroll-area{flex:1;overflow-y:auto;padding-bottom:100px;padding-top:20px;}
-  .scroll-area::-webkit-scrollbar{display:none;}
-
-  /* 1. الترحيب والاسم */
-  .home-greeting{padding:40px 20px 15px; display:flex; justify-content:space-between; align-items:center;}
-  .greeting-text .sub{font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.1em;}
-  .greeting-text .name{font-family:'Syne',sans-serif; font-size:24px; font-weight:800; color:#fff;}
-
-  /* 2. البانر الإعلاني المتحرك */
-  .banner-container{margin:0 20px; height:180px; border-radius:var(--r); overflow:hidden; position:relative;}
-  .banner-slide{position:absolute; inset:0; background-size:cover; background-position:center; opacity:0; transition:opacity 1s ease-in-out;}
-  .banner-slide.active{opacity:1;}
-  .banner-overlay{position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,0.7), transparent); display:flex; align-items:flex-end; padding:15px;}
-  .banner-text{font-family:'Syne'; font-weight:700; font-size:18px; color:white;}
-
-  /* 3. الخدمات (eSIM والفعاليات) */
-  .services-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:20px;}
-  .svc-card{
-    background:var(--glass); border:1px solid var(--border); border-radius:var(--r2);
-    padding:12px 5px; display:flex; flex-direction:column; align-items:center; gap:8px;
-  }
-  .svc-icon{width:40px; height:40px; display:flex; align-items:center; justify-content:center;}
-  .svc-label{font-size:11px; color:var(--muted); font-weight:500;}
-
-  /* 4. AI Chat Panel (مثل الصورة الثالثة) */
-  .ai-panel{
-    margin:10px 20px; background:#0b0f1e; border:1.5px solid rgba(255,255,255,0.05);
-    border-radius:24px; padding:20px; position:relative;
-  }
-  .ai-panel h2{font-family:'Syne'; font-size:22px; margin-bottom:5px; line-height:1.2;}
-  .ai-panel h2 span{color:#3ecfff;}
-  .ai-panel p{font-size:13px; color:var(--muted); margin-bottom:15px;}
+class _HomePageState extends State<HomePage> {
+  // متغيرات للألوان التفاعلية (ألوان فاتحة Pastel)
+  Alignment _topAlignment = Alignment.topLeft;
+  Alignment _bottomAlignment = Alignment.bottomRight;
   
-  .ai-input-box{
-    background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);
-    border-radius:15px; padding:12px 15px; display:flex; align-items:center; gap:10px;
-  }
-  .ai-input-box input{background:none; border:none; color:#fff; flex:1; outline:none; font-size:14px;}
-  .ai-btn{width:32px; height:32px; background:var(--grad); border-radius:50%; border:none; color:white; cursor:pointer;}
+  // اسم المستخدم (يتم جلبه عادة من بيانات التسجيل)
+  final String userName = "Alex Rivera"; 
 
-  /* البانر السفلي (var banner) */
-  .feed-card{margin:15px 20px; border-radius:var(--r); overflow:hidden; border:1px solid var(--border); background:var(--card);}
-  .feed-img{height:150px; background:#1a1a2e; display:flex; align-items:center; justify-content:center; font-size:40px;}
-
-  .nav-bar{
-    position:absolute; bottom:0; width:100%; height:80px; background:rgba(8,11,24,0.95);
-    backdrop-filter:blur(10px); border-top:1px solid var(--border); display:flex; justify-content:space-around; align-items:center;
-  }
-</style>
-</head>
-<body>
-
-<div class="phone-shell">
-  <div class="phone">
-    <div class="island"></div>
-    
-    <div class="scroll-area">
-      <div class="home-greeting">
-        <div class="greeting-text">
-          <div class="sub">صباح الخير ✦</div>
-          <div class="name">أليكس ريفيرا</div>
-        </div>
-        <div style="font-size:20px;">🔔</div>
-      </div>
-
-      <div class="banner-container">
-        <div class="banner-slide active" style="background-image:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=500')">
-          <div class="banner-overlay"><div class="banner-text">اكتشف شواطئ المالديف</div></div>
-        </div>
-        <div class="banner-slide" style="background-image:url('https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=500')">
-          <div class="banner-overlay"><div class="banner-text">مغامرات الجبال في سويسرا</div></div>
-        </div>
-        <div class="banner-slide" style="background-image:url('https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=500')">
-          <div class="banner-overlay"><div class="banner-text">جمال باريس الساحر</div></div>
-        </div>
-      </div>
-
-      <div class="services-grid">
-        <div class="svc-card">
-          <div class="svc-icon">
-            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#3ecfff" stroke-width="2">
-              <rect x="5" y="5" width="14" height="14" rx="2"/>
-              <path d="M9 5v-2M15 5v-2M19 9h2M19 15h2M15 19v2M9 19v2M3 15h2M3 9h2"/>
-              <text x="7" y="15" font-size="6" fill="#3ecfff" font-family="Arial" stroke-width="0">eSIM</text>
-            </svg>
-          </div>
-          <div class="svc-label">eSIM</div>
-        </div>
-        <div class="svc-card">
-          <div class="svc-icon">
-            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#39ffbd" stroke-width="2">
-              <path d="M3 20l7-10 4 6 2-3 5 7H3z"/>
-              <circle cx="18" cy="7" r="2" fill="#39ffbd"/>
-            </svg>
-          </div>
-          <div class="svc-label">الفعاليات</div>
-        </div>
-        <div class="svc-card">
-          <div class="svc-icon">🏨</div>
-          <div class="svc-label">فنادق</div>
-        </div>
-        <div class="svc-card">
-          <div class="svc-icon">🚗</div>
-          <div class="svc-label">سيارات</div>
-        </div>
-      </div>
-
-      <div class="ai-panel">
-        <h2>What will you <span>build</span> today?</h2>
-        <p>اسأل مساعد السفر الذكي عن وجهتك القادمة، الفنادق، أو حتى أفضل المطاعم.</p>
-        <div class="ai-input-box">
-          <span style="opacity:0.5">✦</span>
-          <input type="text" placeholder="اكتب سؤالك عن السفر...">
-          <button class="ai-btn">➔</button>
-        </div>
-        <div style="display:flex; gap:5px; margin-top:12px;">
-           <span style="font-size:10px; background:rgba(255,255,255,0.05); padding:4px 8px; border-radius:10px; color:var(--muted);">#سياحة</span>
-           <span style="font-size:10px; background:rgba(255,255,255,0.05); padding:4px 8px; border-radius:10px; color:var(--muted);">#أفضل_فنادق</span>
-        </div>
-      </div>
-
-      <div class="feed-card">
-        <div style="padding:10px; font-size:12px; font-weight:bold;">آخر العروض</div>
-        <div class="feed-img">🌍</div>
-      </div>
-
-    </div>
-
-    <nav class="nav-bar">
-      <div style="color:var(--neon-p); font-size:24px;">🏠</div>
-      <div style="opacity:0.4; font-size:24px;">📍</div>
-      <div style="opacity:0.4; font-size:24px;">🎬</div>
-      <div style="opacity:0.4; font-size:24px;">👤</div>
-    </nav>
-  </div>
-</div>
-
-<script>
-  // كود تحريك البانر تلقائياً
-  let currentSlide = 0;
-  const slides = document.querySelectorAll('.banner-slide');
-  
-  function nextSlide() {
-    slides[currentSlide].classList.remove('active');
-    currentSlide = (currentSlide + 1) % slides.length;
-    slides[currentSlide].classList.add('active');
+  @override
+  void initState() {
+    super.initState();
+    // مؤقت لتغيير حركة الخلفية بشكل مستمر وسلس
+    Timer.periodic(const Duration(seconds: 3), (timer) {
+      setState(() {
+        _topAlignment = _topAlignment == Alignment.topLeft ? Alignment.topRight : Alignment.topLeft;
+        _bottomAlignment = _bottomAlignment == Alignment.bottomRight ? Alignment.bottomLeft : Alignment.bottomRight;
+      });
+    });
   }
 
-  setInterval(nextSlide, 3000); // تغيير الصورة كل 3 ثواني
-</script>
+  // دالة لتحديد التحية بناءً على الوقت
+  String getGreeting() {
+    var hour = DateTime.now().hour;
+    if (hour < 12) return 'GOOD MORNING';
+    if (hour < 17) return 'GOOD AFTERNOON';
+    return 'GOOD EVENING';
+  }
 
-</body>
-</html>
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: AnimatedContainer(
+        duration: const Duration(seconds: 3),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: _topAlignment,
+            end: _bottomAlignment,
+            // استخدام الألوان الفاتحة المقترحة (Off-white, Light Blue)
+            colors: [Colors.white, Color(0xFFE3F2FD), Color(0xFFF5F5F5)],
+          ),
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          getGreeting(),
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey[600], // رمادي داكن لكسر التباين
+                            letterSpacing: 1.2,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          userName,
+                          style: const TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0偏2D3436), // لون احترافي غامق قليلاً
+                          ),
+                        ),
+                      ],
+                    ),
+                    // أيقونة التنبيهات بلمسة تصميم عصرية
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Icon(Icons.notifications_none, color: Colors.black87),
+                    ),
+                  ],
+                ),
+                // هنا يمكن إضافة باقي محتويات التطبيق لاحقاً
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
