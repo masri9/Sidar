@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sidarapp - Modern Travel UI</title>
+    <title>Sidarapp - Official</title>
     <style>
         :root {
             --primary-blue: #2563eb;
@@ -14,15 +14,13 @@
         }
 
         body, html { 
-            margin: 0; 
-            padding: 0;
+            margin: 0; padding: 0;
             font-family: 'Segoe UI', Roboto, sans-serif;
             overflow: hidden;
             height: 100vh;
-            background-color: #ffffff;
         }
 
-        /* --- 1. Splash Screen Style (Mofidied for Image) --- */
+        /* --- شاشة الـ Splash (التركيز هنا) --- */
         #splash-screen {
             position: fixed;
             inset: 0;
@@ -31,25 +29,21 @@
             justify-content: center;
             align-items: center;
             z-index: 9999;
-            transition: opacity 0.8s ease, visibility 0.8s;
+            transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1), visibility 1s;
         }
 
-        /* استخدام الصورة المرسلة في الرابط */
         .splash-image {
-            width: 150px; /* حجم مناسب للشعار */
+            width: 180px; /* حجم مثالي للشعار */
             height: auto;
-            border-radius: 20px; /* حواف ناعمة إذا كانت الصورة مربعة */
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            animation: pulseLogo 2s infinite ease-in-out; /* حركة النبض */
+            animation: splashEntrance 1.5s ease-out forwards;
         }
 
-        @keyframes pulseLogo {
-            0% { transform: scale(1); opacity: 0.9; }
-            50% { transform: scale(1.05); opacity: 1; }
-            100% { transform: scale(1); opacity: 0.9; }
+        @keyframes splashEntrance {
+            0% { transform: scale(0.8); opacity: 0; filter: blur(10px); }
+            100% { transform: scale(1); opacity: 1; filter: blur(0); }
         }
 
-        /* --- 2. Main App Style (Fixed) --- */
+        /* --- كود الـ Home (ثابت بدون تعديل) --- */
         .background-container {
             position: fixed;
             inset: 0;
@@ -66,8 +60,8 @@
             flex-direction: column;
             justify-content: space-between;
             box-sizing: border-box;
-            opacity: 0; /* مخفي في البداية */
-            transition: opacity 1s ease;
+            opacity: 0; 
+            transition: opacity 1.2s ease;
         }
 
         .header { display: flex; justify-content: space-between; align-items: center; }
@@ -79,10 +73,8 @@
             padding: 12px; 
             border-radius: 16px; 
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            cursor: pointer;
         }
 
-        /* --- 3. Bottom Nav Style (Fixed Blue) --- */
         .bottom-nav-container {
             align-self: center;
             margin-bottom: 30px;
@@ -110,11 +102,8 @@
             color: var(--text-sub);
         }
 
-        .nav-item svg { width: 24px; height: 24px; stroke: currentColor; stroke-width: 2.2; fill: none; transition: 0.3s; }
-
+        .nav-item svg { width: 24px; height: 24px; stroke: currentColor; stroke-width: 2.2; fill: none; }
         .nav-item.active { background: var(--light-blue); color: var(--primary-blue); }
-        .nav-item.active svg { transform: scale(1.1); }
-        
         .nav-text { max-width: 0; overflow: hidden; white-space: nowrap; font-size: 14px; font-weight: 700; transition: all 0.4s ease; opacity: 0; }
         .nav-item.active .nav-text { max-width: 80px; margin-left: 10px; opacity: 1; }
 
@@ -123,7 +112,7 @@
 <body>
 
     <div id="splash-screen">
-        <img src="https://plain-eeur-prod-public.komododecks.com/202604/19/y0zyi6uOKg2CaNATvHPZ/image.png" alt="Sidarapp Splash" class="splash-image">
+        <img src="https://plain-eeur-prod-public.komododecks.com/202604/19/y0zyi6uOKg2CaNATvHPZ/image.png" alt="Sidarapp Logo" class="splash-image">
     </div>
 
     <div class="background-container"></div>
@@ -159,7 +148,7 @@
     </div>
 
     <script>
-        // التحكم في الـ Splash Screen
+        // منطق إخفاء الـ Splash وإظهار الـ Home
         window.addEventListener('load', () => {
             setTimeout(() => {
                 const splash = document.getElementById('splash-screen');
@@ -168,7 +157,7 @@
                 splash.style.opacity = '0';
                 splash.style.visibility = 'hidden';
                 mainApp.style.opacity = '1';
-            }, 3000); // 3 ثواني عرض
+            }, 2500); // وقت العرض 2.5 ثانية
         });
 
         function setActive(el) {
