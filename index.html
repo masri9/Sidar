@@ -125,18 +125,18 @@
             width: auto;
         }
 
-        /* --- AI Search Engine Section --- */
+        /* --- AI Search Engine --- */
         .ai-engine-container {
             width: 100%;
             max-width: 500px;
-            margin-top: 40px;
+            margin-top: 35px;
             opacity: 0;
             animation: textSlideUp 1s ease-out 3.2s forwards;
         }
 
         .ai-input-wrapper {
             position: relative;
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.75);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-radius: 24px;
@@ -147,75 +147,66 @@
             transition: all 0.3s ease;
         }
 
-        .ai-input-wrapper:focus-within {
-            background: rgba(255, 255, 255, 0.95);
-            box-shadow: 0 15px 40px rgba(37, 99, 235, 0.15);
-            transform: translateY(-2px);
-        }
-
         .ai-input-field {
-            flex: 1;
-            border: none;
-            background: transparent;
-            padding: 15px 10px;
-            font-size: 16px;
-            font-weight: 500;
-            color: var(--text-main-color);
-            outline: none;
-        }
-
-        .ai-input-field::placeholder {
-            color: #94a3b8;
+            flex: 1; border: none; background: transparent; padding: 15px 10px;
+            font-size: 16px; font-weight: 500; color: var(--text-main-color); outline: none;
         }
 
         .ai-icon {
-            width: 40px;
-            height: 40px;
+            width: 40px; height: 40px;
             background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-            border-radius: 16px;
+            border-radius: 16px; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        /* --- Smart Prompts (NEW) --- */
+        .smart-prompts {
+            margin-top: 20px;
             display: flex;
-            align-items: center;
+            flex-wrap: wrap;
             justify-content: center;
+            gap: 10px;
+            width: 90%;
+            max-width: 500px;
+            opacity: 0;
+            animation: textSlideUp 1s ease-out 3.5s forwards;
+        }
+
+        .prompt-pill {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #475569;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-            transition: transform 0.2s;
+            transition: all 0.3s ease;
+            white-space: nowrap;
         }
 
-        .ai-icon:hover {
-            transform: scale(1.05);
-        }
-
-        .ai-icon svg {
-            width: 20px;
-            height: 20px;
-            stroke: white;
-            stroke-width: 2.5;
+        .prompt-pill:hover {
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--primary-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
 
         /* --- Bottom Navigation --- */
         .bottom-nav-container {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%;
-            max-width: 420px;
-            background: var(--nav-bg);
-            backdrop-filter: blur(25px);
-            padding: 8px 12px;
-            border-radius: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            border: 1px solid rgba(0,0,0,0.03);
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 420px;
+            background: var(--nav-bg); backdrop-filter: blur(25px);
+            padding: 8px 12px; border-radius: 30px;
+            display: flex; justify-content: space-around; align-items: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.03);
             z-index: 100;
         }
 
         .nav-item {
             display: flex; align-items: center; justify-content: center;
-            padding: 10px 16px; cursor: pointer;
-            transition: all 0.3s ease;
+            padding: 10px 16px; cursor: pointer; transition: all 0.3s ease;
             border-radius: 22px; color: #64748b;
         }
         .nav-item svg { width: 24px; height: 24px; stroke: currentColor; stroke-width: 2.2; fill: none; }
@@ -266,12 +257,19 @@
                     </div>
                 </div>
             </div>
+
+            <div class="smart-prompts">
+                <div class="prompt-pill">Plan a 3-day trip ✨</div>
+                <div class="prompt-pill">Best hidden cafes ☕</div>
+                <div class="prompt-pill">Historical sites 🏛️</div>
+                <div class="prompt-pill">Budget friendly 💰</div>
+            </div>
             
         </main>
 
         <nav class="bottom-nav-container">
             <div class="nav-item active" onclick="setActive(this)">
-                <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
                 <span class="nav-text">Home</span>
             </div>
             <div class="nav-item" onclick="setActive(this)">
@@ -295,7 +293,7 @@
                 const splash = document.getElementById('splash-screen');
                 const mainApp = document.getElementById('main-app');
                 splash.style.opacity = '0';
-                splash.style.visibility = 'hidden';
+                setTimeout(() => splash.style.visibility = 'hidden', 1000);
                 mainApp.style.opacity = '1';
             }, 2500);
         });
