@@ -10,7 +10,7 @@
             --light-blue: #dbeafe;
             --nav-bg: rgba(255, 255, 255, 0.95);
             --text-main-color: #0f172a; 
-            --accent-blue: #3b82f6; /* اللون الأزرق للجملة */
+            --accent-blue: #3b82f6; 
         }
 
         body, html { 
@@ -72,7 +72,7 @@
             border: 1px solid rgba(0,0,0,0.05);
         }
 
-        /* --- Main Content (Updated Slogan Style) --- */
+        /* --- Main Content --- */
         .main-content {
             flex: 1;
             display: flex;
@@ -96,7 +96,7 @@
         }
 
         .hero-full-title {
-            font-size: 42px; /* حجم كبير وقوي كما في الصورة */
+            font-size: 38px;
             font-weight: 800;
             line-height: 1.1;
             margin: 0;
@@ -106,24 +106,90 @@
 
         .hero-full-title span.blue-text {
             color: var(--accent-blue);
-            display: block; /* لجعلها في سطر مميز كما في الصورة */
+            display: block;
         }
 
         .experience-text {
-            margin-top: 20px;
-            font-size: 20px;
+            margin-top: 15px;
+            font-size: 18px;
             color: #475569;
             font-weight: 500;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
         }
 
         .inline-logo {
-            height: 32px;
+            height: 28px;
             width: auto;
-            vertical-align: middle;
+        }
+
+        /* --- AI Search Engine Section --- */
+        .ai-engine-container {
+            width: 100%;
+            max-width: 500px;
+            margin-top: 40px;
+            opacity: 0;
+            animation: textSlideUp 1s ease-out 3.2s forwards;
+        }
+
+        .ai-input-wrapper {
+            position: relative;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 8px 15px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(255, 255, 255, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .ai-input-wrapper:focus-within {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 15px 40px rgba(37, 99, 235, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .ai-input-field {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 15px 10px;
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-main-color);
+            outline: none;
+        }
+
+        .ai-input-field::placeholder {
+            color: #94a3b8;
+        }
+
+        .ai-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            transition: transform 0.2s;
+        }
+
+        .ai-icon:hover {
+            transform: scale(1.05);
+        }
+
+        .ai-icon svg {
+            width: 20px;
+            height: 20px;
+            stroke: white;
+            stroke-width: 2.5;
         }
 
         /* --- Bottom Navigation --- */
@@ -136,7 +202,6 @@
             max-width: 420px;
             background: var(--nav-bg);
             backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
             padding: 8px 12px;
             border-radius: 30px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
@@ -189,8 +254,20 @@
                     <img src="https://plain-eeur-prod-public.komododecks.com/202604/19/y0zyi6uOKg2CaNATvHPZ/image.png" alt="Sidar" class="inline-logo">
                 </div>
             </div>
+
+            <div class="ai-engine-container">
+                <div class="ai-input-wrapper">
+                    <input type="text" class="ai-input-field" placeholder="Ask Sidar AI anything...">
+                    <div class="ai-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            <path d="M9 12l2 2 4-4"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
             
-            </main>
+        </main>
 
         <nav class="bottom-nav-container">
             <div class="nav-item active" onclick="setActive(this)">
