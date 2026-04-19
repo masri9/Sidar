@@ -10,37 +10,43 @@ class SidarTravelApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      theme: ThemeData(fontFamily: 'Roboto'), // يمكنك تغيير الخط لـ Sans Serif لاحقاً
+      home: const HomePage(),
     );
   }
 }
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  // متغيرات للألوان التفاعلية (ألوان فاتحة Pastel)
+  // متغيرات للألوان التفاعلية (Pastel Colors)
   Alignment _topAlignment = Alignment.topLeft;
   Alignment _bottomAlignment = Alignment.bottomRight;
+  int _selectedIndex = 0; // للتحكم في شريط التنقل السفلي
   
-  // اسم المستخدم (يتم جلبه عادة من بيانات التسجيل)
+  // اسم المستخدم الافتراضي
   final String userName = "Alex Rivera"; 
 
   @override
   void initState() {
     super.initState();
     // مؤقت لتغيير حركة الخلفية بشكل مستمر وسلس
-    Timer.periodic(const Duration(seconds: 3), (timer) {
-      setState(() {
-        _topAlignment = _topAlignment == Alignment.topLeft ? Alignment.topRight : Alignment.topLeft;
-        _bottomAlignment = _bottomAlignment == Alignment.bottomRight ? Alignment.bottomLeft : Alignment.bottomRight;
-      });
+    Timer.periodic(const Duration(seconds: 4), (timer) {
+      if (mounted) {
+        setState(() {
+          _topAlignment = _topAlignment == Alignment.topLeft ? Alignment.topRight : Alignment.topLeft;
+          _bottomAlignment = _bottomAlignment == Alignment.bottomRight ? Alignment.bottomLeft : Alignment.bottomRight;
+        });
+      }
     });
   }
 
-  // دالة لتحديد التحية بناءً على الوقت
+  // دالة ذكية لتحديد التحية بناءً على الوقت الحالي
   String getGreeting() {
     var hour = DateTime.now().hour;
     if (hour < 12) return 'GOOD MORNING';
@@ -51,23 +57,24 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // استخدام الألوان الفاتحة لتقليل إجهاد العين
       body: AnimatedContainer(
-        duration: const Duration(seconds: 3),
+        duration: const Duration(seconds: 4),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: _topAlignment,
             end: _bottomAlignment,
-            // استخدام الألوان الفاتحة المقترحة (Off-white, Light Blue)
-            colors: [Colors.white, Color(0xFFE3F2FD), Color(0xFFF5F5F5)],
+            colors: const [Color(0xFFF8F9FA), Color(0xFFE3F2FD), Color(0xFFFFFFFF)],
           ),
         ),
         child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // الهيدر العلوي (التحية والاسم)
+              Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Column(
@@ -76,40 +83,84 @@ class _HomePageState extends State<HomePage> {
                         Text(
                           getGreeting(),
                           style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey[600], // رمادي داكن لكسر التباين
-                            letterSpacing: 1.2,
-                            fontWeight: FontWeight.w500,
+                            fontSize: 12,
+                            color: Colors.grey[600],
+                            letterSpacing: 1.5,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(height: 4),
+                        const SizedBox(height: 8),
                         Text(
                           userName,
                           style: const TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0偏2D3436), // لون احترافي غامق قليلاً
+                            fontSize: 26,
+                            fontWeight: FontWeight.w900,
+                            color: Color(0xFF2D3436),
                           ),
                         ),
                       ],
                     ),
-                    // أيقونة التنبيهات بلمسة تصميم عصرية
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.5),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: const Icon(Icons.notifications_none, color: Colors.black87),
-                    ),
+                    _buildNotificationIcon(),
                   ],
                 ),
-                // هنا يمكن إضافة باقي محتويات التطبيق لاحقاً
-              ],
-            ),
+              ),
+              const Spacer(), // يترك مساحة فارغة في المنتصف كما طلبت
+            ],
           ),
         ),
       ),
+      
+      // شريط التنقل السفلي (NavBar) المطلوب
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.9),
+          boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 10)],
+        ),
+        child: BottomNavigationBar(
+          currentIndex: _selectedIndex,
+          onTap: (index) => setState(() => _selectedIndex = index),
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: Colors.white,
+          selectedItemColor: Colors.blueAccent,
+          unselectedItemColor: Colors.grey,
+          showSelectedLabels: true,
+          showUnselectedLabels: true,
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: 'الرئيسية'),
+            BottomNavigationBarItem(icon: Icon(Icons.map_outlined), label: 'الخريطة'),
+            BottomNavigationBarItem(icon: Icon(Icons.video_library_outlined), label: 'ريلز'),
+            BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: 'بروفايل'),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // ويدجت أيقونة التنبيهات مع النقطة البنفسجية من الصورة
+  Widget _buildNotificationIcon() {
+    return Stack(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.05),
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: const Icon(Icons.notifications_none, color: Colors.black87),
+        ),
+        Positioned(
+          right: 10,
+          top: 10,
+          child: Container(
+            height: 10,
+            width: 10,
+            decoration: const BoxDecoration(
+              color: Colors.purpleAccent,
+              shape: BoxShape.circle,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
