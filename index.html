@@ -4,14 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sidarapp - Official</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
     <style>
         :root {
-            --primary-blue: #2563eb; /* اللون الأزرق للأيقونة والنص النشط */
-            --light-blue-bg: #dbeafe; /* لون خلفية الزر النشط من الصورة */
+            --primary-blue: #2563eb;
+            --light-blue-bg: #dbeafe;
             --nav-bg: #ffffff;
             --text-main-color: #0f172a; 
             --accent-blue: #3b82f6; 
-            --inactive-gray: #64748b; /* لون الأيقونات غير النشطة */
+            --inactive-gray: #64748b;
         }
 
         body, html { 
@@ -86,76 +89,38 @@
         .bg-change { background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%); }
         .service-item span { font-size: 13px; font-weight: 700; }
 
-        /* --- Content Areas --- */
+        /* --- Scripts Area --- */
         .script-container { width: 100%; max-width: 500px; margin-top: 25px; display: none; }
         .script-container.active { display: block; animation: fadeIn 0.5s; }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        /* --- Map Page Layer --- */
+        #map-page {
+            display: none; height: 100vh; width: 100%; position: absolute; top: 0; left: 0; background: white; z-index: 50;
+        }
+        #map { width: 100%; height: 100%; }
+        .gps-btn {
+            position: absolute; bottom: 130px; right: 20px; z-index: 1000;
+            background: white; width: 55px; height: 55px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15); cursor: pointer; border: none;
+        }
 
-        /* --- UPDATED: Bottom Navigation (Exact replica of user image) --- */
+        /* --- Bottom Navigation --- */
         .bottom-nav-container {
-            position: fixed;
-            bottom: 30px; /* المسافة من الأسفل */
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%; /* عرض الشريط */
-            max-width: 420px; /* أقصى عرض */
-            background: var(--nav-bg);
-            padding: 10px 15px; /* المسافة الداخلية العمودية والأفقية */
-            border-radius: 50px; /* حواف دائرية جداً (Pill-shape) */
-            display: flex;
-            justify-content: space-between; /* توزيع متساوٍ للأيقونات */
-            align-items: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08); /* ظل ناعم من الصورة */
-            z-index: 1000;
-            border: 1px solid rgba(0,0,0,0.03); /* حدود خفيفة جداً */
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 420px; background: var(--nav-bg);
+            padding: 10px 15px; border-radius: 50px;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); z-index: 1000;
+            border: 1px solid rgba(0,0,0,0.03);
         }
+        .nav-item { display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease; padding: 10px 15px; color: var(--inactive-gray); }
+        .nav-item svg { width: 24px; height: 24px; stroke: currentColor; stroke-width: 2.2; fill: none; }
+        .nav-text { max-width: 0; overflow: hidden; white-space: nowrap; font-size: 14px; font-weight: 700; transition: all 0.3s ease; opacity: 0; }
+        .nav-item.active { background: var(--light-blue-bg); color: var(--primary-blue); border-radius: 30px; }
+        .nav-item.active .nav-text { max-width: 80px; margin-left: 10px; opacity: 1; }
 
-        .nav-item {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            padding: 10px 15px;
-            color: var(--inactive-gray); /* لون الأيقونة غير النشطة */
-        }
-
-        /* تنسيق الأيقونات (SVG) من الصورة */
-        .nav-item svg {
-            width: 24px;
-            height: 24px;
-            stroke: currentColor; /* يستخدم اللون المحدد للـ nav-item */
-            stroke-width: 2.2; /* سمك الخط */
-            fill: none;
-            transition: stroke 0.3s;
-        }
-
-        /* النص (Label) مخفي افتراضياً */
-        .nav-text {
-            max-width: 0;
-            overflow: hidden;
-            white-space: nowrap;
-            font-size: 14px;
-            font-weight: 700;
-            transition: all 0.3s ease;
-            opacity: 0;
-        }
-
-        /* --- Active State (زر دائري أزرق فاتح) --- */
-        .nav-item.active {
-            background: var(--light-blue-bg); /* لون الخلفية الأزرق الفاتح جداً */
-            color: var(--primary-blue); /* لون الأيقونة والنص الأزرق */
-            border-radius: 30px; /* حواف دائرية للزر */
-        }
-
-        /* إظهار النص عند التفعيل */
-        .nav-item.active .nav-text {
-            max-width: 80px; /* تمدد النص */
-            margin-left: 10px; /* مسافة عن الأيقونة */
-            opacity: 1;
-        }
-
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
@@ -168,6 +133,7 @@
     <div class="background-overlay"></div>
     
     <div class="app-container" id="main-app">
+        
         <header class="header">
             <div class="menu-icon">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="2.5"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
@@ -176,7 +142,6 @@
 
         <main class="main-content">
             <h1 class="hero-full-title">Your Journey <span class="blue-text">Starts Before</span> You Even Arrive.</h1>
-
             <div class="ai-engine-container">
                 <div class="ai-input-wrapper">
                     <input type="text" class="ai-input-field" placeholder="Ask Sidar AI anything...">
@@ -204,8 +169,12 @@
             <div id="esim-script" class="script-container active"> <div style="padding:20px; color:#64748b;">eSIM Widget Area</div> </div>
             <div id="events-script" class="script-container"> <div style="padding:20px; color:#64748b;">Events Widget Area</div> </div>
             <div id="change-script" class="script-container"> <div style="padding:20px; color:#64748b;">Currency Widget Area</div> </div>
-            
         </main>
+
+        <div id="map-page">
+            <div id="map"></div>
+            <button class="gps-btn" onclick="locateUser()">🎯</button>
+        </div>
 
         <nav class="bottom-nav-container">
             <div class="nav-item active" onclick="setActive(this, 'Home')">
@@ -228,6 +197,7 @@
     </div>
 
     <script>
+        // Splash logic
         window.addEventListener('load', () => {
             setTimeout(() => {
                 document.getElementById('splash-screen').style.opacity = '0';
@@ -236,17 +206,46 @@
             }, 2500);
         });
 
+        // Map logic
+        let map;
+        let userMarker;
+
+        function initMap() {
+            if (map) return;
+            map = L.map('map', { zoomControl: false }).setView([25.2048, 55.2708], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+            // مثال لإضافة Pin مفضل
+            L.marker([25.2048, 55.2708]).addTo(map).bindPopup("Dubai Center").openPopup();
+        }
+
+        function locateUser() {
+            map.locate({setView: true, maxZoom: 16});
+        }
+
+        // Navigation and Pages logic
+        function setActive(el, page) {
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            el.classList.add('active');
+
+            const mainContent = document.querySelector('.main-content');
+            const mapPage = document.getElementById('map-page');
+
+            if (page === 'Map') {
+                mainContent.style.display = 'none';
+                mapPage.style.display = 'block';
+                setTimeout(initMap, 100);
+            } else {
+                mainContent.style.display = 'flex';
+                mapPage.style.display = 'none';
+            }
+        }
+
         function toggleService(id, element) {
             document.querySelectorAll('.script-container').forEach(c => c.classList.remove('active'));
             document.querySelectorAll('.service-item').forEach(i => i.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             element.classList.add('active');
-        }
-
-        function setActive(el, page) {
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-            el.classList.add('active');
-            console.log("Navigating to: " + page);
         }
     </script>
 </body>
