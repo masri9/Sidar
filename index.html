@@ -6,18 +6,17 @@
     <title>Sidarapp - Stacked Cards Focus</title>
     
     <style>
-    
-    /* إنشاء فئة للون البركاني */
-.lava-text {
-    color: var(--primary-lava);
-    font-weight: 700;
-}
-
         :root {
             --primary-lava: #ff4500; 
             --lava-glow: rgba(255, 69, 0, 0.4); 
             --lava-intense-glow: rgba(255, 69, 0, 0.8); 
             --text-main: #0f172a; 
+        }
+
+        /* فئة للون البركاني */
+        .lava-text {
+            color: var(--primary-lava);
+            font-weight: 700;
         }
 
         body, html { 
@@ -43,17 +42,15 @@
             background-size: cover; background-position: center;
             z-index: 0;
         }
-       /* --- تعديل الطبقة البيضاء على الخلفية --- *//* --- تعديل الطبقة لتوضيح الخلفية وإبراز الرموز --- */
-.header-bg::before {
-    content: '';
-    position: absolute; inset: 0;
-    /* تم تقليل تأثير اللون الأبيض بشكل كبير ليصبح شفافاً جداً */
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.01) 0%, rgba(255, 255, 255, 0.05) 100%);
-    /* تم إزالة تأثير التغبيش (Blur) تماماً لجعل الخلفية واضحة */
-    backdrop-filter: none; 
-    transition: background 0.3s ease; /* الحفاظ على التأثير الانتقالي السلس */
-}
-/* --------------------------------------------------- */
+
+        /* الطبقة لتوضيح الخلفية وإبراز الرموز */
+        .header-bg::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.01) 0%, rgba(255, 255, 255, 0.05) 100%);
+            backdrop-filter: none; 
+            transition: background 0.3s ease;
+        }
 
         .app-container {
             position: relative; z-index: 1;
@@ -147,11 +144,10 @@
         .dot { width: 7px; height: 7px; background: #e2e8f0; border-radius: 50%; transition: 0.4s; }
         .dot.active { background: var(--primary-lava); width: 18px; border-radius: 10px; }
 
-      /* --- تعديل مكان الشريط السفلي --- *//* --- تعديل مكان الشريط السفلي فقط (إنزاله لأسفل) --- *//* --- Bottom Navigation --- */
+        /* Bottom Navigation */
         .bottom-nav {
             position: fixed; 
-            /* قمنا بتغيير القيمة من 30px إلى 10px لإنزال المستطيل لأسفل */
-            bottom: 10px; 
+            bottom: 10px; /* إنزال المستطيل لأسفل */
             left: 50%; transform: translateX(-50%);
             width: 90%; max-width: 400px; background: #ffffff; border-radius: 40px;
             display: flex; justify-content: space-around; align-items: center;
@@ -163,8 +159,6 @@
         .nav-item span { max-width: 0; overflow: hidden; white-space: nowrap; transition: 0.3s; font-weight: 700; font-size: 14px; }
         .nav-item.active span { max-width: 80px; margin-left: 8px; }
         .nav-item svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2.2; }
-/* ------------------------- */
-
     </style>
 </head>
 <body>
@@ -180,7 +174,7 @@
 
         <div class="search-wrapper">
             <span>🔍</span>
-            <input type="text" placeholder="Ask Sidar AI anything...">
+            <input type="text" id="searchField" placeholder="Ask Sidar AI anything...">
         </div>
 
         <div class="services-scroll-container">
@@ -227,7 +221,6 @@
             card3: 'https://plain-eeur-prod-public.komododecks.com/202604/19/qzr51sWPt6GgM3gTZH8K/image.png'
         };
 
-        // مصفوفة البيانات لكل منطقة
         const DATA = [
             { tag: "Natural", title: "Valley of Light", desc: "Discover the hidden beauty of the valley where the sun hits perfectly every morning." },
             { tag: "Adventure", title: "The High Peak", desc: "For those who love heights and snow, this peak offers the best view in the region." },
@@ -264,7 +257,6 @@
             document.querySelectorAll('.dot').forEach((dot, i) => dot.classList.toggle('active', i === currentIndex));
         }
 
-        // وظائف التحكم في بطاقة المعلومات
         function showInfo(index) {
             const item = DATA[index];
             document.getElementById('target-tag').innerText = item.tag;
@@ -279,6 +271,13 @@
 
         window.addEventListener('load', () => {
             applyImages();
+            // تلوين كلمة Sidar
+            const targetWord = 'Sidar';
+            const searchField = document.getElementById('searchField');
+            const originalPlaceholder = searchField.getAttribute('placeholder');
+            const coloredPlaceholder = originalPlaceholder.replace(targetWord, `<span class="lava-text">${targetWord}</span>`);
+            searchField.setAttribute('placeholder', coloredPlaceholder);
+
             setTimeout(() => {
                 document.getElementById('splash-screen').style.opacity = '0';
                 setTimeout(() => {
@@ -289,7 +288,6 @@
             }, 2000);
         });
 
-        // يتوقف المؤقت إذا كانت البطاقة مفتوحة
         setInterval(() => { 
             if(!document.getElementById('info-overlay').classList.contains('open')) {
                 currentIndex = (currentIndex + 1) % cards.length; 
@@ -306,21 +304,6 @@
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
             el.classList.add('active');
         }
-        
-        <script>
-    // تحديد الكلمة المستهدفة (Sidar)
-    const targetWord = 'Sidar';
-
-    // الحصول على نص Placeholder الأصلي
-    const originalPlaceholder = document.getElementById('searchField').getAttribute('placeholder');
-
-    // استبدال الكلمة المستهدفة بالنص الملوّن
-    const coloredPlaceholder = originalPlaceholder.replace(targetWord, `<span class="lava-text">${targetWord}</span>`);
-
-    // تحديث نص Placeholder بالنص الملوّن عند تحميل الصفحة
-    document.getElementById('searchField').setAttribute('placeholder', coloredPlaceholder);
-</script>
-
     </script>
 </body>
 </html>
