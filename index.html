@@ -3,149 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sidar App - Premium Nav</title>
+    <title>Sidar App - Balanced Design</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --primary-grad: linear-gradient(135deg, #2A70DC, #00C7B7);
-            --nav-bg: rgba(255, 255, 255, 0.95);
-            --icon-color: #2d3436;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
-            margin: 0;
-            background-color: #ffffff;
+            background-color: #ffffff; /* صفحة بيضاء بالكامل حسب طلبك */
             height: 100vh;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Segoe UI', sans-serif;
         }
 
-        .bottom-nav {
+        /* حاوية الشريط السفلي */
+        .nav-container {
             position: fixed;
             bottom: 0;
             width: 100%;
-            height: 85px;
-            background: var(--nav-bg);
-            backdrop-filter: blur(15px); /* تأثير زجاجي ناعم */
+            height: 75px;
+            background: #ffffff;
             display: flex;
-            justify-content: space-around;
             align-items: center;
-            border-top: 1px solid rgba(0,0,0,0.05);
-            padding-bottom: 15px; /* مساحة لأجهزة الآيفون الحديثة */
+            justify-content: space-around;
+            border-top: 1px solid #f0f0f0;
+            padding: 0 10px;
             z-index: 1000;
         }
 
+        /* تنسيق الأيقونات العادية */
         .nav-item {
             flex: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            color: #2d3436;
             text-decoration: none;
-            position: relative;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        /* تصميم الأيقونات العادية */
-        .nav-item img, .nav-item i {
-            width: 26px;
-            height: 26px;
-            object-fit: contain;
-            color: var(--icon-color);
-            margin-bottom: 4px;
-            opacity: 0.7;
             transition: 0.3s;
         }
 
-        /* أيقونة الريلز (صورة مخصصة كما في طلبك) */
-        .reels-icon {
-            width: 28px !important;
-            height: 28px !important;
+        .nav-item i, .nav-item img {
+            width: 24px;
+            height: 24px;
+            font-size: 22px;
+            opacity: 0.6;
         }
 
-        /* الخريطة - التصميم الاحترافي البارز */
-        .map-center {
+        .nav-item span {
+            font-size: 10px;
+            font-weight: 600;
+            margin-top: 4px;
+            opacity: 0.6;
+        }
+
+        /* --- الأيقونة البارزة (الخريطة) --- */
+        .map-wrapper {
             position: relative;
-            z-index: 1001;
-            margin-top: -40px; /* رفع العنصر بالكامل */
-        }
-
-        .map-circle {
-            width: 68px;
-            height: 68px;
-            background: var(--primary-grad);
-            border-radius: 22px; /* زوايا دائرية ناعمة وليست دائرة كاملة لتعطي شكل عصري */
+            flex: 1;
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 12px 24px rgba(42, 112, 220, 0.35);
-            border: 4px solid #fff;
-            transform: rotate(-5deg); /* ميلان خفيف جداً للحيوية */
-            transition: 0.4s;
         }
 
-        .map-circle img {
-            width: 35px;
-            height: 35px;
-            filter: brightness(0) invert(1); /* تحويل الأيقونة للون الأبيض */
+        .map-btn {
+            position: absolute;
+            top: -40px; /* الارتفاع لتبدو بارزة */
+            width: 62px;
+            height: 62px;
+            background: linear-gradient(135deg, #2A70DC, #00C7B7); /* تدرج لوني احترافي */
+            border-radius: 20px; /* شكل Squircle عصري */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 20px rgba(42, 112, 220, 0.3);
+            border: 4px solid #ffffff;
+            transition: transform 0.3s ease;
         }
 
-        /* تأثيرات التفاعل */
-        .nav-item:hover {
-            transform: translateY(-3px);
+        .map-btn img {
+            width: 32px;
+            height: 32px;
+            filter: brightness(0) invert(1); /* جعل أيقونة الخريطة بيضاء */
+            opacity: 1 !important;
         }
 
-        .nav-item:hover img, .nav-item:hover i {
-            opacity: 1;
-            color: #2A70DC;
-        }
+        /* حالة التفاعل */
+        .nav-item:hover { opacity: 1; transform: translateY(-2px); }
+        .map-btn:hover { transform: scale(1.1) rotate(5deg); }
 
-        .map-center:hover .map-circle {
-            transform: rotate(0deg) scale(1.1);
-            box-shadow: 0 15px 30px rgba(42, 112, 220, 0.45);
-        }
-
-        /* نصوص صغيرة تحت الأيقونات */
-        .nav-label {
-            font-size: 10px;
-            font-weight: 700;
-            color: #b2bec3;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .active-label {
-            color: #2A70DC;
-        }
     </style>
 </head>
 <body>
 
-    <nav class="bottom-nav">
+    <nav class="nav-container">
         <a href="#" class="nav-item">
-            <i class="fa-solid fa-house-chimney"></i>
-            <span class="nav-label">Home</span>
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
         </a>
 
         <a href="#" class="nav-item">
-            <img src="https://cdn-icons-png.flaticon.com/512/5948/5948543.png" class="reels-icon" alt="Reels">
-            <span class="nav-label">Reels</span>
+            <img src="https://cdn-icons-png.flaticon.com/512/5948/5948543.png" alt="Reels">
+            <span>Reels</span>
         </a>
 
-        <a href="#" class="nav-item map-center">
-            <div class="map-circle">
+        <div class="map-wrapper">
+            <a href="#" class="map-btn">
                 <img src="https://cdn-icons-png.flaticon.com/512/854/854878.png" alt="Map">
-            </div>
-            <span class="nav-label" style="margin-top: 10px;">Explore</span>
+            </a>
+            <span style="font-size: 10px; font-weight: 600; margin-top: 45px; opacity: 0.6;">Explore</span>
+        </div>
+
+        <a href="#" class="nav-item">
+            <i class="fa-solid fa-paper-plane"></i>
+            <span>Messages</span>
         </a>
 
         <a href="#" class="nav-item">
-            <i class="fa-solid fa-comment-dots"></i>
-            <span class="nav-label">Inbox</span>
-        </a>
-
-        <a href="#" class="nav-item">
-            <i class="fa-solid fa-circle-user"></i>
-            <span class="nav-label">Profile</span>
+            <i class="fa-solid fa-user"></i>
+            <span>Profile</span>
         </a>
     </nav>
 
