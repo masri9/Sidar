@@ -1,53 +1,116 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sidarapp - Splash Only</title>
-    
-    <style>
-        body, html { 
-            margin: 0; padding: 0;
-            height: 100vh;
-            background: #ffffff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            font-family: 'Segoe UI', sans-serif;
-        }
-
-        /* --- Splash Screen --- */
-        #splash-screen {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            height: 100%;
-        }
-
-        .splash-image { 
-            width: 180px; 
-            animation: pulse 2s ease-in-out infinite; 
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 0.8; }
-            50% { transform: scale(1.1); opacity: 1; }
-            100% { transform: scale(1); opacity: 0.8; }
-        }
-
-        /* تم إخفاء باقي العناصر تماماً بناءً على طلبك */
-        .app-container, .header-bg, .bottom-nav {
-            display: none !important;
-        }
-    </style>
-</head>
-<body>
-
-    <div id="splash-screen">
-        <img src="https://plain-eeur-prod-public.komododecks.com/202604/19/y0zyi6uOKg2CaNATvHPZ/image.png" class="splash-image">
+<div class="carousel-section">
+            <h2 class="carousel-title">Recommended for you</h2>
+            <div class="carousel-wrapper" id="carousel">
+                <div class="card side" onclick="focusCard(this)">
+                    <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400">
+                    <div class="card-info">
+                        <h4>Maldives</h4>
+                        <p>⭐ 4.9</p>
+                    </div>
+                </div>
+                <div class="card main" onclick="focusCard(this)">
+                    <img src="https://images.unsplash.com/photo-1506929113675-b92417bbbe8d?w=400">
+                    <div class="card-info">
+                        <h4>Bali, Indonesia</h4>
+                        <p>⭐ 4.8</p>
+                    </div>
+                    <button class="card-btn">Explore Now</button>
+                </div>
+                <div class="card side" onclick="focusCard(this)">
+                    <img src="https://images.unsplash.com/photo-1519046904884-53103b34b206?w=400">
+                    <div class="card-info">
+                        <h4>Santorini</h4>
+                        <p>⭐ 5.0</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-</body>
-</html>
+    <nav class="bottom-nav">
+        <div class="nav-item active" onclick="tab(this)">
+            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+            <span>Home</span>
+        </div>
+        <div class="nav-item" onclick="tab(this)">
+            <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            <span>Map</span>
+        </div>
+        <div class="nav-item" onclick="tab(this)">
+            <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+            <span>Media</span>
+        </div>
+        <div class="nav-item" onclick="tab(this)">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            <span>Profile</span>
+        </div>
+    </nav>
+
+    <style>
+        /* إضافة ستايلات جديدة للتحسينات */
+        .card-info {
+            position: absolute; top: 15px; left: 15px; color: white;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+        .card-info h4 { margin: 0; font-size: 16px; font-weight: 700; }
+        .card-info p { margin: 2px 0; font-size: 12px; opacity: 0.9; }
+        
+        .card.side .card-btn, .card.side .card-info { opacity: 0; transition: 0.3s; }
+        .card.main .card-info { opacity: 1; }
+
+        /* تعديلات خفيفة على الـ Nav */
+        .bottom-nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+    </style>
+
+    <script>
+        // Splash logic
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('splash-screen').style.display = 'none';
+                document.getElementById('main-app').style.opacity = '1';
+            }, 2500);
+        });
+
+        // Widget Logic
+        function openWidget(type, el) {
+            document.querySelectorAll('.service-card').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+            const box = document.getElementById('widget-display');
+            document.getElementById('w-title').innerText = type + " Service";
+            box.style.display = 'block';
+            box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        // Navigation Tab Logic
+        function tab(el) {
+            document.querySelectorAll('.nav-item').forEach(i => {
+                i.classList.remove('active');
+            });
+            el.classList.add('active');
+        }
+
+        // Carousel Focus Logic
+        function focusCard(el) {
+            document.querySelectorAll('.card').forEach(c => {
+                c.classList.remove('main');
+                c.classList.add('side');
+                const btn = c.querySelector('.card-btn');
+                if(btn) btn.remove(); // تنظيف الأزرار القديمة
+            });
+            
+            el.classList.remove('side');
+            el.classList.add('main');
+            
+            // إضافة الزر للبطاقة المختارة فقط
+            if(!el.querySelector('.card-btn')) {
+                const btn = document.createElement('button');
+                btn.className = 'card-btn';
+                btn.innerText = 'Explore Now';
+                el.appendChild(btn);
+            }
+        }
+    </script>
