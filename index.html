@@ -3,20 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sidarapp - Simple UI</title>
+    <title>Sidarapp - Modern Nav</title>
     <style>
         :root {
             --accent: #6c5ce7;
             --text-main: #1a1a1a;
             --text-sub: #8e8e8e;
-            --bg-light: #f8faff;
+            --nav-bg: rgba(255, 255, 255, 0.9);
         }
 
         body { 
             margin: 0; 
             font-family: 'Segoe UI', Roboto, sans-serif;
             overflow: hidden;
-            background-color: var(--bg-light);
             height: 100vh;
             display: flex;
             flex-direction: column;
@@ -30,105 +29,95 @@
             background-image: url('https://plain-eeur-prod-public.komododecks.com/202604/19/FtJXvAZvXREKew6PJ3ew/image.png'); 
             background-size: cover;
             background-position: center;
-            background-repeat: no-repeat;
         }
 
-        /* حركة الطائرة اللطيفة */
-        .plane-shadow {
-            position: absolute;
-            width: 80px;
-            fill: var(--accent);
-            opacity: 0.1;
-            animation: planeFly 40s linear infinite;
-        }
-
-        @keyframes planeFly {
-            0% { transform: translate(-100px, 200px) rotate(25deg); }
-            100% { transform: translate(110vw, -100px) rotate(25deg); }
-        }
-
-        /* --- الهيكل الرئيسي --- */
         .app-container {
             flex: 1;
             padding: 30px 25px;
             display: flex;
             flex-direction: column;
-            justify-content: space-between; /* لترك مسافة بين الترحيب والشريط */
-            position: relative;
-            z-index: 1;
+            justify-content: space-between;
         }
 
-        /* --- الترحيب في الأعلى --- */
-        .header { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center;
-        }
-        .greeting { 
-            font-size: 14px; 
-            color: var(--text-sub); 
-            text-transform: uppercase; 
-            font-weight: bold; 
-            letter-spacing: 1px;
-        }
-        .user-name { 
-            font-size: 32px; 
-            font-weight: 800; 
-            color: var(--text-main); 
-            margin-top: 5px; 
-        }
-        .notif-icon { 
-            background: rgba(255,255,255,0.8); 
-            padding: 12px; 
-            border-radius: 18px; 
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05); 
-            backdrop-filter: blur(10px); 
-            font-size: 20px;
-        }
+        /* --- الترحيب --- */
+        .header { display: flex; justify-content: space-between; align-items: center; }
+        .greeting { font-size: 14px; color: var(--text-sub); font-weight: bold; text-transform: uppercase; }
+        .user-name { font-size: 30px; font-weight: 800; color: var(--text-main); }
+        .notif-icon { background: white; padding: 12px; border-radius: 18px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
 
-        /* --- شريط التنقل في الأسفل --- */
-        .bottom-nav {
-            margin-bottom: 25px;
+        /* --- شريط التنقل المطور (Modern Floating Nav) --- */
+        .bottom-nav-container {
             align-self: center;
-            width: 85%;
-            max-width: 360px; 
-            background: rgba(255, 255, 255, 0.9);
+            margin-bottom: 35px;
+            width: 90%;
+            max-width: 400px;
+            background: var(--nav-bg);
             backdrop-filter: blur(20px);
-            display: flex; 
-            justify-content: space-around; 
-            padding: 15px 0;
-            border-radius: 35px; 
-            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            padding: 10px 15px;
+            border-radius: 40px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
         }
-        .nav-item { 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            width: 50px; 
-            height: 50px; 
-            border-radius: 50%; 
-            transition: 0.3s;
+
+        .nav-item {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 30px;
+            color: #b2bec3;
+            text-decoration: none;
         }
-        .nav-icon { 
-            width: 26px; 
-            height: 26px; 
-            stroke: #b2bec3; 
-            stroke-width: 2; 
-            fill: none; 
+
+        .nav-item svg {
+            width: 24px;
+            height: 24px;
+            stroke: currentColor;
+            stroke-width: 2;
+            fill: none;
+            transition: all 0.4s;
         }
-        .nav-item.active { 
-            background: rgba(108, 92, 231, 0.1); 
+
+        /* تأثير الأيقونة النشطة */
+        .nav-item.active {
+            background: rgba(108, 92, 231, 0.12);
+            color: var(--accent);
+            padding-left: 20px;
+            padding-right: 20px;
         }
-        .nav-item.active .nav-icon { 
-            stroke: var(--accent); 
+
+        .nav-item .nav-text {
+            max-width: 0;
+            overflow: hidden;
+            white-space: nowrap;
+            font-size: 14px;
+            font-weight: 700;
+            margin-left: 0;
+            transition: all 0.4s;
+            opacity: 0;
         }
+
+        .nav-item.active .nav-text {
+            max-width: 80px;
+            margin-left: 8px;
+            opacity: 1;
+        }
+
+        .nav-item.active svg {
+            fill: rgba(108, 92, 231, 0.1);
+        }
+
     </style>
 </head>
 <body>
 
-    <div class="background-container">
-        <svg class="plane-shadow" viewBox="0 0 24 24"><path d="M21,16L14,11V5A2,2 0 0,0 12,3A2,2 0 0,0 10,5V11L3,16V18L10,15.7V21L8,22.5V24L12,23L16,24V22.5L14,21V15.7L21,18V16Z" /></svg>
-    </div>
+    <div class="background-container"></div>
 
     <div class="app-container">
         <header class="header">
@@ -139,15 +128,39 @@
             <div class="notif-icon">🔔</div>
         </header>
 
-        <nav class="bottom-nav">
-            <div class="nav-item active"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg></div>
-            <div class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div>
-            <div class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"></circle><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path></svg></div>
+        <nav class="bottom-nav-container">
+            <div class="nav-item active" onclick="setActive(this)">
+                <svg viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                <span class="nav-text">Home</span>
+            </div>
+
+            <div class="nav-item" onclick="setActive(this)">
+                <svg viewBox="0 0 24 24"><path d="M9 20l-5-4V4l5 4m0 12l6-4m-6 4V8m6 8l5 4V8l-5-4m0 12V4"/></svg>
+                <span class="nav-text">Map</span>
+            </div>
+
+            <div class="nav-item" onclick="setActive(this)">
+                <svg viewBox="0 0 24 24"><path d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M11 8l4 4-4 4V8z"/></svg>
+                <span class="nav-text">Reels</span>
+            </div>
+
+            <div class="nav-item" onclick="setActive(this)">
+                <svg viewBox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                <span class="nav-text">Profile</span>
+            </div>
         </nav>
     </div>
 
     <script>
-        // تحديث التحية بناءً على الوقت
+        // وظيفة التبديل بين الأيقونات بحركة ناعمة
+        function setActive(el) {
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            el.classList.add('active');
+        }
+
+        // تحية الوقت
         const hours = new Date().getHours();
         const g = document.getElementById('greeting');
         if (hours < 12) g.innerText = "Good Morning ☀️";
