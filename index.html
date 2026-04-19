@@ -1,166 +1,167 @@
-import 'dart:async';
-import 'package:flutter/material.dart';
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sidarapp - Travel App</title>
+    <style>
+        /* إعدادات الخطوط والألوان الأساسية */
+        :root {
+            --bg-light: #f8f9fa; /* أبيض مائل للرمادي لتقليل إجهاد العين */
+            --text-dark: #2d3436; /* رمادي داكن للتباين الهادئ */
+            --accent-purple: #a29bfe;
+        }
 
-void main() => runApp(const SidarTravelApp());
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
 
-class SidarTravelApp extends StatelessWidget {
-  const SidarTravelApp({super.key});
+        /* خلفية تفاعلية متغيرة الألوان (Gradient Animation) */
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(45deg, #ffffff, #e3f2fd, #f5f5f5);
+            background-size: 400% 400%;
+            animation: gradientBG 10s ease infinite;
+        }
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(fontFamily: 'Roboto'), // يمكنك تغيير الخط لـ Sans Serif لاحقاً
-      home: const HomePage(),
-    );
-  }
-}
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+        /* الحاوية الرئيسية */
+        .app-container {
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            box-sizing: border-box;
+        }
 
-  @override
-  _HomePageState createState() => _HomePageState();
-}
+        /* الهيدر العلوي */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-class _HomePageState extends State<HomePage> {
-  // متغيرات للألوان التفاعلية (Pastel Colors)
-  Alignment _topAlignment = Alignment.topLeft;
-  Alignment _bottomAlignment = Alignment.bottomRight;
-  int _selectedIndex = 0; // للتحكم في شريط التنقل السفلي
-  
-  // اسم المستخدم الافتراضي
-  final String userName = "Alex Rivera"; 
+        .greeting-text {
+            font-size: 12px;
+            color: #636e72;
+            letter-spacing: 1px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
 
-  @override
-  void initState() {
-    super.initState();
-    // مؤقت لتغيير حركة الخلفية بشكل مستمر وسلس
-    Timer.periodic(const Duration(seconds: 4), (timer) {
-      if (mounted) {
-        setState(() {
-          _topAlignment = _topAlignment == Alignment.topLeft ? Alignment.topRight : Alignment.topLeft;
-          _bottomAlignment = _bottomAlignment == Alignment.bottomRight ? Alignment.bottomLeft : Alignment.bottomRight;
-        });
-      }
-    });
-  }
+        .user-name {
+            font-size: 26px;
+            font-weight: 900;
+            color: var(--text-dark);
+        }
 
-  // دالة ذكية لتحديد التحية بناءً على الوقت الحالي
-  String getGreeting() {
-    var hour = DateTime.now().hour;
-    if (hour < 12) return 'GOOD MORNING';
-    if (hour < 17) return 'GOOD AFTERNOON';
-    return 'GOOD EVENING';
-  }
+        /* أيقونة التنبيهات مع النقطة الأرجوانية */
+        .notif-box {
+            position: relative;
+            background: rgba(0, 0, 0, 0.05);
+            padding: 10px;
+            border-radius: 12px;
+        }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      // استخدام الألوان الفاتحة لتقليل إجهاد العين
-      body: AnimatedContainer(
-        duration: const Duration(seconds: 4),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: _topAlignment,
-            end: _bottomAlignment,
-            colors: const [Color(0xFFF8F9FA), Color(0xFFE3F2FD), Color(0xFFFFFFFF)],
-          ),
-        ),
-        child: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // الهيدر العلوي (التحية والاسم)
-              Padding(
-                padding: const EdgeInsets.all(24.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          getGreeting(),
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey[600],
-                            letterSpacing: 1.5,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          userName,
-                          style: const TextStyle(
-                            fontSize: 26,
-                            fontWeight: FontWeight.w900,
-                            color: Color(0xFF2D3436),
-                          ),
-                        ),
-                      ],
-                    ),
-                    _buildNotificationIcon(),
-                  ],
-                ),
-              ),
-              const Spacer(), // يترك مساحة فارغة في المنتصف كما طلبت
-            ],
-          ),
-        ),
-      ),
-      
-      // شريط التنقل السفلي (NavBar) المطلوب
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.9),
-          boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 10)],
-        ),
-        child: BottomNavigationBar(
-          currentIndex: _selectedIndex,
-          onTap: (index) => setState(() => _selectedIndex = index),
-          type: BottomNavigationBarType.fixed,
-          backgroundColor: Colors.white,
-          selectedItemColor: Colors.blueAccent,
-          unselectedItemColor: Colors.grey,
-          showSelectedLabels: true,
-          showUnselectedLabels: true,
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: 'الرئيسية'),
-            BottomNavigationBarItem(icon: Icon(Icons.map_outlined), label: 'الخريطة'),
-            BottomNavigationBarItem(icon: Icon(Icons.video_library_outlined), label: 'ريلز'),
-            BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: 'بروفايل'),
-          ],
-        ),
-      ),
-    );
-  }
+        .dot {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-purple);
+            border-radius: 50%;
+        }
 
-  // ويدجت أيقونة التنبيهات مع النقطة البنفسجية من الصورة
-  Widget _buildNotificationIcon() {
-    return Stack(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.05),
-            borderRadius: BorderRadius.circular(15),
-          ),
-          child: const Icon(Icons.notifications_none, color: Colors.black87),
-        ),
-        Positioned(
-          right: 10,
-          top: 10,
-          child: Container(
-            height: 10,
-            width: 10,
-            decoration: const BoxDecoration(
-              color: Colors.purpleAccent,
-              shape: BoxShape.circle,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
+        /* شريط التنقل السفلي (Bottom Nav Bar) */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+            border-radius: 20px 20px 0 0;
+        }
+
+        .nav-item {
+            text-align: center;
+            color: #b2bec3;
+            font-size: 10px;
+            text-decoration: none;
+        }
+
+        .nav-item.active {
+            color: #0984e3;
+        }
+
+        .nav-icon {
+            font-size: 20px;
+            display: block;
+            margin-bottom: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="background"></div>
+
+    <div class="app-container">
+        <div class="header">
+            <div>
+                <div id="greeting" class="greeting-text">GOOD MORNING</div>
+                <div class="user-name">Alex Rivera</div>
+            </div>
+            <div class="notif-box">
+                <span class="dot"></span>
+                <span style="font-size: 20px;">🔔</span>
+            </div>
+        </div>
+
+        <div style="flex-grow: 1;"></div>
+    </div>
+
+    <nav class="bottom-nav">
+        <a href="#" class="nav-item active"><span class="nav-icon">🏠</span>الرئيسية</a>
+        <a href="#" class="nav-item"><span class="nav-icon">📍</span>الخريطة</a>
+        <a href="#" class="nav-item"><span class="nav-icon">🎬</span>ريلز</a>
+        <a href="#" class="nav-item"><span class="nav-icon">👤</span>بروفايل</a>
+    </nav>
+
+    <script>
+        // دالة لتحديث التحية حسب وقت الجهاز
+        function updateGreeting() {
+            const now = new Date();
+            const hours = now.getHours();
+            const greetingElement = document.getElementById('greeting');
+            
+            if (hours < 12) {
+                greetingElement.innerText = "GOOD MORNING";
+            } else if (hours < 17) {
+                greetingElement.innerText = "GOOD AFTERNOON";
+            } else {
+                greetingElement.innerText = "GOOD EVENING";
+            }
+        }
+
+        updateGreeting();
+    </script>
+</body>
+</html>
