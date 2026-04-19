@@ -36,16 +36,17 @@
             background-size: cover; background-position: center;
             z-index: 0;
         }
-       /* --- تعديل الطبقة البيضاء على الخلفية --- */
+       /* --- تعديل الطبقة البيضاء على الخلفية --- *//* --- تعديل الطبقة لتوضيح الخلفية وإبراز الرموز --- */
 .header-bg::before {
     content: '';
     position: absolute; inset: 0;
-    /* تم تعديل التدرج لتقليل حدة اللون الأبيض وجعله أكثر شفافية */
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.2) 100%);
-    backdrop-filter: blur(5px); /* إضافة تأثير تعتيم خفيف لزيادة التركيز */
-    transition: background 0.3s ease; /* إضافة تأثير انتقالي سلس */
+    /* تم تقليل تأثير اللون الأبيض بشكل كبير ليصبح شفافاً جداً */
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.01) 0%, rgba(255, 255, 255, 0.05) 100%);
+    /* تم إزالة تأثير التغبيش (Blur) تماماً لجعل الخلفية واضحة */
+    backdrop-filter: none; 
+    transition: background 0.3s ease; /* الحفاظ على التأثير الانتقالي السلس */
 }
-/* ------------------------------------------ */
+/* --------------------------------------------------- */
 
         .app-container {
             position: relative; z-index: 1;
