@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sidarapp - Saturated Lava Edition</title>
+    <title>Sidarapp - Fully Saturated Lava Edition</title>
     
     <style>
         :root {
-            --primary-lava: #ff4500; 
-            --lava-glow: rgba(255, 69, 0, 0.4);
+            --primary-lava: #ff4500; /* لون الحمم الأساسي */
+            --lava-glow: rgba(255, 69, 0, 0.4); /* توهج الحمم الخفيف */
+            --lava-intense-glow: rgba(255, 69, 0, 0.8); /* توهج ناري قوي للشعار */
             --text-main: #0f172a; 
         }
 
@@ -20,7 +21,7 @@
             background: #fff;
         }
 
-        /* --- Splash Screen --- */
+        /* --- Splash Screen (التشبع الكامل بالأزرق الناري) --- */
         #splash-screen {
             position: fixed; inset: 0; background: #ffffff;
             display: flex; justify-content: center; align-items: center;
@@ -28,27 +29,35 @@
             transition: opacity 0.5s ease;
         }
         .splash-image { 
-            width: 160px; 
-            filter: drop-shadow(0 0 10px var(--lava-glow));
-            animation: splashEntrance 1.5s ease-out forwards; 
+            width: 180px; /* زيادة حجم الشعار قليلاً ليكون أكثر تأثيراً */
+            
+            /* تلوين الشعار باللون البركاني بالكامل */
+            filter: drop-shadow(0 0 15px var(--lava-intense-glow)); 
+            
+            /* أنيميشن الدخول والنبض */
+            animation: splashEntrance 1.5s ease-out forwards, pulseGlow 2.5s infinite 1.5s; 
         }
+
+        /* أنيميشن النبض (Pulse) لجعل الشعار ينبض بالحياة */
+        @keyframes pulseGlow {
+            0%, 100% { filter: drop-shadow(0 0 10px var(--lava-glow)); transform: scale(1); }
+            50% { filter: drop-shadow(0 0 25px var(--lava-intense-glow)); transform: scale(1.03); }
+        }
+
         @keyframes splashEntrance { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 
         /* --- Hero Background (تشبيع باللون البركاني) --- */
         .header-bg {
             position: absolute; top: 0; left: 0; right: 0; height: 48vh;
-            /* إضافة تدرج لوني يميل للبرتقالي الدافئ قبل التلاشي للأبيض */
             background: 
                 linear-gradient(to bottom, rgba(255, 69, 0, 0.05), #fff 90%), 
                 url('https://plain-eeur-prod-public.komododecks.com/202604/19/FtJXvAZvXREKew6PJ3ew/image.png');
             background-size: cover; 
             background-position: center;
             z-index: 0;
-            /* زيادة تشبع الألوان ودفئها */
             filter: saturate(1.4) sepia(0.1); 
         }
 
-        /* طبقة إضافية خفيفة جداً لتعزيز وهج الحمم في الأعلى */
         .header-bg::after {
             content: '';
             position: absolute; inset: 0;
