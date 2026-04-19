@@ -18,7 +18,7 @@
             font-family: 'Segoe UI', Roboto, sans-serif;
             overflow: hidden;
             height: 100vh;
-            background-color: white; /* باقي الصفحة أبيض صافي */
+            background-color: white;
         }
 
         /* --- شاشة الـ Splash --- */
@@ -35,17 +35,16 @@
             100% { transform: scale(1); opacity: 1; filter: blur(0); }
         }
 
-        /* --- الربع الأول: صورة الـ Hero مع التلاشي --- */
+        /* --- الربع الأول: صورة الـ Hero (تم تصحيح الظهور) --- */
         .hero-background {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            height: 45vh; /* يغطي الربع الأول مع مساحة للتلاشي التدريجي */
-            z-index: -1;
-            /* تأثير التلاشي (Fade) لدمج الصورة مع البياض */
+            height: 50vh; /* زيادة الارتفاع قليلاً لضمان وضوح التلاشي */
+            z-index: 1; /* تأكد أنها فوق الخلفية البيضاء الأساسية */
             background: linear-gradient(to bottom, 
-                transparent 70%, 
+                rgba(255,255,255,0) 60%, 
                 white 100%), 
                 url('https://plain-eeur-prod-public.komododecks.com/202604/19/xtTjoD90EZEkcsX7cG9c/image.jpg');
             background-size: cover;
@@ -59,10 +58,10 @@
             opacity: 0; 
             transition: opacity 1.2s ease;
             position: relative;
-            z-index: 10;
+            z-index: 10; /* الهيدر والأزرار فوق كل شيء */
         }
 
-        /* --- الهيدر (الشعار يسار، الجرس يمين) --- */
+        /* --- الهيدر --- */
         .header { 
             display: flex; 
             justify-content: space-between; 
@@ -81,13 +80,13 @@
             background: white; 
             padding: 10px; 
             border-radius: 14px; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        /* --- شريط التنقل السفلي المثبت --- */
+        /* --- شريط التنقل السفلي --- */
         .bottom-nav-container {
             position: absolute;
             bottom: 30px;
@@ -99,7 +98,7 @@
             backdrop-filter: blur(25px);
             padding: 8px 12px;
             border-radius: 30px;
-            box-shadow: 0 15px 35px rgba(37, 99, 235, 0.15);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
             display: flex;
             justify-content: space-around;
             align-items: center;
@@ -109,8 +108,8 @@
         .nav-item {
             display: flex; align-items: center; justify-content: center;
             padding: 10px 16px; cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             border-radius: 22px; color: var(--text-sub);
+            transition: all 0.4s ease;
         }
         .nav-item svg { width: 24px; height: 24px; stroke: currentColor; stroke-width: 2.2; fill: none; }
         .nav-item.active { background: var(--light-blue); color: var(--primary-blue); }
@@ -163,7 +162,6 @@
     </div>
 
     <script>
-        // إخفاء الـ Splash بعد التحميل
         window.addEventListener('load', () => {
             setTimeout(() => {
                 const splash = document.getElementById('splash-screen');
@@ -174,7 +172,6 @@
             }, 2500);
         });
 
-        // تفعيل عناصر شريط التنقل
         function setActive(el) {
             document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
             el.classList.add('active');
