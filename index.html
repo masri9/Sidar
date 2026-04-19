@@ -6,6 +6,13 @@
     <title>Sidarapp - Stacked Cards Focus</title>
     
     <style>
+    
+    /* إنشاء فئة للون البركاني */
+.lava-text {
+    color: var(--primary-lava);
+    font-weight: 700;
+}
+
         :root {
             --primary-lava: #ff4500; 
             --lava-glow: rgba(255, 69, 0, 0.4); 
@@ -299,6 +306,21 @@
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
             el.classList.add('active');
         }
+        
+        <script>
+    // تحديد الكلمة المستهدفة (Sidar)
+    const targetWord = 'Sidar';
+
+    // الحصول على نص Placeholder الأصلي
+    const originalPlaceholder = document.getElementById('searchField').getAttribute('placeholder');
+
+    // استبدال الكلمة المستهدفة بالنص الملوّن
+    const coloredPlaceholder = originalPlaceholder.replace(targetWord, `<span class="lava-text">${targetWord}</span>`);
+
+    // تحديث نص Placeholder بالنص الملوّن عند تحميل الصفحة
+    document.getElementById('searchField').setAttribute('placeholder', coloredPlaceholder);
+</script>
+
     </script>
 </body>
 </html>
