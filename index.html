@@ -8,7 +8,6 @@
         :root {
             --primary-blue: #2563eb;
             --light-blue: #dbeafe;
-            --text-main: #ffffff; /* تغيير الخط للوني الأبيض ليتناسب مع الخلفية بدون بطاقة */
             --nav-bg: rgba(255, 255, 255, 0.95);
         }
 
@@ -40,10 +39,11 @@
             background-image: url('https://plain-eeur-prod-public.komododecks.com/202604/19/FtJXvAZvXREKew6PJ3ew/image.png'); 
             background-size: cover; background-position: center;
         }
-        /* طبقة تظليل خفيفة لجعل النص الأبيض واضحاً */
+        
+        /* تظليل خفيف لبروز النص الأبيض */
         .background-overlay {
             position: fixed; inset: 0; z-index: -1;
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, 0.25);
         }
 
         .app-container {
@@ -53,7 +53,7 @@
             transition: opacity 1.2s ease;
         }
 
-        /* --- الهيدر والقائمة --- */
+        /* --- الهيدر --- */
         .header {
             height: 60px;
             display: flex;
@@ -68,23 +68,24 @@
             border-radius: 16px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             cursor: pointer;
+            transition: transform 0.2s ease;
         }
+        .menu-icon:active { transform: scale(0.9); }
 
-        /* --- المحتوى الرئيسي (الجملة الكبيرة) --- */
+        /* --- المحتوى الرئيسي (النص) --- */
         .main-content {
             flex: 1;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start; /* لرفع النص للأعلى */
+            justify-content: flex-start; 
             align-items: center;
-            padding-top: 60px; /* مسافة من الأعلى */
+            padding-top: 50px; 
             text-align: center;
         }
 
         .hero-text-container {
             width: 90%;
             max-width: 500px;
-            /* أنيميشن الظهور */
             opacity: 0;
             transform: translateY(30px);
             animation: textSlideUp 1s ease-out 2.8s forwards;
@@ -95,23 +96,23 @@
         }
 
         .hero-full-title {
-            font-size: 34px; /* حجم كبير وموحد */
+            font-size: 34px;
             font-weight: 800;
             color: #ffffff;
             line-height: 1.3;
-            text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             align-items: center;
             gap: 12px;
+            margin: 0;
         }
 
-        /* تنسيق الشعار في نهاية الجملة */
         .inline-logo {
-            height: 38px; /* متناسق مع حجم الخط الكبير */
+            height: 38px;
             width: auto;
-            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.2));
+            filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));
             vertical-align: middle;
         }
 
@@ -128,7 +129,7 @@
             -webkit-backdrop-filter: blur(25px);
             padding: 8px 12px;
             border-radius: 30px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.25);
             display: flex;
             justify-content: space-around;
             align-items: center;
