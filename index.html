@@ -140,18 +140,23 @@
         .dot { width: 7px; height: 7px; background: #e2e8f0; border-radius: 50%; transition: 0.4s; }
         .dot.active { background: var(--primary-lava); width: 18px; border-radius: 10px; }
 
-      /* --- تعديل مكان الشريط السفلي --- *//* --- تعديل مكان الشريط السفلي فقط (إنزاله لأسفل) --- */
-.bottom-nav {
-    position: fixed; 
-    /* القيمة السابقة كانت 30px، قمنا بتغييرها إلى 10px لإنزاله لأسفل */
-    bottom: 10px; 
-    left: 50%; transform: translateX(-50%);
-    width: 90%; max-width: 400px; background: #ffffff; border-radius: 40px;
-    display: flex; justify-content: space-around; align-items: center;
-    padding: 8px; border: 2px solid var(--primary-lava);
-    box-shadow: 0 0 20px var(--lava-glow); z-index: 1000;
-}
-/* -------------------------------------------------- */
+      /* --- تعديل مكان الشريط السفلي --- *//* --- تعديل مكان الشريط السفلي فقط (إنزاله لأسفل) --- *//* --- Bottom Navigation --- */
+        .bottom-nav {
+            position: fixed; 
+            /* قمنا بتغيير القيمة من 30px إلى 10px لإنزال المستطيل لأسفل */
+            bottom: 10px; 
+            left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 400px; background: #ffffff; border-radius: 40px;
+            display: flex; justify-content: space-around; align-items: center;
+            padding: 8px; border: 2px solid var(--primary-lava);
+            box-shadow: 0 0 20px var(--lava-glow); z-index: 1000;
+        }
+        .nav-item { display: flex; align-items: center; justify-content: center; padding: 10px 15px; color: #94a3b8; cursor: pointer; transition: 0.3s; border-radius: 30px; }
+        .nav-item.active { background: rgba(255, 69, 0, 0.1); color: var(--primary-lava); }
+        .nav-item span { max-width: 0; overflow: hidden; white-space: nowrap; transition: 0.3s; font-weight: 700; font-size: 14px; }
+        .nav-item.active span { max-width: 80px; margin-left: 8px; }
+        .nav-item svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2.2; }
+/* ------------------------- */
 
     </style>
 </head>
