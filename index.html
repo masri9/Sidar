@@ -9,7 +9,6 @@
             --primary-blue: #2563eb;
             --light-blue: #dbeafe;
             --nav-bg: rgba(255, 255, 255, 0.95);
-            /* لون خط أسود غني وجديد */
             --text-main-color: #0f172a; 
         }
 
@@ -21,7 +20,7 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* --- شاشة الـ Splash --- */
+        /* --- Splash Screen --- */
         #splash-screen {
             position: fixed; inset: 0; background: #ffffff;
             display: flex; justify-content: center; align-items: center;
@@ -35,17 +34,16 @@
             100% { transform: scale(1); opacity: 1; filter: blur(0); }
         }
 
-        /* --- واجهة الـ Home (الخلفية) --- */
+        /* --- Background --- */
         .background-container {
             position: fixed; inset: 0; z-index: -1;
             background-image: url('https://plain-eeur-prod-public.komododecks.com/202604/19/FtJXvAZvXREKew6PJ3ew/image.png'); 
             background-size: cover; background-position: center;
         }
         
-        /* تظليل الخلفية المخفف جداً */
         .background-overlay {
             position: fixed; inset: 0; z-index: -1;
-            background: rgba(255, 255, 255, 0.1); /* شفاف جداً لتبقى الخلفية واضحة */
+            background: rgba(255, 255, 255, 0.15); 
         }
 
         .app-container {
@@ -55,13 +53,13 @@
             transition: opacity 1.2s ease;
         }
 
-        /* --- الهيدر --- */
+        /* --- Header --- */
         .header {
             height: 60px;
             display: flex;
             align-items: center;
             justify-content: flex-start;
-            margin-bottom: 5px; /* مسافة أقل لرفع المحتوى */
+            margin-bottom: 5px;
         }
 
         .menu-icon {
@@ -70,25 +68,23 @@
             border-radius: 16px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.08);
             cursor: pointer;
-            transition: transform 0.2s ease;
             border: 1px solid rgba(0,0,0,0.05);
         }
-        .menu-icon:active { transform: scale(0.9); }
 
-        /* --- المحتوى الرئيسي (النص الجديد) --- */
+        /* --- Main Content (New Slogan) --- */
         .main-content {
             flex: 1;
             display: flex;
             flex-direction: column;
             justify-content: flex-start; 
             align-items: center;
-            padding-top: 50px; /* تم تقليله لرفع النص للأعلى */
+            padding-top: 40px; /* مرفوعة للأعلى */
             text-align: center;
         }
 
         .hero-text-container {
             width: 85%;
-            max-width: 450px;
+            max-width: 500px;
             opacity: 0;
             transform: translateY(20px);
             animation: textSlideUp 1s ease-out 2.8s forwards;
@@ -99,37 +95,28 @@
         }
 
         .hero-full-title {
-            font-size: 36px;
+            font-size: 32px; /* حجم متوازن واحترافي */
             font-weight: 800;
-            line-height: 1.25;
+            line-height: 1.3;
             margin: 0;
-            
-            /* اللون الأسود الجديد وتأثيراته */
             color: var(--text-main-color);
-            /* تظليل خفيف جداً خلف الأسود لضمان البروز */
-            text-shadow: 0 2px 4px rgba(255, 255, 255, 0.5); 
+            text-shadow: 0 2px 4px rgba(255, 255, 255, 0.6); 
             
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             align-items: center;
-            gap: 10px 15px;
+            gap: 10px 12px;
         }
 
-        /* تنسيق الشعار */
         .inline-logo {
-            height: 38px;
+            height: 34px; /* متناسق مع طول الخط الجديد */
             width: auto;
             vertical-align: middle;
-            /* ظل داكن خلف الشعار لبروزه */
-            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.2));
-            transition: transform 0.3s ease;
-        }
-        .hero-full-title:hover .inline-logo {
-            transform: scale(1.08);
+            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.15));
         }
 
-        /* --- شريط التنقل السفلي --- */
+        /* --- Bottom Navigation --- */
         .bottom-nav-container {
             position: fixed;
             bottom: 30px;
@@ -153,12 +140,12 @@
         .nav-item {
             display: flex; align-items: center; justify-content: center;
             padding: 10px 16px; cursor: pointer;
-            transition: all 0.4s ease;
+            transition: all 0.3s ease;
             border-radius: 22px; color: #64748b;
         }
         .nav-item svg { width: 24px; height: 24px; stroke: currentColor; stroke-width: 2.2; fill: none; }
         .nav-item.active { background: var(--light-blue); color: var(--primary-blue); }
-        .nav-text { max-width: 0; overflow: hidden; white-space: nowrap; font-size: 14px; font-weight: 700; transition: all 0.4s ease; opacity: 0; }
+        .nav-text { max-width: 0; overflow: hidden; white-space: nowrap; font-size: 14px; font-weight: 700; transition: all 0.3s ease; opacity: 0; }
         .nav-item.active .nav-text { max-width: 80px; margin-left: 10px; opacity: 1; }
 
     </style>
@@ -183,7 +170,7 @@
         <main class="main-content">
             <div class="hero-text-container">
                 <h1 class="hero-full-title">
-                    Your Next Adventure Starts With 
+                    Your Journey Starts Before You Even Arrive.
                     <img src="https://plain-eeur-prod-public.komododecks.com/202604/19/y0zyi6uOKg2CaNATvHPZ/image.png" alt="Sidar" class="inline-logo">
                 </h1>
             </div>
