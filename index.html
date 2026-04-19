@@ -3,23 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sidarapp - Lava Wave Fix</title>
+    <title>Sidarapp - Fully Saturated Lava Edition</title>
     
     <style>
         :root {
-            --primary-lava: #ff4500; 
-            --lava-glow: rgba(255, 69, 0, 0.4);
+            --primary-lava: #ff4500; /* لون الحمم الأساسي */
+            --lava-glow: rgba(255, 69, 0, 0.4); /* توهج الحمم الخفيف */
+            --lava-intense-glow: rgba(255, 69, 0, 0.8); /* توهج ناري قوي للشعار */
             --text-main: #0f172a; 
         }
 
         body, html { 
             margin: 0; padding: 0;
             font-family: 'Segoe UI', Roboto, sans-serif;
+            overflow: hidden;
+            height: 100vh;
             background: #fff;
-            min-height: 100vh;
         }
 
-        /* --- Splash Screen --- */
+        /* --- Splash Screen (التشبع الكامل بالأزرق الناري) --- */
         #splash-screen {
             position: fixed; inset: 0; background: #ffffff;
             display: flex; justify-content: center; align-items: center;
@@ -27,94 +29,94 @@
             transition: opacity 0.5s ease;
         }
         .splash-image { 
-            width: 160px; 
-            filter: drop-shadow(0 0 10px var(--lava-glow));
-            animation: splashEntrance 1.2s ease-out forwards; 
+            width: 180px; /* زيادة حجم الشعار قليلاً ليكون أكثر تأثيراً */
+            
+            /* تلوين الشعار باللون البركاني بالكامل */
+            filter: drop-shadow(0 0 15px var(--lava-intense-glow)); 
+            
+            /* أنيميشن الدخول والنبض */
+            animation: splashEntrance 1.5s ease-out forwards, pulseGlow 2.5s infinite 1.5s; 
         }
+
+        /* أنيميشن النبض (Pulse) لجعل الشعار ينبض بالحياة */
+        @keyframes pulseGlow {
+            0%, 100% { filter: drop-shadow(0 0 10px var(--lava-glow)); transform: scale(1); }
+            50% { filter: drop-shadow(0 0 25px var(--lava-intense-glow)); transform: scale(1.03); }
+        }
+
         @keyframes splashEntrance { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 
-        /* --- Hero Section (الخلفية العلوية المشبعة) --- */
-        .hero-section {
-            padding: 60px 20px 40px;
-            /* خلفية بتدرج برتقالي خفيف جداً في الأعلى لتشبيع الهيرو */
-            background: linear-gradient(180deg, rgba(255, 69, 0, 0.08) 0%, rgba(255, 255, 255, 1) 100%);
-            position: relative;
-            z-index: 2;
+        /* --- Hero Background (تشبيع باللون البركاني) --- */
+        .header-bg {
+            position: absolute; top: 0; left: 0; right: 0; height: 48vh;
+            background: 
+                linear-gradient(to bottom, rgba(255, 69, 0, 0.05), #fff 90%), 
+                url('https://plain-eeur-prod-public.komododecks.com/202604/19/FtJXvAZvXREKew6PJ3ew/image.png');
+            background-size: cover; 
+            background-position: center;
+            z-index: 0;
+            filter: saturate(1.4) sepia(0.1); 
         }
 
+        .header-bg::after {
+            content: '';
+            position: absolute; inset: 0;
+            background: radial-gradient(circle at top right, rgba(255, 69, 0, 0.15), transparent 70%);
+            pointer-events: none;
+        }
+
+        .app-container {
+            position: relative; z-index: 1;
+            height: 100vh; overflow-y: auto;
+            padding: 60px 20px 120px; box-sizing: border-box;
+            scrollbar-width: none;
+        }
+
+        /* --- Hero Text --- */
         .hero-title { 
             font-size: 34px; font-weight: 800; line-height: 1.1; color: var(--text-main); 
-            margin-bottom: 25px;
+            margin-bottom: 25px; margin-top: 20px; 
         }
         .hero-title span { 
             color: var(--primary-lava); 
-            text-shadow: 0 0 10px rgba(255, 69, 0, 0.1);
+            text-shadow: 0 0 15px rgba(255, 69, 0, 0.2);
         }
 
-        /* --- Search Bar with Glow --- */
+        /* --- Search Bar (Glow Border) --- */
         .search-wrapper {
-            background: #fff;
+            background: rgba(255,255,255,0.92); backdrop-filter: blur(15px);
             border-radius: 20px; padding: 12px 18px; display: flex; align-items: center;
             border: 2px solid var(--primary-lava); 
-            box-shadow: 0 0 15px var(--lava-glow);
-            margin-bottom: 10px;
+            box-shadow: 0 0 15px var(--lava-glow), 0 10px 30px rgba(0,0,0,0.05);
+            margin-bottom: 35px;
         }
-        .search-wrapper input { flex: 1; border: none; background: transparent; outline: none; font-size: 16px; padding: 0 10px; }
-        .search-wrapper span { color: var(--primary-lava); font-size: 20px; }
+        .search-wrapper input { flex: 1; border: none; background: transparent; outline: none; padding-left: 10px; font-size: 16px; font-weight: 500; }
+        .search-wrapper span { color: var(--primary-lava); }
 
-        /* --- Wave Content Area (القسم البرتقالي المموج تحت الهيرو) --- */
-        .wave-container {
-            position: relative;
-            width: 100%;
-            height: 500px; /* مساحة القسم البرتقالي */
-            /* تدرج لوني يعطي تأثير الموجات والتشبع البركاني */
-            background: 
-                radial-gradient(circle at 20% 30%, rgba(255, 69, 0, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(255, 69, 0, 0.1) 0%, transparent 50%),
-                linear-gradient(135deg, #ff4500 0%, #ff8c00 100%);
-            border-radius: 40px 40px 0 0; /* تمويج الحواف العلوية */
-            margin-top: 20px;
-            overflow: hidden;
-            box-shadow: inset 0 20px 40px rgba(0,0,0,0.1);
-        }
-
-        /* إضافة أيقونات/رسومات خفيفة (معالم وطيارة) كطبقة خلفية */
-        .wave-container::before {
-            content: '✈️ 🏙️ 🗼 🏯';
-            position: absolute;
-            width: 200%;
-            font-size: 40px;
-            opacity: 0.15;
-            top: 20%;
-            left: 10%;
-            letter-spacing: 100px;
-            transform: rotate(-5deg);
-            white-space: nowrap;
-        }
-
-        /* تأثير الموجة الإضافي */
-        .wave-container::after {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; right: 0; height: 100%;
-            background: url('https://www.transparenttextures.com/patterns/waves.png'); /* نقش موجات خفيف */
-            opacity: 0.2;
-        }
-
-        /* --- Bottom Nav --- */
+        /* --- Bottom Nav (Glow Border) --- */
         .bottom-nav {
             position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
             width: 90%; max-width: 400px; 
-            background: rgba(255, 255, 255, 0.98); 
-            border-radius: 40px; display: flex; justify-content: space-around; align-items: center;
+            background: #ffffff; border-radius: 40px;
+            display: flex; justify-content: space-around; align-items: center;
             padding: 8px; 
             border: 2px solid var(--primary-lava);
             box-shadow: 0 0 20px var(--lava-glow);
             z-index: 1000;
         }
-        .nav-item { display: flex; align-items: center; padding: 10px 15px; color: #94a3b8; cursor: pointer; transition: 0.3s; border-radius: 30px; }
-        .nav-item.active { background: rgba(255, 69, 0, 0.1); color: var(--primary-lava); }
-        .nav-item span { max-width: 0; overflow: hidden; transition: 0.3s; font-weight: 700; font-size: 14px; white-space: nowrap; }
+        .nav-item { 
+            display: flex; align-items: center; justify-content: center; 
+            padding: 10px 15px; color: #94a3b8; cursor: pointer; transition: 0.3s;
+            border-radius: 30px;
+        }
+        .nav-item.active { 
+            background: rgba(255, 69, 0, 0.1); 
+            color: var(--primary-lava); 
+        }
+        .nav-item span { 
+            max-width: 0; overflow: hidden; white-space: nowrap; 
+            transition: 0.3s; font-weight: 700; font-size: 14px; 
+        }
         .nav-item.active span { max-width: 80px; margin-left: 8px; }
         .nav-item svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2.2; }
 
@@ -126,19 +128,18 @@
         <img src="https://plain-eeur-prod-public.komododecks.com/202604/19/y0zyi6uOKg2CaNATvHPZ/image.png" class="splash-image">
     </div>
 
-    <div class="hero-section">
+    <div class="header-bg"></div>
+
+    <div class="app-container" id="main-app" style="opacity: 0; transition: 1s;">
+        
         <h1 class="hero-title">Where do you <br><span>wanna go?</span></h1>
+
         <div class="search-wrapper">
             <span>🔍</span>
             <input type="text" placeholder="Ask Sidar AI anything...">
-            <span>🎤</span>
+            <span style="font-size: 20px;">🎤</span>
         </div>
-    </div>
 
-    <div class="wave-container">
-        <div style="padding: 40px; color: #fff; font-weight: bold; opacity: 0.8; text-align: center;">
-            Explore Our Services
-        </div>
     </div>
 
     <nav class="bottom-nav">
@@ -151,6 +152,10 @@
             <span>Map</span>
         </div>
         <div class="nav-item" onclick="tab(this)">
+            <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+            <span>Reels</span>
+        </div>
+        <div class="nav-item" onclick="tab(this)">
             <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
             <span>Profile</span>
         </div>
@@ -160,8 +165,11 @@
         window.addEventListener('load', () => {
             setTimeout(() => {
                 document.getElementById('splash-screen').style.opacity = '0';
-                setTimeout(() => { document.getElementById('splash-screen').style.display = 'none'; }, 500);
-            }, 2000);
+                setTimeout(() => {
+                    document.getElementById('splash-screen').style.display = 'none';
+                    document.getElementById('main-app').style.opacity = '1';
+                }, 500);
+            }, 2500);
         });
 
         function tab(el) {
