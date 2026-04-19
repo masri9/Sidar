@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sidarapp - Professional Fixed</title>
+    <title>Sidarapp - Navigation Fixed</title>
     
     <style>
         :root {
             --primary-lava: #ff4500; 
             --lava-glow: rgba(255, 69, 0, 0.4); 
+            --lava-intense-glow: rgba(255, 69, 0, 0.8); 
             --text-main: #0f172a; 
         }
 
         body, html { 
             margin: 0; padding: 0;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', Roboto, sans-serif;
             background: #fff;
             min-height: 100vh;
             overflow-x: hidden;
@@ -25,169 +26,275 @@
             position: fixed; inset: 0; background: #ffffff;
             display: flex; justify-content: center; align-items: center;
             z-index: 9999;
+            transition: opacity 0.5s ease;
         }
-        .splash-image { width: 150px; }
+        .splash-image { width: 180px; filter: drop-shadow(0 0 15px var(--lava-intense-glow)); }
 
-        /* --- Header Background --- */
+        /* --- Hero Background --- */
         .header-bg {
             position: absolute; top: 0; left: 0; right: 0; height: 50vh;
             background-size: cover; background-position: center;
             z-index: 0;
-            background-image: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000');
         }
         .header-bg::before {
-            content: ''; position: absolute; inset: 0;
-            background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%);
         }
 
         .app-container {
             position: relative; z-index: 1;
-            padding: 60px 20px 100px;
+            padding: 60px 20px 120px; box-sizing: border-box;
+            background: transparent;
         }
 
-        .hero-title { font-size: 34px; font-weight: 800; color: var(--text-main); margin-bottom: 20px; }
+        .hero-title { font-size: 34px; font-weight: 800; line-height: 1.1; color: var(--text-main); margin-bottom: 25px; }
         .hero-title span { color: var(--primary-lava); }
 
         .search-wrapper {
-            background: #fff; border-radius: 20px; padding: 12px 18px; 
-            display: flex; align-items: center; border: 2px solid var(--primary-lava);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 25px;
+            background: rgba(255,255,255,0.95); backdrop-filter: blur(10px);
+            border-radius: 20px; padding: 12px 18px; display: flex; align-items: center;
+            border: 2px solid var(--primary-lava); margin-bottom: 25px;
         }
-        .search-wrapper input { flex: 1; border: none; outline: none; font-size: 16px; padding-left: 10px; }
+        .search-wrapper input { flex: 1; border: none; background: transparent; outline: none; padding-left: 10px; font-size: 16px; width: 100%; }
 
-        .services-scroll { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 20px; scrollbar-width: none; }
-        .services-scroll::-webkit-scrollbar { display: none; }
+        .services-scroll-container {
+            display: flex; gap: 10px; overflow-x: auto; padding-bottom: 25px; scrollbar-width: none;
+        }
+        .services-scroll-container::-webkit-scrollbar { display: none; }
         .service-pill {
-            padding: 8px 18px; border-radius: 50px; border: 1.5px solid #eee;
-            background: #fff; white-space: nowrap; font-weight: 600;
+            display: flex; align-items: center; background: #ffffff; border: 1.5px solid #f1f5f9;
+            padding: 8px 16px; border-radius: 50px; flex-shrink: 0; transition: 0.3s;
         }
-        .service-pill.active { border-color: var(--primary-lava); color: var(--primary-lava); background: rgba(255,69,0,0.05); }
+        .service-pill.active { border-color: var(--primary-lava); color: var(--primary-lava); background: rgba(255, 69, 0, 0.05); }
 
-        /* --- Stacked Cards (THE FIX) --- */
+        /* --- Stacked Cards Section --- */
         .stacked-cards-wrapper {
-            position: relative; width: 100%; height: 300px;
-            display: flex; justify-content: center; align-items: center;
-            perspective: 1000px; margin-top: 10px;
+            position: relative;
+            width: 100%;
+            height: 320px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 1000px;
+            margin-top: 10px;
         }
 
         .card-item {
-            position: absolute; width: 220px; height: 280px;
-            border-radius: 25px; background-size: cover; background-position: center;
-            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-            display: flex; align-items: flex-end; justify-content: center;
-            padding-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            opacity: 0; pointer-events: none;
-            background-color: #333; /* خلفية احتياطية سوداء في حال فشل الصورة */
+            position: absolute;
+            width: 260px;
+            height: 300px;
+            border-radius: 30px;
+            background-size: cover;
+            background-position: center;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding-bottom: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            opacity: 0;
+            pointer-events: none;
         }
 
         .card-item.active { opacity: 1; transform: translateX(0) scale(1); z-index: 10; pointer-events: auto; }
-        .card-item.prev { opacity: 0.6; transform: translateX(-90px) scale(0.8); z-index: 5; filter: blur(1px); }
-        .card-item.next { opacity: 0.6; transform: translateX(90px) scale(0.8); z-index: 5; filter: blur(1px); }
+        .card-item.prev { opacity: 0.6; transform: translateX(-100px) scale(0.85); z-index: 5; }
+        .card-item.next { opacity: 0.6; transform: translateX(100px) scale(0.85); z-index: 5; }
 
         .see-more-btn {
-            background: rgba(0,0,0,0.6); backdrop-filter: blur(8px);
-            color: #fff; border-radius: 50px; padding: 10px 35px;
-            font-weight: 700; font-size: 13px; border: 1px solid rgba(255,255,255,0.3);
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            color: #fff;
+            border-radius: 50px;
+            padding: 10px 45px;
+            font-weight: 700;
+            font-size: 14px;
+            border: 1px solid rgba(255,255,255,0.2);
         }
 
-        .dots { display: flex; justify-content: center; gap: 8px; margin-top: 15px; }
-        .dot { width: 6px; height: 6px; background: #ddd; border-radius: 50%; transition: 0.3s; }
-        .dot.active { background: #000; width: 16px; border-radius: 10px; }
+        .dots-container { display: flex; justify-content: center; gap: 8px; margin-top: 20px; }
+        .dot { width: 8px; height: 8px; background: #e2e8f0; border-radius: 50%; transition: 0.3s; }
+        .dot.active { background: #000; width: 12px; border-radius: 10px; }
 
-        /* --- Navigation --- */
+        /* --- 🛠️ المصلح: شريط التنقل السفلي 🛠️ --- */
         .bottom-nav {
-            position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
-            width: 85%; max-width: 400px; background: #fff; border-radius: 40px;
-            display: flex; justify-content: space-around; padding: 10px;
-            border: 2px solid var(--primary-lava); box-shadow: 0 5px 20px var(--lava-glow); z-index: 1000;
+            position: fixed; 
+            bottom: 30px; 
+            left: 50%; 
+            transform: translateX(-50%);
+            width: 90%; 
+            max-width: 400px; 
+            background: #ffffff; 
+            border-radius: 40px;
+            display: flex; 
+            justify-content: space-around; 
+            align-items: center;
+            padding: 8px; 
+            border: 2px solid var(--primary-lava);
+            box-shadow: 0 0 20px var(--lava-glow); 
+            z-index: 1000;
         }
-        .nav-item { color: #94a3b8; display: flex; align-items: center; transition: 0.3s; padding: 8px 12px; border-radius: 20px; }
-        .nav-item.active { background: rgba(255, 69, 0, 0.1); color: var(--primary-lava); }
-        .nav-item span { max-width: 0; overflow: hidden; transition: 0.3s; font-weight: 700; font-size: 14px; }
-        .nav-item.active span { max-width: 80px; margin-left: 8px; }
-        .nav-item svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2.2; }
+        
+        .nav-item { 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            padding: 10px 15px; 
+            color: #94a3b8; 
+            cursor: pointer; 
+            transition: 0.3s;
+            border-radius: 30px;
+            text-decoration: none;
+        }
+
+        .nav-item.active { 
+            background: rgba(255, 69, 0, 0.1); 
+            color: var(--primary-lava); 
+        }
+
+        .nav-item span { 
+            max-width: 0; 
+            overflow: hidden; 
+            white-space: nowrap; 
+            transition: 0.3s; 
+            font-weight: 700; 
+            font-size: 14px; 
+        }
+
+        .nav-item.active span { 
+            max-width: 80px; 
+            margin-left: 8px; 
+        }
+
+        .nav-item svg { 
+            width: 24px; 
+            height: 24px; 
+            fill: none; 
+            stroke: currentColor; 
+            stroke-width: 2.2; 
+        }
+
     </style>
 </head>
 <body>
 
     <div id="splash-screen">
-        <img src="https://plain-eeur-prod-public.komododecks.com/202604/19/y0zyi6uOKg2CaNATvHPZ/image.png" class="splash-image">
+        <img id="splashLogo" src="" class="splash-image">
     </div>
 
-    <div class="header-bg"></div>
+    <div class="header-bg" id="heroBg"></div>
 
-    <div class="app-container" id="main-app" style="opacity: 0; transition: 0.8s;">
+    <div class="app-container" id="main-app" style="opacity: 0; transition: 1s;">
+        
         <h1 class="hero-title">Where do you <br><span>wanna go?</span></h1>
 
         <div class="search-wrapper">
             <span>🔍</span>
-            <input type="text" placeholder="Search for anything...">
+            <input type="text" placeholder="Ask Sidar AI anything...">
         </div>
 
-        <div class="services-scroll">
-            <div class="service-pill">🎟️ Events</div>
-            <div class="service-pill">📶 eSIM</div>
-            <div class="service-pill active">💱 Currency</div>
-            <div class="service-pill">💸 Transfer</div>
+        <div class="services-scroll-container">
+            <div class="service-pill" onclick="activatePill(this)"><span>🎟️ Events</span></div>
+            <div class="service-pill" onclick="activatePill(this)"><span>📶 eSIM</span></div>
+            <div class="service-pill active" onclick="activatePill(this)"><span>💱 Currency</span></div>
+            <div class="service-pill" onclick="activatePill(this)"><span>💸 Transfer</span></div>
         </div>
 
         <div class="stacked-cards-wrapper" id="cardsWrapper">
-            <div class="card-item active" style="background-image: url('https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=500')"><div class="see-more-btn">See More</div></div>
-            <div class="card-item" style="background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=500')"><div class="see-more-btn">See More</div></div>
-            <div class="card-item" style="background-image: url('https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=500')"><div class="see-more-btn">See More</div></div>
-            <div class="card-item" style="background-image: url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=500')"><div class="see-more-btn">See More</div></div>
+            <div class="card-item" id="card0"><div class="see-more-btn">See More</div></div>
+            <div class="card-item" id="card1"><div class="see-more-btn">See More</div></div>
+            <div class="card-item" id="card2"><div class="see-more-btn">See More</div></div>
+            <div class="card-item" id="card3"><div class="see-more-btn">See More</div></div>
         </div>
 
-        <div class="dots" id="dots"></div>
+        <div class="dots-container" id="dotsContainer"></div>
+
     </div>
 
     <nav class="bottom-nav">
-        <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg><span>Home</span></div>
-        <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg><span>Map</span></div>
-        <div class="nav-item"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line></svg><span>Reels</span></div>
-        <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg><span>Profile</span></div>
+        <div class="nav-item active" onclick="tab(this)">
+            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+            <span>Home</span>
+        </div>
+        <div class="nav-item" onclick="tab(this)">
+            <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            <span>Map</span>
+        </div>
+        <div class="nav-item" onclick="tab(this)">
+            <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+            <span>Reels</span>
+        </div>
+        <div class="nav-item" onclick="tab(this)">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            <span>Profile</span>
+        </div>
     </nav>
 
     <script>
-        // إخفاء السكرين سبلاش
-        window.onload = () => {
-            setTimeout(() => {
-                document.getElementById('splash-screen').style.display = 'none';
-                document.getElementById('main-app').style.opacity = '1';
-                initCards();
-            }, 1500);
+        /* ---------------------------------------------------------
+           🖼️ قسم روابط الصور: ضع روابطك هنا 🖼️
+        --------------------------------------------------------- */
+        const MY_IMAGES = {
+            splashLogo: 'https://plain-eeur-prod-public.komododecks.com/202604/19/y0zyi6uOKg2CaNATvHPZ/image.png',
+            heroBackground: 'https://plain-eeur-prod-public.komododecks.com/202604/19/FtJXvAZvXREKew6PJ3ew/image.png',
+            card0: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600',
+            card1: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600',
+            card2: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=600',
+            card3: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=600'
         };
 
-        let current = 0;
-        const items = document.querySelectorAll('.card-item');
-        const dotsContainer = document.getElementById('dots');
-
-        function initCards() {
-            // إنشاء النقاط
-            items.forEach((_, i) => {
-                const d = document.createElement('div');
-                d.className = i === 0 ? 'dot active' : 'dot';
-                dotsContainer.appendChild(d);
-            });
-            update();
-            setInterval(next, 3500); // تغيير تلقائي
+        function applyImages() {
+            document.getElementById('splashLogo').src = MY_IMAGES.splashLogo;
+            document.getElementById('heroBg').style.backgroundImage = `url('${MY_IMAGES.heroBackground}')`;
+            document.getElementById('card0').style.backgroundImage = `url('${MY_IMAGES.card0}')`;
+            document.getElementById('card1').style.backgroundImage = `url('${MY_IMAGES.card1}')`;
+            document.getElementById('card2').style.backgroundImage = `url('${MY_IMAGES.card2}')`;
+            document.getElementById('card3').style.backgroundImage = `url('${MY_IMAGES.card3}')`;
         }
 
-        function next() {
-            current = (current + 1) % items.length;
-            update();
+        // نظام البطاقات
+        let currentIndex = 0;
+        const cards = document.querySelectorAll('.card-item');
+        const dotsContainer = document.getElementById('dotsContainer');
+
+        cards.forEach((_, i) => {
+            const dot = document.createElement('div');
+            dot.className = `dot ${i === 0 ? 'active' : ''}`;
+            dotsContainer.appendChild(dot);
+        });
+
+        function updateCards() {
+            cards.forEach((card, i) => {
+                card.classList.remove('active', 'prev', 'next');
+                if (i === currentIndex) card.classList.add('active');
+                else if (i === (currentIndex - 1 + cards.length) % cards.length) card.classList.add('prev');
+                else if (i === (currentIndex + 1) % cards.length) card.classList.add('next');
+            });
+            document.querySelectorAll('.dot').forEach((dot, i) => dot.classList.toggle('active', i === currentIndex));
         }
 
-        function update() {
-            items.forEach((item, i) => {
-                item.classList.remove('active', 'prev', 'next');
-                if (i === current) item.classList.add('active');
-                else if (i === (current - 1 + items.length) % items.length) item.classList.add('prev');
-                else if (i === (current + 1) % items.length) item.classList.add('next');
-            });
-            
-            const ds = document.querySelectorAll('.dot');
-            ds.forEach((d, i) => d.classList.toggle('active', i === current));
+        window.addEventListener('load', () => {
+            applyImages();
+            setTimeout(() => {
+                document.getElementById('splash-screen').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('splash-screen').style.display = 'none';
+                    document.getElementById('main-app').style.opacity = '1';
+                    updateCards();
+                }, 500);
+            }, 2000);
+        });
+
+        setInterval(() => { currentIndex = (currentIndex + 1) % cards.length; updateCards(); }, 4000);
+
+        function activatePill(el) {
+            document.querySelectorAll('.service-pill').forEach(p => p.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        function tab(el) {
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            el.classList.add('active');
         }
     </script>
 </body>
