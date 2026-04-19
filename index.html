@@ -3,15 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sidarapp - Travel Cards Edition</title>
+    <title>Sidarapp - Dynamic Image Edition</title>
     
     <style>
         :root {
+            /* --- ألوان الحمم الأساسية والتوهج --- */
             --primary-lava: #ff4500; 
             --lava-glow: rgba(255, 69, 0, 0.4); 
             --lava-intense-glow: rgba(255, 69, 0, 0.8); 
             --text-main: #0f172a; 
         }
+
+        /* --- 🖼️ قسم روابط الصور: استبدل الروابط هنا بالصور الخاصة بك 🖼️ --- */
+        <script>
+            // شاشة البداية (Splash Logo)
+            const SPLASH_LOGO_URL = 'https://plain-eeur-prod-public.komododecks.com/202604/19/y0zyi6uOKg2CaNATvHPZ/image.png';
+            
+            // خلفية الهيرو (Hero Background)
+            const HERO_BACKGROUND_URL = 'https://plain-eeur-prod-public.komododecks.com/202604/19/FtJXvAZvXREKew6PJ3ew/image.png';
+
+            // بطاقات السفر الأربعة (Travel Cards)
+            const TRAVEL_CARD_1_URL = 'https://image_generation_content/4'; // رابط صورة الشاطئ المخفي
+            const TRAVEL_CARD_2_URL = 'https://image_generation_content/5'; // رابط صورة جزر استوائية
+            const TRAVEL_CARD_3_URL = 'https://image_generation_content/6'; // رابط صورة غابة خريفية
+            const TRAVEL_CARD_4_URL = 'https://image_generation_content/7'; // رابط صورة مدينة تاريخية
+        </script>
 
         body, html { 
             margin: 0; padding: 0;
@@ -41,13 +57,16 @@
         /* --- Hero Background --- */
         .header-bg {
             position: absolute; top: 0; left: 0; right: 0; height: 48vh;
-            background: 
-                linear-gradient(to bottom, rgba(255, 69, 0, 0.05), #fff 90%), 
-                url('https://plain-eeur-prod-public.komododecks.com/202604/19/FtJXvAZvXREKew6PJ3ew/image.png');
             background-size: cover; 
             background-position: center;
             z-index: 0;
             filter: saturate(1.4) sepia(0.1); 
+        }
+
+        .header-bg::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(to bottom, rgba(255, 69, 0, 0.05), #fff 90%);
         }
 
         .header-bg::after {
@@ -60,7 +79,7 @@
         .app-container {
             position: relative; z-index: 1;
             padding: 60px 20px 120px; box-sizing: border-box;
-            background: rgba(255,255,255,0.8); /* خلفية نصف شفافة خلف المحتوى لتسهيل القراءة */
+            background: rgba(255,255,255,0.8); 
             border-radius: 40px 40px 0 0;
             margin-top: -10px;
         }
@@ -95,7 +114,7 @@
             gap: 10px;
             scrollbar-width: none; 
             -ms-overflow-style: none;
-            margin-bottom: 25px; /* مسافة بين الخدمات والبطاقات */
+            margin-bottom: 25px; 
         }
         .services-scroll-container::-webkit-scrollbar { display: none; }
 
@@ -125,26 +144,26 @@
         .pill-icon { font-size: 18px; margin-right: 8px; }
         .pill-label { color: #1e293b; font-weight: 600; font-size: 13px; white-space: nowrap; transition: 0.3s; }
 
-        /* --- NEW: Auto-Scrolling Travel Cards (شاشة العرض الكبيرة) --- */
+        /* --- NEW: Dynamic Auto-Scrolling Travel Cards (شاشة العرض الكبيرة) --- */
         .travel-cards-container {
             position: relative;
             width: 100%;
-            max-width: 360px; /* حجم الكرت كما في الصورة تقريباً */
+            max-width: 360px; 
             margin: 0 auto;
             overflow: hidden;
             border-radius: 30px;
-            aspect-ratio: 1/1; /* شكل مربع كقاعدة */
+            aspect-ratio: 1/1; 
         }
 
         .cards-scroller {
             display: flex;
-            width: 400%; /* لعرض 4 بطاقات */
+            width: 400%; 
             height: 100%;
-            transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1); /* تأثير انتقالي سلس */
+            transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1); 
         }
 
         .travel-card {
-            width: 25%; /* حجم كل كرت */
+            width: 25%; 
             height: 100%;
             background-size: cover;
             background-position: center;
@@ -217,10 +236,10 @@
 <body>
 
     <div id="splash-screen">
-        <img src="https://plain-eeur-prod-public.komododecks.com/202604/19/y0zyi6uOKg2CaNATvHPZ/image.png" class="splash-image">
+        <img id="splashLogo" src="" class="splash-image">
     </div>
 
-    <div class="header-bg"></div>
+    <div class="header-bg" id="heroBg"></div>
 
     <div class="app-container" id="main-app" style="opacity: 0; transition: 1s;">
         
@@ -257,16 +276,16 @@
 
         <div class="travel-cards-container">
             <div class="cards-scroller" id="cardsScroller">
-                <div class="travel-card" style="background-image: url('https://image_generation_content/4')">
+                <div class="travel-card" id="card1">
                     <div class="see-more-btn">See More</div>
                 </div>
-                <div class="travel-card" style="background-image: url('https://image_generation_content/5')">
+                <div class="travel-card" id="card2">
                     <div class="see-more-btn">See More</div>
                 </div>
-                <div class="travel-card" style="background-image: url('https://image_generation_content/6')">
+                <div class="travel-card" id="card3">
                     <div class="see-more-btn">See More</div>
                 </div>
-                <div class="travel-card" style="background-image: url('https://image_generation_content/7')">
+                <div class="travel-card" id="card4">
                     <div class="see-more-btn">See More</div>
                 </div>
             </div>
@@ -301,7 +320,25 @@
     </nav>
 
     <script>
+        // --- تطبيق روابط الصور الديناميكية ---
+        function applyDynamicImages() {
+            // شاشة البداية
+            document.getElementById('splashLogo').src = SPLASH_LOGO_URL;
+            
+            // خلفية الهيرو
+            document.getElementById('heroBg').style.backgroundImage = `url('${HERO_BACKGROUND_URL}')`;
+            
+            // بطاقات السفر
+            document.getElementById('card1').style.backgroundImage = `url('${TRAVEL_CARD_1_URL}')`;
+            document.getElementById('card2').style.backgroundImage = `url('${TRAVEL_CARD_2_URL}')`;
+            document.getElementById('card3').style.backgroundImage = `url('${TRAVEL_CARD_3_URL}')`;
+            document.getElementById('card4').style.backgroundImage = `url('${TRAVEL_CARD_4_URL}')`;
+        }
+
         window.addEventListener('load', () => {
+            // تطبيق الصور فوراً عند التحميل
+            applyDynamicImages();
+            
             setTimeout(() => {
                 document.getElementById('splash-screen').style.opacity = '0';
                 setTimeout(() => {
@@ -326,15 +363,12 @@
         function scrollCards() {
             currentIndex = (currentIndex + 1) % totalCards;
             
-            // تحريك الحاوية أفقياً
             scroller.style.transform = `translateX(-${currentIndex * 25}%)`;
             
-            // تحديث النقاط
             dots.forEach(dot => dot.classList.remove('active'));
             dots[currentIndex].classList.add('active');
         }
 
-        // تغيير البطاقة كل 5 ثوانٍ
         setInterval(scrollCards, 5000);
 
         // شريط التنقل السفلي
