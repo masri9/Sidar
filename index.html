@@ -3,38 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sidarapp - Official</title>
+    <title>Sidarapp - AI Experience</title>
     <style>
         :root {
             --primary-blue: #2563eb;
-            --light-blue: #dbeafe;
+            --text-dark: #0f172a;
+            --text-gray: #475569;
             --nav-bg: rgba(255, 255, 255, 0.95);
-            --text-main-color: #0f172a; 
         }
 
         body, html { 
             margin: 0; padding: 0;
-            font-family: 'Segoe UI', Roboto, -apple-system, sans-serif;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
             overflow: hidden;
             height: 100vh;
-            -webkit-font-smoothing: antialiased;
+            background: #fff;
         }
 
-        /* --- Splash Screen --- */
+        /* --- شاشة الـ Splash --- */
         #splash-screen {
             position: fixed; inset: 0; background: #ffffff;
             display: flex; justify-content: center; align-items: center;
             z-index: 9999;
-            transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1), visibility 1s;
+            transition: opacity 1s ease, visibility 1s;
         }
-        .splash-image { width: 180px; height: auto; animation: splashEntrance 1.5s ease-out forwards; }
+        .splash-image { width: 140px; filter: grayscale(1); opacity: 0.8; }
 
-        @keyframes splashEntrance {
-            0% { transform: scale(0.8); opacity: 0; filter: blur(10px); }
-            100% { transform: scale(1); opacity: 1; filter: blur(0); }
-        }
-
-        /* --- Background --- */
+        /* --- الخلفية --- */
         .background-container {
             position: fixed; inset: 0; z-index: -1;
             background-image: url('https://plain-eeur-prod-public.komododecks.com/202604/19/FtJXvAZvXREKew6PJ3ew/image.png'); 
@@ -43,110 +38,102 @@
         
         .background-overlay {
             position: fixed; inset: 0; z-index: -1;
-            background: rgba(255, 255, 255, 0.15); 
+            background: linear-gradient(to bottom, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.8) 100%);
         }
 
         .app-container {
-            height: 100vh; padding: 25px;
+            height: 100vh; padding: 20px;
             display: flex; flex-direction: column;
             box-sizing: border-box; opacity: 0; 
-            transition: opacity 1.2s ease;
+            transition: opacity 1.5s ease;
         }
 
         /* --- Header --- */
         .header {
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            margin-bottom: 5px;
+            display: flex; align-items: center; height: 60px;
         }
-
         .menu-icon {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 12px;
-            border-radius: 16px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            cursor: pointer;
-            border: 1px solid rgba(0,0,0,0.05);
+            background: white; padding: 12px; border-radius: 18px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); cursor: pointer;
         }
 
-        /* --- Main Content (New Slogan) --- */
+        /* --- المحتوى الرئيسي (Typography) --- */
         .main-content {
             flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start; 
-            align-items: center;
-            padding-top: 40px; /* مرفوعة للأعلى */
-            text-align: center;
+            display: flex; flex-direction: column;
+            padding-top: 30px; /* رفع النص للأعلى بقوة */
+            align-items: center; text-align: center;
         }
 
-        .hero-text-container {
-            width: 85%;
-            max-width: 500px;
+        .hero-section {
+            max-width: 90%;
             opacity: 0;
             transform: translateY(20px);
-            animation: textSlideUp 1s ease-out 2.8s forwards;
+            animation: slideUpFade 1s cubic-bezier(0.16, 1, 0.3, 1) 2.8s forwards;
         }
 
-        @keyframes textSlideUp {
+        @keyframes slideUpFade {
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .hero-full-title {
-            font-size: 32px; /* حجم متوازن واحترافي */
-            font-weight: 800;
-            line-height: 1.3;
-            margin: 0;
-            color: var(--text-main-color);
-            text-shadow: 0 2px 4px rgba(255, 255, 255, 0.6); 
-            
+        .hero-title {
+            font-size: 42px; /* خط عريض وقوي */
+            font-weight: 900;
+            line-height: 1.1;
+            color: var(--text-dark);
+            letter-spacing: -1.5px;
+            margin-bottom: 15px;
+        }
+
+        .hero-title span {
+            display: block;
+            color: var(--primary-blue); /* تمييز كلمة بلون مختلف */
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--text-gray);
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
             align-items: center;
-            gap: 10px 12px;
+            justify-content: center;
+            gap: 10px;
         }
 
         .inline-logo {
-            height: 34px; /* متناسق مع طول الخط الجديد */
+            height: 28px;
             width: auto;
-            vertical-align: middle;
-            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.15));
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
         }
 
-        /* --- Bottom Navigation --- */
+        /* --- منطقة محرك الـ AI (Placeholder) --- */
+        .ai-chat-placeholder {
+            margin-top: 40px;
+            width: 100%;
+            max-width: 500px;
+            /* هنا ستبدأ ببناء صندوق الشات لاحقاً */
+        }
+
+        /* --- Bottom Nav --- */
         .bottom-nav-container {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
+            position: fixed; bottom: 30px; left: 50%;
             transform: translateX(-50%);
-            width: 90%;
-            max-width: 420px;
-            background: var(--nav-bg);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            padding: 8px 12px;
-            border-radius: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            border: 1px solid rgba(0,0,0,0.03);
-            z-index: 100;
+            width: 90%; max-width: 400px;
+            background: var(--nav-bg); backdrop-filter: blur(20px);
+            padding: 10px; border-radius: 30px;
+            display: flex; justify-content: space-around;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.5);
         }
 
         .nav-item {
-            display: flex; align-items: center; justify-content: center;
-            padding: 10px 16px; cursor: pointer;
-            transition: all 0.3s ease;
-            border-radius: 22px; color: #64748b;
+            display: flex; align-items: center; padding: 10px 18px;
+            border-radius: 20px; color: #94a3b8; transition: 0.3s;
         }
-        .nav-item svg { width: 24px; height: 24px; stroke: currentColor; stroke-width: 2.2; fill: none; }
-        .nav-item.active { background: var(--light-blue); color: var(--primary-blue); }
-        .nav-text { max-width: 0; overflow: hidden; white-space: nowrap; font-size: 14px; font-weight: 700; transition: all 0.3s ease; opacity: 0; }
-        .nav-item.active .nav-text { max-width: 80px; margin-left: 10px; opacity: 1; }
+        .nav-item.active { background: #f1f5f9; color: var(--primary-blue); }
+        .nav-item svg { width: 22px; height: 22px; stroke-width: 2.5; fill: none; stroke: currentColor; }
+        .nav-text { max-width: 0; overflow: hidden; white-space: nowrap; font-size: 14px; font-weight: 700; transition: 0.3s; opacity: 0; }
+        .nav-item.active .nav-text { max-width: 80px; margin-left: 8px; opacity: 1; }
 
     </style>
 </head>
@@ -163,23 +150,28 @@
         
         <header class="header">
             <div class="menu-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
             </div>
         </header>
 
         <main class="main-content">
-            <div class="hero-text-container">
-                <h1 class="hero-full-title">
-                    Your Journey Starts Before You Even Arrive.
-                    <img src="https://plain-eeur-prod-public.komododecks.com/202604/19/y0zyi6uOKg2CaNATvHPZ/image.png" alt="Sidar" class="inline-logo">
+            <div class="hero-section">
+                <h1 class="hero-title">
+                    Your Journey <span>Starts Before</span> You Even Arrive.
                 </h1>
+                <div class="hero-subtitle">
+                    Experience travel with 
+                    <img src="https://plain-eeur-prod-public.komododecks.com/202604/19/y0zyi6uOKg2CaNATvHPZ/image.png" alt="Sidar" class="inline-logo">
+                </div>
             </div>
-            
-            </main>
+
+            <div class="ai-chat-placeholder">
+                </div>
+        </main>
 
         <nav class="bottom-nav-container">
             <div class="nav-item active" onclick="setActive(this)">
-                <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
                 <span class="nav-text">Home</span>
             </div>
             <div class="nav-item" onclick="setActive(this)">
@@ -187,7 +179,7 @@
                 <span class="nav-text">Map</span>
             </div>
             <div class="nav-item" onclick="setActive(this)">
-                <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"></rect><path d="M10 8l6 4-6 4V8z" fill="currentColor" opacity="0.3"></path></svg>
+                <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"></rect></svg>
                 <span class="nav-text">Reels</span>
             </div>
             <div class="nav-item" onclick="setActive(this)">
@@ -203,9 +195,9 @@
                 const splash = document.getElementById('splash-screen');
                 const mainApp = document.getElementById('main-app');
                 splash.style.opacity = '0';
-                splash.style.visibility = 'hidden';
+                setTimeout(() => splash.style.visibility = 'hidden', 1000);
                 mainApp.style.opacity = '1';
-            }, 2500);
+            }, 2000);
         });
 
         function setActive(el) {
