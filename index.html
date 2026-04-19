@@ -174,7 +174,7 @@
 
         <div class="search-wrapper">
             <span>🔍</span>
-            <input type="text" id="searchField" placeholder="Ask Sidar AI anything...">
+            <input type="text" id="searchField" placeholder="Ask Sidar any thing...">
         </div>
 
         <div class="services-scroll-container">
@@ -271,7 +271,8 @@
 
         window.addEventListener('load', () => {
             applyImages();
-            // تلوين كلمة Sidar
+
+            // تلوين كلمة Sidar داخل Placeholder
             const targetWord = 'Sidar';
             const searchField = document.getElementById('searchField');
             const originalPlaceholder = searchField.getAttribute('placeholder');
