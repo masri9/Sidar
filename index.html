@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sidarapp - Dynamic UI</title>
+    <title>Sidarapp - Creative Travel UI</title>
     <style>
         :root {
             --accent: #6c5ce7;
@@ -13,27 +13,47 @@
             --esim-gradient: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
         }
 
-        /* --- 1. الخلفية المتحركة --- */
+        /* --- 1. إعدادات الخلفية الإبداعية الجديدة --- */
         body { 
             margin: 0; 
             font-family: 'Segoe UI', sans-serif;
             overflow-x: hidden;
-            background: linear-gradient(45deg, #f8faff, #f1f0ff, #f8faff, #eef2ff);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite; /* حركة بطيئة وناعمة */
+            background-color: #f8faff; /* اللون الأساسي الفاتح */
+            position: relative;
         }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        /* طبقة العناصر المتحركة (أيقونات سفر وطبيعة) */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            z-index: -1; /* خلف المحتوى */
+            
+            /* إضافة النقوش: طائرات، بوصلة، أوراق شجر (باستخدام SVG مبسط) */
+            background-image: 
+                url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDQwIDQwIj48ZyBmaWxsPSIjNmM1Y2U3IiBmaWxsLW9wYWNpdHk9IjAuMDUiPjxwYXRoIGQ9Ik0wIDBoNDB2NDBIMHoiLz48cGF0aCBkPSJNMjAgMTBsLTUgNUg1bDUgNWw1IDUgMTAtMTB6TTI1IDE1bDUtNUwzMCAwaC01bC01IDV6Ii8+PC9nPjwvc3ZnPg=='), /* طائرة مبسطة */
+                url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MCIgaGVpZ2h0PSI1MCIgdmlld0JveD0iMCAwIDUwIDUwIj48ZyBmaWxsPSIjOThmZmE2IiBmaWxsLW9wYWNpdHk9IjAuMDQiPjxwYXRoIGQ9Ik0yNSAwaDEwdjEwSDI1ek0yNSA0MGgxMHYxMEgyNXpNMCAyNWgxMHYxMEgwek00MCAyNWgxMHYxMEg0MHoiLz48Y2lyY2xlIGN4PSIyNSIgY3k9IjI1IiByPSIyMCIvPjwvZz48L3N2Zz4='); /* بوصلة وأوراق */
+            
+            background-repeat: repeat;
+            background-size: 150px, 250px; /* أحجام مختلفة للعمق */
+            opacity: 0.6;
+            animation: travelBackgroundMove 60s linear infinite; /* حركة بطيئة جداً */
         }
 
-        /* --- باقي العناصر الثابتة --- */
+        /* حركة دوران وانزلاق ناعمة للخلفية */
+        @keyframes travelBackgroundMove {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(15%, 15%) rotate(5deg); }
+        }
+
+        /* --- باقي العناصر الثابتة (كما هي تماماً) --- */
         .app-container {
             padding: 25px 20px 120px 20px;
             position: relative;
-            z-index: 1; /* لتكون فوق الخلفية */
+            z-index: 1;
         }
 
         .header {
@@ -68,8 +88,8 @@
         .services-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 
         .service-card {
-            background: rgba(255, 255, 255, 0.7); /* شفافة قليلاً لتظهر حركة الخلفية */
-            backdrop-filter: blur(10px); /* تأثير زجاجي ناعم */
+            background: rgba(255, 255, 255, 0.85); /* زيادة الشفافية لتظهر الخلفية */
+            backdrop-filter: blur(10px);
             padding: 20px;
             border-radius: 25px;
             display: flex;
@@ -79,7 +99,7 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.02);
             cursor: pointer;
             transition: transform 0.2s ease;
-            border: 1px solid rgba(255,255,255,0.4);
+            border: 1px solid rgba(255,255,255,0.5);
         }
 
         .esim-card {
@@ -105,7 +125,7 @@
 
         .bottom-nav {
             position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
-            width: 80%; max-width: 340px; background: rgba(255, 255, 255, 0.9);
+            width: 80%; max-width: 340px; background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             display: flex; justify-content: space-around; padding: 12px 0;
             border-radius: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); z-index: 1000;
