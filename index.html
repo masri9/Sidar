@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sidarapp - Lava Glow Edition</title>
+    <title>Sidarapp - Saturated Lava Edition</title>
     
     <style>
         :root {
-            --primary-lava: #ff4500; /* لون الحمم الأساسي */
+            --primary-lava: #ff4500; 
             --lava-glow: rgba(255, 69, 0, 0.4);
             --text-main: #0f172a; 
         }
@@ -29,18 +29,31 @@
         }
         .splash-image { 
             width: 160px; 
-            filter: drop-shadow(0 0 10px var(--lava-glow)); /* توهج للشعار في البداية */
+            filter: drop-shadow(0 0 10px var(--lava-glow));
             animation: splashEntrance 1.5s ease-out forwards; 
         }
         @keyframes splashEntrance { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 
-        /* --- Hero Background --- */
+        /* --- Hero Background (تشبيع باللون البركاني) --- */
         .header-bg {
-            position: absolute; top: 0; left: 0; right: 0; height: 45vh;
-            background: linear-gradient(rgba(255,255,255,0.1), #fff), 
-                        url('https://plain-eeur-prod-public.komododecks.com/202604/19/FtJXvAZvXREKew6PJ3ew/image.png');
-            background-size: cover; background-position: center;
+            position: absolute; top: 0; left: 0; right: 0; height: 48vh;
+            /* إضافة تدرج لوني يميل للبرتقالي الدافئ قبل التلاشي للأبيض */
+            background: 
+                linear-gradient(to bottom, rgba(255, 69, 0, 0.05), #fff 90%), 
+                url('https://plain-eeur-prod-public.komododecks.com/202604/19/FtJXvAZvXREKew6PJ3ew/image.png');
+            background-size: cover; 
+            background-position: center;
             z-index: 0;
+            /* زيادة تشبع الألوان ودفئها */
+            filter: saturate(1.4) sepia(0.1); 
+        }
+
+        /* طبقة إضافية خفيفة جداً لتعزيز وهج الحمم في الأعلى */
+        .header-bg::after {
+            content: '';
+            position: absolute; inset: 0;
+            background: radial-gradient(circle at top right, rgba(255, 69, 0, 0.15), transparent 70%);
+            pointer-events: none;
         }
 
         .app-container {
@@ -50,22 +63,20 @@
             scrollbar-width: none;
         }
 
-        /* --- Hero Text (Where do you wanna go?) --- */
+        /* --- Hero Text --- */
         .hero-title { 
             font-size: 34px; font-weight: 800; line-height: 1.1; color: var(--text-main); 
             margin-bottom: 25px; margin-top: 20px; 
         }
-        /* تطبيق لون الحمم على كلمة wanna go مع توهج خفيف */
         .hero-title span { 
             color: var(--primary-lava); 
-            text-shadow: 0 0 15px rgba(255, 69, 0, 0.3);
+            text-shadow: 0 0 15px rgba(255, 69, 0, 0.2);
         }
 
-        /* --- Search Bar (تطبيق الإطار المتوهج مثل الصورة) --- */
+        /* --- Search Bar (Glow Border) --- */
         .search-wrapper {
-            background: rgba(255,255,255,0.95); backdrop-filter: blur(15px);
+            background: rgba(255,255,255,0.92); backdrop-filter: blur(15px);
             border-radius: 20px; padding: 12px 18px; display: flex; align-items: center;
-            /* الإطار الملون والمتوهج */
             border: 2px solid var(--primary-lava); 
             box-shadow: 0 0 15px var(--lava-glow), 0 10px 30px rgba(0,0,0,0.05);
             margin-bottom: 35px;
@@ -73,14 +84,13 @@
         .search-wrapper input { flex: 1; border: none; background: transparent; outline: none; padding-left: 10px; font-size: 16px; font-weight: 500; }
         .search-wrapper span { color: var(--primary-lava); }
 
-        /* --- Bottom Nav (الإطار المتوهج للسفلي) --- */
+        /* --- Bottom Nav (Glow Border) --- */
         .bottom-nav {
             position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
             width: 90%; max-width: 400px; 
             background: #ffffff; border-radius: 40px;
             display: flex; justify-content: space-around; align-items: center;
             padding: 8px; 
-            /* تطبيق الإطار والظل الناري */
             border: 2px solid var(--primary-lava);
             box-shadow: 0 0 20px var(--lava-glow);
             z-index: 1000;
@@ -90,7 +100,6 @@
             padding: 10px 15px; color: #94a3b8; cursor: pointer; transition: 0.3s;
             border-radius: 30px;
         }
-        /* لون العنصر المختار */
         .nav-item.active { 
             background: rgba(255, 69, 0, 0.1); 
             color: var(--primary-lava); 
