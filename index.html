@@ -3,15 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sidarapp - Volcanic Flow Edition</title>
+    <title>Sidarapp - Lava Services Edition</title>
     
     <style>
         :root {
-            /* ألوان الحمم البركانية الأساسية */
             --primary-lava: #ff4500; 
-            --lava-glow: rgba(255, 69, 0, 0.4);
-            --dark-lava: #8b0000;
-            --lava-ash: #2d2d2d;
+            --lava-glow: rgba(255, 69, 0, 0.4); 
+            --lava-intense-glow: rgba(255, 69, 0, 0.8); 
             --text-main: #0f172a; 
         }
 
@@ -23,7 +21,7 @@
             background: #fff;
         }
 
-        /* --- Splash Screen (مع هالة بركانية خفيفة) --- */
+        /* --- Splash Screen --- */
         #splash-screen {
             position: fixed; inset: 0; background: #ffffff;
             display: flex; justify-content: center; align-items: center;
@@ -31,94 +29,135 @@
             transition: opacity 0.5s ease;
         }
         .splash-image { 
-            width: 160px; 
-            filter: drop-shadow(0 0 10px var(--lava-glow)); /* توهج برتقالي */
-            animation: splashEntrance 1.2s ease-out forwards; 
+            width: 180px; 
+            filter: drop-shadow(0 0 15px var(--lava-intense-glow)); 
+            animation: splashEntrance 1.5s ease-out forwards, pulseGlow 2.5s infinite 1.5s; 
         }
+
+        @keyframes pulseGlow {
+            0%, 100% { filter: drop-shadow(0 0 10px var(--lava-glow)); transform: scale(1); }
+            50% { filter: drop-shadow(0 0 25px var(--lava-intense-glow)); transform: scale(1.03); }
+        }
+
         @keyframes splashEntrance { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 
-        /* --- Hero Section (الخلفية العلوية) --- */
-        .hero-section {
-            padding: 60px 20px 40px;
-            /* خلفية بتدرج برتقالي خفيف جداً في الأعلى لتشبيع الهيرو */
-            background: linear-gradient(180deg, rgba(255, 69, 0, 0.08) 0%, rgba(255, 255, 255, 1) 100%);
-            position: relative;
-            z-index: 2;
+        /* --- Hero Background --- */
+        .header-bg {
+            position: absolute; top: 0; left: 0; right: 0; height: 48vh;
+            background: 
+                linear-gradient(to bottom, rgba(255, 69, 0, 0.05), #fff 90%), 
+                url('https://plain-eeur-prod-public.komododecks.com/202604/19/FtJXvAZvXREKew6PJ3ew/image.png');
+            background-size: cover; 
+            background-position: center;
+            z-index: 0;
+            filter: saturate(1.4) sepia(0.1); 
         }
 
+        .header-bg::after {
+            content: '';
+            position: absolute; inset: 0;
+            background: radial-gradient(circle at top right, rgba(255, 69, 0, 0.15), transparent 70%);
+            pointer-events: none;
+        }
+
+        .app-container {
+            position: relative; z-index: 1;
+            height: 100vh; overflow-y: auto;
+            padding: 60px 20px 120px; box-sizing: border-box;
+            scrollbar-width: none;
+        }
+
+        /* --- Hero Text --- */
         .hero-title { 
             font-size: 34px; font-weight: 800; line-height: 1.1; color: var(--text-main); 
-            margin-bottom: 25px;
+            margin-bottom: 25px; margin-top: 20px; 
         }
         .hero-title span { 
             color: var(--primary-lava); 
-            text-shadow: 0 0 10px rgba(255, 69, 0, 0.1);
+            text-shadow: 0 0 15px rgba(255, 69, 0, 0.2);
         }
 
-        /* --- Search Bar with Lava Glow Border --- */
+        /* --- Search Bar --- */
         .search-wrapper {
-            background: #fff;
+            background: rgba(255,255,255,0.92); backdrop-filter: blur(15px);
             border-radius: 20px; padding: 12px 18px; display: flex; align-items: center;
             border: 2px solid var(--primary-lava); 
-            box-shadow: 0 0 15px var(--lava-glow);
-            margin-bottom: 10px;
+            box-shadow: 0 0 15px var(--lava-glow), 0 10px 30px rgba(0,0,0,0.05);
+            margin-bottom: 35px;
         }
         .search-wrapper input { flex: 1; border: none; background: transparent; outline: none; padding-left: 10px; font-size: 16px; font-weight: 500; }
-        .search-wrapper span { color: var(--primary-lava); font-size: 20px; }
+        .search-wrapper span { color: var(--primary-lava); }
 
-        /* --- Volcanic Content Area (القسم البركاني المشبع) --- */
-        .wave-container {
+        /* --- NEW: Lava Services Section (القسم البركاني المموج) --- */
+        .services-area {
+            margin-top: 10px;
+            padding: 30px 15px;
+            border-radius: 30px;
+            background: linear-gradient(135deg, #ff4500 0%, #ff8c00 50%, #e63e00 100%);
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.2), 0 15px 35px var(--lava-glow);
             position: relative;
-            width: 100%;
-            height: 500px; /* مساحة القسم البركاني */
-            /* تدرج لوني يعطي تأثير الحمم البركانية المتدفقة */
-            background: 
-                radial-gradient(circle at 20% 30%, rgba(255, 69, 0, 0.2) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(255, 69, 0, 0.1) 0%, transparent 50%),
-                linear-gradient(135deg, var(--primary-lava) 0%, var(--dark-lava) 100%);
-            border-radius: 40px 40px 0 0; /* تمويج الحواف العلوية */
-            margin-top: 20px;
             overflow: hidden;
-            box-shadow: inset 0 20px 40px rgba(0,0,0,0.1);
         }
 
-        /* إضافة أيقونات/رسومات خفيفة تعطي عمقاً بركانياً */
-        .wave-container::before {
-            content: '✈️ 🏙️ 🗼 🏯';
+        /* إضافة تموجات خلفية خفيفة */
+        .services-area::before {
+            content: '';
             position: absolute;
-            width: 200%;
-            font-size: 40px;
-            opacity: 0.15;
-            top: 20%;
-            left: 10%;
-            letter-spacing: 100px;
-            transform: rotate(-5deg);
-            white-space: nowrap;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+            animation: rotateLava 10s linear infinite;
         }
 
-        /* تأثير التموج الإضافي */
-        .wave-container::after {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; right: 0; height: 100%;
-            background: url('https://www.transparenttextures.com/patterns/waves.png'); /* نقش موجات خفيف */
-            opacity: 0.2;
+        @keyframes rotateLava { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            position: relative;
+            z-index: 1;
         }
+
+        .service-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 20px 10px;
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        .service-card:active { transform: scale(0.95); background: rgba(255, 255, 255, 0.25); }
+
+        .service-icon { font-size: 30px; margin-bottom: 8px; display: block; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.2)); }
+        .service-label { color: #fff; font-weight: 700; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; }
 
         /* --- Bottom Nav --- */
         .bottom-nav {
             position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
             width: 90%; max-width: 400px; 
-            background: rgba(255, 255, 255, 0.98); 
-            border-radius: 40px; display: flex; justify-content: space-around; align-items: center;
+            background: #ffffff; border-radius: 40px;
+            display: flex; justify-content: space-around; align-items: center;
             padding: 8px; 
             border: 2px solid var(--primary-lava);
             box-shadow: 0 0 20px var(--lava-glow);
             z-index: 1000;
         }
-        .nav-item { display: flex; align-items: center; justify-content: center; padding: 10px 15px; color: #94a3b8; cursor: pointer; transition: 0.3s; border-radius: 30px; }
-        .nav-item.active { background: rgba(255, 69, 0, 0.1); color: var(--primary-lava); }
-        .nav-item span { max-width: 0; overflow: hidden; white-space: nowrap; transition: 0.3s; font-weight: 700; font-size: 14px; }
+        .nav-item { 
+            display: flex; align-items: center; justify-content: center; 
+            padding: 10px 15px; color: #94a3b8; cursor: pointer; transition: 0.3s;
+            border-radius: 30px;
+        }
+        .nav-item.active { 
+            background: rgba(255, 69, 0, 0.1); 
+            color: var(--primary-lava); 
+        }
+        .nav-item span { 
+            max-width: 0; overflow: hidden; white-space: nowrap; 
+            transition: 0.3s; font-weight: 700; font-size: 14px; 
+        }
         .nav-item.active span { max-width: 80px; margin-left: 8px; }
         .nav-item svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2.2; }
 
@@ -130,19 +169,39 @@
         <img src="https://plain-eeur-prod-public.komododecks.com/202604/19/y0zyi6uOKg2CaNATvHPZ/image.png" class="splash-image">
     </div>
 
-    <div class="hero-section">
+    <div class="header-bg"></div>
+
+    <div class="app-container" id="main-app" style="opacity: 0; transition: 1s;">
+        
         <h1 class="hero-title">Where do you <br><span>wanna go?</span></h1>
+
         <div class="search-wrapper">
             <span>🔍</span>
             <input type="text" placeholder="Ask Sidar AI anything...">
-            <span>🎤</span>
+            <span style="font-size: 20px;">🎤</span>
         </div>
-    </div>
 
-    <div class="wave-container">
-        <div style="padding: 40px; color: #fff; font-weight: bold; opacity: 0.8; text-align: center;">
-            Experience our Specialized Services
+        <div class="services-area">
+            <div class="services-grid">
+                <div class="service-card">
+                    <span class="service-icon">🎟️</span>
+                    <span class="service-label">Book Events</span>
+                </div>
+                <div class="service-card">
+                    <span class="service-icon">🌐</span>
+                    <span class="service-label">eSIM</span>
+                </div>
+                <div class="service-card">
+                    <span class="service-icon">💱</span>
+                    <span class="service-label">Change</span>
+                </div>
+                <div class="service-card">
+                    <span class="service-icon">💸</span>
+                    <span class="service-label">Transfer</span>
+                </div>
+            </div>
         </div>
+
     </div>
 
     <nav class="bottom-nav">
@@ -155,6 +214,10 @@
             <span>Map</span>
         </div>
         <div class="nav-item" onclick="tab(this)">
+            <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+            <span>Reels</span>
+        </div>
+        <div class="nav-item" onclick="tab(this)">
             <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
             <span>Profile</span>
         </div>
@@ -164,8 +227,11 @@
         window.addEventListener('load', () => {
             setTimeout(() => {
                 document.getElementById('splash-screen').style.opacity = '0';
-                setTimeout(() => { document.getElementById('splash-screen').style.display = 'none'; }, 500);
-            }, 2000);
+                setTimeout(() => {
+                    document.getElementById('splash-screen').style.display = 'none';
+                    document.getElementById('main-app').style.opacity = '1';
+                }, 500);
+            }, 2500);
         });
 
         function tab(el) {
