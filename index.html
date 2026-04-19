@@ -20,59 +20,67 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start; /* الترتيب يبدأ من الأعلى */
     background: linear-gradient(180deg,#fdfefe 0%,#e9f7ff 40%,#fff8ec 100%);
-    padding: 20px;
+    padding: 0 20px;
   }
 
-  /* Header Icons */
+  /* Header Icons - كما في الصورة (المنيو يسار والجرس يمين) */
   header {
-    position: fixed;
-    top: 0; width: 100%;
-    padding: 25px 40px;
+    width: 100%;
+    padding: 25px 30px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     z-index: 100;
   }
-  .header-icon { font-size: 24px; color: var(--ink); cursor: pointer; opacity: 0.7; }
+  .header-icon { font-size: 24px; color: var(--ink); cursor: pointer; opacity: 0.8; }
 
-  /* Main Container */
-  .chat-container {
+  /* Hero Container */
+  .hero-container {
     width: 100%;
     max-width: 700px;
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px; /* مسافة بسيطة تحت الهيدر */
   }
 
+  /* 1. الجملة الترحيبية في أعلى حافة الـ Hero (على الأخضر) */
   .welcome-msg {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--blue);
-    letter-spacing: 1.5px;
-    margin-bottom: 15px;
+    font-size: 15px;
+    font-weight: 800;
+    color: #1A3A8F; /* لون أزرق غامق احترافي */
+    letter-spacing: 1.2px;
+    margin-bottom: 30px;
     text-transform: uppercase;
+    animation: fadeInDown 0.6s ease;
   }
 
-  .logo-container { margin-bottom: 30px; }
-  .logo-container img { width: 170px; height: auto; }
+  /* 2. الشعار (وسط الهيرو) */
+  .logo-container {
+    margin-bottom: 50px;
+    animation: fadeIn 0.8s ease;
+  }
+  .logo-container img { width: 190px; height: auto; }
 
-  /* AI Chat Panel */
+  /* 3. بانل الدردشة (الذي يظهر عليه الأخضر في الصورة) */
   .ai-chat-panel {
-    background: rgba(255, 255, 255, 0.7);
+    width: 100%;
+    background: rgba(255, 255, 255, 0.4);
     backdrop-filter: blur(15px);
-    border-radius: 28px;
-    padding: 10px;
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    box-shadow: 0 10px 40px rgba(0,0,0,0.06);
-    transition: all 0.4s ease;
+    border-radius: 35px; /* حواف دائرية ناعمة */
+    padding: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.03);
   }
 
   .input-group {
     display: flex;
     align-items: center;
-    background: #fff;
-    border-radius: 22px;
-    padding: 10px 15px;
+    background: #f1f1f1; /* لون خلفية المدخل كما في الصورة */
+    border-radius: 28px;
+    padding: 8px 15px;
   }
 
   .input-group input {
@@ -80,76 +88,58 @@
     border: none;
     outline: none;
     font-size: 16px;
-    padding: 8px 12px;
+    background: transparent;
+    padding: 10px;
+    color: var(--ink);
   }
 
   .send-btn {
-    background: var(--ink);
+    background: #0D0D35; /* لون زر الإرسال الداكن */
     color: white;
     border: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 15px;
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
     cursor: pointer;
-    transition: 0.3s;
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: 0.3s;
   }
-  .send-btn:hover { background: var(--blue); transform: scale(1.05); }
+  .send-btn:hover { transform: scale(1.05); background: var(--blue); }
 
-  /* Response Box */
+  /* مكان ظهور الجواب بشكل احترافي */
   #response-area {
-    margin-top: 20px;
-    display: none; /* مخفي افتراضياً */
+    margin-top: 25px;
+    display: none;
+    width: 100%;
     text-align: left;
     background: #ffffff;
-    padding: 20px;
-    border-radius: 22px;
-    border: 1px solid rgba(42, 112, 220, 0.1);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.05);
+    padding: 22px;
+    border-radius: 28px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.05);
     animation: slideUp 0.5s ease;
   }
 
-  .response-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 12px;
-    color: var(--blue);
-    font-weight: 700;
-    font-size: 14px;
-  }
-
-  .response-content {
-    color: var(--ink);
-    line-height: 1.6;
-    font-size: 15px;
-  }
-
-  @keyframes slideUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+  @keyframes fadeInDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="header-icon"><i class="fas fa-bars"></i></div>
-  <div class="header-icon"><i class="fas fa-bell"></i></div>
-</header>
+  <div class="header-icon"><i class="fas fa-bars"></i></div> <div class="header-icon"><i class="fas fa-bell"></i></div> </header>
 
-<main class="chat-container">
-  <div class="welcome-msg">Ask Sidar Anything</div>
-  
+<main class="hero-container">
+  <div class="welcome-msg">EXPLORE YOUR NEXT ADVENTURE</div>
+
   <div class="logo-container">
     <img src="https://i.ibb.co/Q3p4gmYX/IMG-1629.png" alt="SIDAR TRAVEL">
   </div>
 
   <div class="ai-chat-panel">
     <div class="input-group">
-      <input type="text" id="chatInput" placeholder="Ask Sidar about travel, hotels, or flights...">
+      <input type="text" id="chatInput" placeholder="Ask Sidar anything...">
       <button class="send-btn" onclick="handleSearch()">
         <i class="fas fa-arrow-up"></i>
       </button>
@@ -157,11 +147,10 @@
   </div>
 
   <div id="response-area">
-    <div class="response-header">
-      <i class="fas fa-robot"></i> SIDAR AI RESPONSE
+    <div style="color:var(--blue); font-weight:800; font-size:13px; margin-bottom:10px;">
+      <i class="fas fa-magic"></i> SIDAR AI
     </div>
-    <div class="response-content" id="responseText">
-      </div>
+    <div id="responseText" style="line-height:1.6; font-size:15px; color:var(--ink);"></div>
   </div>
 </main>
 
@@ -172,21 +161,11 @@
     const responseText = document.getElementById('responseText');
 
     if (input.value.trim() !== "") {
-      // محاكاة استجابة ذكية
       responseArea.style.display = 'block';
-      responseText.innerHTML = "Searching for <b>" + input.value + "</b>... <br><br> Sidar AI is preparing the best travel options for you. Please wait a moment.";
-      
-      // يمكنك لاحقاً ربط هذا الجزء بأي API للأتمتة
+      responseText.innerHTML = "Thinking about your request: <b>" + input.value + "</b>... <br>I am looking for the best travel details for you.";
       input.value = ""; 
     }
   }
-
-  // السماح بالبحث عند الضغط على Enter
-  document.getElementById("chatInput").addEventListener("keyup", function(event) {
-    if (event.key === "Enter") {
-      handleSearch();
-    }
-  });
 </script>
 
 </body>
