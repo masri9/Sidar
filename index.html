@@ -3,143 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sidarapp - Travel App</title>
+    <title>Sidarapp - Travel UI</title>
     <style>
         :root {
-            --bg-light: #f8f9fa; /* خلفية فاتحة مريحة للعين */
-            --text-dark: #2d3436;
-            --accent-blue: #5f5ce5; /* لون الأيقونات من الصورة */
-            --r: 25px;
+            --bg-light: #f8faff; /* خلفية فاتحة جداً مريحة للعين */
+            --text-dark: #1a1a1a;
+            --accent-purple: #6c5ce7; /* لون الأيقونة النشطة */
+            --nav-bg: #ffffff;
         }
 
         body, html {
             margin: 0; padding: 0;
-            height: 100%; font-family: 'Segoe UI', sans-serif;
+            height: 100%; font-family: 'Inter', sans-serif;
             background-color: var(--bg-light);
-            overflow-x: hidden;
         }
 
-        /* خلفية تفاعلية متحركة */
-        .background {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1; background: linear-gradient(45deg, #ffffff, #f0f4ff, #fdfbfb);
-            background-size: 400% 400%; animation: gradientBG 12s ease infinite;
+        .app-container {
+            padding: 30px 20px 120px 20px;
+            min-height: 100vh;
+            box-sizing: border-box;
         }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        /* الهيدر العلوي */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
         }
 
-        .app-container { padding: 30px 0 110px 0; min-height: 100vh; box-sizing: border-box; }
+        .greeting { font-size: 14px; color: #8e8e8e; text-transform: uppercase; letter-spacing: 1px; }
+        .user-name { font-size: 28px; font-weight: 800; color: var(--text-dark); margin-top: 5px; }
 
-        /* الهيدر العلوي بنظام التحية */
-        .header { display: flex; justify-content: space-between; align-items: center; padding: 0 25px 25px; }
-        .greeting-text { font-size: 13px; color: #888; letter-spacing: 1px; font-weight: 600; text-transform: uppercase; }
-        .user-name { font-size: 28px; font-weight: 900; color: var(--text-dark); margin-top: 4px; }
-        
-        .notif-box {
-            position: relative; background: white; padding: 12px;
-            border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.03);
-        }
-        .notif-dot {
-            position: absolute; top: 10px; right: 10px; width: 8px; height: 8px;
-            background-color: #a29bfe; border-radius: 50%; border: 2px solid white;
-        }
-
-        /* البانر التفاعلي المدمج */
+        /* البانر التفاعلي */
         .banner {
-            margin: 0 20px; position: relative; height: 220px;
-            overflow: hidden; border-radius: var(--r);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+            height: 200px;
+            background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800');
+            background-size: cover;
+            background-position: center;
+            border-radius: 30px;
+            display: flex;
+            align-items: flex-end;
+            padding: 25px;
+            color: white;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
         }
-        .banner-slide {
-            position: absolute; inset: 0; opacity: 0;
-            transition: opacity 1s ease; background-size: cover; background-position: center;
-        }
-        .banner-slide.active { opacity: 1; }
-        .banner-slide::after {
-            content: ''; position: absolute; inset: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 70%);
-        }
-        .banner-content { position: absolute; bottom: 25px; left: 20px; z-index: 2; }
-        .banner-title { font-size: 24px; font-weight: 800; color: #fff; line-height: 1.2; }
 
-        /* شريط التنقل السفلي بالأشكال المطلوبة من الصورة */
+        .banner-title { font-size: 24px; font-weight: 700; line-height: 1.2; }
+
+        /* شريط التنقل السفلي - التصميم المطلوب */
         .bottom-nav {
-            position: fixed; bottom: 0; left: 0; width: 100%;
-            background: white; display: flex; justify-content: space-around;
-            padding: 20px 0; box-shadow: 0 -10px 30px rgba(0,0,0,0.05);
-            border-radius: 35px 35px 0 0; z-index: 1000;
+            position: fixed;
+            bottom: 0; left: 0; width: 100%;
+            background: var(--nav-bg);
+            display: flex;
+            justify-content: space-around;
+            padding: 20px 0 35px 0; /* مساحة إضافية للسحب في الهواتف */
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.04);
+            border-radius: 40px 40px 0 0; /* حواف مستديرة جداً من الأعلى */
+            z-index: 1000;
         }
 
-        .nav-item { cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
-        
-        /* رسم الأيقونات باستخدام SVG لمحاكاة الشكل في الصورة */
-        .icon { width: 28px; height: 28px; stroke: #95a5a6; stroke-width: 2; fill: none; transition: 0.3s; }
-        .nav-item.active .icon { stroke: var(--accent-blue); }
+        .nav-item {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        /* تنسيق الأيقونات الخطية (SVG) */
+        .nav-icon {
+            width: 28px;
+            height: 28px;
+            stroke: #b2bec3; /* لون الأيقونات غير النشطة */
+            stroke-width: 2;
+            fill: none;
+            transition: 0.3s;
+        }
+
+        /* حالة النشاط (Active State) */
+        .nav-item.active .nav-icon {
+            stroke: var(--accent-purple);
+            filter: drop-shadow(0 0 8px rgba(108, 92, 231, 0.3)); /* توهج بسيط */
+        }
+
+        /* النقطة الصغيرة تحت الأيقونة النشطة */
+        .nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            width: 5px;
+            height: 5px;
+            background: var(--accent-purple);
+            border-radius: 50%;
+        }
 
     </style>
 </head>
 <body>
 
-    <div class="background"></div>
-
     <div class="app-container">
         <header class="header">
             <div>
-                <div id="greeting" class="greeting-text">GOOD MORNING</div>
+                <div class="greeting">Good Morning ✨</div>
                 <div class="user-name">Alex Rivera</div>
             </div>
-            <div class="notif-box">
-                <span class="notif-dot"></span>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+            <div style="background: white; padding: 12px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                🔔
             </div>
         </header>
 
-        <section class="banner">
-            <div class="banner-slide active" style="background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800');">
-                <div class="banner-content">
-                    <div class="banner-title">Swiss Alps<br>Adventure</div>
-                </div>
-            </div>
-            <div class="banner-slide" style="background-image: url('https://images.unsplash.com/photo-1519046904884-53103b34b206?w=800');">
-                <div class="banner-content">
-                    <div class="banner-title">Maldives<br>Escape</div>
-                </div>
-            </div>
-        </section>
+        <div class="banner">
+            <div class="banner-title">Explore the<br>Swiss Alps</div>
+        </div>
     </div>
 
     <nav class="bottom-nav">
         <div class="nav-item active">
-            <svg class="icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
         </div>
         <div class="nav-item">
-            <svg class="icon" viewBox="0 0 24 24"><path d="M1 6v16l7-4 8 4 7-4V2l-7 4-8-4-7 4z"></path></svg>
+            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M1 6v16l7-4 8 4 7-4V2l-7 4-8-4-7 4z"></path></svg>
         </div>
         <div class="nav-item">
-            <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"></circle><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path></svg>
+            <svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"></circle><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path></svg>
         </div>
     </nav>
 
-    <script>
-        // تحديث وقت التحية
-        const hours = new Date().getHours();
-        const greeting = document.getElementById('greeting');
-        if (hours < 12) greeting.innerText = "GOOD MORNING";
-        else if (hours < 17) greeting.innerText = "GOOD AFTERNOON";
-        else greeting.innerText = "GOOD EVENING";
-
-        // تبديل البانر
-        let current = 0;
-        const slides = document.querySelectorAll('.banner-slide');
-        setInterval(() => {
-            slides[current].classList.remove('active');
-            current = (current + 1) % slides.length;
-            slides[current].classList.add('active');
-        }, 4000);
-    </script>
 </body>
 </html>
