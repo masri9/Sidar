@@ -3,7 +3,287 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sidarapp - Navigation Fixed</title>
+    <title>Sidarapp - <!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sidarapp - Professional Stacked Cards</title>
+    
+    <style>
+        :root {
+            --primary-lava: #ff4500; 
+            --lava-glow: rgba(255, 69, 0, 0.4); 
+            --lava-intense-glow: rgba(255, 69, 0, 0.8); 
+            --text-main: #0f172a; 
+        }
+
+        body, html { 
+            margin: 0; padding: 0;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* --- Splash Screen --- */
+        #splash-screen {
+            position: fixed; inset: 0; background: #ffffff;
+            display: flex; justify-content: center; align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+        .splash-image { width: 180px; filter: drop-shadow(0 0 15px var(--lava-intense-glow)); }
+
+        /* --- Hero Background --- */
+        .header-bg {
+            position: absolute; top: 0; left: 0; right: 0; height: 50vh;
+            background-size: cover; background-position: center;
+            z-index: 0;
+        }
+        .header-bg::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%);
+        }
+
+        .app-container {
+            position: relative; z-index: 1;
+            padding: 60px 20px 120px; box-sizing: border-box;
+            background: transparent;
+        }
+
+        .hero-title { font-size: 34px; font-weight: 800; line-height: 1.1; color: var(--text-main); margin-bottom: 25px; }
+        .hero-title span { color: var(--primary-lava); }
+
+        .search-wrapper {
+            background: rgba(255,255,255,0.95); backdrop-filter: blur(10px);
+            border-radius: 20px; padding: 12px 18px; display: flex; align-items: center;
+            border: 2px solid var(--primary-lava); margin-bottom: 25px;
+        }
+        .search-wrapper input { flex: 1; border: none; background: transparent; outline: none; padding-left: 10px; font-size: 16px; width: 100%; }
+
+        .services-scroll-container {
+            display: flex; gap: 10px; overflow-x: auto; padding-bottom: 25px; scrollbar-width: none;
+        }
+        .services-scroll-container::-webkit-scrollbar { display: none; }
+        .service-pill {
+            display: flex; align-items: center; background: #ffffff; border: 1.5px solid #f1f5f9;
+            padding: 8px 16px; border-radius: 50px; flex-shrink: 0; transition: 0.3s;
+        }
+        .service-pill.active { border-color: var(--primary-lava); color: var(--primary-lava); background: rgba(255, 69, 0, 0.05); }
+
+        /* --- 🆕 تحسين قسم البطاقات المتداخلة --- */
+        .stacked-cards-wrapper {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 1200px;
+            margin-top: 10px;
+        }
+
+        .card-item {
+            position: absolute;
+            width: 230px; /* تصغير العرض قليلاً للدقة */
+            height: 280px; /* تصغير الطول قليلاً للدقة */
+            border-radius: 30px;
+            background-size: cover;
+            background-position: center;
+            transition: all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1); /* انيميشن احترافي مرن */
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding-bottom: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            opacity: 0;
+            filter: blur(4px); /* تغبيش للبطاقات المختفية */
+            pointer-events: none;
+        }
+
+        /* البطاقة النشطة: واضحة وكبيرة */
+        .card-item.active { 
+            opacity: 1; 
+            transform: translateX(0) scale(1); 
+            z-index: 10; 
+            filter: blur(0);
+            pointer-events: auto; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+        }
+
+        /* البطاقات الجانبية: أصغر وبتداخل جانبي أنيق */
+        .card-item.prev { 
+            opacity: 0.5; 
+            transform: translateX(-110px) scale(0.75); /* تصغير ملحوظ */
+            z-index: 5; 
+            filter: blur(2px);
+        }
+
+        .card-item.next { 
+            opacity: 0.5; 
+            transform: translateX(110px) scale(0.75); /* تصغير ملحوظ */
+            z-index: 5; 
+            filter: blur(2px);
+        }
+
+        .see-more-btn {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            color: #fff;
+            border-radius: 50px;
+            padding: 8px 35px;
+            font-weight: 700;
+            font-size: 13px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .dots-container { display: flex; justify-content: center; gap: 8px; margin-top: 15px; }
+        .dot { width: 6px; height: 6px; background: #e2e8f0; border-radius: 50%; transition: 0.3s; }
+        .dot.active { background: #000; width: 15px; border-radius: 10px; }
+
+        /* --- شريط التنقل السفلي --- */
+        .bottom-nav {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 400px; background: #ffffff; border-radius: 40px;
+            display: flex; justify-content: space-around; align-items: center;
+            padding: 8px; border: 2px solid var(--primary-lava);
+            box-shadow: 0 0 20px var(--lava-glow); z-index: 1000;
+        }
+        .nav-item { display: flex; align-items: center; justify-content: center; padding: 10px 15px; color: #94a3b8; cursor: pointer; transition: 0.3s; border-radius: 30px; }
+        .nav-item.active { background: rgba(255, 69, 0, 0.1); color: var(--primary-lava); }
+        .nav-item span { max-width: 0; overflow: hidden; white-space: nowrap; transition: 0.3s; font-weight: 700; font-size: 14px; }
+        .nav-item.active span { max-width: 80px; margin-left: 8px; }
+        .nav-item svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2.2; }
+
+    </style>
+</head>
+<body>
+
+    <div id="splash-screen">
+        <img id="splashLogo" src="" class="splash-image">
+    </div>
+
+    <div class="header-bg" id="heroBg"></div>
+
+    <div class="app-container" id="main-app" style="opacity: 0; transition: 1s;">
+        
+        <h1 class="hero-title">Where do you <br><span>wanna go?</span></h1>
+
+        <div class="search-wrapper">
+            <span>🔍</span>
+            <input type="text" placeholder="Ask Sidar AI anything...">
+        </div>
+
+        <div class="services-scroll-container">
+            <div class="service-pill" onclick="activatePill(this)"><span>🎟️ Events</span></div>
+            <div class="service-pill" onclick="activatePill(this)"><span>📶 eSIM</span></div>
+            <div class="service-pill active" onclick="activatePill(this)"><span>💱 Currency</span></div>
+            <div class="service-pill" onclick="activatePill(this)"><span>💸 Transfer</span></div>
+        </div>
+
+        <div class="stacked-cards-wrapper" id="cardsWrapper">
+            <div class="card-item" id="card0"><div class="see-more-btn">See More</div></div>
+            <div class="card-item" id="card1"><div class="see-more-btn">See More</div></div>
+            <div class="card-item" id="card2"><div class="see-more-btn">See More</div></div>
+            <div class="card-item" id="card3"><div class="see-more-btn">See More</div></div>
+        </div>
+
+        <div class="dots-container" id="dotsContainer"></div>
+
+    </div>
+
+    <nav class="bottom-nav">
+        <div class="nav-item active" onclick="tab(this)">
+            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+            <span>Home</span>
+        </div>
+        <div class="nav-item" onclick="tab(this)">
+            <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            <span>Map</span>
+        </div>
+        <div class="nav-item" onclick="tab(this)">
+            <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+            <span>Reels</span>
+        </div>
+        <div class="nav-item" onclick="tab(this)">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            <span>Profile</span>
+        </div>
+    </nav>
+
+    <script>
+        const MY_IMAGES = {
+            splashLogo: 'https://plain-eeur-prod-public.komododecks.com/202604/19/y0zyi6uOKg2CaNATvHPZ/image.png',
+            heroBackground: 'https://plain-eeur-prod-public.komododecks.com/202604/19/FtJXvAZvXREKew6PJ3ew/image.png',
+            card0: 'https://plain-eeur-prod-public.komododecks.com/202604/19/MlIUSlvZBhhWqHqFiUB1/image.jpg',
+            card1: 'https://plain-eeur-prod-public.komododecks.com/202604/19/cEwwGzGbS7o3zeBswth1/image.jpg',
+            card2: 'https://plain-eeur-prod-public.komododecks.com/202604/19/nrIyI2idqJFkfA4X2F4w/image.jpg',
+            card3: 'https://plain-eeur-prod-public.komododecks.com/202604/19/Y6iqmUUXfwpeBLkLSY2h/image.jpg'
+        };
+
+        function applyImages() {
+            document.getElementById('splashLogo').src = MY_IMAGES.splashLogo;
+            document.getElementById('heroBg').style.backgroundImage = `url('${MY_IMAGES.heroBackground}')`;
+            document.getElementById('card0').style.backgroundImage = `url('${MY_IMAGES.card0}')`;
+            document.getElementById('card1').style.backgroundImage = `url('${MY_IMAGES.card1}')`;
+            document.getElementById('card2').style.backgroundImage = `url('${MY_IMAGES.card2}')`;
+            document.getElementById('card3').style.backgroundImage = `url('${MY_IMAGES.card3}')`;
+        }
+
+        let currentIndex = 0;
+        const cards = document.querySelectorAll('.card-item');
+        const dotsContainer = document.getElementById('dotsContainer');
+
+        cards.forEach((_, i) => {
+            const dot = document.createElement('div');
+            dot.className = `dot ${i === 0 ? 'active' : ''}`;
+            dotsContainer.appendChild(dot);
+        });
+
+        function updateCards() {
+            cards.forEach((card, i) => {
+                card.classList.remove('active', 'prev', 'next');
+                if (i === currentIndex) {
+                    card.classList.add('active');
+                } else if (i === (currentIndex - 1 + cards.length) % cards.length) {
+                    card.classList.add('prev');
+                } else if (i === (currentIndex + 1) % cards.length) {
+                    card.classList.add('next');
+                }
+            });
+            document.querySelectorAll('.dot').forEach((dot, i) => dot.classList.toggle('active', i === currentIndex));
+        }
+
+        window.addEventListener('load', () => {
+            applyImages();
+            setTimeout(() => {
+                document.getElementById('splash-screen').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('splash-screen').style.display = 'none';
+                    document.getElementById('main-app').style.opacity = '1';
+                    updateCards();
+                }, 500);
+            }, 2000);
+        });
+
+        // حركة تلقائية كل 4 ثوانٍ
+        setInterval(() => { currentIndex = (currentIndex + 1) % cards.length; updateCards(); }, 4000);
+
+        function activatePill(el) {
+            document.querySelectorAll('.service-pill').forEach(p => p.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        function tab(el) {
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            el.classList.add('active');
+        }
+    </script>
+</body>
+</html>
+ Fixed</title>
     
     <style>
         :root {
