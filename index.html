@@ -3,294 +3,207 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sidarapp - Official</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <title>Sidarapp - Interactive AI</title>
     
     <style>
         :root {
             --primary-blue: #2563eb;
-            --light-blue-bg: #dbeafe;
-            --nav-bg: #ffffff;
-            --text-main-color: #0f172a; 
-            --accent-blue: #3b82f6; 
-            --inactive-gray: #64748b;
+            --text-dark: #0f172a;
         }
 
         body, html { 
             margin: 0; padding: 0;
-            font-family: 'Segoe UI', Roboto, -apple-system, sans-serif;
-            overflow: hidden;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background: #ffffff;
             height: 100vh;
-            -webkit-font-smoothing: antialiased;
+            overflow: hidden;
         }
 
-        /* --- Splash Screen --- */
-        #splash-screen {
-            position: fixed; inset: 0; background: #ffffff;
-            display: flex; justify-content: center; align-items: center;
-            z-index: 9999;
-            transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1), visibility 1s;
-        }
-        .splash-image { width: 180px; height: auto; animation: splashEntrance 1.5s ease-out forwards; }
-
-        @keyframes splashEntrance {
-            0% { transform: scale(0.8); opacity: 0; filter: blur(10px); }
-            100% { transform: scale(1); opacity: 1; filter: blur(0); }
-        }
-
-        /* --- Background --- */
-        .background-container {
-            position: fixed; inset: 0; z-index: -1;
-            background-image: url('https://plain-eeur-prod-public.komododecks.com/202604/19/FtJXvAZvXREKew6PJ3ew/image.png'); 
+        .header-bg {
+            position: absolute; top: 0; left: 0; right: 0; height: 50vh;
+            background: linear-gradient(rgba(255,255,255,0.1), #fff), 
+                        url('https://plain-eeur-prod-public.komododecks.com/202604/19/FtJXvAZvXREKew6PJ3ew/image.png');
             background-size: cover; background-position: center;
-        }
-        
-        .background-overlay {
-            position: fixed; inset: 0; z-index: -1;
-            background: rgba(255, 255, 255, 0.15); 
+            z-index: -1;
         }
 
         .app-container {
-            height: 100vh; padding: 25px;
-            display: flex; flex-direction: column;
-            box-sizing: border-box; opacity: 0; 
-            transition: opacity 1.2s ease;
+            height: 100vh; display: flex; flex-direction: column;
+            padding: 25px 25px 120px; box-sizing: border-box;
+            overflow-y: auto; scrollbar-width: none;
         }
+        .app-container::-webkit-scrollbar { display: none; }
 
-        /* --- Header --- */
-        .header { height: 60px; display: flex; align-items: center; justify-content: flex-start; margin-bottom: 5px; }
-        .menu-icon { background: white; padding: 12px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); cursor: pointer; border: 1px solid rgba(0,0,0,0.05); }
+        .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .profile-img { width: 45px; height: 45px; border-radius: 15px; background: url('https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80') center/cover; border: 2px solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
 
-        /* --- Main Content --- */
-        .main-content {
-            flex: 1; display: flex; flex-direction: column;
-            justify-content: flex-start; align-items: center;
-            padding-top: 30px; text-align: center;
-            overflow-y: auto; padding-bottom: 120px;
+        .hero-title { font-size: 38px; font-weight: 800; line-height: 1.1; color: var(--text-dark); margin-bottom: 30px; letter-spacing: -1.5px; }
+        .hero-title span { color: var(--primary-blue); display: block; }
+
+        /* --- AI Chat Box --- */
+        .ai-chat-box {
+            background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px);
+            border-radius: 24px; padding: 10px 15px; display: flex; align-items: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.06); border: 1px solid rgba(255,255,255,0.5);
+            margin-bottom: 30px;
         }
-
-        .hero-full-title { font-size: 36px; font-weight: 800; line-height: 1.1; margin: 0; color: var(--text-main-color); letter-spacing: -1px; }
-        .hero-full-title span.blue-text { color: var(--accent-blue); display: block; }
-
-        /* --- AI Search (Main Page) --- */
-        .ai-engine-container { width: 100%; max-width: 500px; margin-top: 35px; }
-        .ai-input-wrapper { position: relative; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(20px); border-radius: 24px; padding: 8px 15px; display: flex; align-items: center; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); }
-        .ai-input-field { flex: 1; border: none; background: transparent; padding: 15px 10px; font-size: 16px; font-weight: 500; outline: none; }
-        .ai-icon { width: 40px; height: 40px; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); border-radius: 16px; display: flex; align-items: center; justify-content: center; }
+        .ai-icon-circle { width: 40px; height: 40px; background: linear-gradient(135deg, #2563eb, #3b82f6); border-radius: 14px; display: flex; align-items: center; justify-content: center; color: white; }
+        .ai-chat-box input { flex: 1; border: none; background: transparent; padding: 0 15px; font-size: 16px; font-weight: 600; outline: none; }
 
         /* --- Services --- */
-        .services-grid { margin-top: 30px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; width: 100%; max-width: 500px; }
-        .service-item { background: rgba(255, 255, 255, 0.5); backdrop-filter: blur(15px); border-radius: 24px; padding: 15px 10px; display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: 0.3s; border: 1px solid rgba(255,255,255,0.4); }
-        .service-item.active { background: white; border-color: var(--primary-blue); transform: translateY(-5px); }
-        .service-icon-box { width: 54px; height: 54px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; border: 2px solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.08); }
-        .bg-esim { background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%); }
-        .bg-events { background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%); }
-        .bg-change { background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%); }
-        .service-item span { font-size: 13px; font-weight: 700; }
+        .services-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 25px; }
+        .service-card {
+            background: white; border-radius: 22px; padding: 12px 5px;
+            display: flex; flex-direction: column; align-items: center;
+            cursor: pointer; border: 1px solid #f1f5f9; transition: 0.3s;
+        }
+        .service-card.active { border-color: var(--primary-blue); background: #eff6ff; transform: scale(1.05); }
+        .icon-box { width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 5px; }
 
-        /* --- Map Page Elements --- */
-        #map-page { display: none; height: 100vh; width: 100%; position: absolute; top: 0; left: 0; background: white; z-index: 50; }
-        #map { width: 100%; height: 100%; }
-        
-        .map-search-container {
-            position: absolute; top: 50px; left: 50%; transform: translateX(-50%);
-            width: 90%; max-width: 400px; z-index: 1000;
+        /* --- Widget Area --- */
+        #widget-display {
+            background: #f8fafc; border-radius: 24px; padding: 20px; margin-bottom: 30px;
+            display: none; border: 1px dashed #cbd5e1; animation: slideIn 0.4s ease-out;
         }
-        .map-search-bar {
-            background: white; border-radius: 20px; padding: 12px 20px;
-            display: flex; align-items: center; box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-        }
-        .map-search-bar input {
-            border: none; outline: none; width: 100%; font-size: 15px; font-weight: 500; margin-left: 10px;
-        }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .map-filters {
-            display: flex; gap: 8px; margin-top: 12px; overflow-x: auto; padding-bottom: 5px;
-            scrollbar-width: none; /* Hide scrollbar Firefox */
-        }
-        .map-filters::-webkit-scrollbar { display: none; } /* Hide scrollbar Chrome/Safari */
-
-        .filter-btn {
-            background: white; padding: 8px 16px; border-radius: 15px; border: none;
-            white-space: nowrap; font-size: 13px; font-weight: 700; color: #475569;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05); cursor: pointer; transition: 0.3s;
-        }
-        .filter-btn.active { background: var(--primary-blue); color: white; }
-
-        .gps-btn {
-            position: absolute; bottom: 130px; right: 20px; z-index: 1000;
-            background: white; width: 55px; height: 55px; border-radius: 50%;
+        /* --- Auto-Sliding Promo Cards --- */
+        .promo-container { width: 100%; overflow: hidden; position: relative; border-radius: 25px; margin-top: 10px; }
+        .promo-track { display: flex; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        .promo-card {
+            min-width: 100%; height: 160px; border-radius: 25px;
             display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.15); cursor: pointer; border: none;
+            color: white; padding: 20px; box-sizing: border-box; position: relative;
         }
+        .promo-1 { background: linear-gradient(135deg, #1e293b, #334155); }
+        .promo-2 { background: linear-gradient(135deg, #2563eb, #7c3aed); }
+        .promo-3 { background: linear-gradient(135deg, #059669, #10b981); }
 
-        /* --- Bottom Navigation --- */
-        .bottom-nav-container {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            width: 90%; max-width: 420px; background: var(--nav-bg);
-            padding: 10px 15px; border-radius: 50px;
-            display: flex; justify-content: space-between; align-items: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08); z-index: 1000;
+        /* --- Bottom Nav --- */
+        .bottom-nav {
+            position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
+            width: 88%; max-width: 400px; background: white; padding: 10px;
+            border-radius: 40px; display: flex; justify-content: space-between;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1); z-index: 1000;
         }
-        .nav-item { display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease; padding: 10px 15px; color: var(--inactive-gray); }
-        .nav-item svg { width: 24px; height: 24px; stroke: currentColor; stroke-width: 2.2; fill: none; }
-        .nav-text { max-width: 0; overflow: hidden; white-space: nowrap; font-size: 14px; font-weight: 700; transition: all 0.3s ease; opacity: 0; }
-        .nav-item.active { background: var(--light-blue-bg); color: var(--primary-blue); border-radius: 30px; }
-        .nav-item.active .nav-text { max-width: 80px; margin-left: 10px; opacity: 1; }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .nav-link { display: flex; align-items: center; padding: 12px 18px; color: #94a3b8; text-decoration: none; }
+        .nav-link.active { background: #eef2ff; color: #2563eb; border-radius: 30px; }
+        .nav-link span { display: none; margin-left: 8px; font-weight: 700; }
+        .nav-link.active span { display: inline; }
     </style>
 </head>
 <body>
 
-    <div id="splash-screen">
-        <img src="https://plain-eeur-prod-public.komododecks.com/202604/19/y0zyi6uOKg2CaNATvHPZ/image.png" alt="Sidarapp Logo" class="splash-image">
-    </div>
+    <div class="header-bg"></div>
 
-    <div class="background-container"></div>
-    <div class="background-overlay"></div>
-    
-    <div class="app-container" id="main-app">
-        <header class="header">
-            <div class="menu-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="2.5"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-            </div>
-        </header>
-
-        <main class="main-content">
-            <h1 class="hero-full-title">Your Journey <span class="blue-text">Starts Before</span> You Even Arrive.</h1>
-            <div class="ai-engine-container">
-                <div class="ai-input-wrapper">
-                    <input type="text" class="ai-input-field" placeholder="Ask Sidar AI anything...">
-                    <div class="ai-icon">🔍</div>
-                </div>
-            </div>
-            <div class="services-grid">
-                <div class="service-item active" onclick="toggleService('esim-script', this)">
-                    <div class="service-icon-box bg-esim">🌐</div>
-                    <span>eSIM</span>
-                </div>
-                <div class="service-item" onclick="toggleService('events-script', this)">
-                    <div class="service-icon-box bg-events">🎟️</div>
-                    <span>Events</span>
-                </div>
-                <div class="service-item" onclick="toggleService('change-script', this)">
-                    <div class="service-icon-box bg-change">💱</div>
-                    <span>Change</span>
-                </div>
-            </div>
-        </main>
-
-        <div id="map-page">
-            <div class="map-search-container">
-                <div class="map-search-bar">
-                    <span>🔍</span>
-                    <input type="text" placeholder="Search hotels, restaurants...">
-                </div>
-                <div class="map-filters">
-                    <button class="filter-btn active" onclick="filterMap('All', this)">All</button>
-                    <button class="filter-btn" onclick="filterMap('Hotels', this)">🏨 Hotels</button>
-                    <button class="filter-btn" onclick="filterMap('Restaurants', this)">🍴 Restaurants</button>
-                    <button class="filter-btn" onclick="filterMap('Cafes', this)">☕ Cafes</button>
-                </div>
-            </div>
-            <div id="map"></div>
-            <button class="gps-btn" onclick="locateUser()">🎯</button>
+    <div class="app-container">
+        <div class="top-nav">
+            <div style="background: white; padding: 10px; border-radius: 12px;">☰</div>
+            <div class="profile-img"></div>
         </div>
 
-        <nav class="bottom-nav-container">
-            <div class="nav-item active" onclick="setActive(this, 'Home')">
-                <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                <span class="nav-text">Home</span>
+        <h1 class="hero-title">Your Journey <br><span>Starts Here.</span></h1>
+
+        <div class="ai-chat-box">
+            <div class="ai-icon-circle">✨</div>
+            <input type="text" placeholder="Plan my trip to Japan...">
+            <span>🎤</span>
+        </div>
+
+        <div class="services-grid">
+            <div class="service-card" onclick="showWidget('esim', this)">
+                <div class="icon-box" style="background:#eff6ff">🌐</div>
+                <span>eSIM</span>
             </div>
-            <div class="nav-item" onclick="setActive(this, 'Map')">
-                <svg viewBox="0 0 24 24"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon></svg>
-                <span class="nav-text">Map</span>
+            <div class="service-card" onclick="showWidget('hotel', this)">
+                <div class="icon-box" style="background:#fef2f2">🏨</div>
+                <span>Hotel</span>
             </div>
-            <div class="nav-item" onclick="setActive(this, 'Reels')">
-                <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"></rect><path d="M10 8l6 4-6 4V8z" fill="currentColor" opacity="0.3"></path></svg>
-                <span class="nav-text">Reels</span>
+            <div class="service-card" onclick="showWidget('events', this)">
+                <div class="icon-box" style="background:#f0fdf4">🎟️</div>
+                <span>Events</span>
             </div>
-            <div class="nav-item" onclick="setActive(this, 'Profile')">
-                <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                <span class="nav-text">Profile</span>
+            <div class="service-card" onclick="showWidget('offers', this)">
+                <div class="icon-box" style="background:#fff7ed">🏷️</div>
+                <span>Offers</span>
             </div>
-        </nav>
+        </div>
+
+        <div id="widget-display">
+            <h4 id="widget-title" style="margin-top:0; color:var(--primary-blue);">Service Widget</h4>
+            <div id="widget-content" style="font-size: 14px; color: #64748b;">
+                Loading service details...
+            </div>
+        </div>
+
+        <div class="promo-container">
+            <div class="promo-track" id="promoTrack">
+                <div class="promo-card promo-1">
+                    <div>
+                        <h3 style="margin:0">Limited Offer!</h3>
+                        <p style="font-size:14px; opacity:0.8">Get 20% off on your first eSIM activation.</p>
+                    </div>
+                </div>
+                <div class="promo-card promo-2">
+                    <div>
+                        <h3 style="margin:0">AI Trip Planner</h3>
+                        <p style="font-size:14px; opacity:0.8">Let Sidar AI build your 7-day itinerary.</p>
+                    </div>
+                </div>
+                <div class="promo-card promo-3">
+                    <div>
+                        <h3 style="margin:0">New Destinations</h3>
+                        <p style="font-size:14px; opacity:0.8">Discover hidden gems in Bali this summer.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
+    <nav class="bottom-nav">
+        <a href="#" class="nav-link active">🏠<span>Home</span></a>
+        <a href="#" class="nav-link">🗺️<span>Map</span></a>
+        <a href="#" class="nav-link">🎬<span>Reels</span></a>
+        <a href="#" class="nav-link">👤<span>Profile</span></a>
+    </nav>
+
     <script>
-        // Splash logic
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.getElementById('splash-screen').style.opacity = '0';
-                setTimeout(() => document.getElementById('splash-screen').style.visibility = 'hidden', 1000);
-                document.getElementById('main-app').style.opacity = '1';
-            }, 2500);
-        });
+        // 1. التحكم بظهور الـ Widget
+        function showWidget(type, element) {
+            const display = document.getElementById('widget-display');
+            const title = document.getElementById('widget-title');
+            const content = document.getElementById('widget-content');
 
-        // Map logic
-        let map;
-        let userMarker;
-        let markersGroup = L.layerGroup();
+            // إزالة الحالة النشطة من الجميع
+            document.querySelectorAll('.service-card').forEach(c => c.classList.remove('active'));
+            element.classList.add('active');
 
-        function initMap() {
-            if (map) return;
-            // استخدام ستايل Positron الفخم والنظيف من CartoDB
-            map = L.map('map', { zoomControl: false }).setView([25.2048, 55.2708], 13);
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-                attribution: '&copy; CARTO'
-            }).addTo(map);
-            markersGroup.addTo(map);
-            
-            // إضافة عينات Pins افتراضية للمطاعم والفنادق
-            addSampleMarkers();
-        }
+            display.style.display = 'block';
 
-        function addSampleMarkers() {
-            markersGroup.clearLayers();
-            // مثال لفندق
-            L.marker([25.2048, 55.2708]).addTo(markersGroup).bindPopup("<b>Luxury Hotel</b><br>Featured Stay");
-            // مثال لمطعم
-            L.marker([25.2148, 55.2808]).addTo(markersGroup).bindPopup("<b>Top Restaurant</b><br>Delicious local food");
-        }
-
-        function filterMap(category, btn) {
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            // هنا يمكنك مستقبلاً فلترة البيانات بناءً على النوع
-            console.log("Filtering for: " + category);
-        }
-
-        function locateUser() {
-            map.locate({setView: true, maxZoom: 16});
-        }
-
-        map && map.on('locationfound', function(e) {
-            if (userMarker) map.removeLayer(userMarker);
-            userMarker = L.circleMarker(e.latlng, {radius: 8, color: '#2563eb', fillColor: '#3b82f6', fillOpacity: 1}).addTo(map);
-        });
-
-        // App logic
-        function setActive(el, page) {
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-            el.classList.add('active');
-            const mainContent = document.querySelector('.main-content');
-            const mapPage = document.getElementById('map-page');
-            if (page === 'Map') {
-                mainContent.style.display = 'none';
-                mapPage.style.display = 'block';
-                setTimeout(initMap, 100);
+            // هنا يمكنك وضع الـ Scripts الخاصة بكل خدمة
+            if(type === 'esim') {
+                title.innerText = "Global eSIM";
+                content.innerHTML = "<p>Select your country and get connected instantly. [Script Active]</p>";
+            } else if(type === 'hotel') {
+                title.innerText = "Luxury Hotels";
+                content.innerHTML = "<p>Finding the best stays near you... [Script Active]</p>";
             } else {
-                mainContent.style.display = 'flex';
-                mapPage.style.display = 'none';
+                title.innerText = type.toUpperCase();
+                content.innerHTML = "<p>Loading specialized " + type + " script content...</p>";
             }
         }
 
-        function toggleService(id, element) {
-            document.querySelectorAll('.service-item').forEach(i => i.classList.remove('active'));
-            element.classList.add('active');
+        // 2. التحكم في حركة البطاقات التلقائية
+        let currentSlide = 0;
+        const track = document.getElementById('promoTrack');
+        const slides = document.querySelectorAll('.promo-card');
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            track.style.transform = `translateX(-${currentSlide * 100}%)`;
         }
+
+        setInterval(nextSlide, 3000); // تتغير كل 3 ثواني
     </script>
 </body>
 </html>
