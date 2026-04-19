@@ -3,100 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sidar App</title>
+    <title>Sidar App - Curved Nav</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            margin: 0;
-            background-color: #ffffff;
-            font-family: sans-serif;
+        :root {
+            --bg-color: #ffffff;
+            --primary-gradient: linear-gradient(135deg, #2A70DC, #00C7B7);
+            --icon-inactive: #b2bec3;
         }
 
-        /* شريط التنقل السفلي - Bottom Navigation Bar */
-        .bottom-nav-bar {
+        body {
+            margin: 0;
+            background-color: var(--bg-color);
+            font-family: 'Segoe UI', sans-serif;
+            height: 100vh;
+        }
+
+        /* حاوية الشريط السفلي مع الانحناء */
+        .nav-wrapper {
             position: fixed;
             bottom: 0;
             width: 100%;
-            height: 70px;
-            background: #fff;
+            height: 80px;
+            background: white;
+            /* رسم الانحناء باستخدام Clip-path لمحاكاة الصورة */
+            filter: drop-shadow(0 -5px 15px rgba(0,0,0,0.05));
+        }
+
+        /* خلفية الشريط مع الفتحة في المنتصف */
+        .nav-background {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: white;
             display: flex;
             justify-content: space-around;
             align-items: center;
-            border-top: 1px solid #eee;
-            z-index: 1000;
+            /* تشكيل الفتحة الدائرية في المنتصف */
+            clip-path: polygon(0 0, 38% 0, 42% 15%, 50% 45%, 58% 15%, 62% 0, 100% 0, 100% 100%, 0 100%);
+        }
+
+        .nav-items {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 0 10px;
         }
 
         .nav-item {
-            text-decoration: none;
+            flex: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
-            flex: 1;
+            text-decoration: none;
+            transition: 0.3s;
         }
 
-        /* تصغير وتنسيق أيقونة الريلز اللي أرفقتها */
-        .nav-item img.reels-icon {
-            width: 28px;
-            height: 28px;
+        /* تنسيق أيقوناتك الخاصة */
+        .nav-item img, .nav-item i {
+            width: 26px;
+            height: 26px;
+            font-size: 24px;
+            color: var(--icon-inactive);
             object-fit: contain;
         }
 
-        /* تنسيق أيقونة الخريطة البارزة */
-        .map-central-btn {
-            position: relative;
-            top: -25px; /* بروز بسيط مش مبالغ فيه */
-            width: 60px;
-            height: 60px;
-            background: #000; /* جربنا الأسود الفخم بدل الألوان */
+        /* الزر الدائري الملون (الخريطة) */
+        .floating-map-btn {
+            position: absolute;
+            top: -30px; /* مكان الزر في منتصف الانحناء */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 65px;
+            height: 65px;
+            background: var(--primary-gradient);
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 20px rgba(42, 112, 220, 0.4);
+            border: 6px solid #ffffff; /* الإطار الأبيض الذي يظهر في الصورة */
+            z-index: 10;
         }
 
-        .map-central-btn img {
-            width: 30px;
-            filter: brightness(0) invert(1); /* جعلها بيضاء */
+        .floating-map-btn img {
+            width: 32px;
+            filter: brightness(0) invert(1); /* جعل أيقونتك بيضاء */
         }
 
-        .nav-item i {
-            font-size: 24px;
-            color: #333;
-        }
+        /* تفاعل بسيط عند النقر */
+        .nav-item:active { transform: scale(0.9); }
+        .floating-map-btn:active { transform: translateX(-50%) scale(0.9); }
 
-        .nav-item span {
-            font-size: 10px;
-            color: #666;
-            margin-top: 4px;
-        }
     </style>
 </head>
 <body>
 
-    <nav class="bottom-nav-bar">
-        <a href="#" class="nav-item">
-            <i class="fa-solid fa-house"></i>
-        </a>
+    <div class="nav-wrapper">
+        <div class="nav-background"></div>
+        
+        <div class="nav-items">
+            <a href="#" class="nav-item">
+                <i class="fa-solid fa-house"></i>
+            </a>
 
-        <a href="#" class="nav-item">
-            <img src="https://i.ibb.co/3yk8S7p/reels-icon.png" class="reels-icon" alt="Reels">
-        </a>
+            <a href="#" class="nav-item" style="margin-right: 40px;">
+                <img src="https://cdn-icons-png.flaticon.com/512/5948/5948543.png" alt="Reels">
+            </a>
 
-        <a href="#" class="nav-item">
-            <div class="map-central-btn">
-                <img src="https://i.ibb.co/L8N7M9y/map-icon.png" alt="Map">
-            </div>
-        </a>
+            <a href="#" class="floating-map-btn">
+                <img src="https://cdn-icons-png.flaticon.com/512/854/854878.png" alt="Map">
+            </a>
 
-        <a href="#" class="nav-item">
-            <i class="fa-solid fa-message"></i>
-        </a>
+            <a href="#" class="nav-item" style="margin-left: 40px;">
+                <i class="fa-solid fa-paper-plane"></i>
+            </a>
 
-        <a href="#" class="nav-item">
-            <i class="fa-solid fa-user"></i>
-        </a>
-    </nav>
+            <a href="#" class="nav-item">
+                <i class="fa-solid fa-user"></i>
+            </a>
+        </div>
+    </div>
 
 </body>
 </html>
