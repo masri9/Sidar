@@ -6,11 +6,12 @@
     <title>Sidarapp - Official</title>
     <style>
         :root {
-            --primary-blue: #2563eb;
-            --light-blue: #dbeafe;
-            --nav-bg: rgba(255, 255, 255, 0.95);
+            --primary-blue: #2563eb; /* اللون الأزرق للأيقونة والنص النشط */
+            --light-blue-bg: #dbeafe; /* لون خلفية الزر النشط من الصورة */
+            --nav-bg: #ffffff;
             --text-main-color: #0f172a; 
             --accent-blue: #3b82f6; 
+            --inactive-gray: #64748b; /* لون الأيقونات غير النشطة */
         }
 
         body, html { 
@@ -56,76 +57,105 @@
 
         /* --- Header --- */
         .header { height: 60px; display: flex; align-items: center; justify-content: flex-start; margin-bottom: 5px; }
-        .menu-icon { background: rgba(255, 255, 255, 0.95); padding: 12px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); cursor: pointer; border: 1px solid rgba(0,0,0,0.05); }
+        .menu-icon { background: white; padding: 12px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); cursor: pointer; border: 1px solid rgba(0,0,0,0.05); }
 
         /* --- Main Content --- */
         .main-content {
             flex: 1; display: flex; flex-direction: column;
             justify-content: flex-start; align-items: center;
             padding-top: 30px; text-align: center;
-            overflow-y: auto; padding-bottom: 100px;
+            overflow-y: auto; padding-bottom: 120px;
         }
-
-        .hero-text-container { width: 90%; max-width: 550px; opacity: 0; transform: translateY(20px); animation: textSlideUp 1s ease-out 2.8s forwards; }
-
-        @keyframes textSlideUp { to { opacity: 1; transform: translateY(0); } }
 
         .hero-full-title { font-size: 36px; font-weight: 800; line-height: 1.1; margin: 0; color: var(--text-main-color); letter-spacing: -1px; }
         .hero-full-title span.blue-text { color: var(--accent-blue); display: block; }
 
-        /* --- AI Search Engine --- */
-        .ai-engine-container { width: 100%; max-width: 500px; margin-top: 35px; opacity: 0; animation: textSlideUp 1s ease-out 3.2s forwards; }
+        /* --- AI Search --- */
+        .ai-engine-container { width: 100%; max-width: 500px; margin-top: 35px; }
         .ai-input-wrapper { position: relative; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(20px); border-radius: 24px; padding: 8px 15px; display: flex; align-items: center; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); }
-        .ai-input-field { flex: 1; border: none; background: transparent; padding: 15px 10px; font-size: 16px; font-weight: 500; color: var(--text-main-color); outline: none; }
+        .ai-input-field { flex: 1; border: none; background: transparent; padding: 15px 10px; font-size: 16px; font-weight: 500; outline: none; }
         .ai-icon { width: 40px; height: 40px; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); border-radius: 16px; display: flex; align-items: center; justify-content: center; }
 
-        /* --- NEW: Beautiful Services Grid --- */
-        .services-grid { 
-            margin-top: 30px; display: grid; grid-template-columns: repeat(3, 1fr); 
-            gap: 15px; width: 100%; max-width: 500px; 
-            opacity: 0; animation: textSlideUp 1s ease-out 3.5s forwards; 
-        }
-        
-        .service-item { 
-            background: rgba(255, 255, 255, 0.5); backdrop-filter: blur(15px); 
-            border: 1px solid rgba(255, 255, 255, 0.4); border-radius: 24px; 
-            padding: 15px 10px; display: flex; flex-direction: column; 
-            align-items: center; justify-content: center; cursor: pointer; 
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-        }
-
-        .service-item:hover { transform: translateY(-5px); background: white; }
-        .service-item.active { background: white; border-color: var(--primary-blue); box-shadow: 0 10px 25px rgba(37, 99, 235, 0.1); }
-
-        .service-icon-box {
-            width: 54px; height: 54px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            margin-bottom: 8px; border: 2px solid white;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            transition: transform 0.3s ease;
-        }
-
-        /* Gradients for icons */
+        /* --- Services --- */
+        .services-grid { margin-top: 30px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; width: 100%; max-width: 500px; }
+        .service-item { background: rgba(255, 255, 255, 0.5); backdrop-filter: blur(15px); border-radius: 24px; padding: 15px 10px; display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: 0.3s; border: 1px solid rgba(255,255,255,0.4); }
+        .service-item.active { background: white; border-color: var(--primary-blue); transform: translateY(-5px); }
+        .service-icon-box { width: 54px; height: 54px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; border: 2px solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.08); }
         .bg-esim { background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%); }
         .bg-events { background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%); }
         .bg-change { background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%); }
+        .service-item span { font-size: 13px; font-weight: 700; }
 
-        .service-item span { font-size: 13px; font-weight: 700; color: #1e293b; }
-
-        /* --- Content Area for Scripts --- */
-        .script-container { 
-            width: 100%; max-width: 500px; margin-top: 25px; 
-            display: none; opacity: 0; animation: fadeIn 0.5s forwards; 
-        }
-        .script-container.active { display: block; }
+        /* --- Content Areas --- */
+        .script-container { width: 100%; max-width: 500px; margin-top: 25px; display: none; }
+        .script-container.active { display: block; animation: fadeIn 0.5s; }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* --- Bottom Navigation --- */
-        .bottom-nav-container { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 420px; background: var(--nav-bg); backdrop-filter: blur(25px); padding: 8px 12px; border-radius: 30px; display: flex; justify-content: space-around; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.03); z-index: 100; }
-        .nav-item { display: flex; align-items: center; justify-content: center; padding: 10px 16px; cursor: pointer; transition: all 0.3s ease; border-radius: 22px; color: #64748b; }
-        .nav-item svg { width: 24px; height: 24px; stroke: currentColor; stroke-width: 2.2; fill: none; }
-        .nav-item.active { background: var(--light-blue); color: var(--primary-blue); }
+        /* --- UPDATED: Bottom Navigation (Exact replica of user image) --- */
+        .bottom-nav-container {
+            position: fixed;
+            bottom: 30px; /* المسافة من الأسفل */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%; /* عرض الشريط */
+            max-width: 420px; /* أقصى عرض */
+            background: var(--nav-bg);
+            padding: 10px 15px; /* المسافة الداخلية العمودية والأفقية */
+            border-radius: 50px; /* حواف دائرية جداً (Pill-shape) */
+            display: flex;
+            justify-content: space-between; /* توزيع متساوٍ للأيقونات */
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); /* ظل ناعم من الصورة */
+            z-index: 1000;
+            border: 1px solid rgba(0,0,0,0.03); /* حدود خفيفة جداً */
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 10px 15px;
+            color: var(--inactive-gray); /* لون الأيقونة غير النشطة */
+        }
+
+        /* تنسيق الأيقونات (SVG) من الصورة */
+        .nav-item svg {
+            width: 24px;
+            height: 24px;
+            stroke: currentColor; /* يستخدم اللون المحدد للـ nav-item */
+            stroke-width: 2.2; /* سمك الخط */
+            fill: none;
+            transition: stroke 0.3s;
+        }
+
+        /* النص (Label) مخفي افتراضياً */
+        .nav-text {
+            max-width: 0;
+            overflow: hidden;
+            white-space: nowrap;
+            font-size: 14px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            opacity: 0;
+        }
+
+        /* --- Active State (زر دائري أزرق فاتح) --- */
+        .nav-item.active {
+            background: var(--light-blue-bg); /* لون الخلفية الأزرق الفاتح جداً */
+            color: var(--primary-blue); /* لون الأيقونة والنص الأزرق */
+            border-radius: 30px; /* حواف دائرية للزر */
+        }
+
+        /* إظهار النص عند التفعيل */
+        .nav-item.active .nav-text {
+            max-width: 80px; /* تمدد النص */
+            margin-left: 10px; /* مسافة عن الأيقونة */
+            opacity: 1;
+        }
+
     </style>
 </head>
 <body>
@@ -140,67 +170,69 @@
     <div class="app-container" id="main-app">
         <header class="header">
             <div class="menu-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="2.5"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
             </div>
         </header>
 
         <main class="main-content">
-            <div class="hero-text-container">
-                <h1 class="hero-full-title">Your Journey <span class="blue-text">Starts Before</span> You Even Arrive.</h1>
-            </div>
+            <h1 class="hero-full-title">Your Journey <span class="blue-text">Starts Before</span> You Even Arrive.</h1>
 
             <div class="ai-engine-container">
                 <div class="ai-input-wrapper">
                     <input type="text" class="ai-input-field" placeholder="Ask Sidar AI anything...">
                     <div class="ai-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path><path d="M9 12l2 2 4-4"></path></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path><path d="M9 12l2 2 4-4"></path></svg>
                     </div>
                 </div>
             </div>
 
             <div class="services-grid">
-                <div class="service-item" onclick="toggleService('esim-script', this)">
-                    <div class="service-icon-box bg-esim"><span style="font-size: 26px;">🌐</span></div>
+                <div class="service-item active" onclick="toggleService('esim-script', this)">
+                    <div class="service-icon-box bg-esim">🌐</div>
                     <span>eSIM</span>
                 </div>
                 <div class="service-item" onclick="toggleService('events-script', this)">
-                    <div class="service-icon-box bg-events"><span style="font-size: 26px;">🎟️</span></div>
+                    <div class="service-icon-box bg-events">🎟️</div>
                     <span>Events</span>
                 </div>
                 <div class="service-item" onclick="toggleService('change-script', this)">
-                    <div class="service-icon-box bg-change"><span style="font-size: 26px;">💱</span></div>
+                    <div class="service-icon-box bg-change">💱</div>
                     <span>Change</span>
                 </div>
             </div>
 
-            <div id="esim-script" class="script-container">
-                <div style="padding:20px; color:#64748b; font-size:14px; background:rgba(255,255,255,0.4); border-radius:15px;">eSIM Widget Loading...</div>
-            </div>
-            <div id="events-script" class="script-container">
-                <div style="padding:20px; color:#64748b; font-size:14px; background:rgba(255,255,255,0.4); border-radius:15px;">Events Widget Loading...</div>
-            </div>
-            <div id="change-script" class="script-container">
-                <div style="padding:20px; color:#64748b; font-size:14px; background:rgba(255,255,255,0.4); border-radius:15px;">Currency Widget Loading...</div>
-            </div>
+            <div id="esim-script" class="script-container active"> <div style="padding:20px; color:#64748b;">eSIM Widget Area</div> </div>
+            <div id="events-script" class="script-container"> <div style="padding:20px; color:#64748b;">Events Widget Area</div> </div>
+            <div id="change-script" class="script-container"> <div style="padding:20px; color:#64748b;">Currency Widget Area</div> </div>
             
         </main>
 
         <nav class="bottom-nav-container">
-            <div class="nav-item active" onclick="setActive(this)"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg></div>
-            <div class="nav-item" onclick="setActive(this)"><svg viewBox="0 0 24 24"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon></svg></div>
-            <div class="nav-item" onclick="setActive(this)"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"></rect></svg></div>
-            <div class="nav-item" onclick="setActive(this)"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path></svg></div>
+            <div class="nav-item active" onclick="setActive(this, 'Home')">
+                <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                <span class="nav-text">Home</span>
+            </div>
+            <div class="nav-item" onclick="setActive(this, 'Map')">
+                <svg viewBox="0 0 24 24"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon></svg>
+                <span class="nav-text">Map</span>
+            </div>
+            <div class="nav-item" onclick="setActive(this, 'Reels')">
+                <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"></rect><path d="M10 8l6 4-6 4V8z" fill="currentColor" opacity="0.3"></path></svg>
+                <span class="nav-text">Reels</span>
+            </div>
+            <div class="nav-item" onclick="setActive(this, 'Profile')">
+                <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                <span class="nav-text">Profile</span>
+            </div>
         </nav>
     </div>
 
     <script>
         window.addEventListener('load', () => {
             setTimeout(() => {
-                const splash = document.getElementById('splash-screen');
-                const mainApp = document.getElementById('main-app');
-                splash.style.opacity = '0';
-                setTimeout(() => splash.style.visibility = 'hidden', 1000);
-                mainApp.style.opacity = '1';
+                document.getElementById('splash-screen').style.opacity = '0';
+                setTimeout(() => document.getElementById('splash-screen').style.visibility = 'hidden', 1000);
+                document.getElementById('main-app').style.opacity = '1';
             }, 2500);
         });
 
@@ -211,9 +243,10 @@
             element.classList.add('active');
         }
 
-        function setActive(el) {
+        function setActive(el, page) {
             document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
             el.classList.add('active');
+            console.log("Navigating to: " + page);
         }
     </script>
 </body>
