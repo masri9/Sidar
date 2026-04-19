@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sidarapp - Interactive Details</title>
+    <title>Sidarapp - Stacked Cards Focus</title>
     
     <style>
         :root {
             --primary-lava: #ff4500; 
             --lava-glow: rgba(255, 69, 0, 0.4); 
+            --lava-intense-glow: rgba(255, 69, 0, 0.8); 
             --text-main: #0f172a; 
         }
 
@@ -27,27 +28,49 @@
             z-index: 9999;
             transition: opacity 0.5s ease;
         }
-        .splash-image { width: 180px; }
+        .splash-image { width: 180px; filter: drop-shadow(0 0 15px var(--lava-intense-glow)); }
 
         /* --- Hero Background --- */
         .header-bg {
             position: absolute; top: 0; left: 0; right: 0; height: 55vh;
-            background-size: cover; background-position: center; z-index: 0;
+            background-size: cover; background-position: center;
+            z-index: 0;
         }
         .header-bg::before {
-            content: ''; position: absolute; inset: 0;
+            content: '';
+            position: absolute; inset: 0;
             background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.4) 100%);
         }
 
         .app-container {
             position: relative; z-index: 1;
             padding: 60px 20px 120px; box-sizing: border-box;
+            background: transparent;
         }
 
         .hero-title { font-size: 34px; font-weight: 800; line-height: 1.1; color: var(--text-main); margin-bottom: 25px; }
         .hero-title span { color: var(--primary-lava); }
 
-        /* --- Stacked Cards Section --- */
+        .search-wrapper {
+            background: rgba(255,255,255,0.9); backdrop-filter: blur(15px);
+            border-radius: 20px; padding: 12px 18px; display: flex; align-items: center;
+            border: 2px solid var(--primary-lava); margin-bottom: 25px;
+        }
+        .search-wrapper input { flex: 1; border: none; background: transparent; outline: none; padding-left: 10px; font-size: 16px; width: 100%; }
+
+        .services-scroll-container {
+            display: flex; gap: 10px; overflow-x: auto; padding-bottom: 25px; scrollbar-width: none;
+        }
+        .services-scroll-container::-webkit-scrollbar { display: none; }
+        .service-pill {
+            display: flex; align-items: center; background: #ffffff; border: 1.5px solid #f1f5f9;
+            padding: 8px 16px; border-radius: 50px; flex-shrink: 0; transition: 0.3s;
+        }
+        .service-pill.active { border-color: var(--primary-lava); color: var(--primary-lava); background: rgba(255, 69, 0, 0.05); }
+
+        /* ---------------------------------------------------------
+           ✨ Stacked Cards Section ✨
+        --------------------------------------------------------- */
         .stacked-cards-wrapper {
             position: relative; width: 100%; height: 320px;
             display: flex; justify-content: center; align-items: center;
@@ -60,32 +83,30 @@
             transition: all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1); 
             display: flex; align-items: flex-end; justify-content: center;
             padding-bottom: 25px; box-shadow: 0 12px 25px rgba(0,0,0,0.15);
-            opacity: 0; pointer-events: none;
+            opacity: 0; pointer-events: none; overflow: hidden;
+            cursor: pointer;
         }
 
-        .card-item.active { 
-            opacity: 1; transform: translateX(0) translateZ(50px) scale(1); 
-            z-index: 10; pointer-events: auto; 
-        }
-
+        .card-item.active { opacity: 1; transform: translateX(0) translateZ(50px) scale(1); z-index: 10; pointer-events: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.3); filter: blur(0); }
         .card-item.prev { opacity: 0.45; transform: translateX(-115px) translateZ(-100px) scale(0.75); z-index: 5; filter: blur(1.5px); }
         .card-item.next { opacity: 0.45; transform: translateX(115px) translateZ(-100px) scale(0.75); z-index: 5; filter: blur(1.5px); }
 
         .see-more-btn {
-            background: rgba(255, 255, 255, 0.3); backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(12px);
             color: #fff; border-radius: 50px; padding: 10px 40px;
-            font-weight: 700; font-size: 13px; border: 1px solid rgba(255,255,255,0.4);
-            cursor: pointer; transition: 0.3s;
+            font-weight: 700; font-size: 13px; border: 1px solid rgba(255,255,255,0.3);
+            text-transform: uppercase; letter-spacing: 0.5px;
         }
 
-        /* --- 🆕 بطاقة المعلومات المنبثقة (Info Card) --- */
+        /* ---------------------------------------------------------
+           🆕 التحسين الجديد: Info Overlay & Close Button
+        --------------------------------------------------------- */
         #info-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+            position: fixed; inset: 0; background: rgba(0,0,0,0.5);
             backdrop-filter: blur(8px); z-index: 2000;
-            display: flex; align-items: flex-end; /* تظهر من الأسفل */
+            display: flex; align-items: flex-end;
             visibility: hidden; opacity: 0; transition: 0.4s;
         }
-
         #info-overlay.open { visibility: visible; opacity: 1; }
 
         .info-content {
@@ -94,21 +115,21 @@
             transform: translateY(100%); transition: 0.5s cubic-bezier(0.32, 1, 0.23, 1);
             position: relative;
         }
-
         #info-overlay.open .info-content { transform: translateY(0); }
 
         .close-btn {
             position: absolute; top: 20px; right: 25px;
             width: 35px; height: 35px; background: #f1f5f9;
             border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-size: 20px; font-weight: bold; color: #64748b; cursor: pointer;
+            font-size: 22px; font-weight: bold; color: #64748b; cursor: pointer;
         }
 
-        .info-tag { color: var(--primary-lava); font-weight: 700; font-size: 14px; text-transform: uppercase; margin-bottom: 10px; display: block; }
+        .info-tag { color: var(--primary-lava); font-weight: 700; font-size: 14px; text-transform: uppercase; margin-bottom: 8px; display: block; }
         .info-title { font-size: 26px; font-weight: 800; margin: 0 0 15px 0; color: var(--text-main); }
         .info-desc { font-size: 16px; color: #64748b; line-height: 1.6; margin-bottom: 30px; }
 
-        /* --- باقي العناصر --- */
+        /* --------------------------------------------------------- */
+
         .dots-container { display: flex; justify-content: center; gap: 8px; margin-top: 20px; }
         .dot { width: 7px; height: 7px; background: #e2e8f0; border-radius: 50%; transition: 0.4s; }
         .dot.active { background: var(--primary-lava); width: 18px; border-radius: 10px; }
@@ -120,7 +141,7 @@
             padding: 8px; border: 2px solid var(--primary-lava);
             box-shadow: 0 0 20px var(--lava-glow); z-index: 1000;
         }
-        .nav-item { display: flex; align-items: center; justify-content: center; padding: 10px 15px; color: #94a3b8; border-radius: 30px; transition: 0.3s; }
+        .nav-item { display: flex; align-items: center; justify-content: center; padding: 10px 15px; color: #94a3b8; cursor: pointer; transition: 0.3s; border-radius: 30px; }
         .nav-item.active { background: rgba(255, 69, 0, 0.1); color: var(--primary-lava); }
         .nav-item span { max-width: 0; overflow: hidden; white-space: nowrap; transition: 0.3s; font-weight: 700; font-size: 14px; }
         .nav-item.active span { max-width: 80px; margin-left: 8px; }
@@ -138,6 +159,18 @@
     <div class="app-container" id="main-app" style="opacity: 0; transition: 1s;">
         <h1 class="hero-title">Where do you <br><span>wanna go?</span></h1>
 
+        <div class="search-wrapper">
+            <span>🔍</span>
+            <input type="text" placeholder="Ask Sidar AI anything...">
+        </div>
+
+        <div class="services-scroll-container">
+            <div class="service-pill" onclick="activatePill(this)"><span>🎟️ Events</span></div>
+            <div class="service-pill" onclick="activatePill(this)"><span>📶 eSIM</span></div>
+            <div class="service-pill active" onclick="activatePill(this)"><span>💱 Currency</span></div>
+            <div class="service-pill" onclick="activatePill(this)"><span>💸 Transfer</span></div>
+        </div>
+
         <div class="stacked-cards-wrapper" id="cardsWrapper">
             <div class="card-item" id="card0" onclick="showInfo(0)"><div class="see-more-btn">See More</div></div>
             <div class="card-item" id="card1" onclick="showInfo(1)"><div class="see-more-btn">See More</div></div>
@@ -151,18 +184,18 @@
     <div id="info-overlay">
         <div class="info-content">
             <div class="close-btn" onclick="closeInfo()">×</div>
-            <span class="info-tag" id="target-tag">Destination</span>
-            <h2 class="info-title" id="target-title">Discover the Place</h2>
-            <p class="info-desc" id="target-desc">This is a beautiful spot where you can enjoy the nature and spend some quality time.</p>
-            <div class="see-more-btn" style="background: var(--primary-lava); text-align: center; width: 100%; box-sizing: border-box;">Book Now</div>
+            <span class="info-tag" id="target-tag">Category</span>
+            <h2 class="info-title" id="target-title">Location Name</h2>
+            <p class="info-desc" id="target-desc">Description of the place goes here...</p>
+            <div class="see-more-btn" style="background: var(--primary-lava); text-align: center; width: 100%; border: none;">Explore Now</div>
         </div>
     </div>
 
     <nav class="bottom-nav">
-        <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg><span>Home</span></div>
-        <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path></svg><span>Map</span></div>
-        <div class="nav-item"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect></svg><span>Reels</span></div>
-        <div class="nav-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"></circle><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path></svg><span>Profile</span></div>
+        <div class="nav-item active" onclick="tab(this)"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg><span>Home</span></div>
+        <div class="nav-item" onclick="tab(this)"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg><span>Map</span></div>
+        <div class="nav-item" onclick="tab(this)"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line></svg><span>Reels</span></div>
+        <div class="nav-item" onclick="tab(this)"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg><span>Profile</span></div>
     </nav>
 
     <script>
@@ -175,18 +208,21 @@
             card3: 'https://plain-eeur-prod-public.komododecks.com/202604/19/Y6iqmUUXfwpeBLkLSY2h/image.jpg'
         };
 
-        // معلومات البطاقات
-        const CARD_DATA = [
-            { tag: "Nature", title: "Green Valley", desc: "Explore the amazing green valleys with refreshing air and stunning waterfalls." },
-            { tag: "Adventure", title: "Mount Everest", desc: "A journey for the brave. Experience the high peaks and the ultimate cold adventure." },
-            { tag: "Relax", title: "Sunset Beach", desc: "Perfect golden sands and calm waves. The best place for a peaceful evening." },
-            { tag: "Culture", title: "Ancient City", desc: "Walk through history and discover the secrets of the civilizations that lived here." }
+        // مصفوفة البيانات لكل منطقة
+        const DATA = [
+            { tag: "Natural", title: "Valley of Light", desc: "Discover the hidden beauty of the valley where the sun hits perfectly every morning." },
+            { tag: "Adventure", title: "The High Peak", desc: "For those who love heights and snow, this peak offers the best view in the region." },
+            { tag: "Peaceful", title: "Blue Shore", desc: "Relax by the crystal clear waters and enjoy the sound of the Mediterranean waves." },
+            { tag: "Heritage", title: "Stone Temple", desc: "A place built thousands of years ago, holding the secrets of ancient travelers." }
         ];
 
         function applyImages() {
             document.getElementById('splashLogo').src = MY_IMAGES.splashLogo;
             document.getElementById('heroBg').style.backgroundImage = `url('${MY_IMAGES.heroBackground}')`;
-            for(let i=0; i<4; i++) document.getElementById(`card${i}`).style.backgroundImage = `url('${MY_IMAGES[`card${i}`]}')`;
+            document.getElementById('card0').style.backgroundImage = `url('${MY_IMAGES.card0}')`;
+            document.getElementById('card1').style.backgroundImage = `url('${MY_IMAGES.card1}')`;
+            document.getElementById('card2').style.backgroundImage = `url('${MY_IMAGES.card2}')`;
+            document.getElementById('card3').style.backgroundImage = `url('${MY_IMAGES.card3}')`;
         }
 
         let currentIndex = 0;
@@ -209,12 +245,12 @@
             document.querySelectorAll('.dot').forEach((dot, i) => dot.classList.toggle('active', i === currentIndex));
         }
 
-        // 🆕 وظائف عرض وإغلاق المعلومات
+        // وظائف التحكم في بطاقة المعلومات
         function showInfo(index) {
-            const data = CARD_DATA[index];
-            document.getElementById('target-tag').innerText = data.tag;
-            document.getElementById('target-title').innerText = data.title;
-            document.getElementById('target-desc').innerText = data.desc;
+            const item = DATA[index];
+            document.getElementById('target-tag').innerText = item.tag;
+            document.getElementById('target-title').innerText = item.title;
+            document.getElementById('target-desc').innerText = item.desc;
             document.getElementById('info-overlay').classList.add('open');
         }
 
@@ -234,13 +270,23 @@
             }, 2000);
         });
 
+        // يتوقف المؤقت إذا كانت البطاقة مفتوحة
         setInterval(() => { 
-            if (!document.getElementById('info-overlay').classList.contains('open')) {
+            if(!document.getElementById('info-overlay').classList.contains('open')) {
                 currentIndex = (currentIndex + 1) % cards.length; 
                 updateCards(); 
             }
         }, 4000);
 
+        function activatePill(el) {
+            document.querySelectorAll('.service-pill').forEach(p => p.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        function tab(el) {
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            el.classList.add('active');
+        }
     </script>
 </body>
 </html>
