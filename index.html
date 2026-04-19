@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sidarapp - Clear Hero Edition</title>
+    <title>Sidarapp - Stacked Cards Edition</title>
     
     <style>
         :root {
@@ -18,6 +18,7 @@
             font-family: 'Segoe UI', Roboto, sans-serif;
             background: #fff;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
         /* --- Splash Screen --- */
@@ -27,179 +28,130 @@
             z-index: 9999;
             transition: opacity 0.5s ease;
         }
-        .splash-image { 
-            width: 180px; 
-            filter: drop-shadow(0 0 15px var(--lava-intense-glow)); 
-            animation: splashEntrance 1.5s ease-out forwards, pulseGlow 2.5s infinite 1.5s; 
-        }
-        @keyframes pulseGlow {
-            0%, 100% { filter: drop-shadow(0 0 10px var(--lava-glow)); transform: scale(1); }
-            50% { filter: drop-shadow(0 0 25px var(--lava-intense-glow)); transform: scale(1.03); }
-        }
-        @keyframes splashEntrance { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        .splash-image { width: 180px; filter: drop-shadow(0 0 15px var(--lava-intense-glow)); }
 
-        /* --- Hero Background (تم التعديل لتقليل البياض) --- */
+        /* --- Hero Background --- */
         .header-bg {
             position: absolute; top: 0; left: 0; right: 0; height: 50vh;
             background: 
                 linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), 
                 url('https://plain-eeur-prod-public.komododecks.com/202604/19/FtJXvAZvXREKew6PJ3ew/image.png');
-            background-size: cover; 
-            background-position: center;
+            background-size: cover; background-position: center;
             z-index: 0;
-            filter: saturate(1.2); /* زيادة التشبع لإبراز الألوان */
         }
 
         .app-container {
             position: relative; z-index: 1;
             padding: 60px 20px 120px; box-sizing: border-box;
-            /* تم جعل الخلفية شفافة تماماً في الأعلى لتظهر الصورة */
-            background: transparent; 
-            border-radius: 40px 40px 0 0;
-            margin-top: 0;
+            background: transparent;
         }
 
-        /* --- Hero Text --- */
-        .hero-title { 
-            font-size: 34px; font-weight: 800; line-height: 1.1; color: var(--text-main); 
-            margin-bottom: 25px; margin-top: 10px;
-            text-shadow: 0 2px 10px rgba(255,255,255,0.5); /* حماية النص فوق الصورة */
-        }
-        .hero-title span { 
-            color: var(--primary-lava); 
-            text-shadow: 0 0 15px rgba(255, 69, 0, 0.2);
-        }
+        /* --- Hero Text & Search --- */
+        .hero-title { font-size: 34px; font-weight: 800; line-height: 1.1; color: var(--text-main); margin-bottom: 25px; }
+        .hero-title span { color: var(--primary-lava); }
 
-        /* --- Search Bar --- */
         .search-wrapper {
             background: rgba(255,255,255,0.95); backdrop-filter: blur(10px);
             border-radius: 20px; padding: 12px 18px; display: flex; align-items: center;
-            border: 2px solid var(--primary-lava); 
-            box-shadow: 0 0 15px var(--lava-glow), 0 10px 30px rgba(0,0,0,0.05);
-            margin-bottom: 25px;
+            border: 2px solid var(--primary-lava); margin-bottom: 25px;
         }
-        .search-wrapper input { flex: 1; border: none; background: transparent; outline: none; padding-left: 10px; font-size: 16px; font-weight: 500; }
-        .search-wrapper span { color: var(--primary-lava); }
+        .search-wrapper input { flex: 1; border: none; background: transparent; outline: none; padding-left: 10px; font-size: 16px; }
 
         /* --- Scrolling Pill Services --- */
         .services-scroll-container {
-            width: 100%;
-            overflow-x: auto;
-            padding: 5px 0 15px;
-            display: flex;
-            gap: 10px;
-            scrollbar-width: none; 
-            -ms-overflow-style: none;
-            margin-bottom: 25px;
+            display: flex; gap: 10px; overflow-x: auto; padding-bottom: 25px; scrollbar-width: none;
         }
         .services-scroll-container::-webkit-scrollbar { display: none; }
-
         .service-pill {
-            display: flex;
-            align-items: center;
-            background: #ffffff;
-            border: 1.5px solid #f1f5f9;
-            padding: 8px 16px;
-            border-radius: 50px;
-            flex-shrink: 0;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-            cursor: pointer;
-            -webkit-tap-highlight-color: transparent;
+            display: flex; align-items: center; background: #ffffff; border: 1.5px solid #f1f5f9;
+            padding: 8px 16px; border-radius: 50px; flex-shrink: 0; transition: 0.3s;
         }
+        .service-pill.active { border-color: var(--primary-lava); color: var(--primary-lava); background: rgba(255, 69, 0, 0.05); }
 
-        .service-pill.active {
-            border-color: var(--primary-lava);
-            background: rgba(255, 69, 0, 0.05);
-            box-shadow: 0 4px 15px var(--lava-glow);
-            transform: scale(0.95);
-        }
-
-        .service-pill.active .pill-label { color: var(--primary-lava); }
-        .pill-icon { font-size: 18px; margin-right: 8px; }
-        .pill-label { color: #1e293b; font-weight: 600; font-size: 13px; white-space: nowrap; transition: 0.3s; }
-
-        /* --- Auto-Scrolling Travel Cards --- */
-        .travel-cards-container {
+        /* --- 🆕 Stacked Cards Section (كما في الصورة) --- */
+        .stacked-cards-wrapper {
             position: relative;
             width: 100%;
-            max-width: 360px; 
-            margin: 0 auto;
-            overflow: hidden;
-            border-radius: 30px;
-            aspect-ratio: 1/1; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-
-        .cards-scroller {
+            height: 320px;
             display: flex;
-            width: 400%; 
-            height: 100%;
-            transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1); 
+            justify-content: center;
+            align-items: center;
+            perspective: 1000px; /* لإعطاء بعد ثالث */
+            margin-top: 10px;
         }
 
-        .travel-card {
-            width: 25%; 
-            height: 100%;
+        .card-item {
+            position: absolute;
+            width: 260px; /* عرض البطاقة الرئيسية */
+            height: 300px;
+            border-radius: 30px;
             background-size: cover;
             background-position: center;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             align-items: flex-end;
             justify-content: center;
-            position: relative;
+            padding-bottom: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            opacity: 0;
+            pointer-events: none;
         }
 
+        /* حالة البطاقة النشطة (في المنتصف) */
+        .card-item.active {
+            opacity: 1;
+            transform: translateX(0) scale(1);
+            z-index: 10;
+            pointer-events: auto;
+        }
+
+        /* حالة البطاقة السابقة (على اليسار ومتداخلة) */
+        .card-item.prev {
+            opacity: 0.6;
+            transform: translateX(-100px) scale(0.85);
+            z-index: 5;
+        }
+
+        /* حالة البطاقة التالية (على اليمين ومتداخلة) */
+        .card-item.next {
+            opacity: 0.6;
+            transform: translateX(100px) scale(0.85);
+            z-index: 5;
+        }
+
+        /* زر See More الزجاجي */
         .see-more-btn {
-            position: absolute;
-            bottom: 20px;
-            background: rgba(0, 0, 0, 0.65);
-            backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
             color: #fff;
             border-radius: 50px;
-            padding: 10px 40px;
+            padding: 10px 45px;
             font-weight: 700;
             font-size: 14px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.2);
             cursor: pointer;
-            z-index: 10;
         }
 
-        .pagination-dots {
+        /* نقاط التنقيل تحت البطاقة مباشرة */
+        .dots-container {
             display: flex;
             justify-content: center;
-            margin-top: 15px;
-            gap: 6px;
+            gap: 8px;
+            margin-top: 20px;
         }
-
-        .dot {
-            width: 8px; height: 8px;
-            border-radius: 50%;
-            background: #e2e8f0;
-            transition: 0.3s;
-        }
-
-        .dot.active {
-            background: #000;
-        }
+        .dot { width: 8px; height: 8px; background: #e2e8f0; border-radius: 50%; transition: 0.3s; }
+        .dot.active { background: #000; width: 12px; border-radius: 10px; }
 
         /* --- Bottom Nav --- */
         .bottom-nav {
             position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            width: 90%; max-width: 400px; 
-            background: #ffffff; border-radius: 40px;
-            display: flex; justify-content: space-around; align-items: center;
-            padding: 8px; 
-            border: 2px solid var(--primary-lava);
-            box-shadow: 0 0 20px var(--lava-glow);
-            z-index: 1000;
+            width: 90%; max-width: 400px; background: #fff; border-radius: 40px;
+            display: flex; justify-content: space-around; padding: 8px; border: 2px solid var(--primary-lava);
+            box-shadow: 0 0 20px var(--lava-glow); z-index: 1000;
         }
-        .nav-item { 
-            display: flex; align-items: center; justify-content: center; 
-            padding: 10px 15px; color: #94a3b8; cursor: pointer; transition: 0.3s;
-            border-radius: 30px;
-        }
+        .nav-item { color: #94a3b8; display: flex; align-items: center; padding: 10px; transition: 0.3s; border-radius: 30px; }
         .nav-item.active { background: rgba(255, 69, 0, 0.1); color: var(--primary-lava); }
-        .nav-item span { max-width: 0; overflow: hidden; white-space: nowrap; transition: 0.3s; font-weight: 700; font-size: 14px; }
+        .nav-item span { max-width: 0; overflow: hidden; transition: 0.3s; font-weight: 700; }
         .nav-item.active span { max-width: 80px; margin-left: 8px; }
         .nav-item svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2.2; }
 
@@ -220,106 +172,87 @@
         <div class="search-wrapper">
             <span>🔍</span>
             <input type="text" placeholder="Ask Sidar AI anything...">
-            <span style="font-size: 20px;">🎤</span>
         </div>
 
         <div class="services-scroll-container">
-            <div class="service-pill" onclick="activatePill(this)">
-                <span class="pill-icon">🎟️</span>
-                <span class="pill-label">Events</span>
-            </div>
-            <div class="service-pill" onclick="activatePill(this)">
-                <span class="pill-icon">📶</span>
-                <span class="pill-label">eSIM</span>
-            </div>
-            <div class="service-pill active" onclick="activatePill(this)">
-                <span class="pill-icon">💱</span>
-                <span class="pill-label">Currency</span>
-            </div>
-            <div class="service-pill" onclick="activatePill(this)">
-                <span class="pill-icon">💸</span>
-                <span class="pill-label">Transfer</span>
-            </div>
-            <div class="service-pill" onclick="activatePill(this)">
-                <span class="pill-icon">✈️</span>
-                <span class="pill-label">Flights</span>
-            </div>
+            <div class="service-pill" onclick="activatePill(this)"><span class="pill-icon">🎟️</span><span class="pill-label">Events</span></div>
+            <div class="service-pill" onclick="activatePill(this)"><span class="pill-icon">📶</span><span class="pill-label">eSIM</span></div>
+            <div class="service-pill active" onclick="activatePill(this)"><span class="pill-icon">💱</span><span class="pill-label">Currency</span></div>
+            <div class="service-pill" onclick="activatePill(this)"><span class="pill-icon">💸</span><span class="pill-label">Transfer</span></div>
         </div>
 
-        <div class="travel-cards-container">
-            <div class="cards-scroller" id="cardsScroller">
-                <div class="travel-card" style="background-image: url('https://image_generation_content/4')">
-                    <div class="see-more-btn">See More</div>
-                </div>
-                <div class="travel-card" style="background-image: url('https://image_generation_content/5')">
-                    <div class="see-more-btn">See More</div>
-                </div>
-                <div class="travel-card" style="background-image: url('https://image_generation_content/6')">
-                    <div class="see-more-btn">See More</div>
-                </div>
-                <div class="travel-card" style="background-image: url('https://image_generation_content/7')">
-                    <div class="see-more-btn">See More</div>
-                </div>
-            </div>
+        <div class="stacked-cards-wrapper" id="cardsWrapper">
+            <div class="card-item" style="background-image: url('https://image_generation_content/4')"><div class="see-more-btn">See More</div></div>
+            <div class="card-item" style="background-image: url('https://image_generation_content/5')"><div class="see-more-btn">See More</div></div>
+            <div class="card-item" style="background-image: url('https://image_generation_content/6')"><div class="see-more-btn">See More</div></div>
+            <div class="card-item" style="background-image: url('https://image_generation_content/7')"><div class="see-more-btn">See More</div></div>
         </div>
 
-        <div class="pagination-dots">
-            <div class="dot active"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-        </div>
+        <div class="dots-container" id="dotsContainer"></div>
 
     </div>
 
     <nav class="bottom-nav">
-        <div class="nav-item active" onclick="tab(this)">
-            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
-            <span>Home</span>
-        </div>
-        <div class="nav-item" onclick="tab(this)">
-            <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-            <span>Map</span>
-        </div>
-        <div class="nav-item" onclick="tab(this)">
-            <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
-            <span>Reels</span>
-        </div>
-        <div class="nav-item" onclick="tab(this)">
-            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-            <span>Profile</span>
-        </div>
+        <div class="nav-item active" onclick="tab(this)"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg><span>Home</span></div>
+        <div class="nav-item" onclick="tab(this)"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path></svg><span>Map</span></div>
+        <div class="nav-item" onclick="tab(this)"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect></svg><span>Reels</span></div>
     </nav>
 
     <script>
+        // التحكم في السكرين سبلاش
         window.addEventListener('load', () => {
             setTimeout(() => {
                 document.getElementById('splash-screen').style.opacity = '0';
                 setTimeout(() => {
                     document.getElementById('splash-screen').style.display = 'none';
                     document.getElementById('main-app').style.opacity = '1';
+                    updateCards(); 
                 }, 500);
             }, 2500);
         });
+
+        // نظام البطاقات المتداخلة
+        let currentIndex = 0;
+        const cards = document.querySelectorAll('.card-item');
+        const dotsContainer = document.getElementById('dotsContainer');
+
+        // إنشاء النقاط
+        cards.forEach((_, i) => {
+            const dot = document.createElement('div');
+            dot.className = `dot ${i === 0 ? 'active' : ''}`;
+            dotsContainer.appendChild(dot);
+        });
+
+        function updateCards() {
+            cards.forEach((card, i) => {
+                card.classList.remove('active', 'prev', 'next');
+                
+                if (i === currentIndex) {
+                    card.classList.add('active');
+                } else if (i === (currentIndex - 1 + cards.length) % cards.length) {
+                    card.classList.add('prev');
+                } else if (i === (currentIndex + 1) % cards.length) {
+                    card.classList.add('next');
+                }
+            });
+
+            // تحديث النقاط
+            const dots = document.querySelectorAll('.dot');
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentIndex);
+            });
+        }
+
+        // تحريك تلقائي كل 4 ثوانٍ
+        setInterval(() => {
+            currentIndex = (currentIndex + 1) % cards.length;
+            updateCards();
+        }, 4000);
 
         function activatePill(el) {
             document.querySelectorAll('.service-pill').forEach(p => p.classList.remove('active'));
             el.classList.add('active');
         }
-
-        const scroller = document.getElementById('cardsScroller');
-        const dots = document.querySelectorAll('.dot');
-        let currentIndex = 0;
-        const totalCards = 4;
-
-        function scrollCards() {
-            currentIndex = (currentIndex + 1) % totalCards;
-            scroller.style.transform = `translateX(-${currentIndex * 25}%)`;
-            dots.forEach(dot => dot.classList.remove('active'));
-            dots[currentIndex].classList.add('active');
-        }
-
-        setInterval(scrollCards, 5000);
 
         function tab(el) {
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
