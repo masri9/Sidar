@@ -9,8 +9,8 @@
             --primary-blue: #2563eb;
             --light-blue: #dbeafe;
             --nav-bg: rgba(255, 255, 255, 0.95);
-            /* تدرج ألوان احترافي للنص */
-            --text-gradient: linear-gradient(135deg, #ffffff 0%, #dbeafe 100%);
+            /* لون خط أسود غني وجديد */
+            --text-main-color: #0f172a; 
         }
 
         body, html { 
@@ -42,10 +42,10 @@
             background-size: cover; background-position: center;
         }
         
-        /* تظليل الخلفية لبروز النص */
+        /* تظليل الخلفية المخفف جداً */
         .background-overlay {
             position: fixed; inset: 0; z-index: -1;
-            background: rgba(0, 0, 0, 0.3); /* تظليل أعمق قليلاً */
+            background: rgba(255, 255, 255, 0.1); /* شفاف جداً لتبقى الخلفية واضحة */
         }
 
         .app-container {
@@ -61,35 +61,36 @@
             display: flex;
             align-items: center;
             justify-content: flex-start;
-            margin-bottom: 10px;
+            margin-bottom: 5px; /* مسافة أقل لرفع المحتوى */
         }
 
         .menu-icon {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             padding: 12px;
             border-radius: 16px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
             cursor: pointer;
             transition: transform 0.2s ease;
+            border: 1px solid rgba(0,0,0,0.05);
         }
         .menu-icon:active { transform: scale(0.9); }
 
-        /* --- المحتوى الرئيسي (النص الاحترافي) --- */
+        /* --- المحتوى الرئيسي (النص الجديد) --- */
         .main-content {
             flex: 1;
             display: flex;
             flex-direction: column;
             justify-content: flex-start; 
             align-items: center;
-            padding-top: 80px; /* مسافة متناسبة من الأعلى */
+            padding-top: 50px; /* تم تقليله لرفع النص للأعلى */
             text-align: center;
         }
 
         .hero-text-container {
-            width: 85%; /* تحديد العرض ليصبح النص على سطرين متساويين */
+            width: 85%;
             max-width: 450px;
             opacity: 0;
-            transform: translateY(30px);
+            transform: translateY(20px);
             animation: textSlideUp 1s ease-out 2.8s forwards;
         }
 
@@ -98,38 +99,34 @@
         }
 
         .hero-full-title {
-            font-size: 36px; /* حجم كبير وموحد */
+            font-size: 36px;
             font-weight: 800;
-            line-height: 1.25; /* مسافة بين السطرين */
+            line-height: 1.25;
             margin: 0;
             
-            /* تطبيق التدرج اللوني للنص */
-            background: var(--text-gradient);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            color: transparent; /* Fallback */
-
-            /* تظليل النص الاحترافي */
-            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            /* اللون الأسود الجديد وتأثيراته */
+            color: var(--text-main-color);
+            /* تظليل خفيف جداً خلف الأسود لضمان البروز */
+            text-shadow: 0 2px 4px rgba(255, 255, 255, 0.5); 
             
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             align-items: center;
-            gap: 10px 15px; /* مسافة بين الكلمات والشعار */
+            gap: 10px 15px;
         }
 
-        /* تنسيق الشعار في نهاية الجملة */
+        /* تنسيق الشعار */
         .inline-logo {
-            height: 38px; /* حجم متناسق تماماً مع الخط */
+            height: 38px;
             width: auto;
             vertical-align: middle;
-            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.4));
+            /* ظل داكن خلف الشعار لبروزه */
+            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.2));
             transition: transform 0.3s ease;
         }
         .hero-full-title:hover .inline-logo {
-            transform: scale(1.1); /* حركة بسيطة عند التمرير */
+            transform: scale(1.08);
         }
 
         /* --- شريط التنقل السفلي --- */
@@ -145,11 +142,11 @@
             -webkit-backdrop-filter: blur(25px);
             padding: 8px 12px;
             border-radius: 30px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             display: flex;
             justify-content: space-around;
             align-items: center;
-            border: 1px solid rgba(255,255,255,0.3);
+            border: 1px solid rgba(0,0,0,0.03);
             z-index: 100;
         }
 
@@ -179,7 +176,7 @@
         
         <header class="header">
             <div class="menu-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1e293b" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
             </div>
         </header>
 
