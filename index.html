@@ -18,7 +18,7 @@
             font-family: 'Segoe UI', Roboto, sans-serif;
             overflow: hidden;
             height: 100vh;
-            background-color: white;
+            background-color: white; /* باقي الصفحة أبيض صافي */
         }
 
         /* --- شاشة الـ Splash --- */
@@ -35,14 +35,15 @@
             100% { transform: scale(1); opacity: 1; filter: blur(0); }
         }
 
-        /* --- الربع الأول: صورة الهيرو مع التلاشي --- */
+        /* --- الربع الأول: صورة الـ Hero مع التلاشي --- */
         .hero-background {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            height: 45vh; 
+            height: 45vh; /* يغطي الربع الأول مع مساحة للتلاشي التدريجي */
             z-index: -1;
+            /* تأثير التلاشي (Fade) لدمج الصورة مع البياض */
             background: linear-gradient(to bottom, 
                 transparent 70%, 
                 white 100%), 
@@ -61,7 +62,7 @@
             z-index: 10;
         }
 
-        /* --- الهيدر (الشعار على اليسار والجرس على اليمين) --- */
+        /* --- الهيدر (الشعار يسار، الجرس يمين) --- */
         .header { 
             display: flex; 
             justify-content: space-between; 
@@ -73,7 +74,7 @@
             width: 45px;
             height: 45px;
             border-radius: 12px;
-            object-fit: contain; /* للحفاظ على أبعاد الشعار */
+            object-fit: contain;
         }
 
         .notif-icon { 
@@ -86,7 +87,7 @@
             justify-content: center;
         }
 
-        /* --- شريط التنقل السفلي --- */
+        /* --- شريط التنقل السفلي المثبت --- */
         .bottom-nav-container {
             position: absolute;
             bottom: 30px;
@@ -162,6 +163,7 @@
     </div>
 
     <script>
+        // إخفاء الـ Splash بعد التحميل
         window.addEventListener('load', () => {
             setTimeout(() => {
                 const splash = document.getElementById('splash-screen');
@@ -172,6 +174,7 @@
             }, 2500);
         });
 
+        // تفعيل عناصر شريط التنقل
         function setActive(el) {
             document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
             el.classList.add('active');
