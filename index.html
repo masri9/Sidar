@@ -3,212 +3,217 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sidarapp - Fixed UI</title>
+    <title>Sidarapp - Fixed Professional</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
     <style>
         :root {
             --primary-blue: #2563eb;
-            --accent-blue: #3b82f6;
-            --text-main: #0f172a;
+            --light-blue-bg: #eef2ff;
+            --text-main: #0f172a; 
+            --accent-blue: #3b82f6; 
         }
 
-        /* تثبيت الهيكل ومنع الحركة الجانبية */
         body, html { 
             margin: 0; padding: 0;
             font-family: 'Segoe UI', Roboto, sans-serif;
-            background: #ffffff;
+            overflow: hidden; /* تثبيت الهيكل الرئيسي */
             height: 100vh;
-            width: 100vw;
-            overflow: hidden; /* منع السكرول الرئيسي للهيكل */
-            position: relative;
+            background: #fff;
         }
 
-        /* الخلفية الثابتة */
+        /* --- Splash Screen --- */
+        #splash-screen {
+            position: fixed; inset: 0; background: #ffffff;
+            display: flex; justify-content: center; align-items: center;
+            z-index: 9999;
+        }
+        .splash-image { width: 160px; animation: splashEntrance 1.5s ease-out forwards; }
+        @keyframes splashEntrance { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+
+        /* --- Background Header --- */
         .header-bg {
             position: absolute; top: 0; left: 0; right: 0; height: 45vh;
             background: linear-gradient(rgba(255,255,255,0.1), #fff), 
                         url('https://plain-eeur-prod-public.komododecks.com/202604/19/FtJXvAZvXREKew6PJ3ew/image.png');
             background-size: cover; background-position: center;
-            z-index: -1;
+            z-index: 0;
         }
 
-        /* الحاوية الرئيسية القابلة للتمرير عمودياً فقط */
-        .app-scroller {
-            height: 100vh;
-            overflow-y: auto;
-            overflow-x: hidden; /* تأكيد عدم وجود حركة يمين شمال */
-            padding: 25px 20px 120px;
-            box-sizing: border-box;
+        /* --- Main Scroller (لضمان عدم اهتزاز الصفحة) --- */
+        .app-container {
+            position: relative; z-index: 1;
+            height: 100vh; overflow-y: auto; overflow-x: hidden;
+            padding: 20px 20px 120px; box-sizing: border-box;
+            scrollbar-width: none;
         }
+        .app-container::-webkit-scrollbar { display: none; }
 
-        /* الهيدر */
-        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .menu-btn { background: white; padding: 10px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        .profile-img { width: 42px; height: 42px; border-radius: 12px; background: url('https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80') center/cover; border: 2px solid white; }
+        /* --- Top Nav --- */
+        .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .menu-icon { background: white; padding: 10px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .profile-img { width: 42px; height: 42px; border-radius: 12px; border: 2px solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
 
         .hero-title { font-size: 34px; font-weight: 800; line-height: 1.1; color: var(--text-main); margin-bottom: 25px; }
         .hero-title span { color: var(--primary-blue); }
 
-        /* AI Chat Box */
-        .ai-chat-box {
-            background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(15px);
-            border-radius: 20px; padding: 12px 15px; display: flex; align-items: center;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.05); margin-bottom: 25px;
-            border: 1px solid rgba(255,255,255,0.5);
+        /* --- Search Bar --- */
+        .search-wrapper {
+            background: rgba(255,255,255,0.85); backdrop-filter: blur(15px);
+            border-radius: 20px; padding: 12px 18px; display: flex; align-items: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 30px;
         }
-        .ai-chat-box input { flex: 1; border: none; background: transparent; outline: none; padding: 0 10px; font-weight: 600; }
+        .search-wrapper input { flex: 1; border: none; background: transparent; outline: none; padding-left: 10px; font-size: 16px; font-weight: 500; }
 
-        /* الخدمات */
-        .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
-        .service-item {
-            background: rgba(255,255,255,0.6); border-radius: 20px; padding: 15px 5px;
-            display: flex; flex-direction: column; align-items: center; transition: 0.3s;
-            border: 1px solid transparent;
+        /* --- Services Grid --- */
+        .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 30px; }
+        .service-card {
+            background: rgba(255,255,255,0.6); border-radius: 22px; padding: 15px 5px;
+            display: flex; flex-direction: column; align-items: center;
+            border: 1px solid rgba(255,255,255,0.4); transition: 0.3s;
         }
-        .service-item.active { background: white; border-color: var(--primary-blue); transform: scale(1.02); }
-        .icon-box { font-size: 22px; margin-bottom: 5px; }
-        .service-item span { font-size: 12px; font-weight: 700; color: #64748b; }
+        .service-card.active { background: white; border-color: var(--primary-blue); transform: translateY(-3px); }
+        .icon-circle { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
 
-        /* منطقة الـ Widget */
-        #widget-area {
+        /* --- Widget Area --- */
+        #widget-display {
             background: white; border-radius: 25px; padding: 20px; margin-bottom: 30px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.05); display: none;
-            animation: fadeIn 0.4s ease;
+            animation: slideUp 0.4s ease;
         }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- Carousel (البطاقات المتداخلة كما في الصورة) --- */
-        .carousel-section { width: 100%; margin-top: 20px; text-align: left; }
-        .carousel-section h2 { font-size: 22px; font-weight: 800; margin-bottom: 15px; padding-left: 5px; }
-        
-        .carousel-container {
+        /* --- Professional Carousel (كما في الصورة) --- */
+        .carousel-title { font-size: 20px; font-weight: 800; margin-bottom: 15px; color: var(--text-main); }
+        .carousel-wrapper {
             display: flex; align-items: center; justify-content: center;
-            gap: 15px; padding: 10px 0; perspective: 1000px;
+            gap: 15px; perspective: 1000px;
         }
-
         .card {
-            width: 180px; height: 260px; border-radius: 30px;
-            position: relative; overflow: hidden; transition: 0.5s ease;
+            width: 170px; height: 240px; border-radius: 28px;
+            overflow: hidden; position: relative; transition: 0.5s ease;
             box-shadow: 0 15px 35px rgba(0,0,0,0.1);
         }
-
-        /* البطاقة الجانبية (أصغر ومائلة قليلاً) */
         .card.side { transform: scale(0.85); opacity: 0.6; filter: blur(1px); }
-        
-        /* البطاقة الوسطى (أكبر وأوضح) */
-        .card.main { width: 220px; height: 300px; z-index: 10; transform: scale(1.05); opacity: 1; }
-
+        .card.main { width: 210px; height: 280px; z-index: 10; transform: scale(1.05); }
         .card img { width: 100%; height: 100%; object-fit: cover; }
         .card-btn {
             position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
-            background: rgba(0,0,0,0.7); color: white; border: none;
-            padding: 8px 20px; border-radius: 20px; font-size: 12px; font-weight: 600;
+            background: #000; color: #fff; border: none; padding: 10px 22px;
+            border-radius: 25px; font-size: 13px; font-weight: 600;
         }
 
-        /* Navigation */
+        /* --- Bottom Nav (مطابق للصورة تماماً) --- */
         .bottom-nav {
-            position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
-            width: 90%; max-width: 400px; background: white; border-radius: 40px;
-            display: flex; justify-content: space-between; padding: 10px 15px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1); z-index: 1000;
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 400px; background: #fff; border-radius: 50px;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 8px 12px; box-shadow: 0 15px 40px rgba(0,0,0,0.08); z-index: 1000;
         }
-        .nav-item { display: flex; align-items: center; padding: 10px 18px; color: #94a3b8; text-decoration: none; }
-        .nav-item.active { background: #eef2ff; color: #2563eb; border-radius: 30px; }
-        .nav-item span { display: none; margin-left: 8px; font-weight: 700; }
+        .nav-item { display: flex; align-items: center; padding: 12px 20px; color: #94a3b8; cursor: pointer; transition: 0.3s; }
+        .nav-item.active { background: var(--light-blue-bg); color: var(--primary-blue); border-radius: 35px; }
+        .nav-item span { display: none; margin-left: 10px; font-weight: 700; font-size: 15px; }
         .nav-item.active span { display: inline; }
+        .nav-item svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2.2; }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
+    <div id="splash-screen"><img src="https://plain-eeur-prod-public.komododecks.com/202604/19/y0zyi6uOKg2CaNATvHPZ/image.png" class="splash-image"></div>
+
     <div class="header-bg"></div>
 
-    <div class="app-scroller">
-        <div class="top-bar">
-            <div class="menu-btn">☰</div>
-            <div class="profile-img"></div>
+    <div class="app-container" id="main-app" style="opacity: 0; transition: 1s;">
+        <div class="top-nav">
+            <div class="menu-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+            <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100" class="profile-img">
         </div>
 
         <h1 class="hero-title">Where do you <br><span>wanna go?</span></h1>
 
-        <div class="ai-chat-box">
-            <span style="font-size: 18px;">✨</span>
-            <input type="text" placeholder="Ask Sidar AI...">
-            <span style="color: var(--primary-blue);">🎤</span>
+        <div class="search-wrapper">
+            <span>🔍</span>
+            <input type="text" placeholder="Ask Sidar AI anything...">
+            <span style="color: var(--primary-blue)">🎤</span>
         </div>
 
         <div class="services-grid">
-            <div class="service-item" onclick="openWidget('eSIM', this)">
-                <div class="icon-box">🌐</div>
+            <div class="service-card" onclick="openWidget('eSIM', this)">
+                <div class="icon-circle" style="background: #e0e7ff">🌐</div>
                 <span>eSIM</span>
             </div>
-            <div class="service-item" onclick="openWidget('Events', this)">
-                <div class="icon-box">🎟️</div>
+            <div class="service-card" onclick="openWidget('Events', this)">
+                <div class="icon-circle" style="background: #ffedd5">🎟️</div>
                 <span>Events</span>
             </div>
-            <div class="service-item" onclick="openWidget('Change', this)">
-                <div class="icon-box">💱</div>
+            <div class="service-card" onclick="openWidget('Change', this)">
+                <div class="icon-circle" style="background: #dcfce7">💱</div>
                 <span>Change</span>
             </div>
         </div>
 
-        <div id="widget-area">
+        <div id="widget-display">
             <h3 id="w-title" style="margin:0 0 10px 0; color: var(--primary-blue);"></h3>
-            <div id="w-content" style="font-size: 14px; color: #64748b;">Loading script...</div>
+            <div id="w-body" style="font-size: 14px; color: #64748b;">Loading specialized content...</div>
         </div>
 
         <div class="carousel-section">
-            <h2>Recommended</h2>
-            <div class="carousel-container" id="carousel">
-                <div class="card side">
-                    <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=300">
-                </div>
+            <h2 class="carousel-title">Recommended</h2>
+            <div class="carousel-wrapper">
+                <div class="card side"><img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=300"></div>
                 <div class="card main">
-                    <img src="https://images.unsplash.com/photo-1506929113675-b92417bbbe8d?auto=format&fit=crop&w=400">
+                    <img src="https://images.unsplash.com/photo-1506929113675-b92417bbbe8d?w=400">
                     <button class="card-btn">See More</button>
                 </div>
-                <div class="card side">
-                    <img src="https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=300">
-                </div>
-            </div>
-            <div style="text-align:center; margin-top:15px;">
-                <span style="height:8px; width:8px; background:#ddd; border-radius:50%; display:inline-block; margin:0 3px;"></span>
-                <span style="height:8px; width:8px; background:#333; border-radius:50%; display:inline-block; margin:0 3px;"></span>
-                <span style="height:8px; width:8px; background:#ddd; border-radius:50%; display:inline-block; margin:0 3px;"></span>
+                <div class="card side"><img src="https://images.unsplash.com/photo-1519046904884-53103b34b206?w=300"></div>
             </div>
         </div>
     </div>
 
     <nav class="bottom-nav">
-        <a href="#" class="nav-item active">🏠<span>Home</span></a>
-        <a href="#" class="nav-link nav-item">🗺️<span>Map</span></a>
-        <a href="#" class="nav-link nav-item">🎬<span>Reels</span></a>
-        <a href="#" class="nav-link nav-item">👤<span>Profile</span></a>
+        <div class="nav-item active" onclick="tab(this)">
+            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+            <span>Home</span>
+        </div>
+        <div class="nav-item" onclick="tab(this)">
+            <svg viewBox="0 0 24 24"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon></svg>
+            <span>Map</span>
+        </div>
+        <div class="nav-item" onclick="tab(this)">
+            <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"></rect><path d="M10 8l6 4-6 4V8z"></path></svg>
+            <span>Reels</span>
+        </div>
+        <div class="nav-item" onclick="tab(this)">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            <span>Profile</span>
+        </div>
     </nav>
 
     <script>
-        // تثبيت الهيكل ومنع التحرك العشوائي
-        function openWidget(name, el) {
-            const area = document.getElementById('widget-area');
-            const title = document.getElementById('w-title');
-            
-            document.querySelectorAll('.service-item').forEach(i => i.classList.remove('active'));
+        // Splash logic
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('splash-screen').style.display = 'none';
+                document.getElementById('main-app').style.opacity = '1';
+            }, 2500);
+        });
+
+        // Widget Logic
+        function openWidget(type, el) {
+            document.querySelectorAll('.service-card').forEach(c => c.classList.remove('active'));
             el.classList.add('active');
-            
-            area.style.display = 'block';
-            title.innerText = name + " Service";
-            
-            // هنا يتم استدعاء الـ Script الخاص بك
-            console.log("Widget Active: " + name);
+            const box = document.getElementById('widget-display');
+            document.getElementById('w-title').innerText = type + " Service";
+            box.style.display = 'block';
+            box.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
 
-        // تحريك البطاقات تلقائياً (اختياري)
-        let cards = document.querySelectorAll('.card');
-        let index = 0;
-
-        function rotateCarousel() {
-            // منطق بسيط لتبديل الكلاسات لعمل تأثير الحركة
-            // يمكن تطويره بربطه بـ Swipe لاحقاً
+        // Navigation Tab Logic
+        function tab(el) {
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            el.classList.add('active');
         }
     </script>
 </body>
