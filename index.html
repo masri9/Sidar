@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sidarapp - Mountain Journey UI</title>
+    <title>Sidarapp - Travel UI</title>
     <style>
         :root {
-            --accent: #6c5ce7; /* لون الـ Purple النشط */
+            --accent: #6c5ce7;
             --nav-bg: #ffffff;
-            --bg-light: #f8faff; /* خلفية فاتحة جداً مريحة للعين */
+            --bg-light: #f8faff;
             --text-main: #1a1a1a;
             --text-sub: #8e8e8e;
             --esim-gradient: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
@@ -16,103 +16,84 @@
 
         body { 
             margin: 0; 
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Segoe UI', Roboto, sans-serif;
             overflow-x: hidden;
-            background-color: var(--bg-light); /* اللون الأساسي الفاتح الثابت */
+            background-color: var(--bg-light);
             position: relative;
             min-height: 100vh;
         }
 
-        /* --- 1. إعدادات خلفية الجبال المتحركة (Creative Content) --- */
-        /* الحاوية الرئيسية للخلفية المتحركة */
+        /* --- الخلفية (ثابتة كما هي) --- */
         .mountain-background-container {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 40vh; /* تغطي تقريباً الثلث السفلي من الصفحة */
-            z-index: -1; /* خلف المحتوى الأمامي الثابت */
+            height: 45vh;
+            z-index: -1;
             overflow: hidden;
-            pointer-events: none; /* لا تتفاعل مع اللمس لكي لا تعيق المحتوى */
+            pointer-events: none;
         }
 
-        /* رسم وتصميم الجبال باستخدام تدرجات ناعمة */
-        .mountains {
+        .plane-shadow {
+            position: absolute;
+            width: 80px;
+            fill: var(--accent);
+            opacity: 0.05;
+            animation: planeFly 35s linear infinite;
+        }
+
+        @keyframes planeFly {
+            0% { transform: translate(-100px, 100px) rotate(30deg); }
+            100% { transform: translate(110vw, -100px) rotate(30deg); }
+        }
+
+        .tree-layer {
             position: absolute;
             bottom: 0;
-            left: 0;
-            width: 200%; /* عرض مضاعف للسماح بالحركة الأفقية */
-            height: 100%;
-            background-image: 
-                /* طبقة الجبال القريبة (داكنة قليلاً) */
-                linear-gradient(170deg, transparent 40%, rgba(108, 92, 231, 0.08) 40%, rgba(108, 92, 231, 0.12) 100%),
-                /* طبقة الجبال البعيدة (أفتح) */
-                linear-gradient(175deg, transparent 50%, rgba(162, 155, 254, 0.05) 50%, rgba(162, 155, 254, 0.08) 100%);
-            background-size: 50% 100%; /* تكرار النمط أفقيًا */
+            width: 200%;
+            height: 150px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M20 10 L12 30 L28 30 Z' fill='%236c5ce7' fill-opacity='0.06'/%3E%3C/svg%3E");
             background-repeat: repeat-x;
-            animation: mountainMove 120s linear infinite; /* حركة بطيئة جداً وناعمة */
-            opacity: 0.8;
+            background-size: 100px;
+            animation: treeSway 8s ease-in-out infinite alternate;
         }
 
-        /* حركة الانزلاق الأفقي الناعم للجبال */
-        @keyframes mountainMove {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); } /* تتحرك نصف المسافة لتكرار النمط */
+        @keyframes treeSway {
+            from { transform: translateX(0) skewX(-1deg); }
+            to { transform: translateX(-20px) skewX(1deg); }
         }
 
-        /* --- 2. باقي العناصر الأمامية الثابتة (كما هي تماماً) --- */
         .app-container {
-            padding: 25px 20px 140px 20px; /* مسافة سفلية كافية للشريط */
+            padding: 25px 20px 140px 20px;
             position: relative;
-            z-index: 1; /* لتكون فوق الخلفية المتحركة */
+            z-index: 1;
         }
 
-        /* Header (ثابت) */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-        }
-        .greeting { font-size: 12px; color: var(--text-sub); text-transform: uppercase; font-weight: bold; letter-spacing: 1px; }
+        /* --- الهيدر والبانر (ثابت) --- */
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .greeting { font-size: 12px; color: var(--text-sub); text-transform: uppercase; font-weight: bold; }
         .user-name { font-size: 28px; font-weight: 800; color: var(--text-main); margin-top: 4px; }
-        .notif-icon {
-            background: rgba(255,255,255,0.9); 
-            padding: 12px; 
-            border-radius: 15px; 
-            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
-            backdrop-filter: blur(5px);
-        }
+        .notif-icon { background: rgba(255,255,255,0.9); padding: 12px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.03); backdrop-filter: blur(5px); }
 
-        /* Banner Carousel (ثابت مع النقاط) */
-        .banner-carousel {
-            height: 180px;
-            position: relative;
-            overflow: hidden;
-            border-radius: 25px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.06);
-            margin-bottom: 30px;
-        }
+        .banner-carousel { height: 180px; position: relative; overflow: hidden; border-radius: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.06); margin-bottom: 30px; }
         .slides-container { width: 100%; height: 100%; display: flex; transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); }
         .slide { min-width: 100%; height: 100%; background-size: cover; background-position: center; position: relative; }
         .slide::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.5), transparent); }
         .slide-content { position: absolute; bottom: 25px; left: 20px; color: white; z-index: 2; }
-        .slide-title { font-size: 24px; font-weight: 700; line-height: 1.2; }
+        .slide-title { font-size: 24px; font-weight: 700; }
         
-        .banner-dots {
-            position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
-            display: flex; gap: 6px; z-index: 10;
-        }
-        .dot { width: 6px; height: 6px; background: rgba(255,255,255,0.5); border-radius: 50%; transition: 0.3s; }
+        .banner-dots { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); display: flex; gap: 6px; z-index: 10; }
+        .dot { width: 6px; height: 6px; background: rgba(255,255,255,0.5); border-radius: 50%; }
         .dot.active { background: white; width: 18px; border-radius: 4px; }
 
-        /* Services Section (ثابت) */
+        /* --- تعديل الخدمات (إضافة أيقونات وكروت جديدة) --- */
         .section-title { font-size: 18px; font-weight: 700; color: var(--text-main); margin-bottom: 15px; }
         .services-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 
         .service-card {
-            background: rgba(255, 255, 255, 0.8); /* نصف شفافة لتظهر الجبال */
-            backdrop-filter: blur(10px); /* تأثير ضبابي ناعم */
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
             padding: 20px;
             border-radius: 25px;
             display: flex; flex-direction: column; align-items: center; text-align: center;
@@ -120,8 +101,9 @@
             transition: 0.3s ease;
             border: 1px solid rgba(255,255,255,0.5);
         }
-        .esim-card { background: var(--esim-gradient); color: white; border: none; backdrop-filter: none; }
+        .esim-card { background: var(--esim-gradient); color: white; border: none; }
         .service-card:active { transform: scale(0.96); }
+        
         .service-icon-box {
             width: 55px; height: 55px;
             background: rgba(108, 92, 231, 0.08);
@@ -129,12 +111,14 @@
             display: flex; align-items: center; justify-content: center; margin-bottom: 12px;
         }
         .esim-card .service-icon-box { background: rgba(255, 255, 255, 0.2); }
-        .service-icon { width: 28px; height: 28px; stroke: var(--accent); stroke-width: 2; fill: none; }
+        
+        /* أيقونة SVG احترافية */
+        .service-icon { width: 30px; height: 30px; stroke: var(--accent); stroke-width: 1.8; fill: none; }
         .esim-card .service-icon { stroke: white; }
-        .service-name { font-size: 15px; font-weight: 600; color: var(--text-main); }
+        .service-name { font-size: 14px; font-weight: 600; color: var(--text-main); }
         .esim-card .service-name { color: white; }
 
-        /* Bottom Nav (ثابت ومتحرك) */
+        /* --- التنقل (ثابت) --- */
         .bottom-nav {
             position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
             width: 80%; max-width: 340px; 
@@ -143,17 +127,17 @@
             display: flex; justify-content: space-around; padding: 12px 0;
             border-radius: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); z-index: 1000;
         }
-        .nav-item { position: relative; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; transition: 0.4s; }
-        .nav-icon { width: 24px; height: 24px; stroke: #b2bec3; stroke-width: 2; fill: none; transition: 0.3s; }
-        .nav-item.active { background: rgba(108, 92, 231, 0.08); transform: translateY(-8px); }
-        .nav-item.active .nav-icon { stroke: var(--accent); filter: drop-shadow(0 0 5px rgba(108, 92, 231, 0.3)); }
-        .nav-item.active::after { content: ''; position: absolute; bottom: -6px; width: 4px; height: 4px; background: var(--accent); border-radius: 50%; }
+        .nav-item { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; }
+        .nav-icon { width: 24px; height: 24px; stroke: #b2bec3; stroke-width: 2; fill: none; }
+        .nav-item.active { background: rgba(108, 92, 231, 0.08); }
+        .nav-item.active .nav-icon { stroke: var(--accent); }
     </style>
 </head>
 <body>
 
     <div class="mountain-background-container">
-        <div class="mountains"></div>
+        <svg class="plane-shadow" viewBox="0 0 24 24"><path d="M21,16L14,11V5A2,2 0 0,0 12,3A2,2 0 0,0 10,5V11L3,16V18L10,15.7V21L8,22.5V24L12,23L16,24V22.5L14,21V15.7L21,18V16Z" /></svg>
+        <div class="tree-layer"></div>
     </div>
 
     <div class="app-container">
@@ -168,63 +152,69 @@
         <section class="banner-carousel">
             <div class="slides-container" id="slidesContainer">
                 <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800');">
-                    <div class="slide-content"><div class="slide-title">Swiss Alps<br>Adventure</div></div>
+                    <div class="slide-content"><div class="slide-title">Swiss Alps</div></div>
                 </div>
                 <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1519046904884-53103b34b206?w=800');">
-                    <div class="slide-content"><div class="slide-title">Maldives<br>Luxury Escape</div></div>
-                </div>
-                <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1555400538-5fd41fe3e7e4?w=800');">
-                    <div class="slide-content"><div class="slide-title">Tokyo<br>City Tour</div></div>
+                    <div class="slide-content"><div class="slide-title">Maldives</div></div>
                 </div>
             </div>
             <div class="banner-dots">
                 <div class="dot active"></div>
                 <div class="dot"></div>
-                <div class="dot"></div>
             </div>
         </section>
 
-        <h2 class="section-title">Our Services</h2>
+        <h2 class="section-title">Exclusive Services</h2>
         <div class="services-grid">
-            <div class="service-card" onclick="alert('Activities Clicked!')">
-                <div class="service-icon-box">
-                    <svg class="service-icon" viewBox="0 0 24 24"><path d="M14.5 21l-5-5 5-5M8.5 21l-5-5 5-5M21 16H9"></path><circle cx="18" cy="6" r="3"></circle></svg>
-                </div>
-                <div class="service-name">Activities</div>
-            </div>
-            
-            <div class="service-card esim-card" onclick="alert('E-sim Clicked!')">
+            <div class="service-card" onclick="alert('Events!')">
                 <div class="service-icon-box">
                     <svg class="service-icon" viewBox="0 0 24 24">
-                        <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
-                        <path d="M9 7h6M9 11h6"></path>
-                        <circle cx="12" cy="17" r="1"></circle>
+                        <path d="M19 4H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V6a2 2 0 00-2-2zM16 2v4M8 2v4M3 10h18"/>
+                        <circle cx="12" cy="16" r="2" fill="currentColor" fill-opacity="0.2"/>
                     </svg>
                 </div>
-                <div class="service-name">Get E-sim</div>
+                <div class="service-name">Events</div>
+            </div>
+            
+            <div class="service-card esim-card" onclick="alert('eSIM!')">
+                <div class="service-icon-box">
+                    <svg class="service-icon" viewBox="0 0 24 24">
+                        <path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/>
+                        <path d="M12 14v4M9 16h6" opacity="0.5"/>
+                    </svg>
+                </div>
+                <div class="service-name">Global eSIM</div>
+            </div>
+
+            <div class="service-card" onclick="alert('Currency Exchange!')">
+                <div class="service-icon-box">
+                    <svg class="service-icon" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M16 8h-6a2 2 0 100 4h4a2 2 0 110 4H8M12 6v12"/>
+                    </svg>
+                </div>
+                <div class="service-name">Currency</div>
             </div>
         </div>
     </div>
 
     <nav class="bottom-nav">
         <div class="nav-item active"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg></div>
-        <div class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M1 6v16l7-4 8 4 7-4V2l-7 4-8-4-7 4z"></path></svg></div>
+        <div class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div>
         <div class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"></circle><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path></svg></div>
     </nav>
 
     <script>
-        // Banner Auto-slide (كل 4 ثوانٍ)
         let currentSlide = 0;
         const container = document.getElementById('slidesContainer');
         const dots = document.querySelectorAll('.dot');
         setInterval(() => {
-            currentSlide = (currentSlide + 1) % 3;
+            currentSlide = (currentSlide + 1) % 2;
             container.style.transform = `translateX(-${currentSlide * 100}%)`;
             dots.forEach(d => d.classList.remove('active'));
             dots[currentSlide].classList.add('active');
         }, 4000);
 
-        // Greeting Logic (English)
         const hours = new Date().getHours();
         const g = document.getElementById('greeting');
         if (hours < 12) g.innerText = "GOOD MORNING";
