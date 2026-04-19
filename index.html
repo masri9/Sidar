@@ -2,321 +2,213 @@
 <html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sidarapp - Official</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sidarapp - Fixed UI</title>
     
     <style>
         :root {
             --primary-blue: #2563eb;
-            --light-blue-bg: #dbeafe;
-            --nav-bg: #ffffff;
-            --text-main-color: #0f172a; 
-            --accent-blue: #3b82f6; 
-            --inactive-gray: #64748b;
+            --accent-blue: #3b82f6;
+            --text-main: #0f172a;
         }
 
+        /* تثبيت الهيكل ومنع الحركة الجانبية */
         body, html { 
             margin: 0; padding: 0;
-            font-family: 'Segoe UI', Roboto, -apple-system, sans-serif;
-            overflow: hidden;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background: #ffffff;
             height: 100vh;
-            -webkit-font-smoothing: antialiased;
+            width: 100vw;
+            overflow: hidden; /* منع السكرول الرئيسي للهيكل */
+            position: relative;
         }
 
-        /* --- Splash Screen --- */
-        #splash-screen {
-            position: fixed; inset: 0; background: #ffffff;
-            display: flex; justify-content: center; align-items: center;
-            z-index: 9999;
-            transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1), visibility 1s;
-        }
-        .splash-image { width: 180px; height: auto; animation: splashEntrance 1.5s ease-out forwards; }
-
-        @keyframes splashEntrance {
-            0% { transform: scale(0.8); opacity: 0; filter: blur(10px); }
-            100% { transform: scale(1); opacity: 1; filter: blur(0); }
-        }
-
-        /* --- Background --- */
-        .background-container {
-            position: fixed; inset: 0; z-index: -1;
-            background-image: url('https://plain-eeur-prod-public.komododecks.com/202604/19/FtJXvAZvXREKew6PJ3ew/image.png'); 
+        /* الخلفية الثابتة */
+        .header-bg {
+            position: absolute; top: 0; left: 0; right: 0; height: 45vh;
+            background: linear-gradient(rgba(255,255,255,0.1), #fff), 
+                        url('https://plain-eeur-prod-public.komododecks.com/202604/19/FtJXvAZvXREKew6PJ3ew/image.png');
             background-size: cover; background-position: center;
+            z-index: -1;
         }
+
+        /* الحاوية الرئيسية القابلة للتمرير عمودياً فقط */
+        .app-scroller {
+            height: 100vh;
+            overflow-y: auto;
+            overflow-x: hidden; /* تأكيد عدم وجود حركة يمين شمال */
+            padding: 25px 20px 120px;
+            box-sizing: border-box;
+        }
+
+        /* الهيدر */
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .menu-btn { background: white; padding: 10px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .profile-img { width: 42px; height: 42px; border-radius: 12px; background: url('https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80') center/cover; border: 2px solid white; }
+
+        .hero-title { font-size: 34px; font-weight: 800; line-height: 1.1; color: var(--text-main); margin-bottom: 25px; }
+        .hero-title span { color: var(--primary-blue); }
+
+        /* AI Chat Box */
+        .ai-chat-box {
+            background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(15px);
+            border-radius: 20px; padding: 12px 15px; display: flex; align-items: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.05); margin-bottom: 25px;
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+        .ai-chat-box input { flex: 1; border: none; background: transparent; outline: none; padding: 0 10px; font-weight: 600; }
+
+        /* الخدمات */
+        .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+        .service-item {
+            background: rgba(255,255,255,0.6); border-radius: 20px; padding: 15px 5px;
+            display: flex; flex-direction: column; align-items: center; transition: 0.3s;
+            border: 1px solid transparent;
+        }
+        .service-item.active { background: white; border-color: var(--primary-blue); transform: scale(1.02); }
+        .icon-box { font-size: 22px; margin-bottom: 5px; }
+        .service-item span { font-size: 12px; font-weight: 700; color: #64748b; }
+
+        /* منطقة الـ Widget */
+        #widget-area {
+            background: white; border-radius: 25px; padding: 20px; margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        /* --- Carousel (البطاقات المتداخلة كما في الصورة) --- */
+        .carousel-section { width: 100%; margin-top: 20px; text-align: left; }
+        .carousel-section h2 { font-size: 22px; font-weight: 800; margin-bottom: 15px; padding-left: 5px; }
         
-        .background-overlay {
-            position: fixed; inset: 0; z-index: -1;
-            background: rgba(255, 255, 255, 0.15); 
+        .carousel-container {
+            display: flex; align-items: center; justify-content: center;
+            gap: 15px; padding: 10px 0; perspective: 1000px;
         }
 
-        .app-container {
-            height: 100vh; padding: 25px;
-            display: flex; flex-direction: column;
-            box-sizing: border-box; opacity: 0; 
-            transition: opacity 1.2s ease;
+        .card {
+            width: 180px; height: 260px; border-radius: 30px;
+            position: relative; overflow: hidden; transition: 0.5s ease;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
         }
 
-        /* --- Header --- */
-        .header { height: 60px; display: flex; align-items: center; justify-content: flex-start; margin-bottom: 5px; }
-        .menu-icon { background: white; padding: 12px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); cursor: pointer; border: 1px solid rgba(0,0,0,0.05); }
+        /* البطاقة الجانبية (أصغر ومائلة قليلاً) */
+        .card.side { transform: scale(0.85); opacity: 0.6; filter: blur(1px); }
+        
+        /* البطاقة الوسطى (أكبر وأوضح) */
+        .card.main { width: 220px; height: 300px; z-index: 10; transform: scale(1.05); opacity: 1; }
 
-        /* --- Main Content --- */
-        .main-content {
-            flex: 1; display: flex; flex-direction: column;
-            justify-content: flex-start; align-items: center;
-            padding-top: 30px; text-align: center;
-            overflow-y: auto; padding-bottom: 120px;
-            scrollbar-width: none;
+        .card img { width: 100%; height: 100%; object-fit: cover; }
+        .card-btn {
+            position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+            background: rgba(0,0,0,0.7); color: white; border: none;
+            padding: 8px 20px; border-radius: 20px; font-size: 12px; font-weight: 600;
         }
-        .main-content::-webkit-scrollbar { display: none; }
 
-        .hero-full-title { font-size: 36px; font-weight: 800; line-height: 1.1; margin: 0; color: var(--text-main-color); letter-spacing: -1px; }
-        .hero-full-title span.blue-text { color: var(--accent-blue); display: block; }
-
-        /* --- AI Chat Search --- */
-        .ai-engine-container { width: 100%; max-width: 500px; margin-top: 35px; }
-        .ai-input-wrapper { position: relative; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(20px); border-radius: 24px; padding: 8px 15px; display: flex; align-items: center; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); }
-        .ai-sparkle { width: 40px; height: 40px; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); border-radius: 16px; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; }
-        .ai-input-field { flex: 1; border: none; background: transparent; padding: 15px 10px; font-size: 16px; font-weight: 500; outline: none; }
-
-        /* --- Services --- */
-        .services-grid { margin-top: 30px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; width: 100%; max-width: 500px; }
-        .service-item { background: rgba(255, 255, 255, 0.5); backdrop-filter: blur(15px); border-radius: 24px; padding: 15px 10px; display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: 0.3s; border: 1px solid rgba(255,255,255,0.4); }
-        .service-item.active { background: white; border-color: var(--primary-blue); transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-        .service-icon-box { width: 54px; height: 54px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; border: 2px solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.08); font-size: 24px; }
-        .bg-esim { background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%); }
-        .bg-events { background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%); }
-        .bg-change { background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%); }
-        .service-item span { font-size: 13px; font-weight: 700; }
-
-        /* --- Service Widget Area --- */
-        #service-widget-container {
-            width: 100%; max-width: 500px; margin-top: 25px; display: none;
-            background: rgba(255, 255, 255, 0.9); border-radius: 24px; padding: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05); animation: slideUp 0.4s ease-out;
-            text-align: left;
+        /* Navigation */
+        .bottom-nav {
+            position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 400px; background: white; border-radius: 40px;
+            display: flex; justify-content: space-between; padding: 10px 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1); z-index: 1000;
         }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .nav-item { display: flex; align-items: center; padding: 10px 18px; color: #94a3b8; text-decoration: none; }
+        .nav-item.active { background: #eef2ff; color: #2563eb; border-radius: 30px; }
+        .nav-item span { display: none; margin-left: 8px; font-weight: 700; }
+        .nav-item.active span { display: inline; }
 
-        /* --- Auto-Sliding Promo Section --- */
-        .promo-slider {
-            width: 100%; max-width: 500px; margin-top: 30px; overflow: hidden;
-            border-radius: 25px; position: relative; height: 160px;
-        }
-        .promo-track { display: flex; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); height: 100%; }
-        .promo-card {
-            min-width: 100%; height: 100%; display: flex; align-items: center;
-            justify-content: center; padding: 25px; box-sizing: border-box; color: white;
-            text-align: left;
-        }
-        .card-1 { background: linear-gradient(135deg, #1e293b, #334155); }
-        .card-2 { background: linear-gradient(135deg, #2563eb, #7c3aed); }
-        .card-3 { background: linear-gradient(135deg, #059669, #10b981); }
-
-        /* --- Navigation --- */
-        .bottom-nav-container {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            width: 90%; max-width: 420px; background: var(--nav-bg);
-            padding: 10px 15px; border-radius: 50px;
-            display: flex; justify-content: space-between; align-items: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08); z-index: 1000;
-        }
-        .nav-item { display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease; padding: 10px 15px; color: var(--inactive-gray); }
-        .nav-item svg { width: 24px; height: 24px; stroke: currentColor; stroke-width: 2.2; fill: none; }
-        .nav-text { max-width: 0; overflow: hidden; white-space: nowrap; font-size: 14px; font-weight: 700; transition: all 0.3s ease; opacity: 0; }
-        .nav-item.active { background: var(--light-blue-bg); color: var(--primary-blue); border-radius: 30px; }
-        .nav-item.active .nav-text { max-width: 80px; margin-left: 10px; opacity: 1; }
-
-        /* Map Styles */
-        #map-page { display: none; height: 100vh; width: 100%; position: absolute; top: 0; left: 0; background: white; z-index: 50; }
-        #map { width: 100%; height: 100%; }
-        .map-search-container { position: absolute; top: 50px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; z-index: 1000; }
-        .map-search-bar { background: white; border-radius: 20px; padding: 12px 20px; display: flex; align-items: center; box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
-        .map-search-bar input { border: none; outline: none; width: 100%; font-size: 15px; font-weight: 500; margin-left: 10px; }
-        .map-filters { display: flex; gap: 8px; margin-top: 12px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
-        .filter-btn { background: white; padding: 8px 16px; border-radius: 15px; border: none; white-space: nowrap; font-size: 13px; font-weight: 700; color: #475569; box-shadow: 0 4px 10px rgba(0,0,0,0.05); cursor: pointer; }
-        .filter-btn.active { background: var(--primary-blue); color: white; }
-        .gps-btn { position: absolute; bottom: 130px; right: 20px; z-index: 1000; background: white; width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 20px rgba(0,0,0,0.15); border: none; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
-    <div id="splash-screen">
-        <img src="https://plain-eeur-prod-public.komododecks.com/202604/19/y0zyi6uOKg2CaNATvHPZ/image.png" alt="Sidarapp Logo" class="splash-image">
-    </div>
+    <div class="header-bg"></div>
 
-    <div class="background-container"></div>
-    <div class="background-overlay"></div>
-    
-    <div class="app-container" id="main-app">
-        <header class="header">
-            <div class="menu-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="2.5"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-            </div>
-        </header>
-
-        <main class="main-content">
-            <h1 class="hero-full-title">Your Journey <span class="blue-text">Starts Before</span> You Even Arrive.</h1>
-            
-            <div class="ai-engine-container">
-                <div class="ai-input-wrapper">
-                    <div class="ai-sparkle">✨</div>
-                    <input type="text" class="ai-input-field" placeholder="Ask Sidar AI anything...">
-                    <span style="color: #2563eb;">🎤</span>
-                </div>
-            </div>
-
-            <div class="services-grid">
-                <div class="service-item" onclick="toggleService('esim', this)">
-                    <div class="service-icon-box bg-esim">🌐</div>
-                    <span>eSIM</span>
-                </div>
-                <div class="service-item" onclick="toggleService('events', this)">
-                    <div class="service-icon-box bg-events">🎟️</div>
-                    <span>Events</span>
-                </div>
-                <div class="service-item" onclick="toggleService('change', this)">
-                    <div class="service-icon-box bg-change">💱</div>
-                    <span>Change</span>
-                </div>
-            </div>
-
-            <div id="service-widget-container">
-                <h3 id="widget-title" style="margin: 0 0 10px 0; color: var(--primary-blue);">Service</h3>
-                <div id="widget-body" style="font-size: 14px; color: var(--inactive-gray);">
-                    Content loading...
-                </div>
-            </div>
-
-            <div class="promo-slider">
-                <div class="promo-track" id="promoTrack">
-                    <div class="promo-card card-1">
-                        <div>
-                            <h2 style="margin:0">Summer Deal!</h2>
-                            <p>Get 20% off on all city events.</p>
-                        </div>
-                    </div>
-                    <div class="promo-card card-2">
-                        <div>
-                            <h2 style="margin:0">AI Planner</h2>
-                            <p>Let Sidar AI plan your next trip.</p>
-                        </div>
-                    </div>
-                    <div class="promo-card card-3">
-                        <div>
-                            <h2 style="margin:0">Instant Connect</h2>
-                            <p>Activate eSIM in over 150 countries.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-
-        <div id="map-page">
-            <div class="map-search-container">
-                <div class="map-search-bar"><span>🔍</span><input type="text" placeholder="Search hotels, restaurants..."></div>
-                <div class="map-filters">
-                    <button class="filter-btn active" onclick="filterMap('All', this)">All</button>
-                    <button class="filter-btn">🏨 Hotels</button>
-                    <button class="filter-btn">🍴 Restaurants</button>
-                </div>
-            </div>
-            <div id="map"></div>
-            <button class="gps-btn" onclick="locateUser()">🎯</button>
+    <div class="app-scroller">
+        <div class="top-bar">
+            <div class="menu-btn">☰</div>
+            <div class="profile-img"></div>
         </div>
 
-        <nav class="bottom-nav-container">
-            <div class="nav-item active" onclick="setActive(this, 'Home')">
-                <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                <span class="nav-text">Home</span>
+        <h1 class="hero-title">Where do you <br><span>wanna go?</span></h1>
+
+        <div class="ai-chat-box">
+            <span style="font-size: 18px;">✨</span>
+            <input type="text" placeholder="Ask Sidar AI...">
+            <span style="color: var(--primary-blue);">🎤</span>
+        </div>
+
+        <div class="services-grid">
+            <div class="service-item" onclick="openWidget('eSIM', this)">
+                <div class="icon-box">🌐</div>
+                <span>eSIM</span>
             </div>
-            <div class="nav-item" onclick="setActive(this, 'Map')">
-                <svg viewBox="0 0 24 24"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon></svg>
-                <span class="nav-text">Map</span>
+            <div class="service-item" onclick="openWidget('Events', this)">
+                <div class="icon-box">🎟️</div>
+                <span>Events</span>
             </div>
-            <div class="nav-item" onclick="setActive(this, 'Reels')">
-                <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"></rect><path d="M10 8l6 4-6 4V8z" fill="currentColor" opacity="0.3"></path></svg>
-                <span class="nav-text">Reels</span>
+            <div class="service-item" onclick="openWidget('Change', this)">
+                <div class="icon-box">💱</div>
+                <span>Change</span>
             </div>
-            <div class="nav-item" onclick="setActive(this, 'Profile')">
-                <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                <span class="nav-text">Profile</span>
+        </div>
+
+        <div id="widget-area">
+            <h3 id="w-title" style="margin:0 0 10px 0; color: var(--primary-blue);"></h3>
+            <div id="w-content" style="font-size: 14px; color: #64748b;">Loading script...</div>
+        </div>
+
+        <div class="carousel-section">
+            <h2>Recommended</h2>
+            <div class="carousel-container" id="carousel">
+                <div class="card side">
+                    <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=300">
+                </div>
+                <div class="card main">
+                    <img src="https://images.unsplash.com/photo-1506929113675-b92417bbbe8d?auto=format&fit=crop&w=400">
+                    <button class="card-btn">See More</button>
+                </div>
+                <div class="card side">
+                    <img src="https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=300">
+                </div>
             </div>
-        </nav>
+            <div style="text-align:center; margin-top:15px;">
+                <span style="height:8px; width:8px; background:#ddd; border-radius:50%; display:inline-block; margin:0 3px;"></span>
+                <span style="height:8px; width:8px; background:#333; border-radius:50%; display:inline-block; margin:0 3px;"></span>
+                <span style="height:8px; width:8px; background:#ddd; border-radius:50%; display:inline-block; margin:0 3px;"></span>
+            </div>
+        </div>
     </div>
 
+    <nav class="bottom-nav">
+        <a href="#" class="nav-item active">🏠<span>Home</span></a>
+        <a href="#" class="nav-link nav-item">🗺️<span>Map</span></a>
+        <a href="#" class="nav-link nav-item">🎬<span>Reels</span></a>
+        <a href="#" class="nav-link nav-item">👤<span>Profile</span></a>
+    </nav>
+
     <script>
-        // Splash logic
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.getElementById('splash-screen').style.opacity = '0';
-                setTimeout(() => document.getElementById('splash-screen').style.visibility = 'hidden', 1000);
-                document.getElementById('main-app').style.opacity = '1';
-            }, 2500);
-        });
-
-        // Widget Logic
-        function toggleService(type, element) {
-            const container = document.getElementById('service-widget-container');
-            const title = document.getElementById('widget-title');
-            const body = document.getElementById('widget-body');
-
-            // Remove active class from others
-            document.querySelectorAll('.service-item').forEach(i => i.classList.remove('active'));
-            element.classList.add('active');
-
-            container.style.display = 'block';
+        // تثبيت الهيكل ومنع التحرك العشوائي
+        function openWidget(name, el) {
+            const area = document.getElementById('widget-area');
+            const title = document.getElementById('w-title');
             
-            if(type === 'esim') {
-                title.innerText = "Global eSIM Service";
-                body.innerHTML = "Get instant connectivity. Select your destination and activate your plan without a physical SIM card.";
-            } else if(type === 'events') {
-                title.innerText = "Local Events & Tours";
-                body.innerHTML = "Discover the best concerts, tours, and hidden gems around you. Book your tickets instantly.";
-            } else if(type === 'change') {
-                title.innerText = "Currency Exchange";
-                body.innerHTML = "Check live rates and find the nearest trusted exchange offices with the best prices.";
-            }
-        }
-
-        // Auto-Sliding Logic
-        let currentSlide = 0;
-        const track = document.getElementById('promoTrack');
-        const slideCount = 3;
-
-        function slidePromos() {
-            currentSlide = (currentSlide + 1) % slideCount;
-            track.style.transform = `translateX(-${currentSlide * 100}%)`;
-        }
-        setInterval(slidePromos, 3500);
-
-        // Map & Nav Logic
-        let map;
-        function initMap() {
-            if (map) return;
-            map = L.map('map', { zoomControl: false }).setView([25.2048, 55.2708], 13);
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png').addTo(map);
-        }
-
-        function setActive(el, page) {
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            document.querySelectorAll('.service-item').forEach(i => i.classList.remove('active'));
             el.classList.add('active');
-            const mainContent = document.querySelector('.main-content');
-            const mapPage = document.getElementById('map-page');
-            if (page === 'Map') {
-                mainContent.style.display = 'none';
-                mapPage.style.display = 'block';
-                setTimeout(initMap, 100);
-            } else {
-                mainContent.style.display = 'flex';
-                mapPage.style.display = 'none';
-            }
+            
+            area.style.display = 'block';
+            title.innerText = name + " Service";
+            
+            // هنا يتم استدعاء الـ Script الخاص بك
+            console.log("Widget Active: " + name);
         }
 
-        function locateUser() {
-            map.locate({setView: true, maxZoom: 16});
+        // تحريك البطاقات تلقائياً (اختياري)
+        let cards = document.querySelectorAll('.card');
+        let index = 0;
+
+        function rotateCarousel() {
+            // منطق بسيط لتبديل الكلاسات لعمل تأثير الحركة
+            // يمكن تطويره بربطه بـ Swipe لاحقاً
         }
     </script>
 </body>
