@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sidarapp - Master V2</title>
+    <title>Sidarapp - Official</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
@@ -45,179 +45,217 @@
             background-image: url('https://plain-eeur-prod-public.komododecks.com/202604/19/FtJXvAZvXREKew6PJ3ew/image.png'); 
             background-size: cover; background-position: center;
         }
-        .background-overlay { position: fixed; inset: 0; z-index: -1; background: rgba(255, 255, 255, 0.15); }
+        
+        .background-overlay {
+            position: fixed; inset: 0; z-index: -1;
+            background: rgba(255, 255, 255, 0.15); 
+        }
 
-        .app-container { height: 100vh; display: flex; flex-direction: column; box-sizing: border-box; opacity: 0; transition: opacity 1.2s ease; }
+        .app-container {
+            height: 100vh; padding: 25px;
+            display: flex; flex-direction: column;
+            box-sizing: border-box; opacity: 0; 
+            transition: opacity 1.2s ease;
+        }
 
         /* --- Header --- */
-        .header { height: 60px; padding: 25px 25px 5px; display: flex; align-items: center; justify-content: flex-start; z-index: 10; }
+        .header { height: 60px; display: flex; align-items: center; justify-content: flex-start; margin-bottom: 5px; z-index: 10; }
         .menu-icon { background: white; padding: 12px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); cursor: pointer; border: 1px solid rgba(0,0,0,0.05); }
 
         /* --- Main Content --- */
         .main-content {
             flex: 1; display: flex; flex-direction: column;
-            align-items: center; padding: 10px 25px 120px;
-            text-align: center; overflow-y: auto; scrollbar-width: none;
+            justify-content: flex-start; align-items: center;
+            padding-top: 30px; text-align: center;
+            overflow-y: auto; padding-bottom: 120px;
         }
-        .main-content::-webkit-scrollbar { display: none; }
 
-        .hero-full-title { font-size: 34px; font-weight: 800; line-height: 1.1; margin: 20px 0; color: var(--text-main-color); letter-spacing: -1px; }
+        .hero-full-title { font-size: 36px; font-weight: 800; line-height: 1.1; margin: 0; color: var(--text-main-color); letter-spacing: -1px; }
         .hero-full-title span.blue-text { color: var(--accent-blue); display: block; }
 
-        /* --- AI Search --- */
-        .ai-engine-container { width: 100%; max-width: 500px; margin-top: 10px; }
-        .ai-input-wrapper { position: relative; background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(20px); border-radius: 24px; padding: 8px 15px; display: flex; align-items: center; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); border: 1px solid white; }
-        .ai-input-field { flex: 1; border: none; background: transparent; padding: 12px 10px; font-size: 16px; font-weight: 500; outline: none; }
-        .ai-icon { width: 40px; height: 40px; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); border-radius: 16px; display: flex; align-items: center; justify-content: center; color: white; }
+        /* --- AI Search (Main Page) --- */
+        .ai-engine-container { width: 100%; max-width: 500px; margin-top: 35px; }
+        .ai-input-wrapper { position: relative; background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(20px); border-radius: 24px; padding: 8px 15px; display: flex; align-items: center; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); }
+        .ai-input-field { flex: 1; border: none; background: transparent; padding: 15px 10px; font-size: 16px; font-weight: 500; outline: none; }
+        .ai-icon { width: 40px; height: 40px; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); border-radius: 16px; display: flex; align-items: center; justify-content: center; }
 
         /* --- Services --- */
-        .services-grid { margin-top: 25px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; width: 100%; max-width: 500px; }
+        .services-grid { margin-top: 30px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; width: 100%; max-width: 500px; }
         .service-item { background: rgba(255, 255, 255, 0.5); backdrop-filter: blur(15px); border-radius: 24px; padding: 15px 10px; display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: 0.3s; border: 1px solid rgba(255,255,255,0.4); }
-        .service-item.active { background: white; border-color: var(--primary-blue); transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-        .service-icon-box { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; border: 2px solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.08); font-size: 22px; }
+        .service-item.active { background: white; border-color: var(--primary-blue); transform: translateY(-5px); }
+        .service-icon-box { width: 54px; height: 54px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; border: 2px solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.08); }
         .bg-esim { background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%); }
         .bg-events { background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%); }
         .bg-change { background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%); }
-        .service-item span { font-size: 13px; font-weight: 700; color: #1e293b; }
+        .service-item span { font-size: 13px; font-weight: 700; }
 
-        /* --- Trending Section --- */
-        .trending-section { width: 100%; max-width: 500px; text-align: left; margin-top: 35px; }
-        .trending-title { font-size: 18px; font-weight: 800; color: #1e293b; margin-bottom: 15px; padding-left: 5px; }
-        .trending-scroll { display: flex; gap: 15px; overflow-x: auto; scrollbar-width: none; padding-bottom: 10px; }
-        .trending-scroll::-webkit-scrollbar { display: none; }
-        .dest-card { 
-            min-width: 150px; height: 200px; border-radius: 24px; position: relative; flex-shrink: 0; 
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1); overflow: hidden; cursor: pointer;
-        }
-        .dest-card img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
-        .dest-card:hover img { transform: scale(1.1); }
-        .dest-label { position: absolute; bottom: 15px; left: 15px; color: white; font-weight: 700; font-size: 15px; text-shadow: 0 2px 10px rgba(0,0,0,0.8); }
-
-        /* --- Map Page --- */
+        /* --- Map Page Elements --- */
         #map-page { display: none; height: 100vh; width: 100%; position: absolute; top: 0; left: 0; background: white; z-index: 50; }
         #map { width: 100%; height: 100%; }
-        .map-search-container { position: absolute; top: 50px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; z-index: 1000; }
-        .map-search-bar { background: white; border-radius: 20px; padding: 12px 20px; display: flex; align-items: center; box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
-        .map-search-bar input { border: none; outline: none; width: 100%; font-size: 15px; font-weight: 500; margin-left: 10px; }
-        .filter-btn { background: white; padding: 8px 16px; border-radius: 15px; border: none; white-space: nowrap; font-size: 13px; font-weight: 700; color: #475569; box-shadow: 0 4px 10px rgba(0,0,0,0.05); cursor: pointer; margin-right: 5px; }
+        
+        .map-search-container {
+            position: absolute; top: 50px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 400px; z-index: 1000;
+        }
+        .map-search-bar {
+            background: white; border-radius: 20px; padding: 12px 20px;
+            display: flex; align-items: center; box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        .map-search-bar input {
+            border: none; outline: none; width: 100%; font-size: 15px; font-weight: 500; margin-left: 10px;
+        }
+
+        .map-filters {
+            display: flex; gap: 8px; margin-top: 12px; overflow-x: auto; padding-bottom: 5px;
+            scrollbar-width: none; 
+        }
+        .map-filters::-webkit-scrollbar { display: none; }
+
+        .filter-btn {
+            background: white; padding: 8px 16px; border-radius: 15px; border: none;
+            white-space: nowrap; font-size: 13px; font-weight: 700; color: #475569;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05); cursor: pointer; transition: 0.3s;
+        }
         .filter-btn.active { background: var(--primary-blue); color: white; }
 
-        /* --- Reels Page --- */
-        #reels-page { display: none; height: 100vh; width: 100%; position: absolute; top: 0; left: 0; background: #000; z-index: 60; overflow-y: scroll; scroll-snap-type: y mandatory; }
-        #reels-page::-webkit-scrollbar { display: none; }
-        .reel-container { height: 100vh; width: 100%; scroll-snap-align: start; position: relative; }
-        .reel-video { height: 100%; width: 100%; object-fit: cover; }
-        .reel-info { position: absolute; bottom: 120px; left: 20px; color: white; z-index: 10; }
+        .gps-btn {
+            position: absolute; bottom: 130px; right: 20px; z-index: 1000;
+            background: white; width: 55px; height: 55px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15); cursor: pointer; border: none;
+        }
 
-        /* --- Nav --- */
-        .bottom-nav-container { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 420px; background: white; padding: 10px 15px; border-radius: 50px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.08); z-index: 1000; }
-        .nav-item { display: flex; align-items: center; cursor: pointer; transition: 0.3s; padding: 10px 15px; color: var(--inactive-gray); }
+        /* --- Reels Page --- */
+        #reels-page { 
+            display: none; height: 100vh; width: 100%; position: absolute; top: 0; left: 0; 
+            background: #000; z-index: 60; overflow-y: scroll; scroll-snap-type: y mandatory;
+        }
+        #reels-page::-webkit-scrollbar { display: none; }
+        .reel-container { height: 100vh; width: 100%; scroll-snap-align: start; position: relative; display: flex; align-items: center; justify-content: center; }
+        .reel-video { height: 100%; width: 100%; object-fit: cover; }
+        .reel-info { position: absolute; bottom: 120px; left: 20px; color: white; text-shadow: 0 2px 8px rgba(0,0,0,0.8); z-index: 10; }
+        .reel-info h3 { margin: 0; font-size: 20px; }
+        .reel-info p { margin: 5px 0 0; opacity: 0.9; font-size: 14px; }
+        .reel-sidebar { position: absolute; right: 15px; bottom: 150px; display: flex; flex-direction: column; gap: 20px; z-index: 10; color: white; text-align: center; }
+        .side-icon { font-size: 26px; cursor: pointer; }
+        .side-icon span { font-size: 12px; display: block; margin-top: 4px; font-weight: 600; }
+
+        /* --- Bottom Navigation --- */
+        .bottom-nav-container {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 420px; background: var(--nav-bg);
+            padding: 10px 15px; border-radius: 50px;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); z-index: 1000;
+        }
+        .nav-item { display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease; padding: 10px 15px; color: var(--inactive-gray); }
+        .nav-item svg { width: 24px; height: 24px; stroke: currentColor; stroke-width: 2.2; fill: none; }
+        .nav-text { max-width: 0; overflow: hidden; white-space: nowrap; font-size: 14px; font-weight: 700; transition: all 0.3s ease; opacity: 0; }
         .nav-item.active { background: var(--light-blue-bg); color: var(--primary-blue); border-radius: 30px; }
-        .nav-text { max-width: 0; overflow: hidden; white-space: nowrap; font-size: 14px; font-weight: 700; transition: 0.3s; opacity: 0; }
         .nav-item.active .nav-text { max-width: 80px; margin-left: 10px; opacity: 1; }
+
     </style>
 </head>
 <body>
 
     <div id="splash-screen">
-        <img src="https://plain-eeur-prod-public.komododecks.com/202604/19/y0zyi6uOKg2CaNATvHPZ/image.png" alt="Sidarapp" class="splash-image">
+        <img src="https://plain-eeur-prod-public.komododecks.com/202604/19/y0zyi6uOKg2CaNATvHPZ/image.png" alt="Sidarapp Logo" class="splash-image">
     </div>
 
     <div class="background-container"></div>
     <div class="background-overlay"></div>
     
     <div class="app-container" id="main-app">
-        <header class="header" id="app-header">
+        <header class="header" id="top-header">
             <div class="menu-icon">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="2.5"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
             </div>
         </header>
 
-        <main class="main-content" id="home-view">
+        <main class="main-content">
             <h1 class="hero-full-title">Your Journey <span class="blue-text">Starts Before</span> You Even Arrive.</h1>
-            
             <div class="ai-engine-container">
                 <div class="ai-input-wrapper">
-                    <input type="text" class="ai-input-field" placeholder="Where to next? Ask Sidar AI...">
-                    <div class="ai-icon">🔍</div>
+                    <input type="text" class="ai-input-field" placeholder="Ask Sidar AI anything...">
+                    <div class="ai-icon" style="display: flex; align-items: center; justify-content: center; color: white;">🔍</div>
                 </div>
             </div>
-
             <div class="services-grid">
-                <div class="service-item active" onclick="toggleService(this)">
+                <div class="service-item active" onclick="toggleService('esim-script', this)">
                     <div class="service-icon-box bg-esim">🌐</div>
                     <span>eSIM</span>
                 </div>
-                <div class="service-item" onclick="toggleService(this)">
+                <div class="service-item" onclick="toggleService('events-script', this)">
                     <div class="service-icon-box bg-events">🎟️</div>
                     <span>Events</span>
                 </div>
-                <div class="service-item" onclick="toggleService(this)">
+                <div class="service-item" onclick="toggleService('change-script', this)">
                     <div class="service-icon-box bg-change">💱</div>
                     <span>Change</span>
-                </div>
-            </div>
-
-            <div class="trending-section">
-                <div class="trending-title">Trending Destinations</div>
-                <div class="trending-scroll">
-                    <div class="dest-card">
-                        <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=300&q=80" alt="Dubai">
-                        <div class="dest-label">Dubai, UAE</div>
-                    </div>
-                    <div class="dest-card">
-                        <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=300&q=80" alt="Japan">
-                        <div class="dest-label">Kyoto, Japan</div>
-                    </div>
-                    <div class="dest-card">
-                        <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=300&q=80" alt="Paris">
-                        <div class="dest-label">Paris, France</div>
-                    </div>
                 </div>
             </div>
         </main>
 
         <div id="map-page">
             <div class="map-search-container">
-                <div class="map-search-bar"><span>🔍</span><input type="text" placeholder="Search hotels, food..."></div>
-                <div style="margin-top:10px; display:flex; gap:5px; overflow-x:auto;">
-                    <button class="filter-btn active">All</button>
-                    <button class="filter-btn">🏨 Hotels</button>
-                    <button class="filter-btn">🍴 Restaurants</button>
+                <div class="map-search-bar">
+                    <span>🔍</span>
+                    <input type="text" placeholder="Search hotels, restaurants...">
+                </div>
+                <div class="map-filters">
+                    <button class="filter-btn active" onclick="filterMap('All', this)">All</button>
+                    <button class="filter-btn" onclick="filterMap('Hotels', this)">🏨 Hotels</button>
+                    <button class="filter-btn" onclick="filterMap('Restaurants', this)">🍴 Restaurants</button>
+                    <button class="filter-btn" onclick="filterMap('Cafes', this)">☕ Cafes</button>
                 </div>
             </div>
             <div id="map"></div>
-            <button class="gps-btn" onclick="map.locate({setView:true})">🎯</button>
+            <button class="gps-btn" onclick="locateUser()">🎯</button>
         </div>
 
         <div id="reels-page">
             <div class="reel-container">
                 <video class="reel-video" loop muted playsinline src="https://assets.mixkit.co/videos/preview/mixkit-traveling-on-a-highway-through-the-mountains-42935-large.mp4"></video>
-                <div class="reel-info"><h3>Explorer Vibe</h3><p>Mountain roads are calling...</p></div>
+                <div class="reel-info"><h3>Swiss Alps</h3><p>The road to adventure 🏔️</p></div>
+                <div class="reel-sidebar">
+                    <div class="side-icon">❤️<span>12.4k</span></div>
+                    <div class="side-icon">💬<span>850</span></div>
+                    <div class="side-icon">✈️<span>Share</span></div>
+                </div>
+            </div>
+            <div class="reel-container">
+                <video class="reel-video" loop muted playsinline src="https://assets.mixkit.co/videos/preview/mixkit-man-walking-on-the-beach-at-sunset-4404-large.mp4"></video>
+                <div class="reel-info"><h3>Bali Sunset</h3><p>Chasing dreams in Indonesia 🌊</p></div>
+                <div class="reel-sidebar">
+                    <div class="side-icon">❤️<span>8.1k</span></div>
+                    <div class="side-icon">💬<span>310</span></div>
+                    <div class="side-icon">✈️<span>Share</span></div>
+                </div>
             </div>
         </div>
 
         <nav class="bottom-nav-container">
             <div class="nav-item active" onclick="setActive(this, 'Home')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+                <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
                 <span class="nav-text">Home</span>
             </div>
             <div class="nav-item" onclick="setActive(this, 'Map')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon></svg>
+                <svg viewBox="0 0 24 24"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon></svg>
                 <span class="nav-text">Map</span>
             </div>
             <div class="nav-item" onclick="setActive(this, 'Reels')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"></rect><path d="M10 8l6 4-6 4V8z"></path></svg>
+                <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"></rect><path d="M10 8l6 4-6 4V8z" fill="currentColor"></path></svg>
                 <span class="nav-text">Reels</span>
             </div>
             <div class="nav-item" onclick="setActive(this, 'Profile')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                 <span class="nav-text">Profile</span>
             </div>
         </nav>
     </div>
 
     <script>
+        // Splash logic
         window.addEventListener('load', () => {
             setTimeout(() => {
                 document.getElementById('splash-screen').style.opacity = '0';
@@ -226,33 +264,67 @@
             }, 2500);
         });
 
+        // Map logic
         let map;
+        let userMarker;
+        let markersGroup = L.layerGroup();
+
         function initMap() {
             if (map) return;
-            map = L.map('map', { zoomControl: false }).setView([25.2048, 55.2708], 12);
+            map = L.map('map', { zoomControl: false }).setView([25.2048, 55.2708], 13);
             L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png').addTo(map);
+            markersGroup.addTo(map);
+            addSampleMarkers();
         }
 
+        function addSampleMarkers() {
+            markersGroup.clearLayers();
+            L.marker([25.2048, 55.2708]).addTo(markersGroup).bindPopup("<b>Luxury Hotel</b>");
+            L.marker([25.2148, 55.2808]).addTo(markersGroup).bindPopup("<b>Top Restaurant</b>");
+        }
+
+        function filterMap(category, btn) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        function locateUser() {
+            map.locate({setView: true, maxZoom: 16});
+        }
+
+        // App Navigation Logic
         function setActive(el, page) {
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
             el.classList.add('active');
 
-            const home = document.getElementById('home-view');
-            const mapP = document.getElementById('map-page');
-            const reelP = document.getElementById('reels-page');
-            const header = document.getElementById('app-header');
+            const mainContent = document.querySelector('.main-content');
+            const mapPage = document.getElementById('map-page');
+            const reelsPage = document.getElementById('reels-page');
+            const header = document.getElementById('top-header');
 
-            home.style.display = 'none'; mapP.style.display = 'none'; reelP.style.display = 'none';
-            header.style.display = 'flex';
+            // Hide all pages
+            mainContent.style.display = 'none';
+            mapPage.style.display = 'none';
+            reelsPage.style.display = 'none';
+            header.style.display = 'flex'; // Default header visible
 
-            if (page === 'Home') home.style.display = 'flex';
-            if (page === 'Map') { mapP.style.display = 'block'; setTimeout(initMap, 100); }
-            if (page === 'Reels') { reelP.style.display = 'block'; header.style.display = 'none'; reelP.querySelector('video').play(); }
+            if (page === 'Map') {
+                mapPage.style.display = 'block';
+                setTimeout(initMap, 100);
+            } else if (page === 'Reels') {
+                reelsPage.style.display = 'block';
+                header.style.display = 'none'; // Hide header for full-screen reels
+                // Play first video automatically
+                const firstVid = reelsPage.querySelector('video');
+                if(firstVid) firstVid.play();
+            } else if (page === 'Home') {
+                mainContent.style.display = 'flex';
+            }
         }
 
-        function toggleService(el) {
+        function toggleService(id, element) {
             document.querySelectorAll('.service-item').forEach(i => i.classList.remove('active'));
-            el.classList.add('active');
+            element.classList.add('active');
         }
     </script>
 </body>
