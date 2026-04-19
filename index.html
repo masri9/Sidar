@@ -139,18 +139,18 @@
         .dot { width: 7px; height: 7px; background: #e2e8f0; border-radius: 50%; transition: 0.4s; }
         .dot.active { background: var(--primary-lava); width: 18px; border-radius: 10px; }
 
-      /* --- تعديل مكان الشريط السفلي --- */
+      /* --- تعديل مكان الشريط السفلي --- *//* --- تعديل مكان الشريط السفلي فقط (إنزاله لأسفل) --- */
 .bottom-nav {
     position: fixed; 
-    bottom: 20px; /* تم تعديل القيمة من 30px إلى 20px لإنزاله لأسفل */
+    /* القيمة السابقة كانت 30px، قمنا بتغييرها إلى 10px لإنزاله لأسفل */
+    bottom: 10px; 
     left: 50%; transform: translateX(-50%);
     width: 90%; max-width: 400px; background: #ffffff; border-radius: 40px;
     display: flex; justify-content: space-around; align-items: center;
     padding: 8px; border: 2px solid var(--primary-lava);
     box-shadow: 0 0 20px var(--lava-glow); z-index: 1000;
-    transition: bottom 0.3s ease; /* إضافة تأثير انتقالي سلس */
 }
-/* ---------------------------------- */
+/* -------------------------------------------------- */
 
     </style>
 </head>
