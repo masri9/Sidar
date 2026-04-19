@@ -1,266 +1,283 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sidarapp - Travel Explorer</title>
-    <style>
-        /* إعدادات المتغيرات والألوان الفاتحة */
-        :root {
-            --bg-light: #f8f9fa;
-            --text-dark: #2d3436;
-            --accent-purple: #a29bfe;
-            --neon-b: #3ecfff;
-            --neon-p: #a29bfe;
-            --r: 20px; /* حواف مستديرة للبطاقات */
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>VOYAGR — Premium Travel</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #060810;
+    --bg2: #0b0f1e;
+    --bg3: #101628;
+    --card: rgba(16,22,46,0.72);
+    --border: rgba(120,100,255,0.13);
+    --border2: rgba(80,180,255,0.12);
+    --neon-p: #a259ff;
+    --neon-b: #3ecfff;
+    --neon-g: #39ffbd;
+    --grad: linear-gradient(135deg, #a259ff 0%, #3ecfff 100%);
+    --grad2: linear-gradient(135deg, #3ecfff 0%, #39ffbd 100%);
+    --text: #f0f0ff;
+    --muted: rgba(200,200,255,0.45);
+    --glass: rgba(14,20,48,0.65);
+    --r: 20px;
+    --r2: 14px;
+    --ai-grad: linear-gradient(135deg, #0EA5E9 0%, #6366F1 100%);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  html,body{height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--text);overflow:hidden;}
 
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            font-family: 'Segoe UI', sans-serif;
-            background-color: var(--bg-light);
-        }
+.phone-shell{
+position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+background: radial-gradient(ellipse 80% 60% at 50% 20%, rgba(162,89,255,0.09) 0%, transparent 70%),
+radial-gradient(ellipse 60% 40% at 80% 80%, rgba(62,207,255,0.07) 0%, transparent 60%), #040608;
+}
+.phone{
+width:390px;height:844px;
+background:var(--bg);
+border-radius:50px;
+border:1.5px solid rgba(120,100,255,0.25);
+box-shadow:0 0 0 1px rgba(0,0,0,0.8), 0 40px 120px rgba(0,0,0,0.9),
+inset 0 0 0 1px rgba(255,255,255,0.04),
+0 0 80px rgba(162,89,255,0.15), 0 0 200px rgba(62,207,255,0.06);
+overflow:hidden;position:relative;display:flex;flex-direction:column;
+}
+.island{
+position:absolute;top:13px;left:50%;transform:translateX(-50%);
+width:126px;height:37px;background:#000;border-radius:20px;z-index:100;
+box-shadow:0 0 0 1.5px rgba(255,255,255,0.06);
+}
 
-        /* الخلفية التفاعلية الهادئة */
-        .background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: linear-gradient(45deg, #ffffff, #e3f2fd, #f5f5f5);
-            background-size: 400% 400%;
-            animation: gradientBG 10s ease infinite;
-        }
+.screens{display:flex;flex:1;position:relative;overflow:hidden;}
+.screen{
+position:absolute;inset:0;display:flex;flex-direction:column;
+opacity:0;pointer-events:none;transition:opacity .35s cubic-bezier(.4,0,.2,1);
+overflow:hidden;
+}
+.screen.active{opacity:1;pointer-events:all;}
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+.scroll-area{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:100px;padding-top:60px;}
+.scroll-area::-webkit-scrollbar{display:none;}
 
-        .app-container {
-            padding: 25px 0;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            box-sizing: border-box;
-        }
+.status-bar{
+position:absolute;top:0;left:0;right:0;height:52px;z-index:50;
+display:flex;align-items:flex-end;justify-content:space-between;
+padding:0 28px 8px;
+background:linear-gradient(to bottom, rgba(6,8,16,0.98) 0%, transparent 100%);
+pointer-events:none;
+}
+.status-time{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:#fff;}
+.status-icons{display:flex;gap:6px;align-items:center;font-size:12px;color:#fff;opacity:.9;}
 
-        /* الهيدر العلوي */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 25px 20px 25px;
-        }
+.nav-bar{
+position:absolute;bottom:0;left:0;right:0;height:84px;z-index:50;
+background:rgba(8,11,24,0.92);
+backdrop-filter:blur(24px) saturate(180%);
+border-top:1px solid var(--border);
+display:flex;align-items:center;justify-content:space-around;
+padding:0 10px 16px;
+box-shadow:0 -1px 0 rgba(162,89,255,0.08), 0 -20px 60px rgba(0,0,0,0.5);
+}
+.nav-item{
+display:flex;flex-direction:column;align-items:center;gap:5px;
+cursor:pointer;padding:8px 18px 0;transition:all .25s ease;
+position:relative;
+}
+.nav-item svg{width:26px;height:26px;transition:all .3s ease;}
+.nav-item span{font-size:10px;font-weight:500;color:var(--muted);transition:color .3s;}
+.nav-item.active span{color:var(--neon-p);}
+.nav-item.active svg{filter:drop-shadow(0 0 8px var(--neon-p));}
+.nav-glow{
+position:absolute;top:-1px;left:50%;transform:translateX(-50%);
+width:40px;height:2px;
+background:var(--grad);border-radius:0 0 4px 4px;
+opacity:0;transition:opacity .3s;box-shadow:0 0 12px var(--neon-p);
+}
+.nav-item.active .nav-glow{opacity:1;}
 
-        .greeting-text {
-            font-size: 12px;
-            color: #636e72;
-            letter-spacing: 1px;
-            font-weight: bold;
-            margin-bottom: 5px;
-            text-transform: uppercase;
-        }
+/* HOME STYLES */
+.home-greeting{display:flex;justify-content:space-between;align-items:center;padding:64px 20px 12px;}
+.greeting-text .sub{font-size:12px;color:var(--muted);font-weight:400;text-transform:uppercase;letter-spacing:.12em;}
+.greeting-text .name{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 
-        .user-name {
-            font-size: 26px;
-            font-weight: 900;
-            color: var(--text-dark);
-        }
+.banner{margin:0 20px;position:relative;height:210px;overflow:hidden;border-radius:var(--r);}
+.banner-slide{position:absolute;inset:0;opacity:0;transition:opacity .9s ease;background-size:cover;background-position:center;}
+.banner-slide.active{opacity:1;}
+.banner-slide::after{content:'';position:absolute;inset:0;background:linear-gradient(to top, rgba(6,8,16,0.88) 0%, rgba(6,8,16,0.15) 55%, transparent 100%);}
+.banner-content{position:absolute;bottom:18px;left:20px;z-index:2;}
+.banner-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;line-height:1.2;color:#fff;}
 
-        .notif-box {
-            position: relative;
-            background: rgba(0, 0, 0, 0.05);
-            padding: 10px;
-            border-radius: 12px;
-        }
+.services-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:0 20px;}
+.svc-card{
+display:flex;flex-direction:column;align-items:center;gap:8px;
+padding:14px 8px;background:var(--glass);border:1px solid var(--border);
+border-radius:var(--r2);cursor:pointer;backdrop-filter:blur(12px);
+transition:all .25s ease;
+}
+.svc-card:active{transform:scale(.95);}
+.svc-icon{width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;}
+.svc-label{font-size:10px;font-weight:500;color:var(--muted);text-align:center;line-height:1.3;}
 
-        .dot {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            width: 8px;
-            height: 8px;
-            background-color: var(--accent-purple);
-            border-radius: 50%;
-        }
+/* AI SEARCH & CHAT STYLES */
+.ai-search-container {
+  margin: 20px; padding: 15px; border-radius: 18px;
+  background: rgba(120, 100, 255, 0.08); border: 1px solid rgba(162, 89, 255, 0.2);
+  display: flex; align-items: center; gap: 12px; cursor: pointer;
+}
+.ai-orb {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--ai-grad); box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+  display: flex; align-items: center; justify-content: center; font-size: 14px;
+}
+.ai-chat-screen {
+  position: absolute; inset: 0; background: var(--bg); z-index: 300;
+  display: none; flex-direction: column; animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
-        /* تنسيق الـ Banner */
-        .banner {
-            margin: 0 20px;
-            position: relative;
-            height: 210px;
-            overflow: hidden;
-            border-radius: var(--r);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-        }
+.chat-header { padding: 60px 20px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+.chat-body { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+.ai-msg { background: var(--bg3); border: 1px solid var(--border); padding: 12px 16px; border-radius: 18px 18px 18px 4px; max-width: 80%; font-size: 14px; line-height: 1.5; color: #e0e0ff; }
+.chat-input-row { padding: 20px 20px 40px; display: flex; gap: 10px; }
+.chat-input { flex: 1; background: var(--bg3); border: 1px solid var(--border); border-radius: 14px; padding: 12px 16px; color: white; outline: none; }
 
-        .banner-slide {
-            position: absolute;
-            inset: 0;
-            opacity: 0;
-            transition: opacity .9s ease;
-            background-size: cover;
-            background-position: center;
-        }
-
-        .banner-slide.active { opacity: 1; }
-
-        .banner-slide::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 100%);
-        }
-
-        .banner-content {
-            position: absolute;
-            bottom: 18px;
-            left: 20px;
-            z-index: 2;
-        }
-
-        .banner-tag {
-            font-size: 10px;
-            font-weight: 600;
-            color: white;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(5px);
-            padding: 3px 10px;
-            border-radius: 20px;
-            display: inline-block;
-            margin-bottom: 6px;
-        }
-
-        .banner-title {
-            font-size: 22px;
-            font-weight: 800;
-            color: #fff;
-            line-height: 1.2;
-        }
-
-        .banner-dots {
-            position: absolute;
-            bottom: 18px;
-            right: 18px;
-            display: flex;
-            gap: 5px;
-            z-index: 2;
-        }
-
-        .banner-dot {
-            height: 4px;
-            background: rgba(255,255,255,0.3);
-            transition: all .4s ease;
-            width: 4px;
-            border-radius: 2px;
-        }
-
-        .banner-dot.active {
-            width: 20px;
-            background: #fff;
-        }
-
-        /* شريط التنقل السفلي */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: white;
-            display: flex;
-            justify-content: space-around;
-            padding: 15px 0;
-            box-shadow: 0 -2px 15px rgba(0,0,0,0.05);
-            border-radius: 25px 25px 0 0;
-        }
-
-        .nav-item {
-            text-align: center;
-            color: #b2bec3;
-            font-size: 11px;
-            text-decoration: none;
-        }
-
-        .nav-item.active { color: #0984e3; }
-        .nav-icon { font-size: 22px; display: block; margin-bottom: 4px; }
-    </style>
+.feed-card { margin: 0 20px 16px; background: var(--card); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; }
+.feed-header { padding: 14px; display: flex; align-items: center; gap: 10px; }
+.feed-visual { height: 200px; display: flex; align-items: center; justify-content: center; font-size: 60px; background: #0f172a; }
+</style>
 </head>
 <body>
 
-    <div class="background"></div>
+<div class="phone-shell">
+  <div class="phone">
+    <div class="island"></div>
 
-    <div class="app-container">
-        <div class="header">
-            <div>
-                <div id="greeting" class="greeting-text">GOOD MORNING</div>
-                <div class="user-name">Alex Rivera</div>
-            </div>
-            <div class="notif-box">
-                <span class="dot"></span>
-                <span>🔔</span>
-            </div>
+    <div class="ai-chat-screen" id="ai-chat">
+      <div class="chat-header">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div class="ai-orb">✦</div>
+          <span style="font-family:'Syne'; font-weight:700;">Voyagr AI</span>
         </div>
-
-        <div class="banner" id="banner">
-            <div class="banner-slide active" style="background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80');">
-                <div class="banner-content">
-                    <div class="banner-tag">Featured</div>
-                    <div class="banner-title">Swiss Alps Adventure</div>
-                </div>
-            </div>
-            
-            <div class="banner-slide" style="background-image: url('https://images.unsplash.com/photo-1519046904884-53103b34b206?w=800&q=80');">
-                <div class="banner-content">
-                    <div class="banner-tag">Trending</div>
-                    <div class="banner-title">Maldives Escape</div>
-                </div>
-            </div>
-
-            <div class="banner-dots">
-                <div class="banner-dot active"></div>
-                <div class="banner-dot"></div>
-            </div>
-        </div>
-
-        <div style="flex-grow: 1;"></div>
+        <button onclick="toggleChat(false)" style="background:none; border:none; color:var(--muted); font-size:24px;">×</button>
+      </div>
+      <div class="chat-body">
+        <div class="ai-msg">مرحباً! أنا مساعدك الذكي. كيف يمكنني مساعدتك في تخطيط رحلتك القادمة؟</div>
+      </div>
+      <div class="chat-input-row">
+        <input type="text" class="chat-input" placeholder="اكتب سؤالك هنا...">
+        <button style="width:45px; border-radius:12px; border:none; background:var(--grad); color:white;">➔</button>
+      </div>
     </div>
 
-    <nav class="bottom-nav">
-        <a href="#" class="nav-item active"><span class="nav-icon">🏠</span>Home</a>
-        <a href="#" class="nav-item"><span class="nav-icon">📍</span>Map</a>
-        <a href="#" class="nav-item"><span class="nav-icon">🎬</span>Reels</a>
-        <a href="#" class="nav-item"><span class="nav-icon">👤</span>Profile</a>
+    <div class="status-bar">
+      <span class="status-time">9:41</span>
+      <div class="status-icons">▲▲▲ WiFi 🔋</div>
+    </div>
+
+    <div class="screens">
+      <div class="screen active" id="screen-home">
+        <div class="scroll-area">
+          <div class="home-greeting">
+            <div class="greeting-text">
+              <div class="sub">Good morning ✦</div>
+              <div class="name">Alex Rivera</div>
+            </div>
+            <div style="width:40px;height:40px;border-radius:12px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;">🔔</div>
+          </div>
+
+          <div class="banner">
+            <div class="banner-slide active" style="background-image:url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800');">
+              <div class="banner-content">
+                <div class="banner-title">Swiss Alps Adventure</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="padding: 20px 20px 10px;"><h3 style="font-family:'Syne'; font-size:16px;">Services</h3></div>
+          
+          <div class="services-grid">
+            <div class="svc-card">
+              <div class="svc-icon" style="background:rgba(162,89,255,0.15);"><svg viewBox="0 0 24 24" fill="none" stroke="var(--neon-p)" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
+              <div class="svc-label">Villas</div>
+            </div>
+            <div class="svc-card">
+              <div class="svc-icon" style="background:rgba(62,207,255,0.15);"><svg viewBox="0 0 24 24" fill="none" stroke="var(--neon-b)" stroke-width="1.5"><rect x="5" y="2" width="14" height="20" rx="2"/></svg></div>
+              <div class="svc-label">eSIM</div>
+            </div>
+            <div class="svc-card">
+              <div class="svc-icon" style="background:rgba(57,255,189,0.12);"><svg viewBox="0 0 24 24" fill="none" stroke="var(--neon-g)" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg></div>
+              <div class="svc-label">Events</div>
+            </div>
+            <div class="svc-card">
+              <div class="svc-icon" style="background:rgba(255,160,80,0.12);"><svg viewBox="0 0 24 24" fill="none" stroke="#ffaa55" stroke-width="1.5"><path d="M1 9h22M3 9V7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2"/></svg></div>
+              <div class="svc-label">Car Rent</div>
+            </div>
+          </div>
+
+          <div class="ai-search-container" onclick="toggleChat(true)">
+            <div class="ai-orb">✦</div>
+            <div style="flex:1;">
+              <div style="font-size:13px; font-weight:600;">Ask Voyagr AI</div>
+              <div style="font-size:10px; color:var(--muted);">خطط لرحلتك القادمة بمساعدة الذكاء الاصطناعي</div>
+            </div>
+            <span style="color:var(--muted);">🎤</span>
+          </div>
+
+          <div class="feed-card">
+            <div class="feed-header"><strong>@nomad_zara</strong></div>
+            <div class="feed-visual">🏔️</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="screen" id="screen-map"></div>
+      <div class="screen" id="screen-reels"></div>
+      <div class="screen" id="screen-profile"></div>
+    </div>
+
+    <nav class="nav-bar">
+      <div class="nav-item active" onclick="switchTab(this,'home')">
+        <div class="nav-glow"></div>
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--neon-p)" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        <span>Home</span>
+      </div>
+      <div class="nav-item" onclick="switchTab(this,'map')">
+        <div class="nav-glow"></div>
+        <svg viewBox="0 0 24 24" fill="none" stroke="rgba(140,140,200,0.6)" stroke-width="1.8"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/></svg>
+        <span>Map</span>
+      </div>
+      <div class="nav-item" onclick="switchTab(this,'reels')">
+        <div class="nav-glow"></div>
+        <svg viewBox="0 0 24 24" fill="none" stroke="rgba(140,140,200,0.6)" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M10 8l6 4-6 4V8z"/></svg>
+        <span>Reels</span>
+      </div>
+      <div class="nav-item" onclick="switchTab(this,'profile')">
+        <div class="nav-glow"></div>
+        <svg viewBox="0 0 24 24" fill="none" stroke="rgba(140,140,200,0.6)" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/></svg>
+        <span>Profile</span>
+      </div>
     </nav>
+  </div>
+</div>
 
-    <script>
-        // التحية الذكية بالإنجليزية
-        function updateGreeting() {
-            const hours = new Date().getHours();
-            const greeting = document.getElementById('greeting');
-            if (hours < 12) greeting.innerText = "GOOD MORNING";
-            else if (hours < 17) greeting.innerText = "GOOD AFTERNOON";
-            else greeting.innerText = "GOOD EVENING";
-        }
-        updateGreeting();
+<script>
+  function switchTab(el, screen) {
+    document.querySelectorAll('.nav-item').forEach(n => {
+      n.classList.remove('active');
+      n.querySelector('svg').setAttribute('stroke','rgba(140,140,200,0.6)');
+    });
+    el.classList.add('active');
+    el.querySelector('svg').setAttribute('stroke','var(--neon-p)');
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    const target = document.getElementById('screen-'+screen);
+    if(target) target.classList.add('active');
+  }
 
-        // منطق الـ Banner التفاعلي
-        let slide = 0;
-        const slides = document.querySelectorAll('.banner-slide');
-        const dots = document.querySelectorAll('.banner-dot');
+  function toggleChat(show) {
+    document.getElementById('ai-chat').style.display = show ? 'flex' : 'none';
+  }
+</script>
 
-        setInterval(() => {
-            slides[slide].classList.remove('active');
-            dots[slide].classList.remove('active');
-            slide = (slide + 1) % slides.length;
-            slides[slide].classList.add('active');
-            dots[slide].classList.add('active');
-        }, 4000);
-    </script>
 </body>
 </html>
