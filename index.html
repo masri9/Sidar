@@ -3,8 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SIDAR TRAVEL</title>
+<title>SIDAR TRAVEL — AI Chat</title>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
 <style>
   :root {
     --blue: #2A70DC; --orange: #FF7A1A; --yellow: #FFE895; --green: #00C7B7;
@@ -16,20 +18,116 @@
   body {
     font-family: "Tajawal", sans-serif;
     min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    /* الخلفية الأصلية */
     background:
       radial-gradient(900px 600px at 12% -8%, rgba(255,232,149,.55), transparent 65%),
       radial-gradient(900px 600px at 90% -10%, rgba(0,199,183,.40), transparent 70%),
       radial-gradient(700px 520px at 0% 80%, rgba(255,122,26,.18), transparent 70%),
       radial-gradient(700px 520px at 100% 85%, rgba(42,112,220,.30), transparent 70%),
       linear-gradient(180deg,#fdfefe 0%,#e9f7ff 40%,#fff8ec 100%);
+    overflow-x: hidden;
   }
 
-  /* أنيميشن الأمواج */
+  /* الهيدر */
+  header {
+    position: fixed;
+    top: 0; width: 100%;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+  }
+  .header-icon {
+    font-size: 22px;
+    color: var(--ink);
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  .header-icon:hover { color: var(--blue); }
+
+  /* منطقة الهيرو */
+  .hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: 100px;
+    padding-bottom: 300px; /* لترك مساحة للأمواج */
+    min-height: 100vh;
+    z-index: 10;
+    position: relative;
+  }
+
+  .logo-container {
+    text-align: center;
+    margin-bottom: 40px;
+    animation: fadeInScale 1s ease-out;
+  }
+  .logo-container img { width: 220px; height: auto; }
+
+  /* واجهة الدردشة */
+  .ai-chat-box {
+    width: min(90%, 700px);
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(15px);
+    border-radius: 24px;
+    padding: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+  }
+
+  .chat-input-wrapper {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border-radius: 20px;
+    padding: 12px 20px;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.02);
+  }
+
+  .chat-input-wrapper input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-family: inherit;
+    font-size: 16px;
+    background: transparent;
+  }
+
+  .send-btn {
+    background: var(--blue);
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-right: 10px;
+  }
+  .send-btn:hover { background: var(--ink); transform: scale(1.05); }
+
+  .chat-hints {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .hint {
+    background: rgba(255,255,255,0.5);
+    padding: 8px 15px;
+    border-radius: 12px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.3s;
+    border: 1px solid rgba(0,0,0,0.05);
+  }
+  .hint:hover { background: #fff; color: var(--blue); }
+
+  /* الأمواج */
   .waves-wrap {
     position: fixed;
     inset-inline: 0;
@@ -50,31 +148,15 @@
   .wave-1 { bottom: 0; background: linear-gradient(90deg,rgba(42,112,220,.9),rgba(0,199,183,.85)); }
   .wave-2 { bottom: 40px; background: linear-gradient(90deg,rgba(0,199,183,.85),rgba(255,232,149,.9)); animation-duration: 28s; animation-direction: reverse; }
   .wave-3 { bottom: 80px; background: linear-gradient(90deg,rgba(255,232,149,.9),rgba(255,122,26,.9)); animation-duration: 34s; }
-  
-  @keyframes waveMove {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(30%); }
-  }
 
-  /* الشعار */
-  .logo-container {
-    z-index: 10;
-    text-align: center;
-    animation: fadeInScale 1.2s ease-out both;
-  }
-  .logo-container img {
-    width: 280px; /* حجم أكبر قليلاً ليناسب الفراغ */
-    height: auto;
-    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.05));
-  }
-
-  @keyframes fadeInScale {
-    from { opacity: 0; transform: scale(0.9); }
-    to { opacity: 1; transform: scale(1); }
-  }
+  @keyframes waveMove { 0% { transform: translateX(0); } 100% { transform: translateX(30%); } }
+  @keyframes fadeInScale { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 </style>
 </head>
 <body>
+
+<header>
+  <div class="header-icon"><i class="fas fa-bars"></i></div> <div class="header-icon"><i class="fas fa-bell"></i></div> </header>
 
 <div class="waves-wrap">
   <div class="wave-layer wave-1"></div>
@@ -82,9 +164,23 @@
   <div class="wave-layer wave-3"></div>
 </div>
 
-<div class="logo-container">
-  <img src="https://i.ibb.co/Q3p4gmYX/IMG-1629.png" alt="SIDAR TRAVEL">
-</div>
+<section class="hero">
+  <div class="logo-container">
+    <img src="https://i.ibb.co/Q3p4gmYX/IMG-1629.png" alt="SIDAR TRAVEL">
+  </div>
+
+  <div class="ai-chat-box">
+    <div class="chat-input-wrapper">
+      <input type="text" placeholder="اسأل سيدار AI عن وجهتك القادمة...">
+      <button class="send-btn"><i class="fas fa-paper-plane"></i></button>
+    </div>
+    <div class="chat-hints">
+      <div class="hint">✈️ خطط لرحلتي إلى تركيا</div>
+      <div class="hint">🏨 أفضل فنادق دبي</div>
+      <div class="hint">🗺️ أماكن غير معروفة في أوروبا</div>
+    </div>
+  </div>
+</section>
 
 </body>
 </html>
