@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sidarapp - Travel Home</title>
+    <title>Sidarapp - Travel Services</title>
     <style>
-        /* المتغيرات الأساسية والألوان الفاتحة */
         :root {
-            --accent: #6c5ce7; /* لون الـ Purple النشط من الصورة */
+            --accent: #6c5ce7;
             --nav-bg: #ffffff;
-            --bg-light: #f8faff; /* خلفية فاتحة لراحة العين */
+            --bg-light: #f8faff;
             --text-main: #1a1a1a;
             --text-sub: #8e8e8e;
         }
@@ -17,286 +16,176 @@
         body { 
             margin: 0; 
             background-color: var(--bg-light); 
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             overflow-x: hidden;
         }
 
-        /* حاوية التطبيق الرئيسية بمسافات مناسبة */
         .app-container {
-            padding: 25px 20px 120px 20px; /* مسافة سفلية كافية للشريط */
+            padding: 25px 20px 120px 20px;
         }
 
-        /* --- قسم الترحيب العلوي (ثابت) --- */
+        /* --- Header (Fixed) --- */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
-        .greeting-group { display: flex; flex-direction: column; }
-        .greeting { 
-            font-size: 12px; 
-            color: var(--text-sub); 
-            text-transform: uppercase; 
-            font-weight: bold; 
-            letter-spacing: 1px;
-        }
-        .user-name { 
-            font-size: 28px; 
-            font-weight: 800; 
-            color: var(--text-main); 
-            margin-top: 4px;
-        }
-        .notif-icon {
-            background: white; 
-            padding: 12px; 
-            border-radius: 15px; 
-            box-shadow: 0 5px 15px rgba(0,0,0,0.04);
-            cursor: pointer;
-        }
+        .greeting { font-size: 12px; color: var(--text-sub); text-transform: uppercase; font-weight: bold; }
+        .user-name { font-size: 26px; font-weight: 800; color: var(--text-main); }
 
-        /* --- البانر الإعلاني التفاعلي (الجديد) --- */
+        /* --- Banner Carousel (Fixed with Dots) --- */
         .banner-carousel {
-            height: 200px;
+            height: 180px;
             position: relative;
             overflow: hidden;
             border-radius: 25px;
-            box-shadow: 0 12px 25px rgba(0,0,0,0.07);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+            margin-bottom: 30px;
         }
-
-        /* حاوية الصور */
-        .slides-container {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); /* تحريك سلس */
-        }
-
-        .slide {
-            min-width: 100%;
-            height: 100%;
-            background-size: cover;
-            background-position: center;
-            position: relative;
-        }
-
-        /* طبقة تظليل خفيفة لقراءة النص */
-        .slide::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.5), transparent 70%);
-        }
-
-        .slide-content {
-            position: absolute;
-            bottom: 25px;
-            left: 20px;
-            color: white;
-            z-index: 2;
-        }
-        .slide-title { font-size: 24px; font-weight: 700; line-height: 1.2; }
-
-        /* --- المؤشرات السفلية للبانر (Dots) --- */
+        .slides-container { width: 100%; height: 100%; display: flex; transition: transform 0.6s ease; }
+        .slide { min-width: 100%; height: 100%; background-size: cover; background-position: center; }
         .banner-dots {
-            position: absolute;
-            bottom: 15px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 8px;
-            z-index: 10;
+            position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 6px;
+        }
+        .dot { width: 6px; height: 6px; background: rgba(255,255,255,0.5); border-radius: 50%; transition: 0.3s; }
+        .dot.active { background: white; width: 15px; border-radius: 4px; }
+
+        /* --- New: Services Section (Activities & E-sim) --- */
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 15px;
         }
 
-        .dot {
-            width: 8px;
-            height: 8px;
-            background-color: rgba(255, 255, 255, 0.5);
-            border-radius: 50%;
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .service-card {
+            background: white;
+            padding: 20px;
+            border-radius: 22px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            transition: transform 0.3s ease;
             cursor: pointer;
-            transition: all 0.3s ease;
+            border: 1px solid rgba(0,0,0,0.02);
         }
 
-        .dot.active {
-            background-color: white;
-            width: 20px; /* استطالة النقطة النشطة */
-            border-radius: 4px;
-        }
+        .service-card:active { transform: scale(0.95); }
 
-        /* --- شريط التنقل السفلي (ثابت ومتحرك) --- */
-        .bottom-nav {
-            position: fixed;
-            bottom: 25px; 
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80%; 
-            max-width: 340px; /* حجم أصغر ومناسب */
-            background: var(--nav-bg);
-            display: flex;
-            justify-content: space-around;
-            padding: 12px 0;
-            border-radius: 30px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            z-index: 1000;
-        }
-
-        .nav-item {
-            position: relative;
+        .service-icon-box {
+            width: 50px;
+            height: 50px;
+            background: rgba(108, 92, 231, 0.08);
+            border-radius: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* حركة جميلة */
+            margin-bottom: 12px;
         }
 
-        .nav-icon {
-            width: 24px;
-            height: 24px;
-            stroke: #b2bec3; /* لون غير نشط */
+        .service-icon {
+            width: 26px;
+            height: 26px;
+            stroke: var(--accent);
             stroke-width: 2;
             fill: none;
-            transition: 0.3s;
         }
 
-        /* تحريك قفزة للأعلى للأيقونة النشطة */
-        .nav-item.active {
-            background: rgba(108, 92, 231, 0.08);
-            transform: translateY(-8px);
+        .service-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-main);
         }
 
-        .nav-item.active .nav-icon {
-            stroke: var(--accent);
-            filter: drop-shadow(0 0 5px rgba(108, 92, 231, 0.3));
+        /* --- Bottom Nav (Fixed) --- */
+        .bottom-nav {
+            position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
+            width: 80%; max-width: 340px; background: var(--nav-bg);
+            display: flex; justify-content: space-around; padding: 12px 0;
+            border-radius: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); z-index: 1000;
         }
-
-        /* النقطة الصغيرة تحت الأيقونة النشطة */
-        .nav-item.active::after {
-            content: '';
-            position: absolute;
-            bottom: -6px;
-            width: 4px;
-            height: 4px;
-            background: var(--accent);
-            border-radius: 50%;
-        }
+        .nav-item { position: relative; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; transition: 0.4s; }
+        .nav-icon { width: 24px; height: 24px; stroke: #b2bec3; stroke-width: 2; fill: none; transition: 0.3s; }
+        .nav-item.active { background: rgba(108, 92, 231, 0.08); transform: translateY(-8px); }
+        .nav-item.active .nav-icon { stroke: var(--accent); }
     </style>
 </head>
 <body>
 
     <div class="app-container">
         <header class="header">
-            <div class="greeting-group">
+            <div>
                 <div id="greeting" class="greeting">GOOD MORNING</div>
                 <div class="user-name">Alex Rivera</div>
             </div>
-            <div class="notif-icon">🔔</div>
+            <div style="background: white; padding: 10px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.03);">🔔</div>
         </header>
 
         <section class="banner-carousel">
             <div class="slides-container" id="slidesContainer">
-                <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800');">
-                    <div class="slide-content">
-                        <div class="slide-title">Swiss Alps<br>Adventure</div>
-                    </div>
-                </div>
-                <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1519046904884-53103b34b206?w=800');">
-                    <div class="slide-content">
-                        <div class="slide-title">Maldives<br>Luxury Escape</div>
-                    </div>
-                </div>
-                <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1555400538-5fd41fe3e7e4?w=800');">
-                    <div class="slide-content">
-                        <div class="slide-title">Tokyo<br>City Tour</div>
-                    </div>
-                </div>
+                <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800');"></div>
+                <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1519046904884-53103b34b206?w=800');"></div>
+                <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1555400538-5fd41fe3e7e4?w=800');"></div>
             </div>
-
             <div class="banner-dots">
-                <div class="dot active" onclick="goToSlide(0)"></div>
-                <div class="dot" onclick="goToSlide(1)"></div>
-                <div class="dot" onclick="goToSlide(2)"></div>
+                <div class="dot active"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
             </div>
         </section>
+
+        <h2 class="section-title">Our Services</h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon-box">
+                    <svg class="service-icon" viewBox="0 0 24 24"><path d="M14.5 21l-5-5 5-5M8.5 21l-5-5 5-5M21 16H9"></path><circle cx="18" cy="6" r="3"></circle></svg>
+                </div>
+                <div class="service-name">Activities</div>
+            </div>
+            <div class="service-card">
+                <div class="service-icon-box">
+                    <svg class="service-icon" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line><path d="M9 7h6"></path><path d="M9 11h6"></path></svg>
+                </div>
+                <div class="service-name">E-sim</div>
+            </div>
+        </div>
     </div>
 
     <nav class="bottom-nav">
-        <div class="nav-item active" onclick="setActive(this)">
-            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
-        </div>
-        <div class="nav-item" onclick="setActive(this)">
-            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M1 6v16l7-4 8 4 7-4V2l-7 4-8-4-7 4z"></path></svg>
-        </div>
-        <div class="nav-item" onclick="setActive(this)">
-            <svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"></circle><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path></svg>
-        </div>
+        <div class="nav-item active"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg></div>
+        <div class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M1 6v16l7-4 8 4 7-4V2l-7 4-8-4-7 4z"></path></svg></div>
+        <div class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"></circle><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path></svg></div>
     </nav>
 
     <script>
-        // --- أولاً: تحضير العناصر العامة ---
-        const greetingText = document.getElementById('greeting');
-        const userName = "Alex Rivera"; // يمكن جلبها ديناميكياً لاحقاً
-
-        // --- ثانياً: منطق التحية الذكية بالإنجليزية ---
-        function updateGreeting() {
-            const hours = new Date().getHours();
-            if (hours < 12) greetingText.innerText = "GOOD MORNING";
-            else if (hours < 17) greetingText.innerText = "GOOD AFTERNOON";
-            else greetingText.innerText = "GOOD EVENING";
-        }
-        updateGreeting();
-
-        // --- ثالثاً: منطق البانر التفاعلي (Carousel) ---
+        // Banner Logic
         let currentSlide = 0;
-        const totalSlides = 3; // عدد الصور
         const container = document.getElementById('slidesContainer');
         const dots = document.querySelectorAll('.dot');
-
-        // دالة للانتقال لصورة محددة
-        function goToSlide(slideIndex) {
-            currentSlide = slideIndex;
-            // تحريك الحاوية أفقياً بناءً على المؤشر
-            container.style.transform = `translateX(-${currentSlide * 100}%)`;
-            
-            // تحديث حالة النقاط (Dots)
-            dots.forEach(dot => dot.classList.remove('active'));
-            dots[currentSlide].classList.add('active');
-        }
-
-        // دالة للانتقال التلقائي كل 4 ثوانٍ
-        function autoSlide() {
-            currentSlide = (currentSlide + 1) % totalSlides;
-            goToSlide(currentSlide);
-        }
-
-        // تشغيل المؤقت التلقائي
-        let slideInterval = setInterval(autoSlide, 4000);
-
-        // إعادة ضبط المؤقت عند النقر اليدوي على النقاط
-        function resetInterval() {
-            clearInterval(slideInterval);
-            slideInterval = setInterval(autoSlide, 4000);
-        }
         
-        // إضافة مستمعي النقر للنقاط اليدوية
-        dots.forEach((dot, index) => {
-            dot.addEventListener('click', () => {
-                goToSlide(index);
-                resetInterval();
-            });
-        });
+        setInterval(() => {
+            currentSlide = (currentSlide + 1) % 3;
+            container.style.transform = `translateX(-${currentSlide * 100}%)`;
+            dots.forEach(d => d.classList.remove('active'));
+            dots[currentSlide].classList.add('active');
+        }, 4000);
 
-        // --- رابعاً: تحريك شريط التنقل السفلي عند النقر ---
-        function setActive(clickedItem) {
-            // إزالة حالة النشاط من جميع العناصر
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.classList.remove('active');
-            });
-            // إضافة حالة النشاط للعنصر الذي تم النقر عليه
-            clickedItem.classList.add('active');
-        }
+        // Greeting Logic
+        const hours = new Date().getHours();
+        const g = document.getElementById('greeting');
+        if (hours < 12) g.innerText = "GOOD MORNING";
+        else if (hours < 17) g.innerText = "GOOD AFTERNOON";
+        else g.innerText = "GOOD EVENING";
     </script>
 </body>
 </html>
