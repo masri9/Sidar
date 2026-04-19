@@ -3,68 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sidarapp - Creative Travel UI</title>
+    <title>Sidarapp - Mountain Journey UI</title>
     <style>
         :root {
-            --accent: #6c5ce7;
+            --accent: #6c5ce7; /* لون الـ Purple النشط */
             --nav-bg: #ffffff;
+            --bg-light: #f8faff; /* خلفية فاتحة جداً مريحة للعين */
             --text-main: #1a1a1a;
             --text-sub: #8e8e8e;
             --esim-gradient: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
         }
 
-        /* --- 1. إعدادات الخلفية الإبداعية الجديدة --- */
         body { 
             margin: 0; 
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             overflow-x: hidden;
-            background-color: #f8faff; /* اللون الأساسي الفاتح */
+            background-color: var(--bg-light); /* اللون الأساسي الفاتح الثابت */
             position: relative;
+            min-height: 100vh;
         }
 
-        /* طبقة العناصر المتحركة (أيقونات سفر وطبيعة) */
-        body::before {
-            content: '';
+        /* --- 1. إعدادات خلفية الجبال المتحركة (Creative Content) --- */
+        /* الحاوية الرئيسية للخلفية المتحركة */
+        .mountain-background-container {
             position: fixed;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            z-index: -1; /* خلف المحتوى */
-            
-            /* إضافة النقوش: طائرات، بوصلة، أوراق شجر (باستخدام SVG مبسط) */
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40vh; /* تغطي تقريباً الثلث السفلي من الصفحة */
+            z-index: -1; /* خلف المحتوى الأمامي الثابت */
+            overflow: hidden;
+            pointer-events: none; /* لا تتفاعل مع اللمس لكي لا تعيق المحتوى */
+        }
+
+        /* رسم وتصميم الجبال باستخدام تدرجات ناعمة */
+        .mountains {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 200%; /* عرض مضاعف للسماح بالحركة الأفقية */
+            height: 100%;
             background-image: 
-                url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDQwIDQwIj48ZyBmaWxsPSIjNmM1Y2U3IiBmaWxsLW9wYWNpdHk9IjAuMDUiPjxwYXRoIGQ9Ik0wIDBoNDB2NDBIMHoiLz48cGF0aCBkPSJNMjAgMTBsLTUgNUg1bDUgNWw1IDUgMTAtMTB6TTI1IDE1bDUtNUwzMCAwaC01bC01IDV6Ii8+PC9nPjwvc3ZnPg=='), /* طائرة مبسطة */
-                url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MCIgaGVpZ2h0PSI1MCIgdmlld0JveD0iMCAwIDUwIDUwIj48ZyBmaWxsPSIjOThmZmE2IiBmaWxsLW9wYWNpdHk9IjAuMDQiPjxwYXRoIGQ9Ik0yNSAwaDEwdjEwSDI1ek0yNSA0MGgxMHYxMEgyNXpNMCAyNWgxMHYxMEgwek00MCAyNWgxMHYxMEg0MHoiLz48Y2lyY2xlIGN4PSIyNSIgY3k9IjI1IiByPSIyMCIvPjwvZz48L3N2Zz4='); /* بوصلة وأوراق */
-            
-            background-repeat: repeat;
-            background-size: 150px, 250px; /* أحجام مختلفة للعمق */
-            opacity: 0.6;
-            animation: travelBackgroundMove 60s linear infinite; /* حركة بطيئة جداً */
+                /* طبقة الجبال القريبة (داكنة قليلاً) */
+                linear-gradient(170deg, transparent 40%, rgba(108, 92, 231, 0.08) 40%, rgba(108, 92, 231, 0.12) 100%),
+                /* طبقة الجبال البعيدة (أفتح) */
+                linear-gradient(175deg, transparent 50%, rgba(162, 155, 254, 0.05) 50%, rgba(162, 155, 254, 0.08) 100%);
+            background-size: 50% 100%; /* تكرار النمط أفقيًا */
+            background-repeat: repeat-x;
+            animation: mountainMove 120s linear infinite; /* حركة بطيئة جداً وناعمة */
+            opacity: 0.8;
         }
 
-        /* حركة دوران وانزلاق ناعمة للخلفية */
-        @keyframes travelBackgroundMove {
-            0% { transform: translate(0, 0) rotate(0deg); }
-            100% { transform: translate(15%, 15%) rotate(5deg); }
+        /* حركة الانزلاق الأفقي الناعم للجبال */
+        @keyframes mountainMove {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); } /* تتحرك نصف المسافة لتكرار النمط */
         }
 
-        /* --- باقي العناصر الثابتة (كما هي تماماً) --- */
+        /* --- 2. باقي العناصر الأمامية الثابتة (كما هي تماماً) --- */
         .app-container {
-            padding: 25px 20px 120px 20px;
+            padding: 25px 20px 140px 20px; /* مسافة سفلية كافية للشريط */
             position: relative;
-            z-index: 1;
+            z-index: 1; /* لتكون فوق الخلفية المتحركة */
         }
 
+        /* Header (ثابت) */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 25px;
         }
-        .greeting { font-size: 12px; color: var(--text-sub); text-transform: uppercase; font-weight: bold; }
-        .user-name { font-size: 26px; font-weight: 800; color: var(--text-main); }
+        .greeting { font-size: 12px; color: var(--text-sub); text-transform: uppercase; font-weight: bold; letter-spacing: 1px; }
+        .user-name { font-size: 28px; font-weight: 800; color: var(--text-main); margin-top: 4px; }
+        .notif-icon {
+            background: rgba(255,255,255,0.9); 
+            padding: 12px; 
+            border-radius: 15px; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+            backdrop-filter: blur(5px);
+        }
 
+        /* Banner Carousel (ثابت مع النقاط) */
         .banner-carousel {
             height: 180px;
             position: relative;
@@ -73,71 +93,68 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.06);
             margin-bottom: 30px;
         }
-        .slides-container { width: 100%; height: 100%; display: flex; transition: transform 0.6s ease; }
-        .slide { min-width: 100%; height: 100%; background-size: cover; background-position: center; }
+        .slides-container { width: 100%; height: 100%; display: flex; transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); }
+        .slide { min-width: 100%; height: 100%; background-size: cover; background-position: center; position: relative; }
+        .slide::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.5), transparent); }
+        .slide-content { position: absolute; bottom: 25px; left: 20px; color: white; z-index: 2; }
+        .slide-title { font-size: 24px; font-weight: 700; line-height: 1.2; }
         
         .banner-dots {
             position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
-            display: flex; gap: 6px;
+            display: flex; gap: 6px; z-index: 10;
         }
-        .dot { width: 6px; height: 6px; background: rgba(255,255,255,0.5); border-radius: 50%; }
-        .dot.active { background: white; width: 15px; border-radius: 4px; }
+        .dot { width: 6px; height: 6px; background: rgba(255,255,255,0.5); border-radius: 50%; transition: 0.3s; }
+        .dot.active { background: white; width: 18px; border-radius: 4px; }
 
+        /* Services Section (ثابت) */
         .section-title { font-size: 18px; font-weight: 700; color: var(--text-main); margin-bottom: 15px; }
-
         .services-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 
         .service-card {
-            background: rgba(255, 255, 255, 0.85); /* زيادة الشفافية لتظهر الخلفية */
-            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.8); /* نصف شفافة لتظهر الجبال */
+            backdrop-filter: blur(10px); /* تأثير ضبابي ناعم */
             padding: 20px;
             border-radius: 25px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
+            display: flex; flex-direction: column; align-items: center; text-align: center;
             box-shadow: 0 4px 15px rgba(0,0,0,0.02);
-            cursor: pointer;
-            transition: transform 0.2s ease;
+            transition: 0.3s ease;
             border: 1px solid rgba(255,255,255,0.5);
         }
-
-        .esim-card {
-            background: var(--esim-gradient);
-            color: white;
-            border: none;
-        }
-
-        .service-card:active { transform: scale(0.95); }
-
+        .esim-card { background: var(--esim-gradient); color: white; border: none; backdrop-filter: none; }
+        .service-card:active { transform: scale(0.96); }
         .service-icon-box {
             width: 55px; height: 55px;
             background: rgba(108, 92, 231, 0.08);
             border-radius: 18px;
             display: flex; align-items: center; justify-content: center; margin-bottom: 12px;
         }
-
         .esim-card .service-icon-box { background: rgba(255, 255, 255, 0.2); }
         .service-icon { width: 28px; height: 28px; stroke: var(--accent); stroke-width: 2; fill: none; }
         .esim-card .service-icon { stroke: white; }
         .service-name { font-size: 15px; font-weight: 600; color: var(--text-main); }
         .esim-card .service-name { color: white; }
 
+        /* Bottom Nav (ثابت ومتحرك) */
         .bottom-nav {
             position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
-            width: 80%; max-width: 340px; background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
+            width: 80%; max-width: 340px; 
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
             display: flex; justify-content: space-around; padding: 12px 0;
             border-radius: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); z-index: 1000;
         }
         .nav-item { position: relative; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; transition: 0.4s; }
-        .nav-icon { width: 24px; height: 24px; stroke: #b2bec3; stroke-width: 2; fill: none; }
-        .nav-item.active { background: rgba(108, 92, 231, 0.1); transform: translateY(-8px); }
-        .nav-item.active .nav-icon { stroke: var(--accent); }
-
+        .nav-icon { width: 24px; height: 24px; stroke: #b2bec3; stroke-width: 2; fill: none; transition: 0.3s; }
+        .nav-item.active { background: rgba(108, 92, 231, 0.08); transform: translateY(-8px); }
+        .nav-item.active .nav-icon { stroke: var(--accent); filter: drop-shadow(0 0 5px rgba(108, 92, 231, 0.3)); }
+        .nav-item.active::after { content: ''; position: absolute; bottom: -6px; width: 4px; height: 4px; background: var(--accent); border-radius: 50%; }
     </style>
 </head>
 <body>
+
+    <div class="mountain-background-container">
+        <div class="mountains"></div>
+    </div>
 
     <div class="app-container">
         <header class="header">
@@ -145,14 +162,20 @@
                 <div id="greeting" class="greeting">GOOD MORNING</div>
                 <div class="user-name">Alex Rivera</div>
             </div>
-            <div style="background: white; padding: 10px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.03);">🔔</div>
+            <div class="notif-icon">🔔</div>
         </header>
 
         <section class="banner-carousel">
             <div class="slides-container" id="slidesContainer">
-                <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800');"></div>
-                <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1519046904884-53103b34b206?w=800');"></div>
-                <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1555400538-5fd41fe3e7e4?w=800');"></div>
+                <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800');">
+                    <div class="slide-content"><div class="slide-title">Swiss Alps<br>Adventure</div></div>
+                </div>
+                <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1519046904884-53103b34b206?w=800');">
+                    <div class="slide-content"><div class="slide-title">Maldives<br>Luxury Escape</div></div>
+                </div>
+                <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1555400538-5fd41fe3e7e4?w=800');">
+                    <div class="slide-content"><div class="slide-title">Tokyo<br>City Tour</div></div>
+                </div>
             </div>
             <div class="banner-dots">
                 <div class="dot active"></div>
@@ -190,7 +213,7 @@
     </nav>
 
     <script>
-        // Banner Logic
+        // Banner Auto-slide (كل 4 ثوانٍ)
         let currentSlide = 0;
         const container = document.getElementById('slidesContainer');
         const dots = document.querySelectorAll('.dot');
@@ -201,7 +224,7 @@
             dots[currentSlide].classList.add('active');
         }, 4000);
 
-        // Greeting Logic
+        // Greeting Logic (English)
         const hours = new Date().getHours();
         const g = document.getElementById('greeting');
         if (hours < 12) g.innerText = "GOOD MORNING";
