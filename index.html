@@ -11,6 +11,7 @@
             --text-main: #1e293b;
             --text-sub: #64748b;
             --nav-bg: rgba(255, 255, 255, 0.95);
+            --white-alpha: rgba(255, 255, 255, 0.85);
         }
 
         body, html { 
@@ -18,6 +19,7 @@
             font-family: 'Segoe UI', Roboto, sans-serif;
             overflow: hidden;
             height: 100vh;
+            -webkit-font-smoothing: antialiased;
         }
 
         /* --- شاشة الـ Splash --- */
@@ -34,7 +36,7 @@
             100% { transform: scale(1); opacity: 1; filter: blur(0); }
         }
 
-        /* --- واجهة الـ Home --- */
+        /* --- واجهة الـ Home (الخلفية) --- */
         .background-container {
             position: fixed; inset: 0; z-index: -1;
             background-image: url('https://plain-eeur-prod-public.komododecks.com/202604/19/FtJXvAZvXREKew6PJ3ew/image.png'); 
@@ -42,32 +44,111 @@
         }
 
         .app-container {
-            height: 100vh; padding: 30px 25px;
-            display: flex; flex-direction: column; justify-content: space-between;
+            height: 100vh; padding: 25px;
+            display: flex; flex-direction: column;
             box-sizing: border-box; opacity: 0; 
             transition: opacity 1.2s ease;
         }
 
-        /* تعديل الـ Header ليبقى فارغاً */
-        .header { height: 60px; }
+        /* --- الهيدر والقائمة --- */
+        .header {
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start; /* ترتيب العناصر من اليسار */
+            margin-bottom: 20px;
+        }
 
+        .menu-icon {
+            background: white;
+            padding: 12px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .menu-icon:active { background: #f1f5f9; }
+
+        /* --- المحتوى الرئيسي وبطاقة الـ Hero --- */
         .main-content {
             flex: 1;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            justify-content: center; /* توسيط عمودي */
+            align-items: center;     /* توسيط أفقي */
+            padding-bottom: 100px;  /* مسافة لشريط التنقل */
         }
 
-        /* --- شريط التنقل --- */
+        .hero-card {
+            background: var(--white-alpha);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 40px 30px;
+            border-radius: 35px;
+            width: 85%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(37, 99, 235, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            
+            /* أنيميشن الظهور */
+            opacity: 0;
+            transform: translateY(40px);
+            animation: heroSlideUp 1s ease-out 2.8s forwards; /* تظهر بعد الـ Splash */
+        }
+
+        @keyframes heroSlideUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-title {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--text-main);
+            margin: 0 0 15px 0;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: 16px;
+            color: var(--text-sub);
+            margin: 0;
+            line-height: 1.6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 5px; /* مسافة بين الكلمات والشعار */
+        }
+
+        /* تنسيق صورة الشعار داخل النص */
+        .inline-logo {
+            height: 20px; /* تناسب طول الخط */
+            width: auto;
+            vertical-align: middle;
+            margin-top: -2px; /* تعديل بسيط للمحاذاة */
+        }
+
+        /* --- شريط التنقل السفلي --- */
         .bottom-nav-container {
-            align-self: center; margin-bottom: 30px;
-            width: 92%; max-width: 420px;
-            background: var(--nav-bg); backdrop-filter: blur(25px);
-            padding: 8px 12px; border-radius: 30px;
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 420px;
+            background: var(--nav-bg);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            padding: 8px 12px;
+            border-radius: 30px;
             box-shadow: 0 15px 35px rgba(37, 99, 235, 0.15);
-            display: flex; justify-content: space-around; align-items: center;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
             border: 1px solid rgba(255,255,255,0.3);
+            z-index: 100;
         }
 
         .nav-item {
@@ -92,11 +173,22 @@
     <div class="background-container"></div>
     
     <div class="app-container" id="main-app">
+        
         <header class="header">
-            </header>
+            <div class="menu-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1e293b" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            </div>
+        </header>
 
         <main class="main-content">
-            </main>
+            <div class="hero-card">
+                <h1 class="hero-title">Explore Without Limits</h1>
+                <p class="hero-subtitle">
+                    <span>Your journey begins with</span>
+                    <img src="https://plain-eeur-prod-public.komododecks.com/202604/19/y0zyi6uOKg2CaNATvHPZ/image.png" alt="Sidar" class="inline-logo">
+                </p>
+            </div>
+        </main>
 
         <nav class="bottom-nav-container">
             <div class="nav-item active" onclick="setActive(this)">
@@ -119,16 +211,22 @@
     </div>
 
     <script>
+        // التعامل مع شاشة الـ Splash وإظهار التطبيق
         window.addEventListener('load', () => {
             setTimeout(() => {
                 const splash = document.getElementById('splash-screen');
                 const mainApp = document.getElementById('main-app');
+                
+                // إخفاء الـ Splash
                 splash.style.opacity = '0';
                 splash.style.visibility = 'hidden';
+                
+                // إظهار التطبيق وحركة البطاقة
                 mainApp.style.opacity = '1';
-            }, 2500);
+            }, 2500); // مدة العرض 2.5 ثانية
         });
 
+        // تغيير القائمة النشطة في شريط التنقل
         function setActive(el) {
             document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
             el.classList.add('active');
