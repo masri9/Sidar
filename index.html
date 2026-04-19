@@ -9,6 +9,8 @@
             --primary-blue: #2563eb;
             --light-blue: #dbeafe;
             --nav-bg: rgba(255, 255, 255, 0.95);
+            /* تدرج ألوان احترافي للنص */
+            --text-gradient: linear-gradient(135deg, #ffffff 0%, #dbeafe 100%);
         }
 
         body, html { 
@@ -40,10 +42,10 @@
             background-size: cover; background-position: center;
         }
         
-        /* تظليل خفيف لبروز النص الأبيض */
+        /* تظليل الخلفية لبروز النص */
         .background-overlay {
             position: fixed; inset: 0; z-index: -1;
-            background: rgba(0, 0, 0, 0.25);
+            background: rgba(0, 0, 0, 0.3); /* تظليل أعمق قليلاً */
         }
 
         .app-container {
@@ -72,20 +74,20 @@
         }
         .menu-icon:active { transform: scale(0.9); }
 
-        /* --- المحتوى الرئيسي (النص) --- */
+        /* --- المحتوى الرئيسي (النص الاحترافي) --- */
         .main-content {
             flex: 1;
             display: flex;
             flex-direction: column;
             justify-content: flex-start; 
             align-items: center;
-            padding-top: 50px; 
+            padding-top: 80px; /* مسافة متناسبة من الأعلى */
             text-align: center;
         }
 
         .hero-text-container {
-            width: 90%;
-            max-width: 500px;
+            width: 85%; /* تحديد العرض ليصبح النص على سطرين متساويين */
+            max-width: 450px;
             opacity: 0;
             transform: translateY(30px);
             animation: textSlideUp 1s ease-out 2.8s forwards;
@@ -96,24 +98,38 @@
         }
 
         .hero-full-title {
-            font-size: 34px;
+            font-size: 36px; /* حجم كبير وموحد */
             font-weight: 800;
-            color: #ffffff;
-            line-height: 1.3;
-            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            line-height: 1.25; /* مسافة بين السطرين */
+            margin: 0;
+            
+            /* تطبيق التدرج اللوني للنص */
+            background: var(--text-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent; /* Fallback */
+
+            /* تظليل النص الاحترافي */
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             align-items: center;
-            gap: 12px;
-            margin: 0;
+            gap: 10px 15px; /* مسافة بين الكلمات والشعار */
         }
 
+        /* تنسيق الشعار في نهاية الجملة */
         .inline-logo {
-            height: 38px;
+            height: 38px; /* حجم متناسق تماماً مع الخط */
             width: auto;
-            filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));
             vertical-align: middle;
+            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.4));
+            transition: transform 0.3s ease;
+        }
+        .hero-full-title:hover .inline-logo {
+            transform: scale(1.1); /* حركة بسيطة عند التمرير */
         }
 
         /* --- شريط التنقل السفلي --- */
