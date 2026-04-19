@@ -3,126 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sidar App - Curved Nav</title>
+    <title>Sidar App - Deep Curve Nav</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg-color: #ffffff;
-            --primary-gradient: linear-gradient(135deg, #2A70DC, #00C7B7);
-            --icon-inactive: #b2bec3;
+            --nav-bg: #ffffff;
+            --primary-color: #2A70DC;
+            --icon-default: #a0a0a0;
         }
 
         body {
             margin: 0;
-            background-color: var(--bg-color);
+            background-color: #f8f9fa; /* خلفية رمادية فاتحة لبروز الشريط الأبيض */
             font-family: 'Segoe UI', sans-serif;
-            height: 100vh;
         }
 
-        /* حاوية الشريط السفلي مع الانحناء */
-        .nav-wrapper {
+        /* حاوية الشريط السفلي */
+        .navigation-bar {
             position: fixed;
             bottom: 0;
             width: 100%;
-            height: 80px;
-            background: white;
-            /* رسم الانحناء باستخدام Clip-path لمحاكاة الصورة */
-            filter: drop-shadow(0 -5px 15px rgba(0,0,0,0.05));
+            height: 70px;
+            background: transparent;
+            z-index: 1000;
         }
 
-        /* خلفية الشريط مع الفتحة في المنتصف */
-        .nav-background {
+        /* رسم الانحناء الاحترافي باستخدام SVG خلفية */
+        .nav-svg-bg {
             position: absolute;
+            bottom: 0;
+            width: 100%;
+            filter: drop-shadow(0 -5px 10px rgba(0,0,0,0.05));
+        }
+
+        /* الزر الدائري الملون (الخريطة) */
+        .center-action-btn {
+            position: absolute;
+            top: -35px; /* يغطس في الانحناء */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 62px;
+            height: 62px;
+            background: linear-gradient(135deg, #2A70DC, #00C7B7);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 8px 15px rgba(42, 112, 220, 0.3);
+            border: 5px solid #ffffff; /* الإطار الفاصل */
+            z-index: 10;
+            transition: 0.3s;
+        }
+
+        .center-action-btn img {
+            width: 30px;
+            filter: brightness(0) invert(1);
+        }
+
+        /* توزيع الأيقونات */
+        .nav-content {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            background: white;
             display: flex;
             justify-content: space-around;
             align-items: center;
-            /* تشكيل الفتحة الدائرية في المنتصف */
-            clip-path: polygon(0 0, 38% 0, 42% 15%, 50% 45%, 58% 15%, 62% 0, 100% 0, 100% 100%, 0 100%);
+            padding: 0 5px;
+            z-index: 5;
         }
 
-        .nav-items {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding: 0 10px;
-        }
-
-        .nav-item {
+        .nav-link {
             flex: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
             text-decoration: none;
+            color: var(--icon-default);
             transition: 0.3s;
         }
 
-        /* تنسيق أيقوناتك الخاصة */
-        .nav-item img, .nav-item i {
-            width: 26px;
-            height: 26px;
-            font-size: 24px;
-            color: var(--icon-inactive);
+        .nav-link i, .nav-link img {
+            font-size: 22px;
+            width: 24px;
+            height: 24px;
             object-fit: contain;
         }
 
-        /* الزر الدائري الملون (الخريطة) */
-        .floating-map-btn {
-            position: absolute;
-            top: -30px; /* مكان الزر في منتصف الانحناء */
-            left: 50%;
-            transform: translateX(-50%);
-            width: 65px;
-            height: 65px;
-            background: var(--primary-gradient);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 8px 20px rgba(42, 112, 220, 0.4);
-            border: 6px solid #ffffff; /* الإطار الأبيض الذي يظهر في الصورة */
-            z-index: 10;
+        /* ترك مسافة كافية في المنتصف للانحناء */
+        .spacer {
+            width: 70px;
         }
 
-        .floating-map-btn img {
-            width: 32px;
-            filter: brightness(0) invert(1); /* جعل أيقونتك بيضاء */
-        }
-
-        /* تفاعل بسيط عند النقر */
-        .nav-item:active { transform: scale(0.9); }
-        .floating-map-btn:active { transform: translateX(-50%) scale(0.9); }
+        /* تفاعلات */
+        .nav-link:hover { color: var(--primary-color); }
+        .center-action-btn:active { transform: translateX(-50%) scale(0.9); }
 
     </style>
 </head>
 <body>
 
-    <div class="nav-wrapper">
-        <div class="nav-background"></div>
-        
-        <div class="nav-items">
-            <a href="#" class="nav-item">
+    <div class="navigation-bar">
+        <svg class="nav-svg-bg" viewBox="0 0 400 70" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 0 H155 C165 0 170 5 175 15 C185 35 215 35 225 15 C230 5 235 0 245 0 H400 V70 H0 Z" fill="white"/>
+        </svg>
+
+        <a href="#" class="center-action-btn">
+            <img src="https://cdn-icons-png.flaticon.com/512/854/854878.png" alt="Map">
+        </a>
+
+        <div class="nav-content">
+            <a href="#" class="nav-link">
                 <i class="fa-solid fa-house"></i>
             </a>
-
-            <a href="#" class="nav-item" style="margin-right: 40px;">
+            <a href="#" class="nav-link">
                 <img src="https://cdn-icons-png.flaticon.com/512/5948/5948543.png" alt="Reels">
             </a>
+            
+            <div class="spacer"></div>
 
-            <a href="#" class="floating-map-btn">
-                <img src="https://cdn-icons-png.flaticon.com/512/854/854878.png" alt="Map">
+            <a href="#" class="nav-link">
+                <i class="fa-solid fa-message"></i>
             </a>
-
-            <a href="#" class="nav-item" style="margin-left: 40px;">
-                <i class="fa-solid fa-paper-plane"></i>
-            </a>
-
-            <a href="#" class="nav-item">
+            <a href="#" class="nav-link">
                 <i class="fa-solid fa-user"></i>
             </a>
         </div>
