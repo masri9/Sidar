@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sidarapp - Active Pill Edition</title>
+    <title>Sidarapp - Travel Cards Edition</title>
     
     <style>
         :root {
@@ -16,9 +16,8 @@
         body, html { 
             margin: 0; padding: 0;
             font-family: 'Segoe UI', Roboto, sans-serif;
-            overflow: hidden;
-            height: 100vh;
             background: #fff;
+            min-height: 100vh;
         }
 
         /* --- Splash Screen --- */
@@ -60,15 +59,16 @@
 
         .app-container {
             position: relative; z-index: 1;
-            height: 100vh; overflow-y: auto;
             padding: 60px 20px 120px; box-sizing: border-box;
-            scrollbar-width: none;
+            background: rgba(255,255,255,0.8); /* خلفية نصف شفافة خلف المحتوى لتسهيل القراءة */
+            border-radius: 40px 40px 0 0;
+            margin-top: -10px;
         }
 
         /* --- Hero Text --- */
         .hero-title { 
             font-size: 34px; font-weight: 800; line-height: 1.1; color: var(--text-main); 
-            margin-bottom: 25px; margin-top: 20px; 
+            margin-bottom: 25px; margin-top: 0; 
         }
         .hero-title span { 
             color: var(--primary-lava); 
@@ -86,7 +86,7 @@
         .search-wrapper input { flex: 1; border: none; background: transparent; outline: none; padding-left: 10px; font-size: 16px; font-weight: 500; }
         .search-wrapper span { color: var(--primary-lava); }
 
-        /* --- Scrolling Pill Services (التفاعل البرتقالي) --- */
+        /* --- Scrolling Pill Services --- */
         .services-scroll-container {
             width: 100%;
             overflow-x: auto;
@@ -95,6 +95,7 @@
             gap: 10px;
             scrollbar-width: none; 
             -ms-overflow-style: none;
+            margin-bottom: 25px; /* مسافة بين الخدمات والبطاقات */
         }
         .services-scroll-container::-webkit-scrollbar { display: none; }
 
@@ -112,7 +113,6 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* التفاعل عند الضغط (Active State) */
         .service-pill.active {
             border-color: var(--primary-lava);
             background: rgba(255, 69, 0, 0.05);
@@ -120,26 +120,75 @@
             transform: scale(0.95);
         }
 
-        .service-pill.active .pill-icon {
-            filter: drop-shadow(0 0 5px var(--lava-glow));
+        .service-pill.active .pill-label { color: var(--primary-lava); }
+
+        .pill-icon { font-size: 18px; margin-right: 8px; }
+        .pill-label { color: #1e293b; font-weight: 600; font-size: 13px; white-space: nowrap; transition: 0.3s; }
+
+        /* --- NEW: Auto-Scrolling Travel Cards (شاشة العرض الكبيرة) --- */
+        .travel-cards-container {
+            position: relative;
+            width: 100%;
+            max-width: 360px; /* حجم الكرت كما في الصورة تقريباً */
+            margin: 0 auto;
+            overflow: hidden;
+            border-radius: 30px;
+            aspect-ratio: 1/1; /* شكل مربع كقاعدة */
         }
 
-        .service-pill.active .pill-label {
-            color: var(--primary-lava);
+        .cards-scroller {
+            display: flex;
+            width: 400%; /* لعرض 4 بطاقات */
+            height: 100%;
+            transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1); /* تأثير انتقالي سلس */
         }
 
-        .pill-icon {
-            font-size: 18px;
-            margin-right: 8px;
+        .travel-card {
+            width: 25%; /* حجم كل كرت */
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* "See More" Button Overlay */
+        .see-more-btn {
+            position: absolute;
+            bottom: 20px;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(8px);
+            color: #fff;
+            border-radius: 50px;
+            padding: 10px 40px;
+            font-weight: 700;
+            font-size: 14px;
+            text-transform: capitalize;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        /* Pagination Dots */
+        .pagination-dots {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: #e2e8f0;
             transition: 0.3s;
         }
 
-        .pill-label {
-            color: #1e293b;
-            font-weight: 600;
-            font-size: 13px;
-            white-space: nowrap;
-            transition: 0.3s;
+        .dot.active {
+            background: #000;
+            box-shadow: 0 0 5px rgba(0,0,0,0.2);
         }
 
         /* --- Bottom Nav --- */
@@ -192,7 +241,7 @@
                 <span class="pill-icon">📶</span>
                 <span class="pill-label">eSIM</span>
             </div>
-            <div class="service-pill" onclick="activatePill(this)">
+            <div class="service-pill active" onclick="activatePill(this)">
                 <span class="pill-icon">💱</span>
                 <span class="pill-label">Currency</span>
             </div>
@@ -204,6 +253,30 @@
                 <span class="pill-icon">✈️</span>
                 <span class="pill-label">Flights</span>
             </div>
+        </div>
+
+        <div class="travel-cards-container">
+            <div class="cards-scroller" id="cardsScroller">
+                <div class="travel-card" style="background-image: url('https://image_generation_content/4')">
+                    <div class="see-more-btn">See More</div>
+                </div>
+                <div class="travel-card" style="background-image: url('https://image_generation_content/5')">
+                    <div class="see-more-btn">See More</div>
+                </div>
+                <div class="travel-card" style="background-image: url('https://image_generation_content/6')">
+                    <div class="see-more-btn">See More</div>
+                </div>
+                <div class="travel-card" style="background-image: url('https://image_generation_content/7')">
+                    <div class="see-more-btn">See More</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="pagination-dots">
+            <div class="dot active"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
         </div>
 
     </div>
@@ -238,12 +311,33 @@
             }, 2500);
         });
 
-        // وظيفة تفعيل الكبسولة وتغيير لونها للبرتقالي
+        // تفعيل كبسولات الخدمات
         function activatePill(el) {
             document.querySelectorAll('.service-pill').forEach(p => p.classList.remove('active'));
             el.classList.add('active');
         }
 
+        // تحريك بطاقات السفر تلقائياً
+        const scroller = document.getElementById('cardsScroller');
+        const dots = document.querySelectorAll('.dot');
+        let currentIndex = 0;
+        const totalCards = 4;
+
+        function scrollCards() {
+            currentIndex = (currentIndex + 1) % totalCards;
+            
+            // تحريك الحاوية أفقياً
+            scroller.style.transform = `translateX(-${currentIndex * 25}%)`;
+            
+            // تحديث النقاط
+            dots.forEach(dot => dot.classList.remove('active'));
+            dots[currentIndex].classList.add('active');
+        }
+
+        // تغيير البطاقة كل 5 ثوانٍ
+        setInterval(scrollCards, 5000);
+
+        // شريط التنقل السفلي
         function tab(el) {
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
             el.classList.add('active');
