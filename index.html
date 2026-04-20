@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sidarapp - Adjusted Layout</title>
+    <title>Sidarapp - Simplified Layout</title>
     
     <style>
         :root {
@@ -45,7 +45,7 @@
 
         .app-container {
             position: relative; z-index: 1;
-            padding: 90px 0 120px; /* تم تصفير الـ padding الجانبي هنا للتحكم به داخل العناصر */
+            padding: 90px 0 120px;
             box-sizing: border-box;
         }
 
@@ -87,10 +87,9 @@
 
         .section-header { display: flex; justify-content: space-between; align-items: flex-end; margin: 30px 0 15px; padding: 0 20px; }
         .section-header h3 { font-size: 22px; font-weight: 900; color: var(--text-main); margin: 0; letter-spacing: -0.5px; }
-        .section-header span { font-size: 13px; color: var(--primary-lava); font-weight: 700; cursor: pointer; }
 
         .services-scroll-container {
-            display: flex; gap: 10px; overflow-x: auto; padding: 0 20px 35px; scrollbar-width: none;
+            display: flex; gap: 10px; overflow-x: auto; padding: 0 20px 15px; scrollbar-width: none;
         }
         .services-scroll-container::-webkit-scrollbar { display: none; }
         .service-pill {
@@ -99,66 +98,19 @@
         }
         .service-pill.active { border-color: var(--primary-lava); color: var(--primary-lava); background: rgba(255, 69, 0, 0.05); }
 
-        /* --- تعديلات قسم Live Moments --- */
-        .stories-container { 
-            display: flex; 
-            gap: 18px; 
-            overflow-x: auto; 
-            padding: 10px 20px 20px; /* زيادة الـ padding ليناسب حواف الشاشة */
-            scrollbar-width: none; 
-        }
-        .stories-container::-webkit-scrollbar { display: none; }
-        
-        .story-item { flex-shrink: 0; width: 75px; text-align: center; transition: 0.3s; }
-        .story-item:active { transform: scale(0.92); }
-
-        .story-ring { 
-            width: 70px; 
-            height: 70px; 
-            border-radius: 24px; 
-            padding: 3px; 
-            background: linear-gradient(45deg, var(--primary-lava), #ff8c00); 
-            box-shadow: 0 8px 15px var(--lava-glow); 
-            margin-bottom: 8px; 
-            position: relative; 
-        }
-        .story-ring img { width: 100%; height: 100%; border-radius: 21px; object-fit: cover; background: #fff; border: 2px solid #fff; }
-        
-        .live-tag { 
-            position: absolute; 
-            bottom: -5px; 
-            left: 50%; 
-            transform: translateX(-50%); 
-            background: var(--primary-lava); 
-            color: #fff; 
-            font-size: 9px; 
-            padding: 2px 10px; 
-            border-radius: 10px; 
-            font-weight: 900; 
-            border: 2px solid #fff; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            animation: pulse-live 1.5s infinite;
-        }
-
-        @keyframes pulse-live {
-            0% { transform: translateX(-50%) scale(1); }
-            50% { transform: translateX(-50%) scale(1.1); }
-            100% { transform: translateX(-50%) scale(1); }
-        }
-
-        .story-item span { font-size: 11px; font-weight: 700; color: var(--text-main); }
-        /* ------------------------------ */
-
+        /* تعديل المسافة بعد الخدمات لأن قسم القصص حُذف */
         .stacked-cards-wrapper {
             position: relative; width: 100%; height: 260px;
             display: flex; justify-content: center; align-items: center;
-            perspective: 1200px; margin-top: 20px;
+            perspective: 1200px; margin-top: 30px; 
         }
+        
         @keyframes border-pulse {
             0% { border-color: rgba(255, 69, 0, 0.4); }
             50% { border-color: rgba(255, 69, 0, 1); }
             100% { border-color: rgba(255, 69, 0, 0.4); }
         }
+
         .card-item {
             position: absolute; width: 200px; height: 240px; 
             border-radius: 30px; background-size: cover; background-position: center;
@@ -185,7 +137,7 @@
         .dot { width: 6px; height: 6px; background: #e2e8f0; border-radius: 50%; transition: 0.4s; }
         .dot.active { background: var(--primary-lava); width: 15px; border-radius: 10px; }
 
-        .hubs-container { display: flex; flex-direction: column; gap: 15px; margin: 0 20px 60px; }
+        .hubs-container { display: flex; flex-direction: column; gap: 15px; margin: 30px 20px 60px; }
         .hub-card { background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-radius: 28px; padding: 20px; display: flex; align-items: center; gap: 15px; border: 1px solid #edf2f7; box-shadow: 0 10px 25px rgba(0,0,0,0.03); }
         .hub-icon-wrapper { width: 55px; height: 55px; background: #fff; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 26px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
         .hub-content { flex: 1; }
@@ -224,18 +176,6 @@
                 <div class="service-pill"><span>📶 eSIM</span></div>
                 <div class="service-pill active"><span>💱 Currency</span></div>
                 <div class="service-pill"><span>💸 Transfer</span></div>
-            </div>
-
-            <div class="section-header">
-                <h3>Live Moments</h3>
-                <span>View Map</span>
-            </div>
-            <div class="stories-container">
-                <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/150?u=a" alt=""><div class="live-tag">Live</div></div><span>Alex</span></div>
-                <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/150?u=b" alt=""></div><span>Sarah</span></div>
-                <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/150?u=c" alt=""></div><span>Yasin</span></div>
-                <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/150?u=d" alt=""><div class="live-tag">Live</div></div><span>Mona</span></div>
-                <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/150?u=e" alt=""></div><span>Omar</span></div>
             </div>
 
             <div class="stacked-cards-wrapper" id="cardsWrapper">
