@@ -3,13 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sidarapp - Complete View</title>
+    <title>Sidarapp - Cinema Travel</title>
     
     <style>
         :root {
             --primary-lava: #ff4500; 
-            --lava-glow: rgba(255, 69, 0, 0.4); 
-            --lava-intense-glow: rgba(255, 69, 0, 0.8); 
             --text-main: #0f172a; 
         }
 
@@ -27,27 +25,23 @@
         #splash-screen {
             position: fixed; inset: 0; background: #ffffff;
             display: flex; justify-content: center; align-items: center;
-            z-index: 9999;
-            transition: opacity 0.5s ease;
+            z-index: 9999; transition: opacity 0.5s ease;
         }
         .splash-image { width: 180px; }
 
         /* --- Hero Background --- */
         .header-bg {
             position: absolute; top: 0; left: 0; right: 0; height: 55vh;
-            background-size: cover; background-position: center;
-            z-index: 0;
+            background-size: cover; background-position: center; z-index: 0;
         }
         .header-bg::before {
-            content: '';
-            position: absolute; inset: 0;
+            content: ''; position: absolute; inset: 0;
             background: linear-gradient(to bottom, rgba(255, 255, 255, 0.01) 0%, rgba(255, 255, 255, 0.05) 100%);
         }
 
         .app-container {
             position: relative; z-index: 1;
             padding: 60px 20px 120px; box-sizing: border-box;
-            background: transparent;
         }
 
         .hero-title { font-size: 34px; font-weight: 800; line-height: 1.1; color: var(--text-main); margin-bottom: 25px; }
@@ -57,8 +51,7 @@
         .search-wrapper {
             background: rgba(255,255,255,0.9); backdrop-filter: blur(15px);
             border-radius: 20px; padding: 12px 18px; display: flex; align-items: center;
-            border: 2px solid var(--primary-lava); margin-bottom: 25px;
-            position: relative;
+            border: 2px solid var(--primary-lava); margin-bottom: 25px; position: relative;
         }
         .search-icon { z-index: 2; margin-right: 10px; font-size: 18px; }
         .search-wrapper input { 
@@ -122,25 +115,42 @@
         .dot { width: 7px; height: 7px; background: #e2e8f0; border-radius: 50%; transition: 0.4s; }
         .dot.active { background: var(--primary-lava); width: 18px; border-radius: 10px; }
 
-        /* --- Trending Section --- */
+        /* --- 🆕 Film Locations & Stories Styling --- */
         .section-header {
-            display: flex; justify-content: space-between; align-items: center;
-            margin: 40px 0 15px 0;
+            display: flex; justify-content: space-between; align-items: center; margin: 40px 0 15px 0;
         }
         .section-header h3 { font-size: 20px; font-weight: 700; margin: 0; color: var(--text-main); }
         .section-header a { color: var(--primary-lava); text-decoration: none; font-size: 14px; font-weight: 600; }
 
-        .trending-grid {
-            display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 40px;
+        .community-stories {
+            display: flex; gap: 15px; overflow-x: auto; padding: 10px 0; scrollbar-width: none;
         }
-        .trending-card {
-            background: #f8fafc; border-radius: 20px; padding: 10px; border: 1px solid #f1f5f9;
+        .community-stories::-webkit-scrollbar { display: none; }
+        .story-item { flex-shrink: 0; text-align: center; width: 70px; }
+        .story-circle {
+            width: 65px; height: 65px; border-radius: 50%; padding: 2px;
+            border: 2px solid var(--primary-lava); margin-bottom: 5px;
         }
-        .trending-card img {
-            width: 100%; height: 110px; border-radius: 15px; object-fit: cover; margin-bottom: 10px;
+        .story-circle img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+
+        .tip-card {
+            background: linear-gradient(135deg, #fff5f2 0%, #fff 100%);
+            border-radius: 25px; padding: 20px; border-left: 5px solid var(--primary-lava);
+            margin: 25px 0; display: flex; align-items: center; gap: 15px;
         }
-        .trending-card h4 { margin: 5px 0; font-size: 15px; color: var(--text-main); }
-        .trending-card p { margin: 0; font-size: 12px; color: #64748b; }
+        .tip-icon { font-size: 30px; }
+        .tip-text h4 { margin: 0; font-size: 16px; color: var(--primary-lava); }
+        .tip-text p { margin: 5px 0 0; font-size: 13px; color: #64748b; line-height: 1.4; }
+
+        .trending-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 40px; }
+        .trending-card { background: #f8fafc; border-radius: 20px; padding: 10px; border: 1px solid #f1f5f9; position: relative; }
+        .trending-card img { width: 100%; height: 110px; border-radius: 15px; object-fit: cover; }
+        .film-badge { 
+            position: absolute; top: 15px; right: 15px; background: var(--primary-lava); 
+            color: #fff; font-size: 10px; padding: 4px 8px; border-radius: 10px; font-weight: bold;
+        }
+        .trending-card h4 { margin: 8px 0 2px; font-size: 14px; color: var(--text-main); }
+        .trending-card p { margin: 0; font-size: 11px; color: #64748b; }
 
         /* --- Overlays --- */
         #info-overlay {
@@ -186,19 +196,19 @@
     <div class="header-bg" id="heroBg"></div>
 
     <div class="app-container" id="main-app" style="opacity: 0; transition: 1s;">
-        <h1 class="hero-title">Where do you <br><span>wanna go?</span></h1>
+        <h1 class="hero-title">Be the Star of<br><span>Your Journey</span></h1>
 
         <div class="search-wrapper">
             <span class="search-icon">🔍</span>
             <input type="text" placeholder=" ">
-            <div class="fake-placeholder">Ask <span class="lava-text">Sidar</span> any thing...</div>
+            <div class="fake-placeholder">Find a <span class="lava-text">Film Location</span>...</div>
         </div>
 
         <div class="services-scroll-container">
-            <div class="service-pill"><span>🎟️ Events</span></div>
-            <div class="service-pill"><span>📶 eSIM</span></div>
-            <div class="service-pill active"><span>💱 Currency</span></div>
-            <div class="service-pill"><span>💸 Transfer</span></div>
+            <div class="service-pill"><span>🎬 Locations</span></div>
+            <div class="service-pill"><span>🎭 Tours</span></div>
+            <div class="service-pill active"><span>🇹🇷 Turkey</span></div>
+            <div class="service-pill"><span>📸 Photo</span></div>
         </div>
 
         <div class="stacked-cards-wrapper" id="cardsWrapper">
@@ -211,19 +221,41 @@
         <div class="dots-container" id="dotsContainer"></div>
 
         <div class="section-header">
-            <h3>Trending Now</h3>
+            <h3>Fans Community</h3>
+            <a href="#">Join</a>
+        </div>
+        <div class="community-stories">
+            <div class="story-item"><div class="story-circle"><img src="https://i.pravatar.cc/150?u=11"></div><span>Mona</span></div>
+            <div class="story-item"><div class="story-circle"><img src="https://i.pravatar.cc/150?u=22"></div><span>Can</span></div>
+            <div class="story-item"><div class="story-circle"><img src="https://i.pravatar.cc/150?u=33"></div><span>Eda</span></div>
+            <div class="story-item"><div class="story-circle"><img src="https://i.pravatar.cc/150?u=44"></div><span>Omar</span></div>
+            <div class="story-item"><div class="story-circle"><img src="https://i.pravatar.cc/150?u=55"></div><span>Selin</span></div>
+        </div>
+
+        <div class="tip-card">
+            <div class="tip-icon">🎬</div>
+            <div class="tip-text">
+                <h4>Director's Tip</h4>
+                <p>Best time for photos in Balat is 8:00 AM before the crowds arrive at the filming spots!</p>
+            </div>
+        </div>
+
+        <div class="section-header">
+            <h3>Famous Spots</h3>
             <a href="#">See all</a>
         </div>
         <div class="trending-grid">
             <div class="trending-card">
-                <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=400&auto=format&fit=crop">
-                <h4>Dubai, UAE</h4>
-                <p>Luxury & Desert</p>
+                <span class="film-badge">Drama</span>
+                <img src="https://images.unsplash.com/photo-1541432905415-21d46b2fc5d4?q=80&w=400">
+                <h4>Kuzguncuk</h4>
+                <p>Historic Vibe</p>
             </div>
             <div class="trending-card">
-                <img src="https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?q=80&w=400&auto=format&fit=crop">
-                <h4>Venice, Italy</h4>
-                <p>Romantic Canals</p>
+                <span class="film-badge">Action</span>
+                <img src="https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?q=80&w=400">
+                <h4>Grand Bazaar</h4>
+                <p>Classic Scenes</p>
             </div>
         </div>
     </div>
@@ -234,14 +266,14 @@
             <span class="info-tag" id="target-tag">Category</span>
             <h2 class="info-title" id="target-title">Location Name</h2>
             <p id="target-desc">Description goes here...</p>
-            <div class="see-more-btn" style="background: var(--primary-lava); text-align: center; width: 100%; border: none;">Explore Now</div>
+            <div class="see-more-btn" style="background: var(--primary-lava); text-align: center; width: 100%; border: none;">Explore Location</div>
         </div>
     </div>
 
     <nav class="bottom-nav">
         <div class="nav-item active" onclick="tab(this)"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg><span>Home</span></div>
-        <div class="nav-item" onclick="tab(this)"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg><span>Map</span></div>
-        <div class="nav-item" onclick="tab(this)"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line></svg><span>Reels</span></div>
+        <div class="nav-item" onclick="tab(this)"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg><span>Spots</span></div>
+        <div class="nav-item" onclick="tab(this)"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line></svg><span>Stories</span></div>
         <div class="nav-item" onclick="tab(this)"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg><span>Profile</span></div>
     </nav>
 
@@ -256,10 +288,10 @@
         };
 
         const DATA = [
-            { tag: "Natural", title: "Turkey", desc: "Discover the hidden beauty of Turkey and its amazing landscapes." },
-            { tag: "Adventure", title: "The High Peak", desc: "Best view in the region." },
-            { tag: "Peaceful", title: "Blue Shore", desc: "Crystal clear waters." },
-            { tag: "Heritage", title: "Stone Temple", desc: "Secrets of ancient travelers." }
+            { tag: "Iconic", title: "Turkey", desc: "Your guide to all the famous filming locations across Istanbul and beyond." },
+            { tag: "Drama", title: "Luxury Villa", desc: "Experience the house where your favorite romantic scenes were filmed." },
+            { tag: "Action", title: "Old Streets", desc: "Walk through the alleys used in international action blockbusters." },
+            { tag: "Historical", title: "Palace Gardens", desc: "Secrets of the royal courts seen on screen." }
         ];
 
         function applyImages() {
@@ -291,16 +323,12 @@
             document.querySelectorAll('.dot').forEach((dot, i) => dot.classList.toggle('active', i === currentIndex));
         }
 
-        // تحديث وظيفة الضغط على See More
         function showInfo(index) {
             const item = DATA[index];
-            
-            // التحقق إذا كان العنوان ليس "Turkey"
             if (item.title !== "Turkey") {
-                alert("Coming Soon...");
-                return; // إيقاف الوظيفة ومنع فتح الـ Overlay
+                alert("Coming Soon... Working on filming details!");
+                return;
             }
-
             document.getElementById('target-tag').innerText = item.tag;
             document.getElementById('target-title').innerText = item.title;
             document.getElementById('target-desc').innerText = item.desc;
