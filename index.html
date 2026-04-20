@@ -101,16 +101,14 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
             margin-bottom: 10px;
-            overflow: hidden; /* لضمان عدم خروج الصورة عن الحواف */
+            overflow: hidden;
         }
 
-        /* إذا وضعت صورة مستقبلاً */
         .service-card-image img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain; /* لتظهر الصورة كاملة بشكل متناسق */
         }
 
         .service-card-info h4 {
@@ -180,21 +178,27 @@
             <div class="section-header"><h3>Our Services</h3></div>
             <div class="services-grid">
                 <div class="service-card" onclick="showWidget('esim')">
-                    <div class="service-card-image">🌐</div>
+                    <div class="service-card-image">
+                        <img src="https://plain-eeur-prod-public.komododecks.com/202604/20/WVky4M0jhFKod2i2RPvD/image.png">
+                    </div>
                     <div class="service-card-info">
                         <h4>eSIM</h4>
                         <p>Instant Data</p>
                     </div>
                 </div>
                 <div class="service-card" onclick="showWidget('events')">
-                    <div class="service-card-image">🎫</div>
+                    <div class="service-card-image">
+                        <img src="https://plain-eeur-prod-public.komododecks.com/202604/20/60ucwerNgwq7UoOF6ddg/image.png">
+                    </div>
                     <div class="service-card-info">
                         <h4>Events</h4>
                         <p>Explore Fun</p>
                     </div>
                 </div>
                 <div class="service-card" onclick="showWidget('transfer')">
-                    <div class="service-card-image">💸</div>
+                    <div class="service-card-image">
+                        <img src="https://plain-eeur-prod-public.komododecks.com/202604/20/ZTysbUO6A6fZQPLzUpwU/image.png">
+                    </div>
                     <div class="service-card-info">
                         <h4>Transfer</h4>
                         <p>Send Money</p>
@@ -235,7 +239,9 @@
 
     <div class="service-widget-overlay" id="widgetOverlay" onclick="hideWidget()">
         <div class="service-widget-content" onclick="event.stopPropagation()">
-            <span id="wIcon" style="font-size: 50px; display: block; margin-bottom: 15px;"></span>
+            <div id="wImageContainer" style="width: 80px; height: 80px; margin: 0 auto 15px; background: #fff5f2; border-radius: 20px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                <img id="wImg" src="" style="width: 70%; height: 70%; object-fit: contain;">
+            </div>
             <h2 id="wTitle" style="font-size: 24px; font-weight: 800; color: var(--text-main);"></h2>
             <p id="wDesc" style="color: #64748b; margin-bottom: 25px;"></p>
             <button class="widget-btn" id="wBtn">Open Service</button>
@@ -253,14 +259,14 @@
         };
 
         const WIDGET_DATA = {
-            events: { title: "Local Events", icon: "🎫", desc: "Discover festivals and activities.", btn: "View" },
-            esim: { title: "Travel eSIM", icon: "🌐", desc: "High-speed internet instantly.", btn: "Get" },
-            transfer: { title: "Transfer", icon: "💸", desc: "Secure money transfer service.", btn: "Send" }
+            events: { title: "Local Events", img: "https://plain-eeur-prod-public.komododecks.com/202604/20/60ucwerNgwq7UoOF6ddg/image.png", desc: "Discover festivals and activities.", btn: "View" },
+            esim: { title: "Travel eSIM", img: "https://plain-eeur-prod-public.komododecks.com/202604/20/WVky4M0jhFKod2i2RPvD/image.png", desc: "High-speed internet instantly.", btn: "Get" },
+            transfer: { title: "Transfer", img: "https://plain-eeur-prod-public.komododecks.com/202604/20/ZTysbUO6A6fZQPLzUpwU/image.png", desc: "Secure money transfer service.", btn: "Send" }
         };
 
         function showWidget(k) {
             const d = WIDGET_DATA[k];
-            document.getElementById('wIcon').innerText = d.icon;
+            document.getElementById('wImg').src = d.img;
             document.getElementById('wTitle').innerText = d.title;
             document.getElementById('wDesc').innerText = d.desc;
             document.getElementById('wBtn').innerText = d.btn;
