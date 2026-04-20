@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sidarapp - Professional Edition</title>
+    <title>Sidarapp - Social Edition</title>
     
     <style>
         :root {
@@ -83,8 +83,7 @@
             100% { border-color: rgba(255, 69, 0, 0.4); }
         }
         .card-item {
-            position: absolute; 
-            width: 200px; height: 240px; 
+            position: absolute; width: 200px; height: 240px; 
             border-radius: 30px; background-size: cover; background-position: center;
             transition: all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1); 
             display: flex; align-items: flex-end; justify-content: center;
@@ -109,45 +108,37 @@
         .dot { width: 6px; height: 6px; background: #e2e8f0; border-radius: 50%; transition: 0.4s; }
         .dot.active { background: var(--primary-lava); width: 15px; border-radius: 10px; }
 
-        /* --- 🆕 Professional Map Styling 🆕 --- */
-        .service-title {
-            font-size: 20px; font-weight: 800; color: var(--text-main);
-            margin: 40px 0 15px; display: flex; align-items: center; gap: 10px;
+        /* --- 🆕 Stories & Hubs Styling 🆕 --- */
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin: 40px 0 15px; }
+        .section-header h3 { font-size: 20px; font-weight: 800; color: var(--text-main); margin: 0; }
+        .section-header span { font-size: 13px; color: var(--primary-lava); font-weight: 700; }
+
+        .stories-container { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
+        .story-item { flex-shrink: 0; text-align: center; width: 70px; }
+        .story-ring {
+            width: 65px; height: 65px; border-radius: 50%; padding: 2px;
+            border: 2px solid var(--primary-lava); box-shadow: 0 0 8px var(--lava-glow);
+            margin-bottom: 5px; overflow: hidden;
         }
-        .world-map-container {
-            width: 100%; height: 200px;
-            position: relative; overflow: hidden; margin-bottom: 40px;
-            background-image: url('https://upload.wikimedia.org/wikipedia/commons/e/ec/World_Map_Blank.svg');
-            background-size: contain; background-repeat: no-repeat; background-position: center;
-            filter: grayscale(100%) opacity(0.25);
+        .story-ring img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+        .story-item span { font-size: 10px; font-weight: 600; color: #64748b; }
+
+        .hubs-container { display: flex; flex-direction: column; gap: 12px; margin-bottom: 50px; }
+        .hub-card {
+            background: #f8fafc; border-radius: 22px; padding: 15px;
+            display: flex; align-items: center; justify-content: space-between;
+            border: 1.5px solid #f1f5f9; transition: 0.3s;
         }
-        .world-map-container::before {
-            content: ''; position: absolute; inset: 0;
-            background-image: linear-gradient(#f1f5f9 1px, transparent 1px), linear-gradient(90deg, #f1f5f9 1px, transparent 1px);
-            background-size: 20px 20px; opacity: 0.4; pointer-events: none;
-        }
-        .map-pin {
-            position: absolute; width: 10px; height: 10px;
-            background: var(--primary-lava); border-radius: 50%;
-            box-shadow: 0 0 10px var(--primary-lava); z-index: 2;
-        }
-        .map-pin::after {
-            content: ''; position: absolute; inset: -5px;
-            border: 2px solid var(--primary-lava); border-radius: 50%;
-            animation: pulse-ring 2s infinite; opacity: 0;
-        }
-        .pin-tr { top: 35%; left: 55%; }
-        .pin-eu { top: 25%; left: 48%; animation-delay: 0.5s; }
-        .pin-us { top: 32%; left: 22%; animation-delay: 1s; }
-        .pin-as { top: 38%; left: 78%; animation-delay: 1.5s; }
-        @keyframes pulse-ring {
-            0% { transform: scale(0.5); opacity: 0.8; }
-            100% { transform: scale(2.5); opacity: 0; }
-        }
-        .map-tag {
-            position: absolute; bottom: 0; right: 5%;
-            font-size: 9px; font-weight: 700; color: #94a3b8;
-            letter-spacing: 1px; text-transform: uppercase;
+        .hub-info { display: flex; align-items: center; gap: 12px; }
+        .hub-icon { font-size: 24px; background: #fff; width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+        .hub-text h4 { margin: 0; font-size: 15px; color: var(--text-main); }
+        .hub-text p { margin: 2px 0 0; font-size: 11px; color: #94a3b8; }
+        .hub-action { background: #fff; border: 1.5px solid var(--primary-lava); color: var(--primary-lava); padding: 6px 12px; border-radius: 10px; font-size: 11px; font-weight: 800; }
+
+        .ask-button {
+            background: var(--primary-lava); color: #fff; padding: 14px; border-radius: 18px;
+            text-align: center; font-weight: 700; font-size: 14px; margin-top: 10px;
+            box-shadow: 0 5px 15px var(--lava-glow);
         }
 
         /* --- Navigation & Overlay --- */
@@ -206,13 +197,36 @@
 
         <div class="dots-container" id="dotsContainer"></div>
 
-        <div class="service-title">Global Network 🎬</div>
-        <div class="world-map-container">
-            <div class="map-pin pin-tr"></div>
-            <div class="map-pin pin-eu"></div>
-            <div class="map-pin pin-us"></div>
-            <div class="map-pin pin-as"></div>
-            <div class="map-tag">Live Feed • Active Spots</div>
+        <div class="section-header">
+            <h3>Live Moments</h3>
+            <span>Watch All</span>
+        </div>
+        <div class="stories-container">
+            <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/100?u=1" alt=""></div><span>@alex_tr</span></div>
+            <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/100?u=2" alt=""></div><span>@sam_film</span></div>
+            <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/100?u=3" alt=""></div><span>@nina_v</span></div>
+            <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/100?u=4" alt=""></div><span>@omr_99</span></div>
+        </div>
+
+        <div class="section-header">
+            <h3>Community Hubs</h3>
+        </div>
+        <div class="hubs-container">
+            <div class="hub-card">
+                <div class="hub-info">
+                    <div class="hub-icon">🇹🇷</div>
+                    <div class="hub-text"><h4>Turkey Hub</h4><p>12 New Questions • 45 Tips</p></div>
+                </div>
+                <div class="hub-action">Enter</div>
+            </div>
+            <div class="hub-card">
+                <div class="hub-info">
+                    <div class="hub-icon">🌍</div>
+                    <div class="hub-text"><h4>General Chat</h4><p>Share your travel secrets</p></div>
+                </div>
+                <div class="hub-action">Enter</div>
+            </div>
+            <div class="ask-button">+ Ask the Community</div>
         </div>
     </div>
 
