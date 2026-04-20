@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sidarapp - Glowing Stacked Cards</title>
+    <title>Sidarapp - Larger Service Icons</title>
     
     <style>
         :root {
             --primary-lava: #ff4500; 
             --lava-glow: rgba(255, 69, 0, 0.4); 
-            --lava-glow-soft: rgba(255, 69, 0, 0.2); /* توهج أخف للأطراف */
+            --lava-glow-soft: rgba(255, 69, 0, 0.2); 
             --text-main: #0f172a; 
         }
 
@@ -101,7 +101,7 @@
 
         .service-card-image {
             width: 100%;
-            height: 80px; 
+            height: 95px; /* تم زيادة الطول قليلاً لاستيعاب الصورة الأكبر */
             background: #fff5f2;
             border-radius: 18px;
             display: flex;
@@ -110,6 +110,7 @@
             margin-bottom: 8px;
             transition: 0.3s;
             overflow: hidden;
+            padding: 4px; /* تقليل الحواف الداخلية لزيادة حجم الصورة */
         }
 
         .service-card.clicked .service-card-image {
@@ -117,8 +118,8 @@
         }
 
         .service-card-image img {
-            width: 85%;
-            height: 85%;
+            width: 95%; /* تكبير الصورة لتشغل 95% من مساحة الحاوية بدل 85% */
+            height: 95%;
             object-fit: contain;
         }
 
@@ -143,52 +144,24 @@
             color: #ffffff;
         }
 
-        /* --- Updated Stacked Cards with Lava Glow --- */
+        /* --- Stacked Cards --- */
         .stacked-cards-wrapper { position: relative; width: 100%; height: 240px; display: flex; justify-content: center; align-items: center; perspective: 1200px; margin-top: 5px;}
-        
         .card-item { 
-            position: absolute; 
-            width: 190px; 
-            height: 230px; 
-            border-radius: 28px; 
-            background-size: cover; 
-            background-position: center; 
-            transition: 0.7s; 
-            display: flex; 
-            align-items: flex-end; 
-            justify-content: center; 
-            padding-bottom: 15px; 
-            opacity: 0; 
-            pointer-events: none;
-            /* إضافة إطار بركاني خفيف وتوهج */
-            border: 1.5px solid var(--lava-glow-soft);
-            box-shadow: 0 0 15px var(--lava-glow-soft);
+            position: absolute; width: 190px; height: 230px; border-radius: 28px; background-size: cover; background-position: center; transition: 0.7s; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 15px; opacity: 0; pointer-events: none; border: 1.5px solid var(--lava-glow-soft); box-shadow: 0 0 15px var(--lava-glow-soft);
         }
-
-        .card-item.active { 
-            opacity: 1; 
-            transform: translateX(0) translateZ(50px) scale(1); 
-            z-index: 10; 
-            pointer-events: auto;
-            border-color: var(--primary-lava); /* توضيح الإطار للبطاقة النشطة */
-            box-shadow: 0 8px 25px var(--lava-glow-soft);
-        }
-
+        .card-item.active { opacity: 1; transform: translateX(0) translateZ(50px) scale(1); z-index: 10; pointer-events: auto; border-color: var(--primary-lava); box-shadow: 0 8px 25px var(--lava-glow-soft); }
         .card-item.prev { opacity: 0.4; transform: translateX(-90px) translateZ(-100px) scale(0.8); z-index: 5; }
         .card-item.next { opacity: 0.4; transform: translateX(90px) translateZ(-100px) scale(0.8); z-index: 5; }
-        
         .see-more-btn { background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(12px); color: #fff; border-radius: 50px; padding: 6px 25px; font-weight: 700; font-size: 10px; border: 1px solid rgba(255,255,255,0.3); }
 
-        /* --- Other Sections --- */
+        /* --- Marketplace & Trending --- */
         .trending-scroll { display: flex; gap: 15px; overflow-x: auto; padding: 5px 5px; scrollbar-width: none; }
         .trend-card { flex-shrink: 0; width: 100px; text-align: center; }
         .trend-icon-box { width: 90px; height: 90px; border-radius: 22px; background: #f8fafc; border: 1.5px solid #f1f5f9; display: flex; align-items: center; justify-content: center; font-size: 35px; margin-bottom: 6px; }
-        
         .market-list { display: flex; flex-direction: column; gap: 10px; }
         .market-item { background: #fff; border-radius: 22px; padding: 12px; display: flex; align-items: center; gap: 12px; border: 1px solid #f1f5f9; }
         .market-item-icon { width: 50px; height: 50px; border-radius: 15px; background: #fff5f2; display: flex; align-items: center; justify-content: center; font-size: 22px; }
         .post-service-btn { margin-top: 8px; text-align: center; font-size: 11px; color: var(--primary-lava); font-weight: 700; }
-
         .hubs-container { display: flex; flex-direction: column; gap: 12px; margin-bottom: 40px; }
         .ask-community-bar { background: var(--text-main); color: #fff; padding: 15px 22px; border-radius: 22px; display: flex; justify-content: space-between; align-items: center; }
     </style>
@@ -254,21 +227,6 @@
                 <div class="trend-card"><div class="trend-icon-box">🕌</div><span>Istanbul</span></div>
                 <div class="trend-card"><div class="trend-icon-box">🏙️</div><span>Dubai</span></div>
                 <div class="trend-card"><div class="trend-icon-box">🏔️</div><span>Georgia</span></div>
-            </div>
-
-            <div class="section-header"><h3>Marketplace</h3></div>
-            <div class="market-list">
-                <div class="market-item">
-                    <div class="market-item-icon">📸</div>
-                    <div class="market-details" style="flex:1"><h4>Photography</h4><p>Alex • Pro</p></div>
-                    <div class="market-price" style="font-weight: 800;">$45</div>
-                </div>
-                <div class="post-service-btn">💰 Start Earning: Post Your Service</div>
-            </div>
-
-            <div class="section-header"><h3>Communities</h3></div>
-            <div class="hubs-container">
-                <div class="ask-community-bar"><span>Have a question?</span><div style="width:28px; height:28px; background:var(--primary-lava); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:20px;">+</div></div>
             </div>
         </div>
     </div>
