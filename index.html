@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sidarapp - Service Redesign</title>
+    <title>Sidarapp - Clean Icons</title>
     
     <style>
         :root {
@@ -22,13 +22,10 @@
             overflow-x: hidden;
         }
 
+        /* Animations */
         .app-page { display: none; animation: slideUp 0.4s ease-out; }
         .app-page.active { display: block; }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
         #splash-screen {
             position: fixed; inset: 0; background: #ffffff;
@@ -40,7 +37,7 @@
         .header-bg {
             position: absolute; top: 0; left: 0; right: 0; height: 55vh;
             background-size: cover; background-position: center; z-index: 0;
-            transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: 0.5s;
         }
 
         .app-container {
@@ -59,82 +56,73 @@
         }
         @keyframes robotFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
 
+        /* Search */
         .search-wrapper {
             background: rgba(255,255,255,0.9); backdrop-filter: blur(15px);
             border-radius: 20px; padding: 12px 18px; display: flex; align-items: center;
             border: 2px solid var(--primary-lava); margin-bottom: 40px; position: relative;
         }
-        .search-wrapper input { flex: 1; border: none; background: transparent; outline: none; font-size: 16px; color: var(--text-main); }
-        .fake-placeholder { position: absolute; left: 45px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 16px; pointer-events: none; z-index: 1; }
+        .search-wrapper input { flex: 1; border: none; background: transparent; outline: none; font-size: 16px; color: var(--text-main); width: 100%; }
+        .fake-placeholder { position: absolute; left: 45px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 16px; pointer-events: none; }
 
+        /* --- Updated Services Section (Icon Focused) --- */
         .section-header { display: flex; justify-content: space-between; align-items: flex-end; margin: 35px 0 15px; padding: 0 5px; }
-        .section-header h3 { font-size: 22px; font-weight: 900; color: var(--text-main); margin: 0; letter-spacing: -0.5px; }
-        .section-header span { font-size: 13px; color: var(--primary-lava); font-weight: 700; cursor: pointer; }
+        .section-header h3 { font-size: 22px; font-weight: 900; color: var(--text-main); margin: 0; }
 
-        /* --- New Services Design --- */
         .services-scroll-container { display: flex; gap: 15px; overflow-x: auto; padding: 10px 5px 25px; scrollbar-width: none; }
         .services-scroll-container::-webkit-scrollbar { display: none; }
         
         .service-pill {
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             background: #ffffff; border: 1.5px solid #f1f5f9; padding: 15px; border-radius: 24px;
-            width: 75px; height: 90px; flex-shrink: 0; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            width: 75px; height: 90px; flex-shrink: 0; transition: 0.4s;
             cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.03);
         }
-        .service-pill .icon-box {
-            width: 42px; height: 42px; background: #f8fafc; border-radius: 14px;
+        
+        /* المربع الصغير داخل المربع الكبير للأيقونة */
+        .icon-box {
+            width: 42px; height: 42px; background: #fff5f2; border-radius: 14px;
             display: flex; align-items: center; justify-content: center; font-size: 22px;
             margin-bottom: 8px; transition: 0.3s;
         }
         .service-pill span { font-size: 11px; font-weight: 700; color: #64748b; }
         
+        /* حالة الاختيار */
         .service-pill.active {
             background: var(--primary-lava); border-color: var(--primary-lava);
             transform: translateY(-5px); box-shadow: 0 10px 20px var(--lava-glow);
         }
-        .service-pill.active .icon-box { background: rgba(255, 255, 255, 0.2); color: #fff; }
+        .service-pill.active .icon-box { background: rgba(255, 255, 255, 0.2); }
         .service-pill.active span { color: #fff; }
 
-        /* --- Stacked Cards --- */
+        /* --- Advert Cards (No Changes) --- */
         .stacked-cards-wrapper { position: relative; width: 100%; height: 260px; display: flex; justify-content: center; align-items: center; perspective: 1200px; margin-top: 10px;}
-        .card-item { position: absolute; width: 200px; height: 240px; border-radius: 30px; background-size: cover; background-position: center; transition: all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 20px; opacity: 0; pointer-events: none; border: 2px solid transparent; }
+        .card-item { position: absolute; width: 200px; height: 240px; border-radius: 30px; background-size: cover; background-position: center; transition: 0.7s; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 20px; opacity: 0; pointer-events: none; }
         .card-item.active { opacity: 1; transform: translateX(0) translateZ(50px) scale(1); z-index: 10; pointer-events: auto; }
         .card-item.prev { opacity: 0.4; transform: translateX(-100px) translateZ(-100px) scale(0.8); z-index: 5; }
         .card-item.next { opacity: 0.4; transform: translateX(100px) translateZ(-100px) scale(0.8); z-index: 5; }
         .see-more-btn { background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(12px); color: #fff; border-radius: 50px; padding: 8px 30px; font-weight: 700; font-size: 11px; border: 1px solid rgba(255,255,255,0.3); }
-        .dots-container { display: flex; justify-content: center; gap: 8px; margin-top: 15px; }
-        .dot { width: 6px; height: 6px; background: #e2e8f0; border-radius: 50%; transition: 0.4s; }
-        .dot.active { background: var(--primary-lava); width: 15px; border-radius: 10px; }
 
-        /* --- Trending Section --- */
+        /* --- Other Sections --- */
         .trending-scroll { display: flex; gap: 15px; overflow-x: auto; padding: 10px 5px; scrollbar-width: none; }
         .trend-card { flex-shrink: 0; width: 110px; text-align: center; }
         .trend-icon-box { width: 100px; height: 100px; border-radius: 25px; background: #f8fafc; border: 1.5px solid #f1f5f9; display: flex; align-items: center; justify-content: center; font-size: 40px; margin-bottom: 8px; }
-        .trend-card span { font-size: 12px; font-weight: 700; color: var(--text-main); }
-
-        /* --- Marketplace --- */
+        
         .market-list { display: flex; flex-direction: column; gap: 12px; }
         .market-item { background: #fff; border-radius: 25px; padding: 15px; display: flex; align-items: center; gap: 15px; border: 1px solid #f1f5f9; }
         .market-item-icon { width: 55px; height: 55px; border-radius: 18px; background: #fff5f2; display: flex; align-items: center; justify-content: center; font-size: 26px; }
-        .market-details { flex: 1; }
-        .market-details h4 { margin: 0; font-size: 15px; font-weight: 800; color: var(--text-main); }
-        .market-details p { margin: 2px 0 0; font-size: 11px; color: #64748b; font-weight: 600; }
-        .market-price { color: var(--primary-lava); font-weight: 800; font-size: 15px; }
-        .post-service-btn { background: #fff; color: var(--primary-lava); padding: 15px; border-radius: 20px; text-align: center; font-weight: 700; border: 2px dashed var(--primary-lava); margin-top: 10px; }
-
-        /* --- Widget --- */
-        .service-widget-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); z-index: 10000; display: none; justify-content: center; align-items: flex-end; }
-        .service-widget-content { background: #fff; width: 100%; border-radius: 40px 40px 0 0; padding: 40px 30px; box-sizing: border-box; transform: translateY(100%); transition: 0.4s; text-align: center; }
-        .service-widget-overlay.open { display: flex; }
-        .service-widget-overlay.open .service-widget-content { transform: translateY(0); }
-        .widget-handle { width: 40px; height: 5px; background: #e2e8f0; border-radius: 10px; margin: -20px auto 30px; }
-        .widget-btn { background: var(--primary-lava); color: #fff; border: none; width: 100%; padding: 18px; border-radius: 20px; font-weight: 700; box-shadow: 0 10px 20px var(--lava-glow); }
-
-        /* --- Communities --- */
+        
         .hubs-container { display: flex; flex-direction: column; gap: 15px; margin-bottom: 60px; }
         .hub-card { background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-radius: 28px; padding: 20px; display: flex; align-items: center; gap: 15px; border: 1px solid #edf2f7; }
         .ask-community-bar { background: var(--text-main); color: #fff; padding: 18px 25px; border-radius: 25px; display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
         .plus-icon { width: 28px; height: 28px; background: var(--primary-lava); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: bold; }
+
+        /* Widget */
+        .service-widget-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); z-index: 10000; display: none; justify-content: center; align-items: flex-end; }
+        .service-widget-content { background: #fff; width: 100%; border-radius: 40px 40px 0 0; padding: 40px 30px; box-sizing: border-box; transform: translateY(100%); transition: 0.4s; text-align: center; }
+        .service-widget-overlay.open { display: flex; }
+        .service-widget-overlay.open .service-widget-content { transform: translateY(0); }
+        .widget-btn { background: var(--primary-lava); color: #fff; border: none; width: 100%; padding: 18px; border-radius: 20px; font-weight: 700; box-shadow: 0 10px 20px var(--lava-glow); }
     </style>
 </head>
 <body>
@@ -188,20 +176,14 @@
                 <div class="trend-card"><div class="trend-icon-box">🕌</div><span>Istanbul</span></div>
                 <div class="trend-card"><div class="trend-icon-box">🏙️</div><span>Dubai</span></div>
                 <div class="trend-card"><div class="trend-icon-box">🏔️</div><span>Georgia</span></div>
-                <div class="trend-card"><div class="trend-icon-box">🇬🇧</div><span>London</span></div>
             </div>
 
             <div class="section-header"><h3>Marketplace</h3><span>Explore</span></div>
             <div class="market-list">
                 <div class="market-item">
                     <div class="market-item-icon">📸</div>
-                    <div class="market-details"><h4>Photography Service</h4><p>By Alex • Verified Pro</p></div>
+                    <div class="market-details"><h4>Photography</h4><p>By Alex • Pro</p></div>
                     <div class="market-price">$45</div>
-                </div>
-                <div class="market-item">
-                    <div class="market-item-icon">🚗</div>
-                    <div class="market-details"><h4>Private Transfer</h4><p>By Sam • Fast Pickup</p></div>
-                    <div class="market-price">$20</div>
                 </div>
                 <div class="post-service-btn">💰 Start Earning: Post Your Service</div>
             </div>
@@ -219,10 +201,9 @@
 
     <div class="service-widget-overlay" id="widgetOverlay" onclick="hideWidget()">
         <div class="service-widget-content" onclick="event.stopPropagation()">
-            <div class="widget-handle"></div>
             <span id="wIcon" style="font-size: 50px; display: block; margin-bottom: 15px;"></span>
-            <h2 id="wTitle" style="font-size: 24px; font-weight: 800; color: var(--text-main); margin-bottom: 10px;"></h2>
-            <p id="wDesc" style="color: #64748b; line-height: 1.6; margin-bottom: 25px;"></p>
+            <h2 id="wTitle" style="font-size: 24px; font-weight: 800; color: var(--text-main);"></h2>
+            <p id="wDesc" style="color: #64748b; margin-bottom: 25px;"></p>
             <button class="widget-btn" id="wBtn">Open Service</button>
         </div>
     </div>
@@ -241,7 +222,7 @@
             events: { title: "Local Events", icon: "🎫", desc: "Discover festivals and activities around you.", btn: "View Events" },
             esim: { title: "Travel eSIM", icon: "🌐", desc: "Get high-speed internet instantly.", btn: "Get eSIM" },
             currency: { title: "Currency Converter", icon: "📊", desc: "Check live exchange rates.", btn: "Check Rates" },
-            transfer: { title: "Money Transfer", icon: "💸", desc: "Send money instantly with lowest fees.", btn: "Send Now" }
+            transfer: { title: "Money Transfer", icon: "💸", desc: "Send money instantly.", btn: "Send Now" }
         };
 
         function showWidget(k) {
@@ -250,6 +231,7 @@
             document.getElementById('wTitle').innerText = d.title;
             document.getElementById('wDesc').innerText = d.desc;
             document.getElementById('widgetOverlay').classList.add('open');
+            // تحديث الشكل النشط
             document.querySelectorAll('.service-pill').forEach(p => p.classList.remove('active'));
             event.currentTarget.classList.add('active');
         }
