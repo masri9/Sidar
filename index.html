@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sidarapp - Filming Map</title>
+    <title>Sidarapp - Global Filming Map</title>
     
     <style>
         :root {
             --primary-lava: #ff4500; 
             --lava-glow: rgba(255, 69, 0, 0.4); 
-            --lava-intense-glow: rgba(255, 69, 0, 0.8); 
             --text-main: #0f172a; 
         }
 
@@ -23,6 +22,7 @@
             overflow-x: hidden;
         }
 
+        /* --- Splash Screen --- */
         #splash-screen {
             position: fixed; inset: 0; background: #ffffff;
             display: flex; justify-content: center; align-items: center;
@@ -30,6 +30,7 @@
         }
         .splash-image { width: 180px; }
 
+        /* --- Hero Section --- */
         .header-bg {
             position: absolute; top: 0; left: 0; right: 0; height: 55vh;
             background-size: cover; background-position: center; z-index: 0;
@@ -47,6 +48,7 @@
         .hero-title { font-size: 34px; font-weight: 800; line-height: 1.1; color: var(--text-main); margin-bottom: 25px; }
         .hero-title span { color: var(--primary-lava); }
 
+        /* --- Search Bar --- */
         .search-wrapper {
             background: rgba(255,255,255,0.9); backdrop-filter: blur(15px);
             border-radius: 20px; padding: 12px 18px; display: flex; align-items: center;
@@ -64,6 +66,7 @@
         .search-wrapper input:focus + .fake-placeholder,
         .search-wrapper input:not(:placeholder-shown) + .fake-placeholder { opacity: 0; }
 
+        /* --- Services --- */
         .services-scroll-container {
             display: flex; gap: 10px; overflow-x: auto; padding-bottom: 25px; scrollbar-width: none;
         }
@@ -110,43 +113,52 @@
         .dot { width: 7px; height: 7px; background: #e2e8f0; border-radius: 50%; transition: 0.4s; }
         .dot.active { background: var(--primary-lava); width: 18px; border-radius: 10px; }
 
-        /* --- 🆕 Gray Map Section 🆕 --- */
+        /* --- 🆕 Global World Map Section 🆕 --- */
         .service-title {
             font-size: 22px; font-weight: 800; color: var(--text-main);
             margin: 40px 0 15px; display: flex; align-items: center; gap: 10px;
         }
-        .map-container {
-            width: 100%; height: 220px; background-color: #f3f4f6;
-            background-image: linear-gradient(#e5e7eb 1px, transparent 1px), linear-gradient(90deg, #e5e7eb 1px, transparent 1px);
-            background-size: 30px 30px; border-radius: 30px; position: relative;
-            overflow: hidden; border: 1.5px solid #e5e7eb; margin-bottom: 30px;
+        .world-map-container {
+            width: 100%; height: 240px; background-color: #f8fafc;
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/e/ec/World_Map_Blank.svg');
+            background-size: contain; background-repeat: no-repeat; background-position: center;
+            border-radius: 30px; position: relative; overflow: hidden;
+            border: 1.5px solid #e5e7eb; margin-bottom: 40px; filter: grayscale(100%) contrast(0.8) brightness(1.05);
+        }
+        /* Grid Overlay */
+        .world-map-container::after {
+            content: ''; position: absolute; inset: 0;
+            background-image: linear-gradient(rgba(255, 69, 0, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 69, 0, 0.05) 1px, transparent 1px);
+            background-size: 25px 25px; pointer-events: none;
         }
         .map-pin {
-            position: absolute; font-size: 24px; color: var(--primary-lava);
-            filter: drop-shadow(0 0 5px var(--lava-glow)); animation: pin-bounce 2s infinite ease-in-out;
+            position: absolute; font-size: 22px; color: var(--primary-lava);
+            filter: drop-shadow(0 0 5px var(--lava-glow)); animation: pin-bounce 2.5s infinite ease-in-out;
+            z-index: 2;
         }
-        .pin-1 { top: 20%; left: 30%; animation-delay: 0s; }
-        .pin-2 { top: 60%; left: 70%; animation-delay: 0.3s; }
-        .pin-3 { top: 40%; left: 50%; animation-delay: 0.6s; }
-        .pin-4 { top: 75%; left: 15%; animation-delay: 0.9s; }
+        .pin-tr { top: 38%; left: 56%; animation-delay: 0s; }
+        .pin-eu { top: 30%; left: 48%; animation-delay: 0.4s; }
+        .pin-us { top: 35%; left: 25%; animation-delay: 0.8s; }
+        .pin-as { top: 40%; left: 75%; animation-delay: 1.2s; }
         @keyframes pin-bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-6px) scale(1.1); }
         }
-        .map-details {
+        .world-map-details {
             background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px);
             position: absolute; bottom: 12px; left: 12px; right: 12px;
-            padding: 12px 18px; border-radius: 20px; display: flex;
+            padding: 10px 15px; border-radius: 18px; display: flex;
             justify-content: space-between; align-items: center; border: 1px solid rgba(255, 69, 0, 0.1);
+            z-index: 3;
         }
-        .map-details h4 { margin: 0; font-size: 14px; color: var(--text-main); }
-        .map-details p { margin: 0; font-size: 11px; color: #64748b; }
+        .world-map-details h4 { margin: 0; font-size: 13px; color: var(--text-main); font-weight: 800; }
+        .world-map-details p { margin: 0; font-size: 10px; color: #64748b; }
         .btn-go {
-            background: var(--primary-lava); color: white; width: 35px; height: 35px;
-            border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: bold;
+            background: var(--primary-lava); color: white; width: 32px; height: 32px;
+            border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold;
         }
 
-        /* --- Overlays & Nav --- */
+        /* --- Overlays & Navigation --- */
         #info-overlay {
             position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px);
             z-index: 2000; display: flex; align-items: flex-end; visibility: hidden; opacity: 0; transition: 0.4s;
@@ -202,15 +214,15 @@
         <div class="dots-container" id="dotsContainer"></div>
 
         <div class="service-title">Filming Spots Map 🎬</div>
-        <div class="map-container">
-            <div class="map-pin pin-1">📍</div>
-            <div class="map-pin pin-2">📍</div>
-            <div class="map-pin pin-3">📍</div>
-            <div class="map-pin pin-4">📍</div>
-            <div class="map-details">
+        <div class="world-map-container">
+            <div class="map-pin pin-tr">📍</div>
+            <div class="map-pin pin-eu">📍</div>
+            <div class="map-pin pin-us">📍</div>
+            <div class="map-pin pin-as">📍</div>
+            <div class="world-map-details">
                 <div>
-                    <h4>28 Secret Locations</h4>
-                    <p>From Turkish Drama series</p>
+                    <h4>Global Locations Network</h4>
+                    <p>Explore 280+ cinematic destinations</p>
                 </div>
                 <div class="btn-go">→</div>
             </div>
@@ -245,10 +257,10 @@
         };
 
         const DATA = [
-            { tag: "Iconic", title: "Turkey", desc: "Guide to Turkish filming spots." },
-            { tag: "Adventure", title: "The Peak", desc: "View from the top." },
-            { tag: "Peaceful", title: "Blue Shore", desc: "Crystal clear water." },
-            { tag: "Heritage", title: "Stone Temple", desc: "Ancient secrets." }
+            { tag: "Iconic", title: "Turkey", desc: "Your cinematic guide to the most famous scenes filmed in Turkey." },
+            { tag: "Adventure", title: "The Peak", desc: "Discover heights seen in action movies." },
+            { tag: "Peaceful", title: "Blue Shore", desc: "Relax in locations from romantic dramas." },
+            { tag: "Heritage", title: "Stone Temple", desc: "Explore the history behind the screen." }
         ];
 
         function applyImages() {
