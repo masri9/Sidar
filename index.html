@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sidarapp - Spaced Edition</title>
+    <title>Sidarapp - Aligned Edition</title>
     
     <style>
         :root {
@@ -11,8 +11,6 @@
             --lava-glow: rgba(255, 69, 0, 0.4); 
             --text-main: #0f172a; 
         }
-
-        .lava-text { color: var(--primary-lava); font-weight: 700; }
 
         body, html { 
             margin: 0; padding: 0;
@@ -22,227 +20,119 @@
             overflow-x: hidden;
         }
 
-        .app-page { display: none; animation: slideUp 0.4s ease-out; }
-        .app-page.active { display: block; }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* --- Splash Screen --- */
-        #splash-screen {
-            position: fixed; inset: 0; background: #ffffff;
-            display: flex; justify-content: center; align-items: center;
-            z-index: 9999; transition: opacity 0.5s ease;
-        }
-        .splash-image { width: 180px; }
-
-        .header-bg {
-            position: absolute; top: 0; left: 0; right: 0; height: 55vh;
-            background-size: cover; background-position: center; z-index: 0;
-            transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
         .app-container {
             position: relative; z-index: 1;
             padding: 60px 20px 150px; box-sizing: border-box;
         }
 
+        .header-bg {
+            position: absolute; top: 0; left: 0; right: 0; height: 55vh;
+            background-size: cover; background-position: center; z-index: 0;
+        }
+
         /* --- Hero & Robot --- */
-        .hero-section { position: relative; }
-        .hero-title { font-size: 34px; font-weight: 800; line-height: 1.1; color: var(--text-main); margin-bottom: 25px; }
+        .hero-section { position: relative; margin-bottom: 20px; }
+        .hero-title { font-size: 34px; font-weight: 800; line-height: 1.1; color: var(--text-main); margin: 0; }
         .hero-title span { color: var(--primary-lava); }
 
         .sidar-robot {
-            position: absolute; right: 5px; top: -20px; width: 120px; z-index: 10;
-            filter: drop-shadow(0 0 15px var(--lava-glow));
+            position: absolute; right: 0; top: -10px; width: 100px; z-index: 10;
             animation: robotFloat 3s ease-in-out infinite;
         }
 
         @keyframes robotFloat {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-12px); }
+            50% { transform: translateY(-10px); }
         }
 
         /* --- Search Bar --- */
         .search-wrapper {
-            background: rgba(255,255,255,0.9); backdrop-filter: blur(15px);
+            background: #fff;
             border-radius: 20px; padding: 12px 18px; display: flex; align-items: center;
-            border: 2px solid var(--primary-lava); margin-bottom: 30px; position: relative;
+            border: 2.5px solid var(--primary-lava); position: relative; margin-bottom: 10px;
         }
-        .search-wrapper input { flex: 1; border: none; background: transparent; outline: none; font-size: 16px; color: var(--text-main); }
-        .fake-placeholder { position: absolute; left: 45px; top: 50%; transform: translateY(-50%); color: #94a3b8; pointer-events: none; }
+        .search-wrapper input { border: none; background: transparent; outline: none; font-size: 16px; width: 100%; }
 
-        /* --- Stories Section --- */
+        /* --- قسم القصص: تم ضبطه لينزل على الخط تماماً --- */
         .stories-container { 
-            display: flex; gap: 18px; overflow-x: auto; 
-            padding: 20px 0 35px; /* زيادة المساحة هنا */
+            display: flex; gap: 15px; overflow-x: auto; 
+            padding: 10px 0; 
+            margin-top: 105px; /* هذه القيمة هي التي تضع الصور على خط الخلفية */
             scrollbar-width: none;
-            margin-bottom: 30px;
         }
         .story-item { flex-shrink: 0; width: 75px; text-align: center; }
         .story-ring { 
-            width: 70px; height: 70px; border-radius: 24px; padding: 3px; 
+            width: 72px; height: 72px; border-radius: 22px; padding: 3px; 
             background: linear-gradient(45deg, var(--primary-lava), #ff8c00); 
-            box-shadow: 0 5px 15px var(--lava-glow); 
-            position: relative; animation: ringPulse 2.5s infinite ease-in-out;
+            position: relative; box-shadow: 0 4px 12px var(--lava-glow);
         }
-
-        @keyframes ringPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.03); }
-        }
-
-        .story-ring img { width: 100%; height: 100%; border-radius: 21px; object-fit: cover; background: #fff; border: 2.5px solid #fff; }
-        .live-tag { position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%); background: var(--primary-lava); color: #fff; font-size: 9px; padding: 1px 8px; border-radius: 10px; font-weight: 900; border: 2px solid #fff; }
+        .story-ring img { width: 100%; height: 100%; border-radius: 19px; object-fit: cover; background: #fff; border: 2px solid #fff; }
+        .live-tag { position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%); background: var(--primary-lava); color: #fff; font-size: 8px; padding: 1px 7px; border-radius: 10px; font-weight: 900; border: 2px solid #fff; }
         .story-item span { font-size: 11px; font-weight: 800; color: var(--text-main); display: block; margin-top: 8px; }
 
-        /* --- Cards - Lowered even more --- */
+        /* --- Cards Section --- */
         .stacked-cards-wrapper { 
             position: relative; width: 100%; height: 260px; 
             display: flex; justify-content: center; align-items: center; 
-            perspective: 1200px; 
-            margin-top: 70px; /* زيادة كبيرة لإنزال البطاقات */
+            perspective: 1000px; 
+            margin-top: 60px; 
         }
-        .card-item { position: absolute; width: 210px; height: 250px; border-radius: 35px; background-size: cover; background-position: center; transition: 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 20px; opacity: 0; border: 2.5px solid transparent; }
-        .card-item.active { opacity: 1; transform: translateX(0) translateZ(60px) scale(1); z-index: 10; border-color: var(--primary-lava); box-shadow: 0 15px 35px rgba(255, 69, 0, 0.2); }
-        .card-item.prev { opacity: 0.35; transform: translateX(-110px) scale(0.8); z-index: 5; }
-        .card-item.next { opacity: 0.35; transform: translateX(110px) scale(0.8); z-index: 5; }
-
-        .dots-container { display: flex; justify-content: center; gap: 8px; margin-top: 45px; }
-        .dot { width: 7px; height: 7px; background: #cbd5e1; border-radius: 50%; transition: 0.4s; }
-        .dot.active { background: var(--primary-lava); width: 18px; border-radius: 10px; }
-
-        /* --- Services - Lowered even more --- */
-        .section-header { 
-            margin: 80px 0 18px; /* زيادة المسافة العلوية لإنزال الخدمات */
+        .card-item { 
+            position: absolute; width: 220px; height: 260px; border-radius: 35px; 
+            background-size: cover; background-position: center; transition: 0.8s; 
+            opacity: 0; border: 2.5px solid var(--primary-lava);
         }
-        .section-header h3 { font-size: 21px; font-weight: 900; color: var(--text-main); margin: 0; letter-spacing: -0.5px; }
-
-        .services-scroll-container { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 30px; scrollbar-width: none; }
-        .service-pill { background: #ffffff; border: 1.5px solid #e2e8f0; padding: 10px 20px; border-radius: 50px; flex-shrink: 0; font-weight: 700; font-size: 14px; transition: 0.3s; }
-        .service-pill.active { border-color: var(--primary-lava); color: var(--primary-lava); background: rgba(255, 69, 0, 0.05); }
+        .card-item.active { opacity: 1; transform: translateZ(50px); z-index: 10; }
 
         /* --- Navigation --- */
-        .bottom-nav { position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; background: #fff; border-radius: 40px; display: flex; justify-content: space-around; padding: 8px; border: 2px solid var(--primary-lava); z-index: 1000; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        .nav-item { display: flex; align-items: center; padding: 10px 15px; color: #94a3b8; border-radius: 30px; transition: 0.3s; cursor: pointer; }
+        .bottom-nav { position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; background: #fff; border-radius: 40px; display: flex; justify-content: space-around; padding: 10px; border: 2.5px solid var(--primary-lava); z-index: 1000; }
+        .nav-item { color: #94a3b8; padding: 8px 15px; border-radius: 25px; display: flex; align-items: center; }
         .nav-item.active { background: rgba(255, 69, 0, 0.1); color: var(--primary-lava); }
-        .nav-item span { max-width: 0; overflow: hidden; transition: 0.3s; font-weight: 700; font-size: 14px; }
-        .nav-item.active span { max-width: 80px; margin-left: 8px; }
-        .nav-item svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2.2; }
+        .nav-item svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2.5; }
+        .nav-item span { font-weight: 800; margin-left: 8px; font-size: 14px; }
     </style>
 </head>
 <body>
 
-    <div id="splash-screen"><img id="splashLogo" src="" class="splash-image"></div>
     <div class="header-bg" id="heroBg"></div>
 
-    <div class="app-container" id="main-app" style="opacity: 0; transition: 1s;">
-        
-        <div id="home-page" class="app-page active">
-            <div class="hero-section">
-                <img src="https://plain-eeur-prod-public.komododecks.com/202604/20/zpRwsd9YMgeCmtSTOjFQ/image.png" class="sidar-robot" alt="Sidar">
-                <h1 class="hero-title">Where do you <br><span>wanna go?</span></h1>
-            </div>
+    <div class="app-container">
+        <div class="hero-section">
+            <img src="https://plain-eeur-prod-public.komododecks.com/202604/20/zpRwsd9YMgeCmtSTOjFQ/image.png" class="sidar-robot">
+            <h1 class="hero-title">Where do you <br><span>wanna go?</span></h1>
+        </div>
 
-            <div class="search-wrapper">
-                <input type="text" placeholder=" ">
-                <div class="fake-placeholder">Ask <span class="lava-text">Sidar</span> any thing...</div>
-            </div>
+        <div class="search-wrapper">
+            <input type="text" placeholder="Ask Sidar any thing...">
+        </div>
 
-            <div class="stories-container">
-                <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/150?u=a" alt=""><div class="live-tag">Live</div></div><span>Alex</span></div>
-                <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/150?u=b" alt=""></div><span>Sarah</span></div>
-                <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/150?u=c" alt=""></div><span>Yasin</span></div>
-                <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/150?u=d" alt=""><div class="live-tag">Live</div></div><span>Mona</span></div>
-            </div>
+        <div class="stories-container">
+            <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/150?u=1"><div class="live-tag">Live</div></div><span>Alex</span></div>
+            <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/150?u=2"></div><span>Sarah</span></div>
+            <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/150?u=3"></div><span>Yasin</span></div>
+            <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/150?u=4"><div class="live-tag">Live</div></div><span>Mona</span></div>
+        </div>
 
-            <div class="stacked-cards-wrapper" id="cardsWrapper">
-                <div class="card-item" id="card0"></div>
-                <div class="card-item" id="card1"></div>
-                <div class="card-item" id="card2"></div>
-                <div class="card-item" id="card3"></div>
-            </div>
-
-            <div class="dots-container" id="dotsContainer"></div>
-
-            <div class="section-header"><h3>Explore Services</h3></div>
-            <div class="services-scroll-container">
-                <div class="service-pill"><span>🎟️ Events</span></div>
-                <div class="service-pill"><span>📶 eSIM</span></div>
-                <div class="service-pill active"><span>💱 Currency</span></div>
-                <div class="service-pill"><span>💸 Transfer</span></div>
-            </div>
+        <div class="stacked-cards-wrapper">
+            <div class="card-item active" id="card0"></div>
         </div>
     </div>
 
     <nav class="bottom-nav">
-        <div class="nav-item active" onclick="tab(this)"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg><span>Home</span></div>
-        <div class="nav-item" onclick="tab(this)"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg><span>Map</span></div>
-        <div class="nav-item" onclick="tab(this)"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line></svg><span>Reels</span></div>
-        <div class="nav-item" onclick="tab(this)"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg><span>Profile</span></div>
+        <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg><span>Home</span></div>
+        <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path></svg></div>
+        <div class="nav-item"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"></rect></svg></div>
+        <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path></svg></div>
     </nav>
 
     <script>
         const MY_IMAGES = {
-            splashLogo: 'https://plain-eeur-prod-public.komododecks.com/202604/19/y0zyi6uOKg2CaNATvHPZ/image.png',
             heroBackground: 'https://plain-eeur-prod-public.komododecks.com/202604/19/FtJXvAZvXREKew6PJ3ew/image.png',
-            card0: 'https://plain-eeur-prod-public.komododecks.com/202604/19/Zs148rIHaZ5l8sjqw4S4/image.png',
-            card1: 'https://plain-eeur-prod-public.komododecks.com/202604/19/xK3pwCpVUtFZFveFLbt2/image.png',
-            card2: 'https://plain-eeur-prod-public.komododecks.com/202604/19/Ri6ookm2NesWdMC7Mcbc/image.png',
-            card3: 'https://plain-eeur-prod-public.komododecks.com/202604/19/qzr51sWPt6GgM3gTZH8K/image.png'
+            card0: 'https://plain-eeur-prod-public.komododecks.com/202604/19/Zs148rIHaZ5l8sjqw4S4/image.png'
         };
 
-        function applyImages() {
-            document.getElementById('splashLogo').src = MY_IMAGES.splashLogo;
-            document.getElementById('heroBg').style.backgroundImage = `url('${MY_IMAGES.heroBackground}')`;
-            document.getElementById('card0').style.backgroundImage = `url('${MY_IMAGES.card0}')`;
-            document.getElementById('card1').style.backgroundImage = `url('${MY_IMAGES.card1}')`;
-            document.getElementById('card2').style.backgroundImage = `url('${MY_IMAGES.card2}')`;
-            document.getElementById('card3').style.backgroundImage = `url('${MY_IMAGES.card3}')`;
-        }
-
-        let currentIndex = 0;
-        const cards = document.querySelectorAll('.card-item');
-
-        function updateCards() {
-            cards.forEach((card, i) => {
-                card.classList.remove('active', 'prev', 'next');
-                if (i === currentIndex) card.classList.add('active');
-                else if (i === (currentIndex - 1 + cards.length) % cards.length) card.classList.add('prev');
-                else if (i === (currentIndex + 1) % cards.length) card.classList.add('next');
-            });
-            document.querySelectorAll('.dot').forEach((dot, i) => dot.classList.toggle('active', i === currentIndex));
-        }
-
-        window.addEventListener('load', () => {
-            applyImages();
-            const dotsContainer = document.getElementById('dotsContainer');
-            cards.forEach((_, i) => {
-                const dot = document.createElement('div');
-                dot.className = `dot ${i === 0 ? 'active' : ''}`;
-                dotsContainer.appendChild(dot);
-            });
-            setTimeout(() => {
-                document.getElementById('splash-screen').style.opacity = '0';
-                setTimeout(() => {
-                    document.getElementById('splash-screen').style.display = 'none';
-                    document.getElementById('main-app').style.opacity = '1';
-                    updateCards();
-                }, 500);
-            }, 2000);
-        });
-
-        setInterval(() => { 
-            currentIndex = (currentIndex + 1) % cards.length; 
-            updateCards(); 
-        }, 4000);
-
-        function tab(el) {
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            el.classList.add('active');
-        }
+        document.getElementById('heroBg').style.backgroundImage = `url('${MY_IMAGES.heroBackground}')`;
+        document.getElementById('card0').style.backgroundImage = `url('${MY_IMAGES.card0}')`;
     </script>
 </body>
 </html>
