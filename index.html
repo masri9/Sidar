@@ -124,6 +124,22 @@
             perspective: 1200px; margin-top: 10px;
         }
 
+        /* ✨ 🆕 إضافة الأنيميشن للحركة البركانية النبضية للأطراف */
+        @keyframes lava-pulse-border {
+            0% {
+                box-shadow: 0 20px 40px rgba(0,0,0,0.3), 0 0 10px var(--lava-glow);
+                border-color: rgba(255, 69, 0, 0.3);
+            }
+            50% {
+                box-shadow: 0 20px 45px rgba(0,0,0,0.4), 0 0 25px var(--lava-intense-glow);
+                border-color: rgba(255, 69, 0, 0.8);
+            }
+            100% {
+                box-shadow: 0 20px 40px rgba(0,0,0,0.3), 0 0 10px var(--lava-glow);
+                border-color: rgba(255, 69, 0, 0.3);
+            }
+        }
+
         .card-item {
             position: absolute; width: 240px; height: 290px;
             border-radius: 35px; background-size: cover; background-position: center;
@@ -132,9 +148,22 @@
             padding-bottom: 25px; box-shadow: 0 12px 25px rgba(0,0,0,0.15);
             opacity: 0; pointer-events: none; overflow: hidden;
             cursor: pointer;
+            /* ✨ 🆕 إضافة إطار افتراضي شفاف للبطاقات حتى تعمل الحركة بسلاسة */
+            border: 2px solid transparent;
         }
 
-        .card-item.active { opacity: 1; transform: translateX(0) translateZ(50px) scale(1); z-index: 10; pointer-events: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.3); filter: blur(0); }
+        /* ✨ 🆕 تحديث حالة البطاقة النشطة بتأثير الأطراف البركانية */
+        .card-item.active { 
+            opacity: 1; 
+            transform: translateX(0) translateZ(50px) scale(1); 
+            z-index: 10; 
+            pointer-events: auto; 
+            /* box-shadow: 0 20px 40px rgba(0,0,0,0.3); -- تمت إزالته واستبداله داخل الأنيميشن */ 
+            filter: blur(0);
+            /* ✨ 🆕 تفعيل تأثير الحركة البركانية النبضية */
+            animation: lava-pulse-border 3s infinite ease-in-out;
+        }
+        
         .card-item.prev { opacity: 0.45; transform: translateX(-115px) translateZ(-100px) scale(0.75); z-index: 5; filter: blur(1.5px); }
         .card-item.next { opacity: 0.45; transform: translateX(115px) translateZ(-100px) scale(0.75); z-index: 5; filter: blur(1.5px); }
 
