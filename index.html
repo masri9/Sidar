@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sidarapp - Full Adjusted</title>
+    <title>Sidarapp - Final Adjusted</title>
     
     <style>
         :root {
@@ -53,63 +53,128 @@
         .hero-title span { color: var(--primary-lava); }
 
         .sidar-robot {
-            position: absolute; right: 5px; top: -20px; width: 120px; z-index: 10;
+            position: absolute;
+            right: 5px;      
+            top: -20px;     
+            width: 120px;    
+            z-index: 10;
             filter: drop-shadow(0 0 15px var(--lava-glow));
             animation: robotFloat 3s ease-in-out infinite;
         }
-        @keyframes robotFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+
+        @keyframes robotFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(2deg); }
+        }
 
         .search-wrapper {
             background: rgba(255,255,255,0.9); backdrop-filter: blur(15px);
             border-radius: 20px; padding: 12px 18px; display: flex; align-items: center;
             border: 2px solid var(--primary-lava); margin-bottom: 40px; position: relative;
         }
-        .search-wrapper input { flex: 1; border: none; background: transparent; outline: none; font-size: 16px; color: var(--text-main); }
+        .search-icon { z-index: 2; margin-right: 10px; font-size: 18px; }
+        .search-wrapper input { 
+            flex: 1; border: none; background: transparent; outline: none; 
+            font-size: 16px; width: 100%; position: relative; z-index: 2; color: var(--text-main);
+        }
+        .fake-placeholder {
+            position: absolute; left: 45px; top: 50%; transform: translateY(-50%);
+            color: #94a3b8; font-size: 16px; pointer-events: none; z-index: 1; transition: 0.2s;
+        }
+        .search-wrapper input:focus + .fake-placeholder,
+        .search-wrapper input:not(:placeholder-shown) + .fake-placeholder { opacity: 0; }
 
-        .section-header { display: flex; justify-content: space-between; align-items: flex-end; margin: 35px 0 15px; padding: 0 5px; }
+        .section-header { display: flex; justify-content: space-between; align-items: flex-end; margin: 30px 0 15px; padding: 0 5px; }
         .section-header h3 { font-size: 22px; font-weight: 900; color: var(--text-main); margin: 0; letter-spacing: -0.5px; }
         .section-header span { font-size: 13px; color: var(--primary-lava); font-weight: 700; cursor: pointer; }
 
-        /* Services Pill Styles */
-        .services-scroll-container { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
-        .service-pill { display: flex; align-items: center; background: #ffffff; border: 1.5px solid #f1f5f9; padding: 8px 16px; border-radius: 50px; flex-shrink: 0; transition: 0.3s; cursor: pointer; }
+        .services-scroll-container {
+            display: flex; gap: 10px; overflow-x: auto; padding-bottom: 35px; scrollbar-width: none;
+        }
+        .service-pill {
+            display: flex; align-items: center; background: #ffffff; border: 1.5px solid #f1f5f9;
+            padding: 8px 16px; border-radius: 50px; flex-shrink: 0; transition: 0.3s; cursor: pointer;
+        }
         .service-pill.active { border-color: var(--primary-lava); color: var(--primary-lava); background: rgba(255, 69, 0, 0.05); }
 
-        /* Widget Styles */
-        .service-widget-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); z-index: 10000; display: none; justify-content: center; align-items: flex-end; }
-        .service-widget-content { background: #fff; width: 100%; border-radius: 40px 40px 0 0; padding: 40px 30px; box-sizing: border-box; transform: translateY(100%); transition: 0.4s; text-align: center; }
+        /* --- Widget Design --- */
+        .service-widget-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(8px);
+            z-index: 10000; display: none; justify-content: center; align-items: flex-end;
+        }
+        .service-widget-content {
+            background: #fff; width: 100%; border-radius: 40px 40px 0 0; padding: 40px 30px;
+            box-sizing: border-box; transform: translateY(100%); transition: 0.4s;
+            text-align: center;
+        }
         .service-widget-overlay.open { display: flex; }
         .service-widget-overlay.open .service-widget-content { transform: translateY(0); }
-        .widget-btn { background: var(--primary-lava); color: #fff; border: none; width: 100%; padding: 18px; border-radius: 20px; font-weight: 700; box-shadow: 0 10px 20px var(--lava-glow); }
+        .widget-handle { width: 40px; height: 5px; background: #e2e8f0; border-radius: 10px; margin: -20px auto 30px; }
+        .widget-icon { font-size: 50px; margin-bottom: 15px; display: block; }
+        .widget-title { font-size: 24px; font-weight: 800; color: var(--text-main); margin-bottom: 10px; }
+        .widget-text { color: #64748b; line-height: 1.6; margin-bottom: 25px; }
+        .widget-btn {
+            background: var(--primary-lava); color: #fff; border: none; width: 100%; padding: 18px;
+            border-radius: 20px; font-weight: 700; font-size: 16px; box-shadow: 0 10px 20px var(--lava-glow);
+        }
 
-        /* Advert Cards Style */
-        .stacked-cards-wrapper { position: relative; width: 100%; height: 260px; display: flex; justify-content: center; align-items: center; perspective: 1200px; margin-top: 20px;}
-        .card-item { position: absolute; width: 200px; height: 240px; border-radius: 30px; background-size: cover; background-position: center; transition: all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 20px; opacity: 0; pointer-events: none; border: 2px solid transparent; }
+        /* --- Trending Destinations Section --- */
+        .trending-scroll { display: flex; gap: 15px; overflow-x: auto; padding: 10px 5px; scrollbar-width: none; }
+        .trend-card { flex-shrink: 0; width: 110px; text-align: center; }
+        .trend-icon-box { 
+            width: 100px; height: 100px; border-radius: 25px; background: #f8fafc; 
+            border: 1.5px solid #f1f5f9; display: flex; align-items: center; justify-content: center; 
+            font-size: 40px; margin-bottom: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        }
+        .trend-card span { font-size: 12px; font-weight: 700; color: var(--text-main); }
+
+        /* --- Market / Earn Section --- */
+        .market-list { display: flex; flex-direction: column; gap: 12px; }
+        .market-item { 
+            background: #fff; border-radius: 25px; padding: 15px; display: flex; 
+            align-items: center; gap: 15px; border: 1px solid #f1f5f9; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.02); 
+        }
+        .market-item-icon { width: 55px; height: 55px; border-radius: 18px; background: #fff5f2; display: flex; align-items: center; justify-content: center; font-size: 26px; }
+        .market-details { flex: 1; }
+        .market-details h4 { margin: 0; font-size: 15px; font-weight: 800; color: var(--text-main); }
+        .market-details p { margin: 2px 0 0; font-size: 11px; color: #64748b; font-weight: 600; }
+        .market-price { color: var(--primary-lava); font-weight: 800; font-size: 15px; }
+        .post-service-btn { 
+            background: #fff; color: var(--primary-lava); padding: 15px; border-radius: 20px; 
+            text-align: center; font-weight: 700; font-size: 13px; border: 2px dashed var(--primary-lava); 
+            margin-top: 10px; cursor: pointer; 
+        }
+
+        /* --- Stacked Cards --- */
+        .stacked-cards-wrapper {
+            position: relative; width: 100%; height: 260px;
+            display: flex; justify-content: center; align-items: center;
+            perspective: 1200px; margin-top: 20px;
+        }
+        .card-item {
+            position: absolute; width: 200px; height: 240px; 
+            border-radius: 30px; background-size: cover; background-position: center;
+            transition: all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1); 
+            display: flex; align-items: flex-end; justify-content: center;
+            padding-bottom: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+            opacity: 0; pointer-events: none; border: 2px solid transparent; 
+        }
         .card-item.active { opacity: 1; transform: translateX(0) translateZ(50px) scale(1); z-index: 10; pointer-events: auto; }
         .card-item.prev { opacity: 0.4; transform: translateX(-100px) translateZ(-100px) scale(0.8); z-index: 5; }
         .card-item.next { opacity: 0.4; transform: translateX(100px) translateZ(-100px) scale(0.8); z-index: 5; }
-        .see-more-btn { background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(12px); color: #fff; border-radius: 50px; padding: 8px 30px; font-weight: 700; font-size: 11px; border: 1px solid rgba(255,255,255,0.3); }
 
-        /* --- Trending Section (Icon Based) --- */
-        .trending-container { display: flex; gap: 15px; overflow-x: auto; padding: 10px 5px; scrollbar-width: none; }
-        .trend-item { flex-shrink: 0; width: 100px; text-align: center; }
-        .trend-box { width: 100px; height: 100px; border-radius: 25px; background: #f8fafc; border: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: center; font-size: 40px; box-shadow: 0 8px 15px rgba(0,0,0,0.02); margin-bottom: 8px; }
-        .trend-item span { font-size: 12px; font-weight: 700; color: var(--text-main); }
-
-        /* --- Market Section --- */
-        .market-container { display: flex; flex-direction: column; gap: 12px; }
-        .market-card { background: #fff; border-radius: 25px; padding: 15px; display: flex; align-items: center; gap: 15px; border: 1px solid #f1f5f9; box-shadow: 0 5px 15px rgba(0,0,0,0.02); }
-        .market-icon-box { width: 60px; height: 60px; border-radius: 18px; background: #fff5f2; display: flex; align-items: center; justify-content: center; font-size: 28px; }
-        .market-info { flex: 1; }
-        .market-info h4 { margin: 0; font-size: 15px; font-weight: 800; color: var(--text-main); }
-        .market-info p { margin: 3px 0 0; font-size: 11px; color: #64748b; font-weight: 600; }
-        .market-price { color: var(--primary-lava); font-weight: 800; font-size: 14px; text-align: right; }
-        .earn-badge { background: #fff7ed; color: #c2410c; padding: 12px; border-radius: 20px; font-size: 12px; font-weight: 700; text-align: center; border: 1px dashed var(--primary-lava); margin-top: 10px; cursor: pointer; }
+        .see-more-btn {
+            background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(12px);
+            color: #fff; border-radius: 50px; padding: 8px 30px;
+            font-weight: 700; font-size: 11px; border: 1px solid rgba(255,255,255,0.3);
+        }
 
         .dots-container { display: flex; justify-content: center; gap: 8px; margin-top: 15px; }
         .dot { width: 6px; height: 6px; background: #e2e8f0; border-radius: 50%; transition: 0.4s; }
         .dot.active { background: var(--primary-lava); width: 15px; border-radius: 10px; }
 
+        /* --- Communities --- */
         .hubs-container { display: flex; flex-direction: column; gap: 15px; margin-bottom: 60px; }
         .hub-card { background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-radius: 28px; padding: 20px; display: flex; align-items: center; gap: 15px; border: 1px solid #edf2f7; }
         .ask-community-bar { background: var(--text-main); color: #fff; padding: 18px 25px; border-radius: 25px; display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
@@ -125,12 +190,14 @@
         
         <div id="home-page" class="app-page active">
             <div class="hero-section">
-                <img src="https://plain-eeur-prod-public.komododecks.com/202604/20/zpRwsd9YMgeCmtSTOjFQ/image.png" class="sidar-robot">
+                <img src="https://plain-eeur-prod-public.komododecks.com/202604/20/zpRwsd9YMgeCmtSTOjFQ/image.png" class="sidar-robot" alt="Sidar AI Robot">
                 <h1 class="hero-title">Where do you <br><span>wanna go?</span></h1>
             </div>
 
             <div class="search-wrapper">
-                <input type="text" placeholder="Ask Sidar anything...">
+                <span class="search-icon">🔍</span>
+                <input type="text" placeholder=" ">
+                <div class="fake-placeholder">Ask <span class="lava-text">Sidar</span> anything...</div>
             </div>
 
             <div class="section-header"><h3>Our Services</h3></div>
@@ -150,32 +217,32 @@
             <div class="dots-container" id="dotsContainer"></div>
 
             <div class="section-header"><h3>Trending</h3><span>View All</span></div>
-            <div class="trending-container">
-                <div class="trend-item"><div class="trend-box">🕌</div><span>Istanbul</span></div>
-                <div class="trend-item"><div class="trend-box">🏙️</div><span>Dubai</span></div>
-                <div class="trend-item"><div class="trend-box">🏔️</div><span>Georgia</span></div>
-                <div class="trend-item"><div class="trend-box">🇬🇧</div><span>London</span></div>
+            <div class="trending-scroll">
+                <div class="trend-card"><div class="trend-icon-box">🕌</div><span>Istanbul</span></div>
+                <div class="trend-card"><div class="trend-icon-box">🏙️</div><span>Dubai</span></div>
+                <div class="trend-card"><div class="trend-icon-box">🏔️</div><span>Georgia</span></div>
+                <div class="trend-card"><div class="trend-icon-box">🇬🇧</div><span>London</span></div>
             </div>
 
-            <div class="section-header"><h3>Community Market</h3><span>Sell Service</span></div>
-            <div class="market-container">
-                <div class="market-card">
-                    <div class="market-icon-box">📸</div>
-                    <div class="market-info"><h4>Travel Photography</h4><p>By Alex • Expert</p></div>
+            <div class="section-header"><h3>Marketplace</h3><span>Explore</span></div>
+            <div class="market-list">
+                <div class="market-item">
+                    <div class="market-item-icon">📸</div>
+                    <div class="market-details"><h4>Photography Service</h4><p>By Alex • Verified Pro</p></div>
                     <div class="market-price">$45</div>
                 </div>
-                <div class="market-card">
-                    <div class="market-icon-box">🚗</div>
-                    <div class="market-info"><h4>Airport Pickup</h4><p>By Sarah • Verified</p></div>
-                    <div class="market-price">$25</div>
+                <div class="market-item">
+                    <div class="market-item-icon">🚗</div>
+                    <div class="market-details"><h4>Private Transfer</h4><p>By Sam • Fast Pickup</p></div>
+                    <div class="market-price">$20</div>
                 </div>
-                <div class="earn-badge">💰 Want to earn? Post your service here!</div>
+                <div class="post-service-btn">💰 Start Earning: Post Your Service</div>
             </div>
 
             <div class="section-header"><h3>Communities</h3></div>
             <div class="hubs-container">
                 <div class="hub-card">
-                    <div class="market-info"><h4>Turkey Hub</h4><div class="stat-pill">12 Questions</div></div>
+                    <div class="market-details"><h4>Turkey Hub</h4><div class="stat-pill" style="display:inline-block; background:rgba(255,69,0,0.1); color:var(--primary-lava); padding:2px 8px; border-radius:5px; font-size:10px;">12 Questions</div></div>
                     <div class="plus-icon">→</div>
                 </div>
                 <div class="ask-community-bar"><span>Have a question?</span><div class="plus-icon">+</div></div>
@@ -185,9 +252,10 @@
 
     <div class="service-widget-overlay" id="widgetOverlay" onclick="hideWidget()">
         <div class="service-widget-content" onclick="event.stopPropagation()">
-            <span id="wIcon" style="font-size: 50px;"></span>
-            <h2 id="wTitle"></h2>
-            <p id="wDesc" style="color: #64748b; margin-bottom: 25px;"></p>
+            <div class="widget-handle"></div>
+            <span class="widget-icon" id="wIcon"></span>
+            <h2 class="widget-title" id="wTitle"></h2>
+            <p class="widget-text" id="wDesc"></p>
             <button class="widget-btn" id="wBtn">Open Service</button>
         </div>
     </div>
@@ -204,18 +272,20 @@
 
         const WIDGET_DATA = {
             events: { title: "Local Events", icon: "🎟️", desc: "Discover festivals and activities around you.", btn: "View Events" },
-            esim: { title: "Travel eSIM", icon: "📶", desc: "Get high-speed internet instantly.", btn: "Get eSIM" },
-            currency: { title: "Currency Converter", icon: "💱", desc: "Check live exchange rates.", btn: "Check Rates" },
-            transfer: { title: "Money Transfer", icon: "💸", desc: "Send money instantly.", btn: "Send Now" }
+            esim: { title: "Travel eSIM", icon: "📶", desc: "Get high-speed internet instantly without physical SIMs.", btn: "Get eSIM" },
+            currency: { title: "Currency Converter", icon: "💱", desc: "Check live exchange rates and best exchange spots.", btn: "Check Rates" },
+            transfer: { title: "Money Transfer", icon: "💸", desc: "Send money instantly with the lowest fees.", btn: "Send Now" }
         };
 
-        function showWidget(k) {
-            const d = WIDGET_DATA[k];
-            document.getElementById('wIcon').innerText = d.icon;
-            document.getElementById('wTitle').innerText = d.title;
-            document.getElementById('wDesc').innerText = d.desc;
+        function showWidget(key) {
+            const data = WIDGET_DATA[key];
+            document.getElementById('wIcon').innerText = data.icon;
+            document.getElementById('wTitle').innerText = data.title;
+            document.getElementById('wDesc').innerText = data.desc;
+            document.getElementById('wBtn').innerText = data.btn;
             document.getElementById('widgetOverlay').classList.add('open');
         }
+
         function hideWidget() { document.getElementById('widgetOverlay').classList.remove('open'); }
 
         let currentIndex = 0;
@@ -252,6 +322,7 @@
             });
             document.querySelectorAll('.dot').forEach((dot, i) => dot.classList.toggle('active', i === currentIndex));
         }
+
         setInterval(() => { currentIndex = (currentIndex + 1) % cards.length; updateCards(); }, 4000);
     </script>
 </body>
