@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sidarapp - Elevated Layout</title>
+    <title>Sidarapp - Interactive Lava Cards</title>
     
     <style>
         :root {
@@ -35,18 +35,18 @@
         .splash-image { width: 180px; }
 
         .header-bg {
-            position: absolute; top: 0; left: 0; right: 0; height: 50vh; /* تقليل الارتفاع قليلاً */
+            position: absolute; top: 0; left: 0; right: 0; height: 50vh;
             background-size: cover; background-position: center; z-index: 0;
             transition: 0.5s;
         }
 
         .app-container {
             position: relative; z-index: 1;
-            padding: 60px 20px 80px; /* تم تقليل الـ padding العلوي لرفع العناصر */
+            padding: 60px 20px 80px;
             box-sizing: border-box;
         }
 
-        .hero-section { position: relative; margin-bottom: 25px; } /* تقليل المسافة السفلية */
+        .hero-section { position: relative; margin-bottom: 25px; } 
         .hero-title { font-size: 34px; font-weight: 800; line-height: 1.1; color: var(--text-main); margin-bottom: 20px; }
         .hero-title span { color: var(--primary-lava); }
 
@@ -66,7 +66,7 @@
         .search-wrapper input { flex: 1; border: none; background: transparent; outline: none; font-size: 16px; color: var(--text-main); width: 100%; }
         .fake-placeholder { position: absolute; left: 45px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 16px; pointer-events: none; }
 
-        /* --- Services Cards --- */
+        /* --- Interactive Lava Services Cards --- */
         .section-header { display: flex; justify-content: space-between; align-items: flex-end; margin: 25px 0 12px; padding: 0 5px; }
         .section-header h3 { font-size: 20px; font-weight: 900; color: var(--text-main); margin: 0; }
 
@@ -83,17 +83,22 @@
             border-radius: 24px;
             padding: 8px;
             text-align: center;
-            transition: 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
             box-shadow: 0 4px 10px rgba(0,0,0,0.02);
             display: flex;
             flex-direction: column;
             align-items: center;
+            position: relative;
+            overflow: hidden;
         }
 
-        .service-card:active {
+        /* تأثير الضغط وتحول اللون للبركاني */
+        .service-card.clicked {
+            background: var(--primary-lava) !important;
             border-color: var(--primary-lava);
-            transform: scale(0.96);
+            transform: scale(0.92);
+            box-shadow: 0 10px 20px var(--lava-glow);
         }
 
         .service-card-image {
@@ -105,7 +110,12 @@
             align-items: center;
             justify-content: center;
             margin-bottom: 8px;
-            overflow: hidden;
+            transition: 0.3s;
+        }
+
+        /* عند تحول البطاقة للبركاني، يتغير لون حاوية الصورة */
+        .service-card.clicked .service-card-image {
+            background: rgba(255, 255, 255, 0.2);
         }
 
         .service-card-image img {
@@ -119,6 +129,7 @@
             font-size: 13px;
             font-weight: 800;
             color: var(--text-main);
+            transition: 0.3s;
         }
 
         .service-card-info p {
@@ -126,9 +137,16 @@
             font-size: 9px;
             color: #94a3b8;
             font-weight: 600;
+            transition: 0.3s;
         }
 
-        /* --- Advert Cards --- */
+        /* تغيير ألوان النصوص للأبيض عند الضغط */
+        .service-card.clicked .service-card-info h4,
+        .service-card.clicked .service-card-info p {
+            color: #ffffff;
+        }
+
+        /* --- باقي التنسيقات --- */
         .stacked-cards-wrapper { position: relative; width: 100%; height: 240px; display: flex; justify-content: center; align-items: center; perspective: 1200px; margin-top: 5px;}
         .card-item { position: absolute; width: 190px; height: 230px; border-radius: 28px; background-size: cover; background-position: center; transition: 0.7s; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 15px; opacity: 0; pointer-events: none; }
         .card-item.active { opacity: 1; transform: translateX(0) translateZ(50px) scale(1); z-index: 10; pointer-events: auto; }
@@ -136,7 +154,6 @@
         .card-item.next { opacity: 0.4; transform: translateX(90px) translateZ(-100px) scale(0.8); z-index: 5; }
         .see-more-btn { background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(12px); color: #fff; border-radius: 50px; padding: 6px 25px; font-weight: 700; font-size: 10px; border: 1px solid rgba(255,255,255,0.3); }
 
-        /* --- Other Sections --- */
         .trending-scroll { display: flex; gap: 15px; overflow-x: auto; padding: 5px 5px; scrollbar-width: none; }
         .trend-card { flex-shrink: 0; width: 100px; text-align: center; }
         .trend-icon-box { width: 90px; height: 90px; border-radius: 22px; background: #f8fafc; border: 1.5px solid #f1f5f9; display: flex; align-items: center; justify-content: center; font-size: 35px; margin-bottom: 6px; }
@@ -170,7 +187,7 @@
 
             <div class="section-header"><h3>Our Services</h3></div>
             <div class="services-grid">
-                <div class="service-card" onclick="showWidget('esim')">
+                <div class="service-card" onclick="handleServiceClick(this, 'esim_page.html')">
                     <div class="service-card-image">
                         <img src="https://plain-eeur-prod-public.komododecks.com/202604/20/WVky4M0jhFKod2i2RPvD/image.png">
                     </div>
@@ -179,7 +196,7 @@
                         <p>Instant Data</p>
                     </div>
                 </div>
-                <div class="service-card" onclick="showWidget('events')">
+                <div class="service-card" onclick="handleServiceClick(this, 'events_page.html')">
                     <div class="service-card-image">
                         <img src="https://plain-eeur-prod-public.komododecks.com/202604/20/60ucwerNgwq7UoOF6ddg/image.png">
                     </div>
@@ -188,7 +205,7 @@
                         <p>Explore Fun</p>
                     </div>
                 </div>
-                <div class="service-card" onclick="showWidget('transfer')">
+                <div class="service-card" onclick="handleServiceClick(this, 'transfer_page.html')">
                     <div class="service-card-image">
                         <img src="https://plain-eeur-prod-public.komododecks.com/202604/20/ZTysbUO6A6fZQPLzUpwU/image.png">
                     </div>
@@ -225,23 +242,27 @@
 
             <div class="section-header"><h3>Communities</h3></div>
             <div class="hubs-container">
-                <div class="ask-community-bar"><span>Have a question?</span><div class="plus-icon" style="width:28px; height:28px; background:var(--primary-lava); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:20px;">+</div></div>
+                <div class="ask-community-bar"><span>Have a question?</span><div style="width:28px; height:28px; background:var(--primary-lava); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:20px;">+</div></div>
             </div>
-        </div>
-    </div>
-
-    <div class="service-widget-overlay" id="widgetOverlay" onclick="hideWidget()">
-        <div class="service-widget-content" onclick="event.stopPropagation()">
-            <div id="wImageContainer" style="width: 100px; height: 100px; margin: 0 auto 15px; background: #fff5f2; border-radius: 25px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
-                <img id="wImg" src="" style="width: 80%; height: 80%; object-fit: contain;">
-            </div>
-            <h2 id="wTitle" style="font-size: 24px; font-weight: 800; color: var(--text-main);"></h2>
-            <p id="wDesc" style="color: #64748b; margin-bottom: 25px;"></p>
-            <button class="widget-btn" id="wBtn" style="background:var(--primary-lava); color:#fff; border:none; width:100%; padding:18px; border-radius:20px; font-weight:700;">Open Service</button>
         </div>
     </div>
 
     <script>
+        // دالة التعامل مع الضغط على الخدمات
+        function handleServiceClick(element, url) {
+            // إضافة كلاس اللون البركاني
+            element.classList.add('clicked');
+            
+            // تأخير بسيط لكي يرى المستخدم تأثير اللون قبل الانتقال
+            setTimeout(() => {
+                // استبدل هذا السطر بـ window.location.href = url للانتقال الفعلي
+                alert("انتقال إلى صفحة: " + url); 
+                
+                // إزالة الكلاس بعد العودة (للتوضيح فقط)
+                element.classList.remove('clicked');
+            }, 300);
+        }
+
         const MY_IMAGES = {
             splashLogo: 'https://plain-eeur-prod-public.komododecks.com/202604/19/y0zyi6uOKg2CaNATvHPZ/image.png',
             heroBackground: 'https://plain-eeur-prod-public.komododecks.com/202604/19/FtJXvAZvXREKew6PJ3ew/image.png',
@@ -251,28 +272,11 @@
             card3: 'https://plain-eeur-prod-public.komododecks.com/202604/19/qzr51sWPt6GgM3gTZH8K/image.png'
         };
 
-        const WIDGET_DATA = {
-            events: { title: "Local Events", img: "https://plain-eeur-prod-public.komododecks.com/202604/20/60ucwerNgwq7UoOF6ddg/image.png", desc: "Discover festivals and activities.", btn: "View" },
-            esim: { title: "Travel eSIM", img: "https://plain-eeur-prod-public.komododecks.com/202604/20/WVky4M0jhFKod2i2RPvD/image.png", desc: "High-speed internet instantly.", btn: "Get" },
-            transfer: { title: "Transfer", img: "https://plain-eeur-prod-public.komododecks.com/202604/20/ZTysbUO6A6fZQPLzUpwU/image.png", desc: "Secure money transfer service.", btn: "Send" }
-        };
-
-        function showWidget(k) {
-            const d = WIDGET_DATA[k];
-            document.getElementById('wImg').src = d.img;
-            document.getElementById('wTitle').innerText = d.title;
-            document.getElementById('wDesc').innerText = d.desc;
-            document.getElementById('wBtn').innerText = d.btn;
-            document.getElementById('widgetOverlay').classList.add('open');
-        }
-        function hideWidget() { document.getElementById('widgetOverlay').classList.remove('open'); }
-
-        let currentIndex = 0;
-        const cards = document.querySelectorAll('.card-item');
-
         window.addEventListener('load', () => {
             document.getElementById('splashLogo').src = MY_IMAGES.splashLogo;
             document.getElementById('heroBg').style.backgroundImage = `url('${MY_IMAGES.heroBackground}')`;
+            
+            const cards = document.querySelectorAll('.card-item');
             cards.forEach((c, i) => c.style.backgroundImage = `url('${MY_IMAGES['card'+i]}')`);
             
             setTimeout(() => {
@@ -280,20 +284,23 @@
                 setTimeout(() => {
                     document.getElementById('splash-screen').style.display = 'none';
                     document.getElementById('main-app').style.opacity = '1';
-                    updateCards();
                 }, 500);
             }, 2000);
         });
 
-        function updateCards() {
+        // منطق تبديل البطاقات التلقائي (Stacked Cards)
+        let currentIndex = 0;
+        setInterval(() => {
+            const cards = document.querySelectorAll('.card-item');
+            if(cards.length === 0) return;
             cards.forEach((card, i) => {
                 card.classList.remove('active', 'prev', 'next');
                 if (i === currentIndex) card.classList.add('active');
                 else if (i === (currentIndex - 1 + cards.length) % cards.length) card.classList.add('prev');
                 else if (i === (currentIndex + 1) % cards.length) card.classList.add('next');
             });
-        }
-        setInterval(() => { currentIndex = (currentIndex + 1) % cards.length; updateCards(); }, 4000);
+            currentIndex = (currentIndex + 1) % cards.length;
+        }, 4000);
     </script>
 </body>
 </html>
