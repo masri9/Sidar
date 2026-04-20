@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sidarapp - Social Edition</title>
+    <title>Sidarapp - Professional Social Hub</title>
     
     <style>
         :root {
@@ -108,37 +108,83 @@
         .dot { width: 6px; height: 6px; background: #e2e8f0; border-radius: 50%; transition: 0.4s; }
         .dot.active { background: var(--primary-lava); width: 15px; border-radius: 10px; }
 
-        /* --- 🆕 Stories & Hubs Styling 🆕 --- */
-        .section-header { display: flex; justify-content: space-between; align-items: center; margin: 40px 0 15px; }
-        .section-header h3 { font-size: 20px; font-weight: 800; color: var(--text-main); margin: 0; }
-        .section-header span { font-size: 13px; color: var(--primary-lava); font-weight: 700; }
+        /* --- 🆕 Professional Stories & Hubs Styling 🆕 --- */
+        .section-header { 
+            display: flex; justify-content: space-between; align-items: flex-end; 
+            margin: 40px 0 15px; padding: 0 5px;
+        }
+        .section-header h3 { font-size: 22px; font-weight: 900; color: var(--text-main); margin: 0; letter-spacing: -0.5px; }
+        .section-header span { font-size: 13px; color: var(--primary-lava); font-weight: 700; cursor: pointer; }
 
-        .stories-container { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
-        .story-item { flex-shrink: 0; text-align: center; width: 70px; }
+        .stories-container { 
+            display: flex; gap: 18px; overflow-x: auto; padding: 10px 5px 20px; 
+            scrollbar-width: none; -webkit-overflow-scrolling: touch;
+        }
+        .story-item { flex-shrink: 0; position: relative; width: 75px; transition: 0.3s; }
+        .story-item:active { transform: scale(0.9); }
+
         .story-ring {
-            width: 65px; height: 65px; border-radius: 50%; padding: 2px;
-            border: 2px solid var(--primary-lava); box-shadow: 0 0 8px var(--lava-glow);
-            margin-bottom: 5px; overflow: hidden;
+            width: 70px; height: 70px; border-radius: 24px;
+            padding: 3px; background: linear-gradient(45deg, var(--primary-lava), #ff8c00);
+            box-shadow: 0 8px 15px var(--lava-glow);
+            margin-bottom: 8px; position: relative;
         }
-        .story-ring img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
-        .story-item span { font-size: 10px; font-weight: 600; color: #64748b; }
+        .story-ring img { 
+            width: 100%; height: 100%; border-radius: 21px; object-fit: cover; 
+            background: #fff; border: 2px solid #fff;
+        }
+        .live-tag {
+            position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%);
+            background: var(--primary-lava); color: #fff; font-size: 8px; 
+            padding: 2px 8px; border-radius: 10px; font-weight: 900;
+            border: 2px solid #fff; text-transform: uppercase;
+        }
+        .story-item span { font-size: 11px; font-weight: 700; color: var(--text-main); display: block; margin-top: 5px; text-align: center; }
 
-        .hubs-container { display: flex; flex-direction: column; gap: 12px; margin-bottom: 50px; }
+        .hubs-container { display: grid; grid-template-columns: 1fr; gap: 15px; margin-bottom: 60px; }
+        
         .hub-card {
-            background: #f8fafc; border-radius: 22px; padding: 15px;
-            display: flex; align-items: center; justify-content: space-between;
-            border: 1.5px solid #f1f5f9; transition: 0.3s;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border-radius: 28px; padding: 20px;
+            display: flex; align-items: center; gap: 15px;
+            border: 1px solid #edf2f7;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.03);
+            position: relative; overflow: hidden; transition: 0.3s;
         }
-        .hub-info { display: flex; align-items: center; gap: 12px; }
-        .hub-icon { font-size: 24px; background: #fff; width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
-        .hub-text h4 { margin: 0; font-size: 15px; color: var(--text-main); }
-        .hub-text p { margin: 2px 0 0; font-size: 11px; color: #94a3b8; }
-        .hub-action { background: #fff; border: 1.5px solid var(--primary-lava); color: var(--primary-lava); padding: 6px 12px; border-radius: 10px; font-size: 11px; font-weight: 800; }
+        .hub-card:active { transform: scale(0.97); background: #fff; }
+        
+        .hub-icon-wrapper {
+            width: 55px; height: 55px; background: #fff; border-radius: 20px;
+            display: flex; align-items: center; justify-content: center; font-size: 26px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); border: 1px solid #f1f5f9;
+        }
+        
+        .hub-content { flex: 1; }
+        .hub-content h4 { margin: 0; font-size: 17px; font-weight: 800; color: var(--text-main); }
+        
+        .hub-stats { display: flex; gap: 10px; margin-top: 5px; }
+        .stat-pill { 
+            background: rgba(255, 69, 0, 0.08); color: var(--primary-lava); 
+            padding: 2px 10px; border-radius: 8px; font-size: 10px; font-weight: 700;
+        }
 
-        .ask-button {
-            background: var(--primary-lava); color: #fff; padding: 14px; border-radius: 18px;
-            text-align: center; font-weight: 700; font-size: 14px; margin-top: 10px;
-            box-shadow: 0 5px 15px var(--lava-glow);
+        .hub-arrow {
+            width: 35px; height: 35px; background: #f1f5f9; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--text-main); transition: 0.3s;
+        }
+
+        .ask-community-bar {
+            background: var(--text-main); color: #fff;
+            padding: 18px 25px; border-radius: 25px;
+            display: flex; justify-content: space-between; align-items: center;
+            margin-top: 10px; box-shadow: 0 15px 30px rgba(15, 23, 42, 0.2);
+        }
+        .ask-community-bar span { font-weight: 800; font-size: 15px; }
+        .plus-icon { 
+            width: 28px; height: 28px; background: var(--primary-lava); 
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 20px; font-weight: bold;
         }
 
         /* --- Navigation & Overlay --- */
@@ -199,34 +245,71 @@
 
         <div class="section-header">
             <h3>Live Moments</h3>
-            <span>Watch All</span>
+            <span>View Map</span>
         </div>
+
         <div class="stories-container">
-            <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/100?u=1" alt=""></div><span>@alex_tr</span></div>
-            <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/100?u=2" alt=""></div><span>@sam_film</span></div>
-            <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/100?u=3" alt=""></div><span>@nina_v</span></div>
-            <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/100?u=4" alt=""></div><span>@omr_99</span></div>
+            <div class="story-item">
+                <div class="story-ring">
+                    <img src="https://i.pravatar.cc/150?u=a" alt="">
+                    <div class="live-tag">Live</div>
+                </div>
+                <span>Alex</span>
+            </div>
+            <div class="story-item">
+                <div class="story-ring">
+                    <img src="https://i.pravatar.cc/150?u=b" alt="">
+                </div>
+                <span>Sarah</span>
+            </div>
+            <div class="story-item">
+                <div class="story-ring">
+                    <img src="https://i.pravatar.cc/150?u=c" alt="">
+                </div>
+                <span>Yasin</span>
+            </div>
+            <div class="story-item">
+                <div class="story-ring">
+                    <img src="https://i.pravatar.cc/150?u=d" alt="">
+                    <div class="live-tag">Live</div>
+                </div>
+                <span>Mona</span>
+            </div>
         </div>
 
         <div class="section-header">
-            <h3>Community Hubs</h3>
+            <h3>Communities</h3>
         </div>
+
         <div class="hubs-container">
             <div class="hub-card">
-                <div class="hub-info">
-                    <div class="hub-icon">🇹🇷</div>
-                    <div class="hub-text"><h4>Turkey Hub</h4><p>12 New Questions • 45 Tips</p></div>
+                <div class="hub-icon-wrapper">🇹🇷</div>
+                <div class="hub-content">
+                    <h4>Turkey Hub</h4>
+                    <div class="hub-stats">
+                        <div class="stat-pill">12 Questions</div>
+                        <div class="stat-pill">45 Tips</div>
+                    </div>
                 </div>
-                <div class="hub-action">Enter</div>
+                <div class="hub-arrow">→</div>
             </div>
+
             <div class="hub-card">
-                <div class="hub-info">
-                    <div class="hub-icon">🌍</div>
-                    <div class="hub-text"><h4>General Chat</h4><p>Share your travel secrets</p></div>
+                <div class="hub-icon-wrapper">🇦🇪</div>
+                <div class="hub-content">
+                    <h4>Dubai Hub</h4>
+                    <div class="hub-stats">
+                        <div class="stat-pill">5 Questions</div>
+                        <div class="stat-pill">22 Tips</div>
+                    </div>
                 </div>
-                <div class="hub-action">Enter</div>
+                <div class="hub-arrow">→</div>
             </div>
-            <div class="ask-button">+ Ask the Community</div>
+
+            <div class="ask-community-bar">
+                <span>Have a question?</span>
+                <div class="plus-icon">+</div>
+            </div>
         </div>
     </div>
 
