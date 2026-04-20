@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sidarapp - Original Stable</title>
+    <title>Sidarapp - Dynamic Robot Entrance</title>
     
     <style>
         :root {
@@ -48,7 +48,7 @@
         .hero-title { font-size: 34px; font-weight: 800; line-height: 1.1; color: var(--text-main); margin-bottom: 45px; position: relative; z-index: 1; }
         .hero-title span { color: var(--primary-lava); }
 
-        /* --- الروبوت: مستقر فوق المستطيل --- */
+        /* --- الروبوت: أنيميشن دخول من الأعلى ثم اهتزاز مستمر --- */
         .sidar-robot {
             position: absolute; 
             right: 0px;    
@@ -56,9 +56,32 @@
             width: 145px;    
             z-index: 10; 
             filter: drop-shadow(0 10px 15px var(--lava-glow-soft));
-            animation: robotFloat 4s ease-in-out infinite;
             pointer-events: none;
+            opacity: 0; /* يبدأ مخفي */
+
+            /* الأنيميشن: الدخول أولاً ثم الاهتزاز بعد 1.2 ثانية */
+            animation: 
+                robotEntrance 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, 
+                robotFloat 4s ease-in-out infinite 1.2s;
         }
+
+        /* أنيميشن الدخول: سقوط مع ارتداد بسيط */
+        @keyframes robotEntrance {
+            0% { 
+                opacity: 0; 
+                transform: translateY(-80px) scale(0.6) rotate(-15deg); 
+            }
+            60% { 
+                opacity: 1; 
+                transform: translateY(10px) scale(1.05) rotate(5deg); 
+            }
+            100% { 
+                opacity: 1; 
+                transform: translateY(0) scale(1) rotate(1deg); 
+            }
+        }
+
+        /* أنيميشن الاهتزاز الهادئ */
         @keyframes robotFloat { 
             0%, 100% { transform: translateY(0) rotate(1deg); } 
             50% { transform: translateY(-7px) rotate(-1deg); } 
@@ -69,6 +92,7 @@
             background: rgba(255,255,255,0.95); backdrop-filter: blur(15px);
             border-radius: 20px; padding: 12px 18px; display: flex; align-items: center;
             border: 2px solid var(--primary-lava); margin-bottom: 30px; position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
         }
         .search-wrapper input { flex: 1; border: none; background: transparent; outline: none; font-size: 16px; color: var(--text-main); width: 100%; }
         .fake-placeholder { position: absolute; left: 45px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 16px; pointer-events: none; }
@@ -175,6 +199,8 @@
             document.getElementById('heroBg').style.backgroundImage = `url('${MY_IMAGES.heroBackground}')`;
             const cardItems = document.querySelectorAll('.card-item');
             cardItems.forEach((c, i) => c.style.backgroundImage = `url('${MY_IMAGES['card'+i]}')`);
+            
+            // انتهاء الـ Splash وظهور التطبيق
             setTimeout(() => {
                 document.getElementById('splash-screen').style.opacity = '0';
                 setTimeout(() => {
