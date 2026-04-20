@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sidarapp - Integrated Edition</title>
+    <title>Sidarapp - Complete Edition</title>
     
     <style>
         :root {
@@ -22,12 +22,12 @@
             overflow-x: hidden;
         }
 
-        /* إخفاء الصفحات غير النشطة */
-        .app-page { display: none; animation: fadeIn 0.4s ease-out; }
+        /* نظام إخفاء وإظهار الصفحات */
+        .app-page { display: none; animation: slideUp 0.4s ease-out; }
         .app-page.active { display: block; }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
@@ -42,7 +42,7 @@
         .header-bg {
             position: absolute; top: 0; left: 0; right: 0; height: 55vh;
             background-size: cover; background-position: center; z-index: 0;
-            transition: 0.5s;
+            transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .app-container {
@@ -131,7 +131,7 @@
         .story-item span { font-size: 11px; font-weight: 700; color: var(--text-main); }
 
         .hubs-container { display: flex; flex-direction: column; gap: 15px; margin-bottom: 60px; }
-        .hub-card { background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-radius: 28px; padding: 20px; display: flex; align-items: center; gap: 15px; border: 1px solid #edf2f7; box-shadow: 0 10px 25px rgba(0,0,0,0.03); transition: 0.3s; }
+        .hub-card { background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-radius: 28px; padding: 20px; display: flex; align-items: center; gap: 15px; border: 1px solid #edf2f7; box-shadow: 0 10px 25px rgba(0,0,0,0.03); }
         .hub-icon-wrapper { width: 55px; height: 55px; background: #fff; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 26px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
         .hub-content { flex: 1; }
         .hub-content h4 { margin: 0; font-size: 17px; font-weight: 800; color: var(--text-main); }
@@ -142,16 +142,25 @@
         .ask-community-bar { background: var(--text-main); color: #fff; padding: 18px 25px; border-radius: 25px; display: flex; justify-content: space-between; align-items: center; margin-top: 10px; box-shadow: 0 15px 30px rgba(15, 23, 42, 0.2); }
         .plus-icon { width: 28px; height: 28px; background: var(--primary-lava); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: bold; }
 
-        /* --- 🆕 Profile Page Styling 🆕 --- */
-        .profile-header { text-align: center; padding: 20px 0; }
-        .profile-img-wrapper { width: 110px; height: 110px; border-radius: 40px; margin: 0 auto 15px; border: 3px solid var(--primary-lava); padding: 5px; position: relative; }
-        .profile-img-wrapper img { width: 100%; height: 100%; border-radius: 35px; object-fit: cover; }
-        .profile-name { font-size: 24px; font-weight: 800; color: var(--text-main); margin: 0; }
-        .profile-handle { font-size: 14px; color: #94a3b8; font-weight: 600; }
-        .settings-group { margin-top: 30px; }
-        .settings-item { background: #f8fafc; padding: 18px; border-radius: 20px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; border: 1px solid #edf2f7; transition: 0.3s; }
-        .settings-item:active { transform: scale(0.98); }
-        .settings-label { display: flex; align-items: center; gap: 12px; font-weight: 700; color: var(--text-main); }
+        /* --- 🆕 Professional Profile Styling 🆕 --- */
+        .profile-container { padding-top: 20px; }
+        .profile-card { text-align: center; margin-bottom: 30px; }
+        .profile-avatar-wrapper { position: relative; width: 120px; height: 120px; margin: 0 auto 15px; }
+        .profile-avatar-wrapper img { width: 100%; height: 100%; border-radius: 45px; object-fit: cover; border: 4px solid #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .edit-badge { position: absolute; bottom: 5px; right: 5px; background: var(--primary-lava); color: #fff; width: 30px; height: 30px; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: 3px solid #fff; font-size: 14px; }
+        .user-info h2 { font-size: 26px; font-weight: 800; color: var(--text-main); margin: 0; }
+        .user-info p { color: #94a3b8; font-weight: 600; margin: 5px 0 0; }
+
+        .settings-section { margin-top: 35px; }
+        .settings-section h4 { font-size: 14px; text-transform: uppercase; color: #94a3b8; letter-spacing: 1px; margin-bottom: 15px; padding-left: 10px; }
+        .menu-list { background: #f8fafc; border-radius: 30px; overflow: hidden; border: 1px solid #f1f5f9; }
+        .menu-item { display: flex; align-items: center; justify-content: space-between; padding: 18px 20px; transition: 0.2s; border-bottom: 1px solid #f1f5f9; cursor: pointer; }
+        .menu-item:last-child { border-bottom: none; }
+        .menu-item:active { background: #fff; }
+        .menu-content { display: flex; align-items: center; gap: 15px; }
+        .menu-icon { width: 40px; height: 40px; background: #fff; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 18px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
+        .menu-text { font-weight: 700; color: var(--text-main); font-size: 15px; }
+        .logout-btn { margin-top: 25px; padding: 18px; text-align: center; color: #ef4444; font-weight: 800; font-size: 15px; background: #fef2f2; border-radius: 25px; border: 1px solid #fee2e2; }
 
         /* --- Navigation --- */
         .bottom-nav {
@@ -213,10 +222,10 @@
                 <span>View Map</span>
             </div>
             <div class="stories-container">
-                <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/150?u=1" alt=""><div class="live-tag">Live</div></div><span>Alex</span></div>
-                <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/150?u=2" alt=""></div><span>Sarah</span></div>
-                <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/150?u=3" alt=""></div><span>Yasin</span></div>
-                <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/150?u=4" alt=""><div class="live-tag">Live</div></div><span>Mona</span></div>
+                <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/150?u=a" alt=""><div class="live-tag">Live</div></div><span>Alex</span></div>
+                <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/150?u=b" alt=""></div><span>Sarah</span></div>
+                <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/150?u=c" alt=""></div><span>Yasin</span></div>
+                <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/150?u=d" alt=""><div class="live-tag">Live</div></div><span>Mona</span></div>
             </div>
 
             <div class="section-header"><h3>Communities</h3></div>
@@ -231,16 +240,34 @@
         </div>
 
         <div id="profile-page" class="app-page">
-            <div class="profile-header">
-                <div class="profile-img-wrapper"><img src="https://i.pravatar.cc/150?u=me" alt=""></div>
-                <h2 class="profile-name">Ahmad Sidar</h2>
-                <p class="profile-handle">@ahmad_travels</p>
-            </div>
-            <div class="settings-group">
-                <div class="settings-item"><div class="settings-label">👤 Account Info</div><span>→</span></div>
-                <div class="settings-item"><div class="settings-label">🔔 Notifications</div><div style="width: 35px; height: 18px; background: var(--primary-lava); border-radius: 20px;"></div></div>
-                <div class="settings-item"><div class="settings-label">🌍 Language</div><span style="font-size: 12px; color: #94a3b8;">English</span></div>
-                <div class="settings-item" style="border-color: #fee2e2;"><div class="settings-label" style="color: #ef4444;">🚪 Logout</div></div>
+            <div class="profile-container">
+                <div class="profile-card">
+                    <div class="profile-avatar-wrapper">
+                        <img src="https://i.pravatar.cc/150?u=myaccount" alt="User">
+                        <div class="edit-badge">✎</div>
+                    </div>
+                    <div class="user-info">
+                        <h2>Sidar Explorer</h2>
+                        <p>Traveler & Content Creator</p>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h4>Account</h4>
+                    <div class="menu-list">
+                        <div class="menu-item"><div class="menu-content"><div class="menu-icon">👤</div><div class="menu-text">Personal Info</div></div><span>→</span></div>
+                        <div class="menu-item"><div class="menu-content"><div class="menu-icon">🔒</div><div class="menu-text">Security</div></div><span>→</span></div>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h4>Preferences</h4>
+                    <div class="menu-list">
+                        <div class="menu-item"><div class="menu-content"><div class="menu-icon">🔔</div><div class="menu-text">Notifications</div></div><span>→</span></div>
+                        <div class="menu-item"><div class="menu-content"><div class="menu-icon">🌐</div><div class="menu-text">Language</div></div><span style="font-size: 12px; color: #94a3b8;">English</span></div>
+                    </div>
+                </div>
+                <div class="logout-btn">Log Out</div>
             </div>
         </div>
     </div>
@@ -346,10 +373,10 @@
             
             if (tabName === 'profile') {
                 document.getElementById('profile-page').classList.add('active');
-                document.getElementById('heroBg').style.opacity = '0.2';
-            } else if (tabName === 'home') {
+                document.getElementById('heroBg').style.filter = 'blur(10px) brightness(0.6)';
+            } else {
                 document.getElementById('home-page').classList.add('active');
-                document.getElementById('heroBg').style.opacity = '1';
+                document.getElementById('heroBg').style.filter = 'none';
             }
         }
     </script>
