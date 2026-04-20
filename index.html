@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sidarapp - Max Image Inside Icon</title>
+    <title>Sidarapp - Robot Adjusted</title>
     
     <style>
         :root {
@@ -13,8 +13,6 @@
             --text-main: #0f172a; 
         }
 
-        .lava-text { color: var(--primary-lava); font-weight: 700; }
-
         body, html { 
             margin: 0; padding: 0;
             font-family: 'Segoe UI', Roboto, sans-serif;
@@ -23,7 +21,6 @@
             overflow-x: hidden;
         }
 
-        /* Animations */
         .app-page { display: none; animation: slideUp 0.4s ease-out; }
         .app-page.active { display: block; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
@@ -48,15 +45,21 @@
         }
 
         .hero-section { position: relative; margin-bottom: 25px; } 
-        .hero-title { font-size: 34px; font-weight: 800; line-height: 1.1; color: var(--text-main); margin-bottom: 20px; }
+        .hero-title { font-size: 34px; font-weight: 800; line-height: 1.1; color: var(--text-main); margin-bottom: 20px; position: relative; z-index: 1; }
         .hero-title span { color: var(--primary-lava); }
 
+        /* --- تعديل الروبوت (تكبير وتنزيل) --- */
         .sidar-robot {
-            position: absolute; right: 5px; top: -35px; width: 110px; z-index: 10;
-            filter: drop-shadow(0 0 15px var(--lava-glow));
+            position: absolute; 
+            right: -10px;    /* تحريك لليمين قليلاً */
+            top: -15px;      /* تم إنزاله للأسفل (كان -35px) */
+            width: 155px;    /* تم تكبيره (كان 110px) */
+            z-index: 5; 
+            filter: drop-shadow(0 0 20px var(--lava-glow));
             animation: robotFloat 3s ease-in-out infinite;
+            pointer-events: none;
         }
-        @keyframes robotFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+        @keyframes robotFloat { 0%, 100% { transform: translateY(0) rotate(2deg); } 50% { transform: translateY(-15px) rotate(-2deg); } }
 
         /* Search Bar */
         .search-wrapper {
@@ -66,95 +69,35 @@
         }
         .search-wrapper input { flex: 1; border: none; background: transparent; outline: none; font-size: 16px; color: var(--text-main); width: 100%; }
         .fake-placeholder { position: absolute; left: 45px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 16px; pointer-events: none; }
+        .lava-text { color: var(--primary-lava); font-weight: 700; }
 
-        /* --- Interactive Services Grid --- */
+        /* Services Grid */
         .section-header { display: flex; justify-content: space-between; align-items: flex-end; margin: 25px 0 12px; padding: 0 5px; }
         .section-header h3 { font-size: 20px; font-weight: 900; color: var(--text-main); margin: 0; }
 
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            padding: 5px 5px 20px;
-        }
-
+        .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 5px 5px 20px; }
         .service-card {
-            background: #ffffff;
-            border: 1.5px solid #f1f5f9;
-            border-radius: 24px;
-            padding: 8px;
-            text-align: center;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            background: #ffffff; border: 1.5px solid #f1f5f9; border-radius: 24px; padding: 8px; text-align: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; display: flex; flex-direction: column; align-items: center;
         }
+        .service-card.clicked { background: var(--primary-lava) !important; border-color: var(--primary-lava); transform: scale(0.92); box-shadow: 0 10px 20px var(--lava-glow); }
+        .service-card-image { width: 100%; height: 80px; background: #fff5f2; border-radius: 18px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; overflow: hidden; }
+        .service-card-image img { width: 100%; height: 100%; object-fit: cover; }
+        .service-card-info h4 { margin: 0; font-size: 13px; font-weight: 800; color: var(--text-main); }
+        .service-card-info p { margin: 1px 0 4px; font-size: 9px; color: #94a3b8; font-weight: 600; }
+        .service-card.clicked .service-card-info h4, .service-card.clicked .service-card-info p { color: #ffffff; }
 
-        .service-card.clicked {
-            background: var(--primary-lava) !important;
-            border-color: var(--primary-lava);
-            transform: scale(0.92);
-            box-shadow: 0 10px 20px var(--lava-glow);
-        }
-
-        .service-card-image {
-            width: 100%;
-            height: 80px; /* رجعنا الحجم الأصلي للأيقونة */
-            background: #fff5f2;
-            border-radius: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 8px;
-            transition: 0.3s;
-            overflow: hidden;
-            padding: 0; /* حذفنا الحواف الداخلية لتكبر الصورة */
-        }
-
-        .service-card.clicked .service-card-image {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .service-card-image img {
-            width: 100%; /* الصورة تملأ العرض بالكامل */
-            height: 100%; /* الصورة تملأ الارتفاع بالكامل */
-            object-fit: cover; /* تجعل الصورة تملأ المربع، يمكنك تغييرها لـ contain إذا كنت لا تريد قص الأطراف */
-        }
-
-        .service-card-info h4 {
-            margin: 0;
-            font-size: 13px;
-            font-weight: 800;
-            color: var(--text-main);
-            transition: 0.3s;
-        }
-
-        .service-card-info p {
-            margin: 1px 0 4px;
-            font-size: 9px;
-            color: #94a3b8;
-            font-weight: 600;
-            transition: 0.3s;
-        }
-
-        .service-card.clicked .service-card-info h4,
-        .service-card.clicked .service-card-info p {
-            color: #ffffff;
-        }
-
-        /* --- Stacked Cards --- */
-        .stacked-cards-wrapper { position: relative; width: 100%; height: 240px; display: flex; justify-content: center; align-items: center; perspective: 1200px; margin-top: 5px;}
+        /* Stacked Cards */
+        .stacked-cards-wrapper { position: relative; width: 100%; height: 240px; display: flex; justify-content: center; align-items: center; perspective: 1200px; }
         .card-item { 
-            position: absolute; width: 190px; height: 230px; border-radius: 28px; background-size: cover; background-position: center; transition: 0.7s; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 15px; opacity: 0; pointer-events: none; border: 1.5px solid var(--lava-glow-soft); box-shadow: 0 0 15px var(--lava-glow-soft);
+            position: absolute; width: 190px; height: 230px; border-radius: 28px; background-size: cover; background-position: center; transition: 0.7s; 
+            display: flex; align-items: flex-end; justify-content: center; padding-bottom: 15px; opacity: 0; pointer-events: none; border: 1.5px solid var(--lava-glow-soft); box-shadow: 0 0 15px var(--lava-glow-soft);
         }
         .card-item.active { opacity: 1; transform: translateX(0) translateZ(50px) scale(1); z-index: 10; pointer-events: auto; border-color: var(--primary-lava); box-shadow: 0 8px 25px var(--lava-glow-soft); }
         .card-item.prev { opacity: 0.4; transform: translateX(-90px) translateZ(-100px) scale(0.8); z-index: 5; }
         .card-item.next { opacity: 0.4; transform: translateX(90px) translateZ(-100px) scale(0.8); z-index: 5; }
         .see-more-btn { background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(12px); color: #fff; border-radius: 50px; padding: 6px 25px; font-weight: 700; font-size: 10px; border: 1px solid rgba(255,255,255,0.3); }
 
-        /* --- Other Sections --- */
         .trending-scroll { display: flex; gap: 15px; overflow-x: auto; padding: 5px 5px; scrollbar-width: none; }
         .trend-card { flex-shrink: 0; width: 100px; text-align: center; }
         .trend-icon-box { width: 90px; height: 90px; border-radius: 22px; background: #f8fafc; border: 1.5px solid #f1f5f9; display: flex; align-items: center; justify-content: center; font-size: 35px; margin-bottom: 6px; }
@@ -180,32 +123,17 @@
 
             <div class="section-header"><h3>Our Services</h3></div>
             <div class="services-grid">
-                <div class="service-card" onclick="handleServiceClick(this, 'esim_service')">
-                    <div class="service-card-image">
-                        <img src="https://plain-eeur-prod-public.komododecks.com/202604/20/wTHcH8IlMhZ65t0JMbMB/image.png">
-                    </div>
-                    <div class="service-card-info">
-                        <h4>eSIM</h4>
-                        <p>Instant Data</p>
-                    </div>
+                <div class="service-card" onclick="handleServiceClick(this, 'esim')">
+                    <div class="service-card-image"><img src="https://plain-eeur-prod-public.komododecks.com/202604/20/wTHcH8IlMhZ65t0JMbMB/image.png"></div>
+                    <div class="service-card-info"><h4>eSIM</h4><p>Instant Data</p></div>
                 </div>
-                <div class="service-card" onclick="handleServiceClick(this, 'events_service')">
-                    <div class="service-card-image">
-                        <img src="https://plain-eeur-prod-public.komododecks.com/202604/20/vPIXv8ss1tI7CGpQywpo/image.png">
-                    </div>
-                    <div class="service-card-info">
-                        <h4>Events</h4>
-                        <p>Explore Fun</p>
-                    </div>
+                <div class="service-card" onclick="handleServiceClick(this, 'events')">
+                    <div class="service-card-image"><img src="https://plain-eeur-prod-public.komododecks.com/202604/20/vPIXv8ss1tI7CGpQywpo/image.png"></div>
+                    <div class="service-card-info"><h4>Events</h4><p>Explore Fun</p></div>
                 </div>
-                <div class="service-card" onclick="handleServiceClick(this, 'transfer_service')">
-                    <div class="service-card-image">
-                        <img src="https://plain-eeur-prod-public.komododecks.com/202604/20/n5ssXxQhHi4IvqHeO0rR/image.png">
-                    </div>
-                    <div class="service-card-info">
-                        <h4>Transfer</h4>
-                        <p>Send Money</p>
-                    </div>
+                <div class="service-card" onclick="handleServiceClick(this, 'transfer')">
+                    <div class="service-card-image"><img src="https://plain-eeur-prod-public.komododecks.com/202604/20/n5ssXxQhHi4IvqHeO0rR/image.png"></div>
+                    <div class="service-card-info"><h4>Transfer</h4><p>Send Money</p></div>
                 </div>
             </div>
 
@@ -235,20 +163,16 @@
             card3: 'https://plain-eeur-prod-public.komododecks.com/202604/19/qzr51sWPt6GgM3gTZH8K/image.png'
         };
 
-        function handleServiceClick(el, serviceId) {
+        function handleServiceClick(el, id) {
             el.classList.add('clicked');
-            setTimeout(() => {
-                el.classList.remove('clicked');
-            }, 400);
+            setTimeout(() => el.classList.remove('clicked'), 400);
         }
 
         window.addEventListener('load', () => {
             document.getElementById('splashLogo').src = MY_IMAGES.splashLogo;
             document.getElementById('heroBg').style.backgroundImage = `url('${MY_IMAGES.heroBackground}')`;
-            
             const cardItems = document.querySelectorAll('.card-item');
             cardItems.forEach((c, i) => c.style.backgroundImage = `url('${MY_IMAGES['card'+i]}')`);
-            
             setTimeout(() => {
                 document.getElementById('splash-screen').style.opacity = '0';
                 setTimeout(() => {
