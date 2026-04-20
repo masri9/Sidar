@@ -122,7 +122,7 @@
         .dot { width: 7px; height: 7px; background: #e2e8f0; border-radius: 50%; transition: 0.4s; }
         .dot.active { background: var(--primary-lava); width: 18px; border-radius: 10px; }
 
-        /* --- 🆕 Trending Section --- */
+        /* --- Trending Section --- */
         .section-header {
             display: flex; justify-content: space-between; align-items: center;
             margin: 40px 0 15px 0;
@@ -256,7 +256,7 @@
         };
 
         const DATA = [
-            { tag: "Natural", title: "Valley of Light", desc: "Hidden beauty of the valley." },
+            { tag: "Natural", title: "Turkey", desc: "Discover the hidden beauty of Turkey and its amazing landscapes." },
             { tag: "Adventure", title: "The High Peak", desc: "Best view in the region." },
             { tag: "Peaceful", title: "Blue Shore", desc: "Crystal clear waters." },
             { tag: "Heritage", title: "Stone Temple", desc: "Secrets of ancient travelers." }
@@ -291,8 +291,16 @@
             document.querySelectorAll('.dot').forEach((dot, i) => dot.classList.toggle('active', i === currentIndex));
         }
 
+        // تحديث وظيفة الضغط على See More
         function showInfo(index) {
             const item = DATA[index];
+            
+            // التحقق إذا كان العنوان ليس "Turkey"
+            if (item.title !== "Turkey") {
+                alert("Coming Soon...");
+                return; // إيقاف الوظيفة ومنع فتح الـ Overlay
+            }
+
             document.getElementById('target-tag').innerText = item.tag;
             document.getElementById('target-title').innerText = item.title;
             document.getElementById('target-desc').innerText = item.desc;
