@@ -3,15 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sidarapp - Mythical Space & Pro Animation</title>
+    <title>Sidarapp - Original Stable</title>
     
     <style>
         :root {
             --primary-lava: #ff4500; 
             --lava-glow: rgba(255, 69, 0, 0.4); 
-            --lava-glow-soft: rgba(255, 69, 0, 0.15); 
+            --lava-glow-soft: rgba(255, 69, 0, 0.2); 
             --text-main: #0f172a; 
-            --deep-space: #050810;
         }
 
         body, html { 
@@ -33,17 +32,10 @@
         }
         .splash-image { width: 180px; }
 
-        /* --- تعديل الخلفية: مكان خرافي (المدينة المستقبلية) --- */
         .header-bg {
-            position: absolute; top: 0; left: 0; right: 0; height: 55vh;
+            position: absolute; top: 0; left: 0; right: 0; height: 50vh;
             background-size: cover; background-position: center; z-index: 0;
             transition: 0.5s;
-            background-image: url('https://plain-eeur-prod-public.komododecks.com/202604/20/x2W7S7t1z6tP4f4l0UuO/image.png'); /* رابط الخلفية الخرافية */
-        }
-        /* تراكب داكن لجعل النص أبيض وواضح */
-        .header-bg::after {
-            content: ''; position: absolute; inset: 0;
-            background: linear-gradient(180deg, rgba(5, 8, 16, 0.4) 0%, rgba(255, 255, 255, 0.1) 70%, #ffffff 100%);
         }
 
         .app-container {
@@ -53,44 +45,30 @@
         }
 
         .hero-section { position: relative; margin-bottom: 5px; } 
-        
-        /* تعديل لون العنوان ليتناسب مع الخلفية الجديدة الداكنة */
-        .hero-title { font-size: 34px; font-weight: 800; line-height: 1.1; color: #ffffff; margin-bottom: 45px; position: relative; z-index: 1; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+        .hero-title { font-size: 34px; font-weight: 800; line-height: 1.1; color: var(--text-main); margin-bottom: 45px; position: relative; z-index: 1; }
         .hero-title span { color: var(--primary-lava); }
 
-        /* --- تعديل الروبوت: أنيميشن احترافي وبسيط --- */
+        /* --- الروبوت: مستقر فوق المستطيل --- */
         .sidar-robot {
             position: absolute; 
             right: 0px;    
-            top: 35px;      
+            top: 45px;      
             width: 145px;    
             z-index: 10; 
+            filter: drop-shadow(0 10px 15px var(--lava-glow-soft));
+            animation: robotFloat 4s ease-in-out infinite;
             pointer-events: none;
-            
-            /* الأنيميشن الجديد المركب: حركة صعود ونزول + نبض التوهج */
-            animation: 
-                robotFloatPro 6s ease-in-out infinite, /* حركة بطيئة جداً */
-                robotGlowPulse 4s ease-in-out infinite; /* توهج ينبض */
         }
-
-        /* أنيميشن الحركة: صعود ونزول ناعم جداً وميلان خفيف */
-        @keyframes robotFloatPro { 
+        @keyframes robotFloat { 
             0%, 100% { transform: translateY(0) rotate(1deg); } 
-            50% { transform: translateY(-10px) rotate(-1deg); } 
+            50% { transform: translateY(-7px) rotate(-1deg); } 
         }
 
-        /* أنيميشن التوهج: تأثير Pulse احترافي حول الروبوت */
-        @keyframes robotGlowPulse {
-            0%, 100% { filter: drop-shadow(0 5px 10px var(--lava-glow-soft)); }
-            50% { filter: drop-shadow(0 10px 25px rgba(255, 69, 0, 0.6)); }
-        }
-
-        /* Search Bar (التي يقف عليها الروبوت) */
+        /* Search Bar */
         .search-wrapper {
-            background: rgba(255,255,255,0.98); backdrop-filter: blur(15px);
+            background: rgba(255,255,255,0.95); backdrop-filter: blur(15px);
             border-radius: 20px; padding: 12px 18px; display: flex; align-items: center;
             border: 2px solid var(--primary-lava); margin-bottom: 30px; position: relative;
-            box-shadow: 0 15px 35px rgba(255, 69, 0, 0.15); /* ظل دافئ */
         }
         .search-wrapper input { flex: 1; border: none; background: transparent; outline: none; font-size: 16px; color: var(--text-main); width: 100%; }
         .fake-placeholder { position: absolute; left: 45px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 16px; pointer-events: none; }
@@ -117,7 +95,7 @@
             position: absolute; width: 190px; height: 230px; border-radius: 28px; background-size: cover; background-position: center; transition: 0.7s; 
             display: flex; align-items: flex-end; justify-content: center; padding-bottom: 15px; opacity: 0; pointer-events: none; border: 1.5px solid var(--lava-glow-soft);
         }
-        .card-item.active { opacity: 1; transform: translateX(0) translateZ(50px) scale(1); z-index: 10; pointer-events: auto; border-color: var(--primary-lava); box-shadow: 0 8px 25px rgba(255, 69, 0, 0.2); }
+        .card-item.active { opacity: 1; transform: translateX(0) translateZ(50px) scale(1); z-index: 10; pointer-events: auto; border-color: var(--primary-lava); box-shadow: 0 8px 25px var(--lava-glow-soft); }
         .card-item.prev { opacity: 0.4; transform: translateX(-90px) translateZ(-100px) scale(0.8); z-index: 5; }
         .card-item.next { opacity: 0.4; transform: translateX(90px) translateZ(-100px) scale(0.8); z-index: 5; }
         .see-more-btn { background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(12px); color: #fff; border-radius: 50px; padding: 6px 25px; font-weight: 700; font-size: 10px; border: 1px solid rgba(255,255,255,0.3); }
@@ -180,7 +158,7 @@
     <script>
         const MY_IMAGES = {
             splashLogo: 'https://plain-eeur-prod-public.komododecks.com/202604/19/y0zyi6uOKg2CaNATvHPZ/image.png',
-            // تم نقل الخلفية إلى الـ CSS لسهولة التحكم في التأثيرات
+            heroBackground: 'https://plain-eeur-prod-public.komododecks.com/202604/19/FtJXvAZvXREKew6PJ3ew/image.png',
             card0: 'https://plain-eeur-prod-public.komododecks.com/202604/19/Zs148rIHaZ5l8sjqw4S4/image.png',
             card1: 'https://plain-eeur-prod-public.komododecks.com/202604/19/xK3pwCpVUtFZFveFLbt2/image.png',
             card2: 'https://plain-eeur-prod-public.komododecks.com/202604/19/Ri6ookm2NesWdMC7Mcbc/image.png',
@@ -194,7 +172,7 @@
 
         window.addEventListener('load', () => {
             document.getElementById('splashLogo').src = MY_IMAGES.splashLogo;
-            // يتم تحميل خلفية المدينة من الـ CSS مباشرة
+            document.getElementById('heroBg').style.backgroundImage = `url('${MY_IMAGES.heroBackground}')`;
             const cardItems = document.querySelectorAll('.card-item');
             cardItems.forEach((c, i) => c.style.backgroundImage = `url('${MY_IMAGES['card'+i]}')`);
             setTimeout(() => {
