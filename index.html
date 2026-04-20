@@ -57,9 +57,9 @@
 
         .sidar-robot {
             position: absolute;
-            right: 5px;      /* الموقع في المربع الأخضر */
-            top: -20px;     /* محاذاة مع النص */
-            width: 120px;    /* حجم مناسب للروبوت */
+            right: 5px;      
+            top: -20px;     
+            width: 120px;    
             z-index: 10;
             filter: drop-shadow(0 0 15px var(--lava-glow));
             animation: robotFloat 3s ease-in-out infinite;
@@ -221,11 +221,15 @@
                 <div class="fake-placeholder">Ask <span class="lava-text">Sidar</span> any thing...</div>
             </div>
 
-            <div class="services-scroll-container">
-                <div class="service-pill"><span>🎟️ Events</span></div>
-                <div class="service-pill"><span>📶 eSIM</span></div>
-                <div class="service-pill active"><span>💱 Currency</span></div>
-                <div class="service-pill"><span>💸 Transfer</span></div>
+            <div class="section-header">
+                <h3>Live Moments</h3>
+                <span>View Map</span>
+            </div>
+            <div class="stories-container">
+                <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/150?u=a" alt=""><div class="live-tag">Live</div></div><span>Alex</span></div>
+                <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/150?u=b" alt=""></div><span>Sarah</span></div>
+                <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/150?u=c" alt=""></div><span>Yasin</span></div>
+                <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/150?u=d" alt=""><div class="live-tag">Live</div></div><span>Mona</span></div>
             </div>
 
             <div class="stacked-cards-wrapper" id="cardsWrapper">
@@ -237,15 +241,12 @@
 
             <div class="dots-container" id="dotsContainer"></div>
 
-            <div class="section-header">
-                <h3>Live Moments</h3>
-                <span>View Map</span>
-            </div>
-            <div class="stories-container">
-                <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/150?u=a" alt=""><div class="live-tag">Live</div></div><span>Alex</span></div>
-                <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/150?u=b" alt=""></div><span>Sarah</span></div>
-                <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/150?u=c" alt=""></div><span>Yasin</span></div>
-                <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/150?u=d" alt=""><div class="live-tag">Live</div></div><span>Mona</span></div>
+            <div class="section-header"><h3>Our Services</h3></div>
+            <div class="services-scroll-container">
+                <div class="service-pill"><span>🎟️ Events</span></div>
+                <div class="service-pill"><span>📶 eSIM</span></div>
+                <div class="service-pill active"><span>💱 Currency</span></div>
+                <div class="service-pill"><span>💸 Transfer</span></div>
             </div>
 
             <div class="section-header"><h3>Communities</h3></div>
@@ -271,7 +272,7 @@
                         <p>Traveler & Content Creator</p>
                     </div>
                 </div>
-                </div>
+            </div>
         </div>
     </div>
 
