@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sidarapp - Larger Service Icons</title>
+    <title>Sidarapp - Max Image Inside Icon</title>
     
     <style>
         :root {
@@ -101,7 +101,7 @@
 
         .service-card-image {
             width: 100%;
-            height: 95px; /* تم زيادة الطول قليلاً لاستيعاب الصورة الأكبر */
+            height: 80px; /* رجعنا الحجم الأصلي للأيقونة */
             background: #fff5f2;
             border-radius: 18px;
             display: flex;
@@ -110,7 +110,7 @@
             margin-bottom: 8px;
             transition: 0.3s;
             overflow: hidden;
-            padding: 4px; /* تقليل الحواف الداخلية لزيادة حجم الصورة */
+            padding: 0; /* حذفنا الحواف الداخلية لتكبر الصورة */
         }
 
         .service-card.clicked .service-card-image {
@@ -118,9 +118,9 @@
         }
 
         .service-card-image img {
-            width: 95%; /* تكبير الصورة لتشغل 95% من مساحة الحاوية بدل 85% */
-            height: 95%;
-            object-fit: contain;
+            width: 100%; /* الصورة تملأ العرض بالكامل */
+            height: 100%; /* الصورة تملأ الارتفاع بالكامل */
+            object-fit: cover; /* تجعل الصورة تملأ المربع، يمكنك تغييرها لـ contain إذا كنت لا تريد قص الأطراف */
         }
 
         .service-card-info h4 {
@@ -154,16 +154,10 @@
         .card-item.next { opacity: 0.4; transform: translateX(90px) translateZ(-100px) scale(0.8); z-index: 5; }
         .see-more-btn { background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(12px); color: #fff; border-radius: 50px; padding: 6px 25px; font-weight: 700; font-size: 10px; border: 1px solid rgba(255,255,255,0.3); }
 
-        /* --- Marketplace & Trending --- */
+        /* --- Other Sections --- */
         .trending-scroll { display: flex; gap: 15px; overflow-x: auto; padding: 5px 5px; scrollbar-width: none; }
         .trend-card { flex-shrink: 0; width: 100px; text-align: center; }
         .trend-icon-box { width: 90px; height: 90px; border-radius: 22px; background: #f8fafc; border: 1.5px solid #f1f5f9; display: flex; align-items: center; justify-content: center; font-size: 35px; margin-bottom: 6px; }
-        .market-list { display: flex; flex-direction: column; gap: 10px; }
-        .market-item { background: #fff; border-radius: 22px; padding: 12px; display: flex; align-items: center; gap: 12px; border: 1px solid #f1f5f9; }
-        .market-item-icon { width: 50px; height: 50px; border-radius: 15px; background: #fff5f2; display: flex; align-items: center; justify-content: center; font-size: 22px; }
-        .post-service-btn { margin-top: 8px; text-align: center; font-size: 11px; color: var(--primary-lava); font-weight: 700; }
-        .hubs-container { display: flex; flex-direction: column; gap: 12px; margin-bottom: 40px; }
-        .ask-community-bar { background: var(--text-main); color: #fff; padding: 15px 22px; border-radius: 22px; display: flex; justify-content: space-between; align-items: center; }
     </style>
 </head>
 <body>
@@ -244,7 +238,6 @@
         function handleServiceClick(el, serviceId) {
             el.classList.add('clicked');
             setTimeout(() => {
-                console.log("Navigating to: " + serviceId);
                 el.classList.remove('clicked');
             }, 400);
         }
