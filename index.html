@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sidarapp - WiFi Icon Update</title>
+    <title>Sidarapp - Clean Icons</title>
     
     <style>
         :root {
@@ -56,6 +56,7 @@
         }
         @keyframes robotFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
 
+        /* Search */
         .search-wrapper {
             background: rgba(255,255,255,0.9); backdrop-filter: blur(15px);
             border-radius: 20px; padding: 12px 18px; display: flex; align-items: center;
@@ -64,10 +65,10 @@
         .search-wrapper input { flex: 1; border: none; background: transparent; outline: none; font-size: 16px; color: var(--text-main); width: 100%; }
         .fake-placeholder { position: absolute; left: 45px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 16px; pointer-events: none; }
 
+        /* --- Updated Services Section (Icon Focused) --- */
         .section-header { display: flex; justify-content: space-between; align-items: flex-end; margin: 35px 0 15px; padding: 0 5px; }
         .section-header h3 { font-size: 22px; font-weight: 900; color: var(--text-main); margin: 0; }
 
-        /* --- Services Section --- */
         .services-scroll-container { display: flex; gap: 15px; overflow-x: auto; padding: 10px 5px 25px; scrollbar-width: none; }
         .services-scroll-container::-webkit-scrollbar { display: none; }
         
@@ -78,26 +79,23 @@
             cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.03);
         }
         
+        /* المربع الصغير داخل المربع الكبير للأيقونة */
         .icon-box {
             width: 42px; height: 42px; background: #fff5f2; border-radius: 14px;
             display: flex; align-items: center; justify-content: center; font-size: 22px;
             margin-bottom: 8px; transition: 0.3s;
         }
-
-        /* تعديل اللون البرتقالي للأيقونة المحددة */
-        .icon-wifi { color: var(--primary-lava); }
-
         .service-pill span { font-size: 11px; font-weight: 700; color: #64748b; }
         
+        /* حالة الاختيار */
         .service-pill.active {
             background: var(--primary-lava); border-color: var(--primary-lava);
             transform: translateY(-5px); box-shadow: 0 10px 20px var(--lava-glow);
         }
-        .service-pill.active .icon-box { background: rgba(255, 255, 255, 0.2); color: #fff !important; }
-        .service-pill.active .icon-wifi { color: #fff; } /* يصبح أبيض عند النشاط */
+        .service-pill.active .icon-box { background: rgba(255, 255, 255, 0.2); }
         .service-pill.active span { color: #fff; }
 
-        /* --- Advert Cards --- */
+        /* --- Advert Cards (No Changes) --- */
         .stacked-cards-wrapper { position: relative; width: 100%; height: 260px; display: flex; justify-content: center; align-items: center; perspective: 1200px; margin-top: 10px;}
         .card-item { position: absolute; width: 200px; height: 240px; border-radius: 30px; background-size: cover; background-position: center; transition: 0.7s; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 20px; opacity: 0; pointer-events: none; }
         .card-item.active { opacity: 1; transform: translateX(0) translateZ(50px) scale(1); z-index: 10; pointer-events: auto; }
@@ -105,17 +103,15 @@
         .card-item.next { opacity: 0.4; transform: translateX(100px) translateZ(-100px) scale(0.8); z-index: 5; }
         .see-more-btn { background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(12px); color: #fff; border-radius: 50px; padding: 8px 30px; font-weight: 700; font-size: 11px; border: 1px solid rgba(255,255,255,0.3); }
 
-        .dots-container { display: flex; justify-content: center; gap: 8px; margin-top: 15px; }
-        .dot { width: 6px; height: 6px; background: #e2e8f0; border-radius: 50%; transition: 0.4s; }
-        .dot.active { background: var(--primary-lava); width: 15px; border-radius: 10px; }
-
-        /* --- Trending / Marketplace / Hubs --- */
+        /* --- Other Sections --- */
         .trending-scroll { display: flex; gap: 15px; overflow-x: auto; padding: 10px 5px; scrollbar-width: none; }
         .trend-card { flex-shrink: 0; width: 110px; text-align: center; }
         .trend-icon-box { width: 100px; height: 100px; border-radius: 25px; background: #f8fafc; border: 1.5px solid #f1f5f9; display: flex; align-items: center; justify-content: center; font-size: 40px; margin-bottom: 8px; }
+        
         .market-list { display: flex; flex-direction: column; gap: 12px; }
         .market-item { background: #fff; border-radius: 25px; padding: 15px; display: flex; align-items: center; gap: 15px; border: 1px solid #f1f5f9; }
         .market-item-icon { width: 55px; height: 55px; border-radius: 18px; background: #fff5f2; display: flex; align-items: center; justify-content: center; font-size: 26px; }
+        
         .hubs-container { display: flex; flex-direction: column; gap: 15px; margin-bottom: 60px; }
         .hub-card { background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-radius: 28px; padding: 20px; display: flex; align-items: center; gap: 15px; border: 1px solid #edf2f7; }
         .ask-community-bar { background: var(--text-main); color: #fff; padding: 18px 25px; border-radius: 25px; display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
@@ -154,7 +150,7 @@
                     <span>Events</span>
                 </div>
                 <div class="service-pill" onclick="showWidget('esim')">
-                    <div class="icon-box icon-wifi">📶</div>
+                    <div class="icon-box">🌐</div>
                     <span>eSIM</span>
                 </div>
                 <div class="service-pill active" onclick="showWidget('currency')">
@@ -189,7 +185,7 @@
                     <div class="market-details"><h4>Photography</h4><p>By Alex • Pro</p></div>
                     <div class="market-price">$45</div>
                 </div>
-                <div class="post-service-btn" style="background:#fff; color:var(--primary-lava); padding:15px; border-radius:20px; text-align:center; font-weight:700; border:2px dashed var(--primary-lava); margin-top:10px;">💰 Start Earning: Post Your Service</div>
+                <div class="post-service-btn">💰 Start Earning: Post Your Service</div>
             </div>
 
             <div class="section-header"><h3>Communities</h3></div>
@@ -224,7 +220,7 @@
 
         const WIDGET_DATA = {
             events: { title: "Local Events", icon: "🎫", desc: "Discover festivals and activities around you.", btn: "View Events" },
-            esim: { title: "Travel eSIM", icon: "📶", desc: "Get high-speed internet instantly.", btn: "Get eSIM" },
+            esim: { title: "Travel eSIM", icon: "🌐", desc: "Get high-speed internet instantly.", btn: "Get eSIM" },
             currency: { title: "Currency Converter", icon: "📊", desc: "Check live exchange rates.", btn: "Check Rates" },
             transfer: { title: "Money Transfer", icon: "💸", desc: "Send money instantly.", btn: "Send Now" }
         };
@@ -235,6 +231,7 @@
             document.getElementById('wTitle').innerText = d.title;
             document.getElementById('wDesc').innerText = d.desc;
             document.getElementById('widgetOverlay').classList.add('open');
+            // تحديث الشكل النشط
             document.querySelectorAll('.service-pill').forEach(p => p.classList.remove('active'));
             event.currentTarget.classList.add('active');
         }
