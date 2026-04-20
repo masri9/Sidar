@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr" id="html-tag">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sidarapp - Multilingual Edition</title>
+    <title>Sidarapp - Original Version</title>
     
     <style>
         :root {
@@ -12,22 +12,17 @@
             --text-main: #0f172a; 
         }
 
+        .lava-text { color: var(--primary-lava); font-weight: 700; }
+
         body, html { 
             margin: 0; padding: 0;
             font-family: 'Segoe UI', Roboto, sans-serif;
             background: #fff;
             min-height: 100vh;
             overflow-x: hidden;
-            transition: direction 0.3s ease;
         }
 
-        /* نظام إدارة الصفحات */
-        .app-page { display: none; animation: fadeIn 0.4s ease-out; }
-        .app-page.active { display: block; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Splash Screen */
+        /* --- Splash Screen --- */
         #splash-screen {
             position: fixed; inset: 0; background: #ffffff;
             display: flex; justify-content: center; align-items: center;
@@ -38,7 +33,7 @@
         .header-bg {
             position: absolute; top: 0; left: 0; right: 0; height: 55vh;
             background-size: cover; background-position: center; z-index: 0;
-            transition: 0.5s;
+            transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .app-container {
@@ -46,27 +41,47 @@
             padding: 60px 20px 120px; box-sizing: border-box;
         }
 
-        /* نصوص الهيرو */
         .hero-title { font-size: 34px; font-weight: 800; line-height: 1.1; color: var(--text-main); margin-bottom: 25px; }
         .hero-title span { color: var(--primary-lava); }
 
-        /* البحث */
+        /* --- Search Bar --- */
         .search-wrapper {
             background: rgba(255,255,255,0.9); backdrop-filter: blur(15px);
             border-radius: 20px; padding: 12px 18px; display: flex; align-items: center;
             border: 2px solid var(--primary-lava); margin-bottom: 25px; position: relative;
         }
-        .search-icon { margin-inline-end: 10px; font-size: 18px; }
+        .search-icon { z-index: 2; margin-right: 10px; font-size: 18px; }
         .search-wrapper input { 
             flex: 1; border: none; background: transparent; outline: none; 
-            font-size: 16px; color: var(--text-main);
+            font-size: 16px; width: 100%; position: relative; z-index: 2; color: var(--text-main);
         }
+        .fake-placeholder {
+            position: absolute; left: 45px; top: 50%; transform: translateY(-50%);
+            color: #94a3b8; font-size: 16px; pointer-events: none; z-index: 1; transition: 0.2s;
+        }
+        .search-wrapper input:focus + .fake-placeholder,
+        .search-wrapper input:not(:placeholder-shown) + .fake-placeholder { opacity: 0; }
 
-        /* البطاقات المتراكمة */
+        /* --- Services --- */
+        .services-scroll-container {
+            display: flex; gap: 10px; overflow-x: auto; padding-bottom: 25px; scrollbar-width: none;
+        }
+        .service-pill {
+            display: flex; align-items: center; background: #ffffff; border: 1.5px solid #f1f5f9;
+            padding: 8px 16px; border-radius: 50px; flex-shrink: 0; transition: 0.3s;
+        }
+        .service-pill.active { border-color: var(--primary-lava); color: var(--primary-lava); background: rgba(255, 69, 0, 0.05); }
+
+        /* --- Stacked Cards --- */
         .stacked-cards-wrapper {
             position: relative; width: 100%; height: 260px;
             display: flex; justify-content: center; align-items: center;
             perspective: 1200px; margin-top: 10px;
+        }
+        @keyframes border-pulse {
+            0% { border-color: rgba(255, 69, 0, 0.4); }
+            50% { border-color: rgba(255, 69, 0, 1); }
+            100% { border-color: rgba(255, 69, 0, 0.4); }
         }
         .card-item {
             position: absolute; width: 200px; height: 240px; 
@@ -78,45 +93,47 @@
         }
         .card-item.active { 
             opacity: 1; transform: translateX(0) translateZ(50px) scale(1); 
-            z-index: 10; pointer-events: auto; border-color: var(--primary-lava);
+            z-index: 10; pointer-events: auto; animation: border-pulse 2.5s infinite ease-in-out;
         }
-        /* تعديل اتجاه البطاقات الجانبية ليدعم اللغتين */
-        [dir="ltr"] .card-item.prev { transform: translateX(-100px) translateZ(-100px) scale(0.8); }
-        [dir="ltr"] .card-item.next { transform: translateX(100px) translateZ(-100px) scale(0.8); }
-        [dir="rtl"] .card-item.prev { transform: translateX(100px) translateZ(-100px) scale(0.8); }
-        [dir="rtl"] .card-item.next { transform: translateX(-100px) translateZ(-100px) scale(0.8); }
+        .card-item.prev { opacity: 0.4; transform: translateX(-100px) translateZ(-100px) scale(0.8); z-index: 5; filter: blur(1px); }
+        .card-item.next { opacity: 0.4; transform: translateX(100px) translateZ(-100px) scale(0.8); z-index: 5; filter: blur(1px); }
 
         .see-more-btn {
             background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(12px);
             color: #fff; border-radius: 50px; padding: 8px 30px;
             font-weight: 700; font-size: 11px; border: 1px solid rgba(255,255,255,0.3);
+            text-transform: uppercase;
         }
 
         .dots-container { display: flex; justify-content: center; gap: 8px; margin-top: 15px; }
         .dot { width: 6px; height: 6px; background: #e2e8f0; border-radius: 50%; transition: 0.4s; }
         .dot.active { background: var(--primary-lava); width: 15px; border-radius: 10px; }
 
-        /* الأقسام */
-        .section-header { display: flex; justify-content: space-between; align-items: flex-end; margin: 40px 0 15px; }
-        .section-header h3 { font-size: 22px; font-weight: 900; color: var(--text-main); margin: 0; }
-        
-        .stories-container { display: flex; gap: 18px; overflow-x: auto; padding: 10px 5px; scrollbar-width: none; }
-        .story-ring { width: 70px; height: 70px; border-radius: 24px; padding: 3px; background: linear-gradient(45deg, var(--primary-lava), #ff8c00); }
+        /* --- Section Styling (Stories & Hubs) --- */
+        .section-header { display: flex; justify-content: space-between; align-items: flex-end; margin: 40px 0 15px; padding: 0 5px; }
+        .section-header h3 { font-size: 22px; font-weight: 900; color: var(--text-main); margin: 0; letter-spacing: -0.5px; }
+        .section-header span { font-size: 13px; color: var(--primary-lava); font-weight: 700; cursor: pointer; }
+
+        .stories-container { display: flex; gap: 18px; overflow-x: auto; padding: 10px 5px 20px; scrollbar-width: none; }
+        .story-item { flex-shrink: 0; width: 75px; text-align: center; }
+        .story-ring { width: 70px; height: 70px; border-radius: 24px; padding: 3px; background: linear-gradient(45deg, var(--primary-lava), #ff8c00); box-shadow: 0 8px 15px var(--lava-glow); margin-bottom: 8px; position: relative; }
         .story-ring img { width: 100%; height: 100%; border-radius: 21px; object-fit: cover; background: #fff; border: 2px solid #fff; }
+        .live-tag { position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%); background: var(--primary-lava); color: #fff; font-size: 8px; padding: 2px 8px; border-radius: 10px; font-weight: 900; border: 2px solid #fff; }
+        .story-item span { font-size: 11px; font-weight: 700; color: var(--text-main); }
 
-        /* --- صفحة البروفايل --- */
-        .profile-card { text-align: center; margin-bottom: 30px; }
-        .profile-avatar { width: 110px; height: 110px; border-radius: 40px; border: 3px solid var(--primary-lava); margin: 0 auto 15px; padding: 5px; }
-        .profile-avatar img { width: 100%; height: 100%; border-radius: 35px; object-fit: cover; }
-        
-        .settings-list { background: #f8fafc; border-radius: 30px; overflow: hidden; border: 1px solid #edf2f7; }
-        .settings-item { display: flex; align-items: center; justify-content: space-between; padding: 20px; border-bottom: 1px solid #eee; cursor: pointer; }
-        .settings-label { display: flex; align-items: center; gap: 12px; font-weight: 700; color: var(--text-main); }
-        
-        /* زر تبديل اللغة المميز */
-        .lang-badge { background: var(--primary-lava); color: #fff; padding: 4px 12px; border-radius: 10px; font-size: 12px; font-weight: 800; }
+        .hubs-container { display: flex; flex-direction: column; gap: 15px; margin-bottom: 60px; }
+        .hub-card { background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-radius: 28px; padding: 20px; display: flex; align-items: center; gap: 15px; border: 1px solid #edf2f7; box-shadow: 0 10px 25px rgba(0,0,0,0.03); }
+        .hub-icon-wrapper { width: 55px; height: 55px; background: #fff; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 26px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .hub-content { flex: 1; }
+        .hub-content h4 { margin: 0; font-size: 17px; font-weight: 800; color: var(--text-main); }
+        .hub-stats { display: flex; gap: 10px; margin-top: 5px; }
+        .stat-pill { background: rgba(255, 69, 0, 0.08); color: var(--primary-lava); padding: 2px 10px; border-radius: 8px; font-size: 10px; font-weight: 700; }
+        .hub-arrow { width: 35px; height: 35px; background: #f1f5f9; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
 
-        /* Navigation */
+        .ask-community-bar { background: var(--text-main); color: #fff; padding: 18px 25px; border-radius: 25px; display: flex; justify-content: space-between; align-items: center; margin-top: 10px; box-shadow: 0 15px 30px rgba(15, 23, 42, 0.2); }
+        .plus-icon { width: 28px; height: 28px; background: var(--primary-lava); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: bold; }
+
+        /* --- Navigation --- */
         .bottom-nav {
             position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%);
             width: 90%; max-width: 400px; background: #ffffff; border-radius: 40px;
@@ -126,8 +143,17 @@
         .nav-item { display: flex; align-items: center; justify-content: center; padding: 10px 15px; color: #94a3b8; transition: 0.3s; border-radius: 30px; }
         .nav-item.active { background: rgba(255, 69, 0, 0.1); color: var(--primary-lava); }
         .nav-item span { max-width: 0; overflow: hidden; white-space: nowrap; transition: 0.3s; font-weight: 700; font-size: 14px; }
-        .nav-item.active span { max-width: 80px; margin-inline-start: 8px; }
+        .nav-item.active span { max-width: 80px; margin-left: 8px; }
         .nav-item svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2.2; }
+
+        #info-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px);
+            z-index: 2000; display: flex; align-items: flex-end; visibility: hidden; opacity: 0; transition: 0.4s;
+        }
+        #info-overlay.open { visibility: visible; opacity: 1; }
+        .info-content { width: 100%; background: #fff; border-radius: 40px 40px 0 0; padding: 40px 30px; box-sizing: border-box; transform: translateY(100%); transition: 0.5s; position: relative; }
+        #info-overlay.open .info-content { transform: translateY(0); }
+        .close-btn { position: absolute; top: 20px; right: 25px; width: 35px; height: 35px; background: #f1f5f9; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -137,59 +163,68 @@
 
     <div class="app-container" id="main-app" style="opacity: 0; transition: 1s;">
         
-        <div id="home-page" class="app-page active">
-            <h1 class="hero-title" id="t-hero-title">Where do you <br><span>wanna go?</span></h1>
+        <h1 class="hero-title">Where do you <br><span>wanna go?</span></h1>
 
-            <div class="search-wrapper">
-                <span class="search-icon">🔍</span>
-                <input type="text" id="t-search-input" placeholder="Ask Sidar anything...">
-            </div>
-
-            <div class="stacked-cards-wrapper">
-                <div class="card-item" id="card0"><div class="see-more-btn" id="t-explore-0">Explore</div></div>
-                <div class="card-item" id="card1"><div class="see-more-btn" id="t-explore-1">Explore</div></div>
-                <div class="card-item" id="card2"><div class="see-more-btn" id="t-explore-2">Explore</div></div>
-                <div class="card-item" id="card3"><div class="see-more-btn" id="t-explore-3">Explore</div></div>
-            </div>
-
-            <div class="dots-container" id="dotsContainer"></div>
-
-            <div class="section-header">
-                <h3 id="t-live-moments">Live Moments</h3>
-            </div>
-            <div class="stories-container">
-                <div class="story-ring"><img src="https://i.pravatar.cc/150?u=1"></div>
-                <div class="story-ring"><img src="https://i.pravatar.cc/150?u=2"></div>
-                <div class="story-ring"><img src="https://i.pravatar.cc/150?u=3"></div>
-            </div>
+        <div class="search-wrapper">
+            <span class="search-icon">🔍</span>
+            <input type="text" placeholder=" ">
+            <div class="fake-placeholder">Ask <span class="lava-text">Sidar</span> any thing...</div>
         </div>
 
-        <div id="profile-page" class="app-page">
-            <div class="profile-card">
-                <div class="profile-avatar"><img src="https://i.pravatar.cc/150?u=me"></div>
-                <h2 id="t-user-name">Ahmad Sidar</h2>
-                <p id="t-user-handle">@ahmad_travels</p>
-            </div>
+        <div class="services-scroll-container">
+            <div class="service-pill"><span>🎟️ Events</span></div>
+            <div class="service-pill"><span>📶 eSIM</span></div>
+            <div class="service-pill active"><span>💱 Currency</span></div>
+            <div class="service-pill"><span>💸 Transfer</span></div>
+        </div>
 
-            <div class="settings-list">
-                <div class="settings-item">
-                    <div class="settings-label"><span id="t-settings-info">👤 Personal Info</span></div>
-                    <span>→</span>
-                </div>
-                <div class="settings-item" onclick="toggleLanguage()">
-                    <div class="settings-label"><span id="t-settings-lang">🌍 Language</span></div>
-                    <div class="lang-badge" id="lang-status">English</div>
-                </div>
-                <div class="settings-item">
-                    <div class="settings-label" style="color:#e11d48;"><span id="t-settings-logout">🚪 Log Out</span></div>
-                </div>
+        <div class="stacked-cards-wrapper" id="cardsWrapper">
+            <div class="card-item" id="card0" onclick="showInfo(0)"><div class="see-more-btn">See More</div></div>
+            <div class="card-item" id="card1" onclick="showInfo(1)"><div class="see-more-btn">See More</div></div>
+            <div class="card-item" id="card2" onclick="showInfo(2)"><div class="see-more-btn">See More</div></div>
+            <div class="card-item" id="card3" onclick="showInfo(3)"><div class="see-more-btn">See More</div></div>
+        </div>
+
+        <div class="dots-container" id="dotsContainer"></div>
+
+        <div class="section-header">
+            <h3>Live Moments</h3>
+            <span>View Map</span>
+        </div>
+        <div class="stories-container">
+            <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/150?u=a" alt=""><div class="live-tag">Live</div></div><span>Alex</span></div>
+            <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/150?u=b" alt=""></div><span>Sarah</span></div>
+            <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/150?u=c" alt=""></div><span>Yasin</span></div>
+            <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/150?u=d" alt=""><div class="live-tag">Live</div></div><span>Mona</span></div>
+        </div>
+
+        <div class="section-header"><h3>Communities</h3></div>
+        <div class="hubs-container">
+            <div class="hub-card">
+                <div class="hub-icon-wrapper">🇹🇷</div>
+                <div class="hub-content"><h4>Turkey Hub</h4><div class="hub-stats"><div class="stat-pill">12 Questions</div><div class="stat-pill">45 Tips</div></div></div>
+                <div class="hub-arrow">→</div>
             </div>
+            <div class="ask-community-bar"><span>Have a question?</span><div class="plus-icon">+</div></div>
+        </div>
+
+    </div>
+
+    <div id="info-overlay">
+        <div class="info-content">
+            <div class="close-btn" onclick="closeInfo()">×</div>
+            <span class="info-tag" id="target-tag" style="background: rgba(255, 69, 0, 0.1); color: var(--primary-lava); padding: 5px 12px; border-radius: 10px; font-size: 12px; font-weight: 800;">Category</span>
+            <h2 class="info-title" id="target-title" style="margin: 15px 0 10px; font-size: 28px; font-weight: 800;">Location Name</h2>
+            <p id="target-desc" style="color: #64748b; line-height: 1.6; font-size: 15px;">Description goes here...</p>
+            <div class="see-more-btn" style="background: var(--primary-lava); text-align: center; width: 100%; border: none; margin-top: 20px; padding: 15px; font-size: 14px;">Explore Now</div>
         </div>
     </div>
 
     <nav class="bottom-nav">
-        <div class="nav-item active" onclick="tab(this, 'home')"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg><span id="t-nav-home">Home</span></div>
-        <div class="nav-item" onclick="tab(this, 'profile')"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg><span id="t-nav-profile">Profile</span></div>
+        <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg><span>Home</span></div>
+        <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg><span>Map</span></div>
+        <div class="nav-item"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line></svg><span>Reels</span></div>
+        <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg><span>Profile</span></div>
     </nav>
 
     <script>
@@ -202,69 +237,20 @@
             card3: 'https://plain-eeur-prod-public.komododecks.com/202604/19/qzr51sWPt6GgM3gTZH8K/image.png'
         };
 
-        // مصفوفة الترجمات
-        const translations = {
-            en: {
-                heroTitle: 'Where do you <br><span>wanna go?</span>',
-                searchPlaceholder: 'Ask Sidar anything...',
-                explore: 'Explore',
-                liveMoments: 'Live Moments',
-                navHome: 'Home',
-                navProfile: 'Profile',
-                settingsInfo: '👤 Personal Info',
-                settingsLang: '🌍 Language',
-                settingsLogout: '🚪 Log Out',
-                langStatus: 'English',
-                userName: 'Ahmad Sidar',
-                userHandle: '@ahmad_travels',
-                dir: 'ltr'
-            },
-            ar: {
-                heroTitle: 'إلى أين تود <br><span>الذهاب؟</span>',
-                searchPlaceholder: 'اسأل سيدار عن أي شيء...',
-                explore: 'استكشف',
-                liveMoments: 'لحظات مباشرة',
-                navHome: 'الرئيسية',
-                navProfile: 'حسابي',
-                settingsInfo: '👤 المعلومات الشخصية',
-                settingsLang: '🌍 اللغة',
-                settingsLogout: '🚪 تسجيل الخروج',
-                langStatus: 'العربية',
-                userName: 'أحمد سيدار',
-                userHandle: '@أحمد_رحالة',
-                dir: 'rtl'
-            }
-        };
+        const DATA = [
+            { tag: "Iconic", title: "Turkey", desc: "Guide to famous Turkish drama locations." },
+            { tag: "Action", title: "Global Spots", desc: "Where the world films its best scenes." },
+            { tag: "Nature", title: "Hidden Gems", desc: "Breath-taking scenery for creators." },
+            { tag: "Urban", title: "City Vibes", desc: "The pulse of cinematic cityscapes." }
+        ];
 
-        let currentLang = 'en';
-
-        function toggleLanguage() {
-            currentLang = (currentLang === 'en') ? 'ar' : 'en';
-            const langData = translations[currentLang];
-
-            // تطبيق اللغة والاتجاه
-            document.getElementById('html-tag').setAttribute('dir', langData.dir);
-            document.getElementById('html-tag').setAttribute('lang', currentLang);
-
-            // تحديث النصوص
-            document.getElementById('t-hero-title').innerHTML = langData.heroTitle;
-            document.getElementById('t-search-input').placeholder = langData.searchPlaceholder;
-            document.getElementById('t-live-moments').innerText = langData.liveMoments;
-            document.getElementById('t-nav-home').innerText = langData.navHome;
-            document.getElementById('t-nav-profile').innerText = langData.navProfile;
-            document.getElementById('t-settings-info').innerText = langData.settingsInfo;
-            document.getElementById('t-settings-lang').innerText = langData.settingsLang;
-            document.getElementById('t-settings-logout').innerText = langData.settingsLogout;
-            document.getElementById('lang-status').innerText = langData.langStatus;
-            document.getElementById('t-user-name').innerText = langData.userName;
-            document.getElementById('t-user-handle').innerText = langData.userHandle;
-
-            // تحديث أزرار البطاقات
-            for(let i=0; i<4; i++) {
-                document.getElementById(`t-explore-${i}`).innerText = langData.explore;
-            }
-
-            updateCards(); // إعادة تحديث البطاقات لضبط الاتجاه الجديد
+        function applyImages() {
+            document.getElementById('splashLogo').src = MY_IMAGES.splashLogo;
+            document.getElementById('heroBg').style.backgroundImage = `url('${MY_IMAGES.heroBackground}')`;
+            document.getElementById('card0').style.backgroundImage = `url('${MY_IMAGES.card0}')`;
+            document.getElementById('card1').style.backgroundImage = `url('${MY_IMAGES.card1}')`;
+            document.getElementById('card2').style.backgroundImage = `url('${MY_IMAGES.card2}')`;
+            document.getElementById('card3').style.backgroundImage = `url('${MY_IMAGES.card3}')`;
         }
 
         let currentIndex = 0;
@@ -280,26 +266,25 @@
             document.querySelectorAll('.dot').forEach((dot, i) => dot.classList.toggle('active', i === currentIndex));
         }
 
-        function tab(el, page) {
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            el.classList.add('active');
-            document.querySelectorAll('.app-page').forEach(p => p.classList.remove('active'));
-            document.getElementById(page + '-page').classList.add('active');
-            document.getElementById('heroBg').style.filter = (page === 'profile') ? 'blur(10px) brightness(0.7)' : 'none';
+        function showInfo(index) {
+            const item = DATA[index];
+            if (item.title !== "Turkey") { alert("Soon..."); return; }
+            document.getElementById('target-tag').innerText = item.tag;
+            document.getElementById('target-title').innerText = item.title;
+            document.getElementById('target-desc').innerText = item.desc;
+            document.getElementById('info-overlay').classList.add('open');
         }
 
-        window.addEventListener('load', () => {
-            document.getElementById('splashLogo').src = MY_IMAGES.splashLogo;
-            document.getElementById('heroBg').style.backgroundImage = `url('${MY_IMAGES.heroBackground}')`;
-            cards.forEach((card, i) => card.style.backgroundImage = `url('${MY_IMAGES['card'+i]}')`);
+        function closeInfo() { document.getElementById('info-overlay').classList.remove('open'); }
 
+        window.addEventListener('load', () => {
+            applyImages();
             const dotsContainer = document.getElementById('dotsContainer');
             cards.forEach((_, i) => {
                 const dot = document.createElement('div');
                 dot.className = `dot ${i === 0 ? 'active' : ''}`;
                 dotsContainer.appendChild(dot);
             });
-
             setTimeout(() => {
                 document.getElementById('splash-screen').style.opacity = '0';
                 setTimeout(() => {
@@ -311,7 +296,7 @@
         });
 
         setInterval(() => { 
-            if(document.getElementById('home-page').classList.contains('active')) {
+            if(!document.getElementById('info-overlay').classList.contains('open')) {
                 currentIndex = (currentIndex + 1) % cards.length; 
                 updateCards(); 
             }
