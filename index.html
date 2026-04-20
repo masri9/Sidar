@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sidarapp - Professional Social Hub</title>
+    <title>Sidarapp - Integrated Edition</title>
     
     <style>
         :root {
@@ -22,6 +22,15 @@
             overflow-x: hidden;
         }
 
+        /* إخفاء الصفحات غير النشطة */
+        .app-page { display: none; animation: fadeIn 0.4s ease-out; }
+        .app-page.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         /* --- Splash Screen --- */
         #splash-screen {
             position: fixed; inset: 0; background: #ffffff;
@@ -33,6 +42,7 @@
         .header-bg {
             position: absolute; top: 0; left: 0; right: 0; height: 55vh;
             background-size: cover; background-position: center; z-index: 0;
+            transition: 0.5s;
         }
 
         .app-container {
@@ -71,7 +81,7 @@
         }
         .service-pill.active { border-color: var(--primary-lava); color: var(--primary-lava); background: rgba(255, 69, 0, 0.05); }
 
-        /* --- Stacked Cards (Optimized Size) --- */
+        /* --- Stacked Cards --- */
         .stacked-cards-wrapper {
             position: relative; width: 100%; height: 260px;
             display: flex; justify-content: center; align-items: center;
@@ -108,86 +118,42 @@
         .dot { width: 6px; height: 6px; background: #e2e8f0; border-radius: 50%; transition: 0.4s; }
         .dot.active { background: var(--primary-lava); width: 15px; border-radius: 10px; }
 
-        /* --- 🆕 Professional Stories & Hubs Styling 🆕 --- */
-        .section-header { 
-            display: flex; justify-content: space-between; align-items: flex-end; 
-            margin: 40px 0 15px; padding: 0 5px;
-        }
+        /* --- Section Styling (Stories & Hubs) --- */
+        .section-header { display: flex; justify-content: space-between; align-items: flex-end; margin: 40px 0 15px; padding: 0 5px; }
         .section-header h3 { font-size: 22px; font-weight: 900; color: var(--text-main); margin: 0; letter-spacing: -0.5px; }
         .section-header span { font-size: 13px; color: var(--primary-lava); font-weight: 700; cursor: pointer; }
 
-        .stories-container { 
-            display: flex; gap: 18px; overflow-x: auto; padding: 10px 5px 20px; 
-            scrollbar-width: none; -webkit-overflow-scrolling: touch;
-        }
-        .story-item { flex-shrink: 0; position: relative; width: 75px; transition: 0.3s; }
-        .story-item:active { transform: scale(0.9); }
+        .stories-container { display: flex; gap: 18px; overflow-x: auto; padding: 10px 5px 20px; scrollbar-width: none; }
+        .story-item { flex-shrink: 0; width: 75px; text-align: center; }
+        .story-ring { width: 70px; height: 70px; border-radius: 24px; padding: 3px; background: linear-gradient(45deg, var(--primary-lava), #ff8c00); box-shadow: 0 8px 15px var(--lava-glow); margin-bottom: 8px; position: relative; }
+        .story-ring img { width: 100%; height: 100%; border-radius: 21px; object-fit: cover; background: #fff; border: 2px solid #fff; }
+        .live-tag { position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%); background: var(--primary-lava); color: #fff; font-size: 8px; padding: 2px 8px; border-radius: 10px; font-weight: 900; border: 2px solid #fff; }
+        .story-item span { font-size: 11px; font-weight: 700; color: var(--text-main); }
 
-        .story-ring {
-            width: 70px; height: 70px; border-radius: 24px;
-            padding: 3px; background: linear-gradient(45deg, var(--primary-lava), #ff8c00);
-            box-shadow: 0 8px 15px var(--lava-glow);
-            margin-bottom: 8px; position: relative;
-        }
-        .story-ring img { 
-            width: 100%; height: 100%; border-radius: 21px; object-fit: cover; 
-            background: #fff; border: 2px solid #fff;
-        }
-        .live-tag {
-            position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%);
-            background: var(--primary-lava); color: #fff; font-size: 8px; 
-            padding: 2px 8px; border-radius: 10px; font-weight: 900;
-            border: 2px solid #fff; text-transform: uppercase;
-        }
-        .story-item span { font-size: 11px; font-weight: 700; color: var(--text-main); display: block; margin-top: 5px; text-align: center; }
-
-        .hubs-container { display: grid; grid-template-columns: 1fr; gap: 15px; margin-bottom: 60px; }
-        
-        .hub-card {
-            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-            border-radius: 28px; padding: 20px;
-            display: flex; align-items: center; gap: 15px;
-            border: 1px solid #edf2f7;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.03);
-            position: relative; overflow: hidden; transition: 0.3s;
-        }
-        .hub-card:active { transform: scale(0.97); background: #fff; }
-        
-        .hub-icon-wrapper {
-            width: 55px; height: 55px; background: #fff; border-radius: 20px;
-            display: flex; align-items: center; justify-content: center; font-size: 26px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05); border: 1px solid #f1f5f9;
-        }
-        
+        .hubs-container { display: flex; flex-direction: column; gap: 15px; margin-bottom: 60px; }
+        .hub-card { background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-radius: 28px; padding: 20px; display: flex; align-items: center; gap: 15px; border: 1px solid #edf2f7; box-shadow: 0 10px 25px rgba(0,0,0,0.03); transition: 0.3s; }
+        .hub-icon-wrapper { width: 55px; height: 55px; background: #fff; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 26px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
         .hub-content { flex: 1; }
         .hub-content h4 { margin: 0; font-size: 17px; font-weight: 800; color: var(--text-main); }
-        
         .hub-stats { display: flex; gap: 10px; margin-top: 5px; }
-        .stat-pill { 
-            background: rgba(255, 69, 0, 0.08); color: var(--primary-lava); 
-            padding: 2px 10px; border-radius: 8px; font-size: 10px; font-weight: 700;
-        }
+        .stat-pill { background: rgba(255, 69, 0, 0.08); color: var(--primary-lava); padding: 2px 10px; border-radius: 8px; font-size: 10px; font-weight: 700; }
+        .hub-arrow { width: 35px; height: 35px; background: #f1f5f9; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
 
-        .hub-arrow {
-            width: 35px; height: 35px; background: #f1f5f9; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            color: var(--text-main); transition: 0.3s;
-        }
+        .ask-community-bar { background: var(--text-main); color: #fff; padding: 18px 25px; border-radius: 25px; display: flex; justify-content: space-between; align-items: center; margin-top: 10px; box-shadow: 0 15px 30px rgba(15, 23, 42, 0.2); }
+        .plus-icon { width: 28px; height: 28px; background: var(--primary-lava); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: bold; }
 
-        .ask-community-bar {
-            background: var(--text-main); color: #fff;
-            padding: 18px 25px; border-radius: 25px;
-            display: flex; justify-content: space-between; align-items: center;
-            margin-top: 10px; box-shadow: 0 15px 30px rgba(15, 23, 42, 0.2);
-        }
-        .ask-community-bar span { font-weight: 800; font-size: 15px; }
-        .plus-icon { 
-            width: 28px; height: 28px; background: var(--primary-lava); 
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-size: 20px; font-weight: bold;
-        }
+        /* --- 🆕 Profile Page Styling 🆕 --- */
+        .profile-header { text-align: center; padding: 20px 0; }
+        .profile-img-wrapper { width: 110px; height: 110px; border-radius: 40px; margin: 0 auto 15px; border: 3px solid var(--primary-lava); padding: 5px; position: relative; }
+        .profile-img-wrapper img { width: 100%; height: 100%; border-radius: 35px; object-fit: cover; }
+        .profile-name { font-size: 24px; font-weight: 800; color: var(--text-main); margin: 0; }
+        .profile-handle { font-size: 14px; color: #94a3b8; font-weight: 600; }
+        .settings-group { margin-top: 30px; }
+        .settings-item { background: #f8fafc; padding: 18px; border-radius: 20px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; border: 1px solid #edf2f7; transition: 0.3s; }
+        .settings-item:active { transform: scale(0.98); }
+        .settings-label { display: flex; align-items: center; gap: 12px; font-weight: 700; color: var(--text-main); }
 
-        /* --- Navigation & Overlay --- */
+        /* --- Navigation --- */
         .bottom-nav {
             position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%);
             width: 90%; max-width: 400px; background: #ffffff; border-radius: 40px;
@@ -205,10 +171,7 @@
             z-index: 2000; display: flex; align-items: flex-end; visibility: hidden; opacity: 0; transition: 0.4s;
         }
         #info-overlay.open { visibility: visible; opacity: 1; }
-        .info-content {
-            width: 100%; background: #fff; border-radius: 40px 40px 0 0; padding: 40px 30px;
-            box-sizing: border-box; transform: translateY(100%); transition: 0.5s; position: relative;
-        }
+        .info-content { width: 100%; background: #fff; border-radius: 40px 40px 0 0; padding: 40px 30px; box-sizing: border-box; transform: translateY(100%); transition: 0.5s; position: relative; }
         #info-overlay.open .info-content { transform: translateY(0); }
         .close-btn { position: absolute; top: 20px; right: 25px; width: 35px; height: 35px; background: #f1f5f9; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; cursor: pointer; }
     </style>
@@ -219,96 +182,65 @@
     <div class="header-bg" id="heroBg"></div>
 
     <div class="app-container" id="main-app" style="opacity: 0; transition: 1s;">
-        <h1 class="hero-title">Where do you <br><span>wanna go?</span></h1>
+        
+        <div id="home-page" class="app-page active">
+            <h1 class="hero-title">Where do you <br><span>wanna go?</span></h1>
 
-        <div class="search-wrapper">
-            <span class="search-icon">🔍</span>
-            <input type="text" placeholder=" ">
-            <div class="fake-placeholder">Ask <span class="lava-text">Sidar</span> any thing...</div>
-        </div>
-
-        <div class="services-scroll-container">
-            <div class="service-pill"><span>🎟️ Events</span></div>
-            <div class="service-pill"><span>📶 eSIM</span></div>
-            <div class="service-pill active"><span>💱 Currency</span></div>
-            <div class="service-pill"><span>💸 Transfer</span></div>
-        </div>
-
-        <div class="stacked-cards-wrapper" id="cardsWrapper">
-            <div class="card-item" id="card0" onclick="showInfo(0)"><div class="see-more-btn">See More</div></div>
-            <div class="card-item" id="card1" onclick="showInfo(1)"><div class="see-more-btn">See More</div></div>
-            <div class="card-item" id="card2" onclick="showInfo(2)"><div class="see-more-btn">See More</div></div>
-            <div class="card-item" id="card3" onclick="showInfo(3)"><div class="see-more-btn">See More</div></div>
-        </div>
-
-        <div class="dots-container" id="dotsContainer"></div>
-
-        <div class="section-header">
-            <h3>Live Moments</h3>
-            <span>View Map</span>
-        </div>
-
-        <div class="stories-container">
-            <div class="story-item">
-                <div class="story-ring">
-                    <img src="https://i.pravatar.cc/150?u=a" alt="">
-                    <div class="live-tag">Live</div>
-                </div>
-                <span>Alex</span>
+            <div class="search-wrapper">
+                <span class="search-icon">🔍</span>
+                <input type="text" placeholder=" ">
+                <div class="fake-placeholder">Ask <span class="lava-text">Sidar</span> any thing...</div>
             </div>
-            <div class="story-item">
-                <div class="story-ring">
-                    <img src="https://i.pravatar.cc/150?u=b" alt="">
-                </div>
-                <span>Sarah</span>
+
+            <div class="services-scroll-container">
+                <div class="service-pill"><span>🎟️ Events</span></div>
+                <div class="service-pill"><span>📶 eSIM</span></div>
+                <div class="service-pill active"><span>💱 Currency</span></div>
+                <div class="service-pill"><span>💸 Transfer</span></div>
             </div>
-            <div class="story-item">
-                <div class="story-ring">
-                    <img src="https://i.pravatar.cc/150?u=c" alt="">
-                </div>
-                <span>Yasin</span>
+
+            <div class="stacked-cards-wrapper" id="cardsWrapper">
+                <div class="card-item" id="card0" onclick="showInfo(0)"><div class="see-more-btn">See More</div></div>
+                <div class="card-item" id="card1" onclick="showInfo(1)"><div class="see-more-btn">See More</div></div>
+                <div class="card-item" id="card2" onclick="showInfo(2)"><div class="see-more-btn">See More</div></div>
+                <div class="card-item" id="card3" onclick="showInfo(3)"><div class="see-more-btn">See More</div></div>
             </div>
-            <div class="story-item">
-                <div class="story-ring">
-                    <img src="https://i.pravatar.cc/150?u=d" alt="">
-                    <div class="live-tag">Live</div>
+
+            <div class="dots-container" id="dotsContainer"></div>
+
+            <div class="section-header">
+                <h3>Live Moments</h3>
+                <span>View Map</span>
+            </div>
+            <div class="stories-container">
+                <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/150?u=1" alt=""><div class="live-tag">Live</div></div><span>Alex</span></div>
+                <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/150?u=2" alt=""></div><span>Sarah</span></div>
+                <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/150?u=3" alt=""></div><span>Yasin</span></div>
+                <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/150?u=4" alt=""><div class="live-tag">Live</div></div><span>Mona</span></div>
+            </div>
+
+            <div class="section-header"><h3>Communities</h3></div>
+            <div class="hubs-container">
+                <div class="hub-card">
+                    <div class="hub-icon-wrapper">🇹🇷</div>
+                    <div class="hub-content"><h4>Turkey Hub</h4><div class="hub-stats"><div class="stat-pill">12 Questions</div><div class="stat-pill">45 Tips</div></div></div>
+                    <div class="hub-arrow">→</div>
                 </div>
-                <span>Mona</span>
+                <div class="ask-community-bar"><span>Have a question?</span><div class="plus-icon">+</div></div>
             </div>
         </div>
 
-        <div class="section-header">
-            <h3>Communities</h3>
-        </div>
-
-        <div class="hubs-container">
-            <div class="hub-card">
-                <div class="hub-icon-wrapper">🇹🇷</div>
-                <div class="hub-content">
-                    <h4>Turkey Hub</h4>
-                    <div class="hub-stats">
-                        <div class="stat-pill">12 Questions</div>
-                        <div class="stat-pill">45 Tips</div>
-                    </div>
-                </div>
-                <div class="hub-arrow">→</div>
+        <div id="profile-page" class="app-page">
+            <div class="profile-header">
+                <div class="profile-img-wrapper"><img src="https://i.pravatar.cc/150?u=me" alt=""></div>
+                <h2 class="profile-name">Ahmad Sidar</h2>
+                <p class="profile-handle">@ahmad_travels</p>
             </div>
-
-            <div class="hub-card">
-                <div class="hub-icon-wrapper">🇦🇪</div>
-                <div class="hub-content">
-                    <h4>Dubai Hub</h4>
-                    <div class="hub-stats">
-                        <div class="stat-pill">5 Questions</div>
-                        <div class="stat-pill">22 Tips</div>
-                    </div>
-                </div>
-                <div class="hub-arrow">→</div>
-            </div>
-
-            <div class="ask-community-bar">
-                <span>Have a question?</span>
-                <div class="plus-icon">+</div>
+            <div class="settings-group">
+                <div class="settings-item"><div class="settings-label">👤 Account Info</div><span>→</span></div>
+                <div class="settings-item"><div class="settings-label">🔔 Notifications</div><div style="width: 35px; height: 18px; background: var(--primary-lava); border-radius: 20px;"></div></div>
+                <div class="settings-item"><div class="settings-label">🌍 Language</div><span style="font-size: 12px; color: #94a3b8;">English</span></div>
+                <div class="settings-item" style="border-color: #fee2e2;"><div class="settings-label" style="color: #ef4444;">🚪 Logout</div></div>
             </div>
         </div>
     </div>
@@ -399,7 +331,7 @@
         });
 
         setInterval(() => { 
-            if(!document.getElementById('info-overlay').classList.contains('open')) {
+            if(!document.getElementById('info-overlay').classList.contains('open') && document.getElementById('home-page').classList.contains('active')) {
                 currentIndex = (currentIndex + 1) % cards.length; 
                 updateCards(); 
             }
@@ -408,6 +340,17 @@
         function tab(el) {
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
             el.classList.add('active');
+            
+            const tabName = el.querySelector('span').innerText.toLowerCase();
+            document.querySelectorAll('.app-page').forEach(page => page.classList.remove('active'));
+            
+            if (tabName === 'profile') {
+                document.getElementById('profile-page').classList.add('active');
+                document.getElementById('heroBg').style.opacity = '0.2';
+            } else if (tabName === 'home') {
+                document.getElementById('home-page').classList.add('active');
+                document.getElementById('heroBg').style.opacity = '1';
+            }
         }
     </script>
 </body>
