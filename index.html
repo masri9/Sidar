@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sidarapp - Minimal Edition</title>
+    <title>Sidarapp - Refined Edition</title>
     
     <style>
         :root {
@@ -22,7 +22,6 @@
             overflow-x: hidden;
         }
 
-        /* نظام الصفحات */
         .app-page { display: none; animation: slideUp 0.4s ease-out; }
         .app-page.active { display: block; }
 
@@ -75,52 +74,54 @@
         .search-wrapper input { flex: 1; border: none; background: transparent; outline: none; font-size: 16px; color: var(--text-main); }
         .fake-placeholder { position: absolute; left: 45px; top: 50%; transform: translateY(-50%); color: #94a3b8; pointer-events: none; }
 
-        /* --- Improved Stories (No Titles) --- */
+        /* --- Improved Stories - Lowered slightly as requested --- */
         .stories-container { 
-            display: flex; gap: 15px; overflow-x: auto; 
-            padding: 5px 0 20px; scrollbar-width: none;
-            margin-bottom: 10px;
+            display: flex; gap: 18px; overflow-x: auto; 
+            padding: 15px 0 25px; /* زيادة الـ padding العلوي لإنزال القسم قليلاً */
+            scrollbar-width: none;
+            margin-bottom: 15px;
         }
-        .story-item { flex-shrink: 0; width: 72px; text-align: center; }
+        .story-item { flex-shrink: 0; width: 75px; text-align: center; }
         .story-ring { 
-            width: 68px; height: 68px; border-radius: 24px; padding: 2.5px; 
+            width: 70px; height: 70px; border-radius: 24px; padding: 3px; 
             background: linear-gradient(45deg, var(--primary-lava), #ff8c00); 
-            box-shadow: 0 4px 12px var(--lava-glow); 
+            box-shadow: 0 5px 15px var(--lava-glow); 
             position: relative; transition: 0.3s;
-            animation: ringPulse 2s infinite ease-in-out;
+            animation: ringPulse 2.5s infinite ease-in-out;
         }
 
         @keyframes ringPulse {
-            0% { transform: scale(1); box-shadow: 0 4px 12px var(--lava-glow); }
-            50% { transform: scale(1.02); box-shadow: 0 6px 16px var(--lava-glow); }
-            100% { transform: scale(1); box-shadow: 0 4px 12px var(--lava-glow); }
+            0% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.03); filter: brightness(1.1); }
+            100% { transform: scale(1); filter: brightness(1); }
         }
 
-        .story-ring img { width: 100%; height: 100%; border-radius: 21px; object-fit: cover; background: #fff; border: 2px solid #fff; }
-        .live-tag { position: absolute; bottom: -4px; left: 50%; transform: translateX(-50%); background: var(--primary-lava); color: #fff; font-size: 8px; padding: 1px 7px; border-radius: 8px; font-weight: 900; border: 1.5px solid #fff; }
-        .story-item span { font-size: 11px; font-weight: 700; color: var(--text-main); display: block; margin-top: 6px; }
+        .story-ring img { width: 100%; height: 100%; border-radius: 21px; object-fit: cover; background: #fff; border: 2.5px solid #fff; }
+        .live-tag { position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%); background: var(--primary-lava); color: #fff; font-size: 9px; padding: 1px 8px; border-radius: 10px; font-weight: 900; border: 2px solid #fff; }
+        .story-item span { font-size: 11px; font-weight: 800; color: var(--text-main); display: block; margin-top: 8px; opacity: 0.9; }
 
-        /* --- Cards & Services --- */
-        .stacked-cards-wrapper { position: relative; width: 100%; height: 260px; display: flex; justify-content: center; align-items: center; perspective: 1200px; }
-        .card-item { position: absolute; width: 200px; height: 240px; border-radius: 30px; background-size: cover; background-position: center; transition: 0.7s cubic-bezier(0.34, 1.56, 0.64, 1); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 20px; opacity: 0; border: 2px solid transparent; }
-        .card-item.active { opacity: 1; transform: translateX(0) translateZ(50px) scale(1); z-index: 10; border-color: var(--primary-lava); }
-        .card-item.prev { opacity: 0.4; transform: translateX(-100px) scale(0.8); z-index: 5; }
-        .card-item.next { opacity: 0.4; transform: translateX(100px) scale(0.8); z-index: 5; }
+        /* --- Cards --- */
+        .stacked-cards-wrapper { position: relative; width: 100%; height: 260px; display: flex; justify-content: center; align-items: center; perspective: 1200px; margin-top: 10px; }
+        .card-item { position: absolute; width: 210px; height: 250px; border-radius: 35px; background-size: cover; background-position: center; transition: 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 20px; opacity: 0; border: 2.5px solid transparent; }
+        .card-item.active { opacity: 1; transform: translateX(0) translateZ(60px) scale(1); z-index: 10; border-color: var(--primary-lava); box-shadow: 0 15px 35px rgba(255, 69, 0, 0.2); }
+        .card-item.prev { opacity: 0.35; transform: translateX(-110px) scale(0.8); z-index: 5; filter: blur(0.5px); }
+        .card-item.next { opacity: 0.35; transform: translateX(110px) scale(0.8); z-index: 5; filter: blur(0.5px); }
 
-        .dots-container { display: flex; justify-content: center; gap: 8px; margin-top: 15px; }
-        .dot { width: 6px; height: 6px; background: #e2e8f0; border-radius: 50%; transition: 0.4s; }
-        .dot.active { background: var(--primary-lava); width: 15px; border-radius: 10px; }
+        .dots-container { display: flex; justify-content: center; gap: 8px; margin-top: 25px; }
+        .dot { width: 7px; height: 7px; background: #cbd5e1; border-radius: 50%; transition: 0.4s; }
+        .dot.active { background: var(--primary-lava); width: 18px; border-radius: 10px; }
 
-        .section-header { margin: 30px 0 15px; }
-        .section-header h3 { font-size: 20px; font-weight: 900; color: var(--text-main); margin: 0; }
+        /* --- Services --- */
+        .section-header { margin: 35px 0 18px; }
+        .section-header h3 { font-size: 21px; font-weight: 900; color: var(--text-main); margin: 0; letter-spacing: -0.5px; }
 
-        .services-scroll-container { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 20px; scrollbar-width: none; }
-        .service-pill { background: #ffffff; border: 1.5px solid #f1f5f9; padding: 8px 16px; border-radius: 50px; flex-shrink: 0; font-weight: 600; font-size: 14px; }
-        .service-pill.active { border-color: var(--primary-lava); color: var(--primary-lava); background: rgba(255, 69, 0, 0.05); }
+        .services-scroll-container { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 20px; scrollbar-width: none; }
+        .service-pill { background: #ffffff; border: 1.5px solid #e2e8f0; padding: 10px 20px; border-radius: 50px; flex-shrink: 0; font-weight: 700; font-size: 14px; transition: 0.3s; }
+        .service-pill.active { border-color: var(--primary-lava); color: var(--primary-lava); background: rgba(255, 69, 0, 0.05); box-shadow: 0 4px 10px rgba(255, 69, 0, 0.1); }
 
         /* --- Navigation --- */
-        .bottom-nav { position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; background: #fff; border-radius: 40px; display: flex; justify-content: space-around; padding: 8px; border: 2px solid var(--primary-lava); z-index: 1000; }
-        .nav-item { display: flex; align-items: center; padding: 10px 15px; color: #94a3b8; border-radius: 30px; transition: 0.3s; }
+        .bottom-nav { position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; background: #fff; border-radius: 40px; display: flex; justify-content: space-around; padding: 8px; border: 2px solid var(--primary-lava); z-index: 1000; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .nav-item { display: flex; align-items: center; padding: 10px 15px; color: #94a3b8; border-radius: 30px; transition: 0.3s; cursor: pointer; }
         .nav-item.active { background: rgba(255, 69, 0, 0.1); color: var(--primary-lava); }
         .nav-item span { max-width: 0; overflow: hidden; transition: 0.3s; font-weight: 700; font-size: 14px; }
         .nav-item.active span { max-width: 80px; margin-left: 8px; }
