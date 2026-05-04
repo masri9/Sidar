@@ -1,12 +1,12 @@
-تم تحديث معرض الصور الخاص بالفندق ليعرض الصور مقسمة حسب الفئات (المنظر، الصالون، غرف النوم، والحمام) لضمان تجربة تصفح مريحة ومنظمة.
-إليك الكود المحدث بالكامل:
+تم تثبيت كافة الأقسام (تفاصيل الرحلة، المطاعم، المسلسلات، النشاطات) تماماً كما كانت في النسخة الأكثر تفصيلاً، مع استعادة كافة الصور وتصنيفها داخل زر "صور الفندق" كما طلبت.
+إليك الكود المحدث والنهائي:
 ```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SIDAR AI - تفاصيل الرحلة كاملة</title>
+    <title>SIDAR AI - رحلة إسطنبول</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
         :root {
@@ -62,7 +62,7 @@
         .close-circle { position: absolute; top: 15px; left: 15px; width: 30px; height: 30px; background: #eee; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-weight: bold; }
         
         .gallery-category-title { font-size: 16px; font-weight: 800; color: var(--primary-lava); margin: 20px 0 10px; border-bottom: 2px solid #f1f5f9; padding-bottom: 5px; }
-        .gallery-img { width: 100%; border-radius: 20px; margin-bottom: 12px; border: 1px solid #f1f5f9; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .gallery-img { width: 100%; border-radius: 20px; margin-bottom: 12px; border: 1px solid #f1f5f9; }
     </style>
 </head>
 <body>
@@ -92,12 +92,14 @@
             </div>
         </div>
 
-        <!-- تفاصيل الرحلة -->
         <div id="details" class="tab-content active">
             <div class="card">
                 <div class="section-header">المعابر (Crossing)</div>
                 <div class="item-box"><span class="note">معبر إسرائيل</span><div class="price-row"><span class="price-main">120 ₪</span></div></div>
-                <div class="item-box"><span class="note">معبر الأردن (دخول وخروج)</span><div class="price-row"><span class="price-main">20 JOD</span><span class="price-sub">83.34 ₪</span></div></div>
+                <div class="item-box">
+                    <span class="note">معبر الأردن (دخول 10 JOD وخروج 10 JOD)</span>
+                    <div class="price-row"><span class="price-main">20 JOD</span><span class="price-sub">83.34 ₪</span></div>
+                </div>
             </div>
 
             <div class="card">
@@ -111,7 +113,14 @@
 
             <div class="card">
                 <div class="section-header">الإقامة (Hotel)</div>
-                <div class="item-box"><span class="note">إسطنبول (للشخص الواحد)</span><div class="price-row"><span class="price-main">168.384 JOD</span><span class="price-sub">701.68 ₪</span></div></div>
+                <div class="item-box">
+                    <span class="note">إسطنبول (للشخص الواحد)</span>
+                    <div class="price-row"><span class="price-main">168.384 JOD</span><span class="price-sub">701.68 ₪</span></div>
+                </div>
+                <div class="item-box">
+                    <span class="note">ليلة واحدة في عمان</span>
+                    <div class="price-row"><span class="price-main">25 JOD</span><span class="price-sub">104.18 ₪</span></div>
+                </div>
                 <div style="display:flex; gap:10px; margin-top:15px;">
                     <button class="btn-action" onclick="openGal()">🖼️ صور الفندق</button>
                     <button class="btn-action" onclick="window.open('https://www.google.com/maps/search/?api=1&query=Şahkulu,+İstiklal+Cd.+No:+233,+34421+Beyoğlu/İstanbul,+Türkiye')">📍 الموقع</button>
@@ -121,12 +130,14 @@
             <div class="card">
                 <div class="section-header">التنقلات (Transfer & Taxi)</div>
                 <div class="item-box">
-                    <span class="note">المطار <-> الفندق</span>
+                    <span class="note">من المطار إلى الفندق (ذهاب وإياب)</span>
                     <div class="price-row"><span class="price-main">118 $</span><span class="price-sub">348.00 ₪</span></div>
+                    <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/Ag5Tsoef8vrr52VFUuoF/image.jpg" style="width:100%; border-radius:15px; margin-top:10px;">
                 </div>
                 <div class="item-box">
-                    <span class="note">تاكسي المعبر <-> المطار</span>
+                    <span class="note">تاكسي المعبر للمطار + العودة (The Oud)</span>
                     <div class="price-row"><span class="price-main">60 JOD</span><span class="price-sub">250.02 ₪</span></div>
+                    <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/E0aQKw9K28BmP0nriRyu/image.jpg" style="width:100%; border-radius:15px; margin-top:10px;">
                 </div>
             </div>
 
@@ -137,12 +148,15 @@
             <button class="join-btn">انضم للرحلة الآن ✈️</button>
         </div>
 
-        <!-- المطاعم والمقاهي -->
         <div id="restaurants" class="tab-content">
             <div class="card">
                 <div class="section-header">Sarayburnu Aile Çay bahçesi ☕</div>
                 <span class="note">🕒 8:00 - 3:00 | إطلالة بحرية</span>
-                <div style="display:flex; flex-direction:column; gap:10px; margin-top: 10px;">
+                <div class="food-gallery">
+                    <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/QtdYAfdMcwmJ9LgO8V8G/image.jpg">
+                    <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/Vq1EAhcdfc4eTN0LSQsW/image.jpg">
+                </div>
+                <div style="display:flex; flex-direction:column; gap:10px;">
                     <div style="display:flex; gap:10px;">
                         <a href="tel:+902125221397" class="btn-action">📞 اتصل</a>
                         <button class="btn-action" onclick="window.open('https://www.google.com/maps/search/?api=1&query=Sarayburnu+Aile+Çay+bahçesi')">📍 الموقع</button>
@@ -152,9 +166,29 @@
             </div>
 
             <div class="card">
+                <div class="section-header">Best Lounge The Bosphorus ☕</div>
+                <span class="note">🕒 8:00 - 2:00</span>
+                <div class="food-gallery">
+                    <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/aCrx1mziFx0zgJ80JgPy/image.jpg">
+                    <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/DhdkZSmu6oWf6eqvlu8y/image.jpg">
+                </div>
+                <div style="display:flex; flex-direction:column; gap:10px;">
+                    <div style="display:flex; gap:10px;">
+                        <a href="https://wa.me/905401663434" class="btn-action" style="background:#25D366; color:white; border:none;">💬 واتساب</a>
+                        <button class="btn-action" onclick="window.open('https://www.google.com/maps/search/?api=1&query=Best+Lounge+The+Bosphorus')">📍 الموقع</button>
+                    </div>
+                    <button class="btn-action" style="border-color:#475569; color:#475569;" onclick="window.open('http://bestloungethebosphorus.com')">🌐 الموقع الإلكتروني</button>
+                </div>
+            </div>
+
+            <div class="card">
                 <div class="section-header">HuQQa Kuruçeşme 💨</div>
-                <span class="note">🕒 9:30 - 3:00 | مقهى وشيشة</span>
-                <div style="display:flex; flex-direction:column; gap:10px; margin-top: 10px;">
+                <span class="note">🕒 9:30 - 3:00</span>
+                <div class="food-gallery">
+                    <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/i05bEuzBkGZKZtLy8IZl/image.jpg">
+                    <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/LEf6Accd61M17zyc2Q2y/image.jpg">
+                </div>
+                <div style="display:flex; flex-direction:column; gap:10px;">
                     <div style="display:flex; gap:10px;">
                         <a href="tel:+902122650666" class="btn-action">📞 اتصل</a>
                         <button class="btn-action" onclick="window.open('https://www.google.com/maps/search/?api=1&query=HuQQa+Kuruçeشme')">📍 الموقع</button>
@@ -174,13 +208,12 @@
         <div id="activities" class="tab-content"><div class="card"><p style="text-align:center;">قريباً... 🎢</p></div></div>
     </div>
 
-    <!-- نافذة الصور المحدثة للفندق -->
     <div id="gallery-overlay">
         <div class="gallery-card">
             <div class="close-circle" onclick="closeGal()">✕</div>
-            <h3 style="text-align:center; color:var(--primary-lava); margin-bottom:10px;">صور الفندق والمنظر</h3>
+            <h3 style="text-align:center; color:var(--primary-lava); margin-bottom:10px;">معرض صور الفندق</h3>
             
-            <div class="gallery-category-title">🌅 المنظر والإطلالة</div>
+            <div class="gallery-category-title">🌅 الإطلالة والمنظر</div>
             <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/i6qnBDrkuUUOaNblMTrD/image.jpg" class="gallery-img">
             <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/7rqbW7I5jIQj50Bg4dKb/image.jpg" class="gallery-img">
 
@@ -212,6 +245,7 @@
             map = L.map('map').setView([41.04, 29.02], 12);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
             L.marker([41.0211, 29.0041]).addTo(map).bindPopup("<b>برج الفتاة</b>");
+            L.marker([41.0833, 29.0558]).addTo(map).bindPopup("<b>روملي حصار</b>");
         }
         function openGal() { document.getElementById('gallery-overlay').style.display = 'flex'; }
         function closeGal() { document.getElementById('gallery-overlay').style.display = 'none'; }
