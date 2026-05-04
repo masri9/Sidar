@@ -1,5 +1,5 @@
-تم تعديل التاريخ ليظهر بالضبط بالتنسيق الرقمي الذي طلبته، مع المحافظة على كافة التنسيقات السابقة ورفع العنوان للأعلى.
-إليك الكود المحدث:
+فكرة ذكية جداً! إضافة الأيقونات ستجعل واجهة المستخدم تبدو احترافية وسهلة الاستخدام. قمت بإضافة تبويب **"المطاعم"** وتخصيص أيقونات تعبيرية (Emojis) لكل تبويب لتكون رمزية وواضحة كما طلبت.
+إليك الكود المحدث بالكامل:
 ```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
@@ -24,13 +24,15 @@
         .hero-title { font-size: 38px; font-weight: 900; line-height: 1; margin-bottom: 8px; color: var(--text-main); text-shadow: 0 2px 10px rgba(255,255,255,0.5); }
         .hero-title span { color: var(--primary-lava); }
         
-        /* تنسيق التاريخ الرقمي الجديد */
         .hero-date { font-size: 18px; font-weight: 800; color: #475569; margin-bottom: 30px; background: rgba(255,255,255,0.7); display: inline-block; padding: 6px 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.3); letter-spacing: 1px; }
 
-        .tab-container { display: flex; gap: 8px; margin-bottom: 25px; }
+        /* التبويبات العلوية مع الأيقونات */
+        .tab-container { display: flex; gap: 8px; margin-bottom: 25px; overflow-x: auto; padding-bottom: 5px; }
         .tab-card { 
-            flex: 1; background: var(--glass); padding: 12px 5px; border-radius: 18px; text-align: center; font-weight: 800; cursor: pointer; border: 2px solid transparent; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: 0.3s; font-size: 11px;
+            flex: 1; min-width: 85px; background: var(--glass); padding: 12px 5px; border-radius: 18px; text-align: center; font-weight: 800; cursor: pointer; border: 2px solid transparent; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: 0.3s; display: flex; flex-direction: column; align-items: center; gap: 5px;
         }
+        .tab-card span { font-size: 10px; white-space: nowrap; }
+        .tab-icon { font-size: 18px; }
         .tab-card.active { border-color: var(--primary-lava); color: var(--primary-lava); }
 
         .tab-content { display: none; }
@@ -70,12 +72,27 @@
         <h1 class="hero-title">رحلة إسطنبول <span>✈️</span></h1>
         <div class="hero-date">24/09/2026 - 01/10/2026</div>
 
+        <!-- التبويبات مع الأيقونات -->
         <div class="tab-container">
-            <div class="tab-card active" onclick="showTab('details', this)">تفاصيل الرحلة</div>
-            <div class="tab-card" onclick="showTab('activities', this)">النشاطات</div>
-            <div class="tab-card" onclick="showTab('series', this)">مواقع المسلسلات</div>
+            <div class="tab-card active" onclick="showTab('details', this)">
+                <div class="tab-icon">📄</div>
+                <span>تفاصيل الرحلة</span>
+            </div>
+            <div class="tab-card" onclick="showTab('activities', this)">
+                <div class="tab-icon">🎢</div>
+                <span>النشاطات</span>
+            </div>
+            <div class="tab-card" onclick="showTab('restaurants', this)">
+                <div class="tab-icon">🍽️</div>
+                <span>المطاعم</span>
+            </div>
+            <div class="tab-card" onclick="showTab('series', this)">
+                <div class="tab-icon">🎬</div>
+                <span>المسلسلات</span>
+            </div>
         </div>
 
+        <!-- قسم تفاصيل الرحلة -->
         <div id="details" class="tab-content active">
             <div class="card">
                 <div class="section-header">المعابر (Crossing)</div>
@@ -150,11 +167,19 @@
             <button class="join-btn" onclick="openJoinModal()">انضم للرحلة الآن ✈️</button>
         </div>
 
+        <!-- قسم النشاطات -->
         <div id="activities" class="tab-content">
-            <div class="card"><div class="section-header">النشاطات المقترحة</div><p style="text-align:center; color:#64748b;">قريباً...</p></div>
+            <div class="card"><div class="section-header">النشاطات المقترحة</div><p style="text-align:center; color:#64748b;">قريباً... 🎢</p></div>
         </div>
+
+        <!-- قسم المطاعم -->
+        <div id="restaurants" class="tab-content">
+            <div class="card"><div class="section-header">أفضل المطاعم</div><p style="text-align:center; color:#64748b;">قريباً... 🍽️</p></div>
+        </div>
+
+        <!-- قسم المسلسلات -->
         <div id="series" class="tab-content">
-            <div class="card"><div class="section-header">مواقع المسلسلات</div><p style="text-align:center; color:#64748b;">قريباً...</p></div>
+            <div class="card"><div class="section-header">مواقع المسلسلات</div><p style="text-align:center; color:#64748b;">قريباً... 🎬</p></div>
         </div>
     </div>
 
