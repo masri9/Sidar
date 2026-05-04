@@ -1,5 +1,5 @@
-أبشر، اعتذر جداً على الخلط، فهمت قصدك الآن تماماً. سأعيد الكود إلى وضعه الأصلي والسليم مع فصل "قسم المسلسلات" ليكون مستقلاً تماماً، بحيث يظل قسم "تفاصيل الرحلة" كاملاً كما كان (بالصور وبطاقة المجموع والزر وكل شيء)، ويكون قسم المسلسلات عبارة عن مساحة فارغة جاهزة لتضيف فيها ما تشاء لاحقاً.
-إليك الكود المُرتب والمنظم:
+أبشر، تم إزالة صورة الروبوت العائم تماماً من الكود، مع الحفاظ على كل الأقسام الأخرى (تفاصيل الرحلة، النشاطات، مواقع المسلسلات) كما هي وبكامل ترتيبها وتنسيقها.
+إليك الكود المحدث:
 ```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
@@ -18,8 +18,6 @@
         body, html { margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; background: #f8fafc; min-height: 100vh; color: var(--text-main); }
         
         .header-bg { position: fixed; top: 0; left: 0; right: 0; height: 50vh; background-image: url('https://plain-eeur-prod-public.komododecks.com/202604/19/FtJXvAZvXREKew6PJ3ew/image.png'); background-size: cover; background-position: center; z-index: 0; }
-        .sidar-robot { position: fixed; left: 10px; top: 20px; width: 110px; z-index: 10; animation: robotFloat 4s ease-in-out infinite; }
-        @keyframes robotFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
         .app-container { position: relative; z-index: 1; padding: 100px 20px 40px; display: block; max-width: 600px; margin: 0 auto; }
         .hero-title { font-size: 32px; font-weight: 900; line-height: 1.1; margin-bottom: 25px; }
@@ -52,7 +50,6 @@
 
         .join-btn { width: 100%; padding: 20px; background: var(--whatsapp-green); color: white; border: none; border-radius: 25px; font-weight: 900; font-size: 18px; margin-top: 20px; cursor: pointer; box-shadow: 0 10px 20px rgba(37, 211, 102, 0.2); display: flex; align-items: center; justify-content: center; gap: 10px; }
 
-        /* نافذة الانضمام */
         #join-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 20000; align-items: center; justify-content: center; padding: 20px; }
         .modal-content { background: white; width: 100%; max-width: 400px; border-radius: 35px; padding: 30px; position: relative; }
         .modal-input { width: 100%; padding: 15px; margin-bottom: 15px; border: 2px solid #f1f5f9; border-radius: 15px; font-size: 16px; outline: none; box-sizing: border-box; }
@@ -65,7 +62,6 @@
 <body>
 
     <div class="header-bg"></div>
-    <img src="https://plain-eeur-prod-public.komododecks.com/202604/20/U4I3P5a9xfiovTcHKNJk/image.png" class="sidar-robot">
 
     <div class="app-container" id="app">
         <h1 class="hero-title">IST Travel <span>✈️</span></h1>
@@ -77,7 +73,7 @@
             <div class="tab-card" onclick="showTab('series', this)">مواقع المسلسلات</div>
         </div>
 
-        <!-- قسم تفاصيل الرحلة (كامل كما طلبت) -->
+        <!-- قسم تفاصيل الرحلة -->
         <div id="details" class="tab-content active">
             <div class="card">
                 <div class="section-header">المعابر (Crossing)</div>
@@ -152,7 +148,7 @@
             <button class="join-btn" onclick="openJoinModal()">انضم للرحلة الآن ✈️</button>
         </div>
 
-        <!-- قسم النشاطات (فارغ) -->
+        <!-- قسم النشاطات -->
         <div id="activities" class="tab-content">
             <div class="card">
                 <div class="section-header">النشاطات المقترحة</div>
@@ -160,7 +156,7 @@
             </div>
         </div>
 
-        <!-- قسم مواقع المسلسلات (فارغ ومستقل لتضيف فيه لاحقاً) -->
+        <!-- قسم المسلسلات -->
         <div id="series" class="tab-content">
             <div class="card">
                 <div class="section-header">أماكن تصوير المسلسلات</div>
