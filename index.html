@@ -3,122 +3,209 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIDAR Travel - Prototype</title>
+    <title>SIDAR AI Travel - Prototype</title>
     <style>
-        :root { --primary: #2c3e50; --accent: #e67e22; --light: #f4f4f4; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--light); margin: 0; padding: 20px; }
-        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        
-        /* Login Style */
-        #login-screen { text-align: center; margin-top: 100px; }
-        input { padding: 10px; font-size: 18px; width: 80%; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px; text-align: center; }
-        button { padding: 10px 20px; background: var(--primary); color: white; border: none; border-radius: 5px; cursor: pointer; }
+        :root {
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --accent-cyan: #00f2fe;
+            --accent-purple: #7028ff;
+            --text-main: #ffffff;
+            --bg-dark: #050505;
+        }
 
-        /* Content Style */
-        #app-content { display: none; }
-        .trip-header { border-bottom: 2px solid var(--accent); padding-bottom: 10px; margin-bottom: 20px; }
-        .section { margin-bottom: 20px; padding: 10px; background: #fffaf5; border-radius: 5px; }
-        .price { color: #d35400; font-weight: bold; }
-        .admin-badge { background: red; color: white; padding: 2px 8px; border-radius: 10px; font-size: 12px; }
+        body, html {
+            margin: 0; padding: 0; height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-main);
+            overflow-x: hidden;
+            background: var(--bg-dark);
+        }
 
-        /* Chat Style */
-        #chat-box { position: fixed; bottom: 20px; right: 20px; width: 250px; background: white; border: 1px solid #ccc; border-radius: 10px; display: none; }
-        #chat-header { background: var(--primary); color: white; padding: 10px; border-radius: 10px 10px 0 0; font-size: 14px; }
-        #chat-messages { height: 150px; overflow-y: auto; padding: 10px; font-size: 13px; }
-        #chat-input { width: 100%; border: none; border-top: 1px solid #eee; padding: 10px; box-sizing: border-box; }
+        /* الخلفية المتحركة Gradient */
+        .bg-animate {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -2;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e, #050505);
+            background-size: 400% 400%;
+            animation: gradientMove 15s ease infinite;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* تأثير الجزيئات المتحركة */
+        .particles {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: starsMove 100s linear infinite;
+        }
+
+        @keyframes starsMove {
+            from { background-position: 0 0; }
+            to { background-position: 1000px 1000px; }
+        }
+
+        /* شاشة تسجيل الدخول */
+        #login-screen {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            height: 100vh; text-align: center;
+        }
+
+        .glass-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(20px);
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+            width: 350px;
+        }
+
+        h1.logo {
+            font-size: 2.5rem; margin-bottom: 10px;
+            background: linear-gradient(to right, var(--accent-cyan), var(--accent-purple));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            letter-spacing: 2px; font-weight: 900;
+        }
+
+        input {
+            width: 100%; padding: 15px; background: rgba(255,255,255,0.03);
+            border: 1px solid var(--glass-border); border-radius: 15px;
+            color: white; text-align: center; font-size: 1.2rem;
+            outline: none; margin-bottom: 20px;
+        }
+
+        .btn-login {
+            width: 100%; padding: 15px; border: none; border-radius: 15px;
+            background: linear-gradient(45deg, var(--accent-purple), var(--accent-cyan));
+            color: white; font-weight: bold; cursor: pointer; transition: 0.3s;
+        }
+
+        /* محتوى التطبيق */
+        #app-content { display: none; padding: 20px; max-width: 800px; margin: 0 auto; animation: fadeIn 1s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .card {
+            background: var(--glass); border: 1px solid var(--glass-border);
+            backdrop-filter: blur(15px); border-radius: 25px;
+            padding: 25px; margin-bottom: 20px;
+        }
+
+        .section-header h3 { color: var(--accent-cyan); border-right: 4px solid var(--accent-cyan); padding-right: 10px; }
+        .item-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .currency-ils { color: #f1c40f; margin-right: 8px; font-size: 0.9rem; }
+
+        /* التشات */
+        #chat-widget {
+            position: fixed; bottom: 30px; left: 30px; width: 300px;
+            height: 400px; background: rgba(10, 10, 10, 0.95);
+            border: 1px solid var(--glass-border); border-radius: 20px;
+            display: none; flex-direction: column; z-index: 1000;
+        }
+        .chat-head { background: linear-gradient(to left, var(--accent-purple), var(--accent-cyan)); padding: 12px; font-weight: bold; border-radius: 20px 20px 0 0; }
+        #chat-msgs { flex: 1; padding: 15px; overflow-y: auto; font-size: 0.85rem; }
+        .chat-input { padding: 10px; background: #111; border: none; border-top: 1px solid #333; color: white; border-radius: 0 0 20px 20px; }
+
+        .admin-badge { background: #ff4757; padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; margin-bottom: 15px; display: inline-block; }
     </style>
 </head>
 <body>
 
-    <!-- شاشة تسجيل الدخول -->
-    <div id="login-screen" class="container">
-        <h1>SIDAR Travel ✈️</h1>
-        <p>الرجاء إدخال رمز الدخول</p>
-        <input type="password" id="passcode" placeholder="0000">
-        <br>
-        <button onclick="login()">دخول</button>
+    <div class="bg-animate"></div>
+    <div class="particles"></div>
+
+    <div id="login-screen">
+        <div class="glass-card">
+            <h1 class="logo">SIDAR AI</h1>
+            <input type="password" id="passcode" placeholder="رمز الدخول">
+            <button class="btn-login" onclick="checkAuth()">دخول ذكي</button>
+        </div>
     </div>
 
-    <!-- محتوى التطبيق -->
-    <div id="app-content" class="container">
-        <div id="admin-indicator"></div>
-        <div class="trip-header">
-            <h2 id="title" contenteditable="false">رحلة IST Travel ✈️</h2>
-            <p id="dates" contenteditable="false">
-                24/9/2026 - 01/10/2026 في إسطنبول<br>
-                01/10/2026 - 02/10/2026 في عمان
-            </p>
+    <div id="app-content">
+        <div id="admin-banner" style="display:none; text-align:center;">
+            <div class="admin-badge">وضع المسؤول مفعل ✍️</div>
         </div>
 
-        <div class="section">
-            <h3>التكاليف الأساسية</h3>
-            <p>المعابر (الأردن/إسرائيل): <span class="price" id="crossing-cost" contenteditable="false">140 JOD إجمالي</span></p>
-            <p>تذكرة الطيران: <span class="price" id="flight-cost" contenteditable="false">360.89 JOD</span></p>
+        <div class="card" style="text-align:center;">
+            <h1 class="logo">IST Travel ✈️</h1>
+            <p>24/9/2026 - 01/10/2026 (إسطنبول)</p>
+            <p>01/10/2026 - 02/10/2026 (عمان)</p>
         </div>
 
-        <div class="section">
-            <h3>الفنادق والتنقلات</h3>
-            <p>فندق إسطنبول (للشخص): <span class="price" id="hotel-cost" contenteditable="false">168.38 JOD</span></p>
-            <p>المواصلات والتاكسي: <span class="price" id="taxi-cost" contenteditable="false">11.8$ + 6JOD</span></p>
+        <!-- تفاصيل التكاليف -->
+        <div class="card">
+            <div class="section-header"><h3>المعابر و الطيران</h3></div>
+            <div class="item-row">
+                <span>المعبر لإسرائيل</span>
+                <span id="edit1">120 ₪</span>
+            </div>
+            <div class="item-row">
+                <span>المعبر للأردن</span>
+                <span>20 JOD <span class="currency-ils">= 83.41 ILS</span></span>
+            </div>
+            <div class="item-row">
+                <span>تذكرة الطيران</span>
+                <span>360.890 JOD <span class="currency-ils">= 1,505.16 ILS</span></span>
+            </div>
         </div>
 
-        <hr>
-        <h3>المجموع الكلي التقريبي: <span class="price" id="total-cost" contenteditable="false">635 JOD</span></h3>
+        <div class="card">
+            <div class="section-header"><h3>الفنادق والتنقل</h3></div>
+            <div class="item-row">
+                <span>فندق إسطنبول (فترة كاملة)</span>
+                <span>841.92 JOD <span class="currency-ils">= 3,511.39 ILS</span></span>
+            </div>
+            <div class="item-row">
+                <span>تكلفة الشخص (إسطنبول)</span>
+                <span>168.384 JOD <span class="currency-ils">= 702.28 ILS</span></span>
+            </div>
+            <div class="item-row">
+                <span>ليلة عمان</span>
+                <span>25 JOD <span class="currency-ils">= 104.18 ILS</span></span>
+            </div>
+            <div class="item-row">
+                <span>تاكسي المعبر للمطار</span>
+                <span>30 JOD <span class="currency-ils">= 125.01 ILS</span></span>
+            </div>
+        </div>
+
+        <div class="card" style="border: 2px solid var(--accent-cyan); background: rgba(0,242,254,0.05);">
+            <div class="item-row" style="font-size: 1.4rem; font-weight: bold;">
+                <span>المجموع الكلي</span>
+                <span style="color: var(--accent-cyan);">635 JOD <span class="currency-ils" style="font-size: 1.1rem;">≈ 2,646.15 ILS</span></span>
+            </div>
+        </div>
     </div>
 
-    <!-- نافذة التشات للزبائن -->
-    <div id="chat-box">
-        <div id="chat-header">اسأل SIDAR أي شيء..</div>
-        <div id="chat-messages">مرحباً بك! كيف يمكننا مساعدتك في رحلتك؟</div>
-        <input type="text" id="chat-input" placeholder="اكتب رسالتك..." onkeypress="sendMessage(event)">
+    <div id="chat-widget">
+        <div class="chat-head">مساعد SIDAR AI</div>
+        <div id="chat-msgs">مرحباً! كيف أساعدك في تفاصيل رحلتك؟</div>
+        <input type="text" class="chat-input" placeholder="اكتب سؤالك هنا...">
     </div>
 
     <script>
-        let isAdmin = false;
-
-        function login() {
+        function checkAuth() {
             const code = document.getElementById('passcode').value;
-            const loginScreen = document.getElementById('login-screen');
-            const appContent = document.getElementById('app-content');
-            const chatBox = document.getElementById('chat-box');
-
             if (code === "0000") {
-                isAdmin = false;
-                loginScreen.style.display = 'none';
-                appContent.style.display = 'block';
-                chatBox.style.display = 'block';
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('app-content').style.display = 'block';
+                document.getElementById('chat-widget').style.display = 'flex';
             } else if (code === "9999") {
-                isAdmin = true;
-                loginScreen.style.display = 'none';
-                appContent.style.display = 'block';
-                enableAdminMode();
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('app-content').style.display = 'block';
+                document.getElementById('admin-banner').style.display = 'block';
+                document.querySelectorAll('.card span').forEach(el => el.contentEditable = true);
             } else {
-                alert("الرمز خاطئ، جرب 0000 للزبون أو 9999 للمسؤول");
-            }
-        }
-
-        function enableAdminMode() {
-            document.getElementById('admin-indicator').innerHTML = '<span class="admin-badge">وضع المسؤول - يمكنك التعديل مباشرة</span>';
-            // السماح بتعديل النصوص
-            const editableElements = ['title', 'dates', 'crossing-cost', 'flight-cost', 'hotel-cost', 'taxi-cost', 'total-cost'];
-            editableElements.forEach(id => {
-                document.getElementById(id).contentEditable = "true";
-                document.getElementById(id).style.border = "1px dashed #ccc";
-            });
-        }
-
-        function sendMessage(event) {
-            if (event.key === "Enter") {
-                const input = document.getElementById('chat-input');
-                const messages = document.getElementById('chat-messages');
-                if (input.value.trim() !== "") {
-                    messages.innerHTML += `<div><b>أنت:</b> ${input.value}</div>`;
-                    setTimeout(() => {
-                        messages.innerHTML += `<div><b>SIDAR:</b> شكراً لسؤالك، سيقوم أحد موظفينا بالرد عليك قريباً.</div>`;
-                        messages.scrollTop = messages.scrollHeight;
-                    }, 1000);
-                    input.value = "";
-                }
+                alert("رمز خاطئ!");
             }
         }
     </script>
