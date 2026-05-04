@@ -1,5 +1,4 @@
-فهمت عليك تماماً، الفكرة هي تحويل الصفحة إلى نظام **تبويبات (Tabs)** بحيث تكون البطاقات الحالية مخفية داخل زر "التفاصيل"، وعند الضغط على زر "النشاطات" تظهر مساحة فارغة للنشاطات المستقبلية.
-لقد قمت بتعديل الكود ليحتوي على هذه الأزرار (البطاقتين العلوية) مع الحفاظ على كافة تفاصيلك السابقة وتنسيقاتك كما هي:
+تم تحديث بطاقة التنقلات بإضافة الصورة التي طلبتها أسفل البند الأول مباشرة، مع الحفاظ على كافة التنسيقات والتبويبات كما هي:
 ```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
@@ -24,7 +23,6 @@
         .hero-title { font-size: 32px; font-weight: 900; line-height: 1.1; margin-bottom: 25px; }
         .hero-title span { color: var(--primary-lava); }
 
-        /* تنسيق أزرار التبديل (البطاقات العلوية) */
         .tab-container { display: flex; gap: 10px; margin-bottom: 25px; }
         .tab-card { 
             flex: 1; 
@@ -40,7 +38,6 @@
         }
         .tab-card.active { border-color: var(--primary-lava); color: var(--primary-lava); }
 
-        /* إخفاء المحتوى الافتراضي */
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
@@ -52,6 +49,9 @@
         .price-main { font-weight: 800; font-size: 16px; }
         .price-sub { font-size: 13px; color: var(--primary-lava); font-weight: 700; }
         .note { font-size: 11px; color: #64748b; margin-top: 4px; display: block; }
+
+        /* تنسيق صورة السيارة المضافة */
+        .car-img { width: 100%; border-radius: 15px; margin-top: 10px; border: 1px solid #eee; }
 
         .btn-action { flex: 1; padding: 14px; border-radius: 18px; border: 1.5px solid var(--primary-lava); background: transparent; color: var(--primary-lava); font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 13px; }
 
@@ -72,15 +72,12 @@
         <h1 class="hero-title">IST Travel <span>✈️</span></h1>
         <p style="margin-top:-20px; color:#64748b; font-size:14px; margin-bottom:30px;">24/9/2026 - 02/10/2026</p>
 
-        <!-- أزرار التبديل العلوية -->
         <div class="tab-container">
             <div class="tab-card active" onclick="showTab('details', this)">تفاصيل الرحلة</div>
             <div class="tab-card" onclick="showTab('activities', this)">النشاطات</div>
         </div>
 
-        <!-- محتوى تفاصيل الرحلة -->
         <div id="details" class="tab-content active">
-            <!-- المعابر -->
             <div class="card">
                 <div class="section-header">المعابر (Crossing)</div>
                 <div class="item-box">
@@ -96,7 +93,6 @@
                 </div>
             </div>
 
-            <!-- الطيران -->
             <div class="card">
                 <div class="section-header">تذاكر الطيران (Plane Ticket)</div>
                 <div class="item-box">
@@ -109,7 +105,6 @@
                 </div>
             </div>
 
-            <!-- الفنادق -->
             <div class="card">
                 <div class="section-header">الإقامة (Hotel)</div>
                 <div class="item-box">
@@ -130,13 +125,14 @@
                 </div>
             </div>
 
-            <!-- النقل -->
             <div class="card">
                 <div class="section-header">التنقلات (Transfer & Taxi)</div>
                 <div class="item-box">
                     <span class="note">من المطار إلى الفندق (ذهاب وإياب)</span>
                     <div class="price-row"><span class="price-main">118 $</span><span class="price-sub">348.00 ₪</span></div>
                     <span class="note">للشخص: 11.8$ = 34.80 ₪</span>
+                    <!-- إضافة الصورة هنا -->
+                    <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/Ag5Tsoef8vrr52VFUuoF/image.jpg" class="car-img">
                 </div>
                 <div class="item-box">
                     <span class="note">تاكسي المعبر للمطار + العودة (The Oud)</span>
@@ -145,7 +141,6 @@
                 </div>
             </div>
 
-            <!-- المجموع -->
             <div class="total-banner">
                 <div style="font-size:14px; opacity:0.8;">المجموع الكلي المطلوب لكل شخص</div>
                 <div style="font-size:38px; font-weight:900; color:var(--primary-lava);">635 JOD</div>
@@ -153,7 +148,6 @@
             </div>
         </div>
 
-        <!-- محتوى النشاطات (فارغ حالياً كما طلبت) -->
         <div id="activities" class="tab-content">
             <div class="card">
                 <div class="section-header">النشاطات المقترحة</div>
@@ -162,7 +156,6 @@
         </div>
     </div>
 
-    <!-- Gallery -->
     <div id="gallery-overlay">
         <div class="gallery-card">
             <div class="gallery-close" onclick="closeGal()">✕</div>
@@ -176,19 +169,11 @@
 
     <script>
         function showTab(tabId, element) {
-            // إخفاء كل المحتويات
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            // إزالة الحالة النشطة من الأزرار
-            document.querySelectorAll('.tab-card').forEach(card => {
-                card.classList.remove('active');
-            });
-            // إظهار المحتوى المختار وتفعيل الزر
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-card').forEach(card => card.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             element.classList.add('active');
         }
-
         function openGal() { document.getElementById('gallery-overlay').style.display = 'flex'; }
         function closeGal() { document.getElementById('gallery-overlay').style.display = 'none'; }
     </script>
