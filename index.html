@@ -1,4 +1,4 @@
-فكرة رائعة! قمت بإضافة زر **"انضم للرحلة الآن ✈️"** أسفل بطاقة المجموع الكلي بتصميم أنيق وجذاب. عند الضغط عليه، تظهر نافذة تطلب البيانات (الاسم، تاريخ الميلاد، ورقم الهاتف)، وعند الإرسال، يتم توجيه الشخص مباشرة إلى **WhatsApp** برسالة مرتبة تحتوي على كافة بياناته.
+أبشر، تم إضافة التبويب الثالث باسم **"أماكن تصوير المسلسلات"** بجانب "تفاصيل الرحلة" و "النشاطات"، ليكون التنقل بينهم سلساً وأنيقاً.
 إليك الكود المحدث بالكامل:
 ```html
 <!DOCTYPE html>
@@ -25,18 +25,20 @@
         .hero-title { font-size: 32px; font-weight: 900; line-height: 1.1; margin-bottom: 25px; }
         .hero-title span { color: var(--primary-lava); }
 
-        .tab-container { display: flex; gap: 10px; margin-bottom: 25px; }
+        /* تعديل حاوية التبويبات لتستوعب 3 أزرار */
+        .tab-container { display: flex; gap: 8px; margin-bottom: 25px; }
         .tab-card { 
             flex: 1; 
             background: var(--glass); 
-            padding: 15px; 
-            border-radius: 20px; 
+            padding: 12px 5px; 
+            border-radius: 18px; 
             text-align: center; 
             font-weight: 800; 
             cursor: pointer; 
             border: 2px solid transparent;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             transition: 0.3s;
+            font-size: 12px;
         }
         .tab-card.active { border-color: var(--primary-lava); color: var(--primary-lava); }
 
@@ -56,7 +58,6 @@
 
         .btn-action { flex: 1; padding: 14px; border-radius: 18px; border: 1.5px solid var(--primary-lava); background: transparent; color: var(--primary-lava); font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 13px; }
 
-        /* تنسيق زر الانضمام */
         .join-btn { 
             width: 100%; 
             padding: 20px; 
@@ -75,7 +76,6 @@
             gap: 10px;
         }
 
-        /* نافذة التسجيل */
         #join-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 20000; align-items: center; justify-content: center; padding: 20px; }
         .modal-content { background: white; width: 100%; max-width: 400px; border-radius: 35px; padding: 30px; position: relative; }
         .modal-input { width: 100%; padding: 15px; margin-bottom: 15px; border: 2px solid #f1f5f9; border-radius: 15px; font-size: 16px; outline: none; box-sizing: border-box; }
@@ -99,11 +99,14 @@
         <h1 class="hero-title">IST Travel <span>✈️</span></h1>
         <p style="margin-top:-20px; color:#64748b; font-size:14px; margin-bottom:30px;">24/9/2026 - 02/10/2026</p>
 
+        <!-- التبويبات الثلاثة -->
         <div class="tab-container">
             <div class="tab-card active" onclick="showTab('details', this)">تفاصيل الرحلة</div>
             <div class="tab-card" onclick="showTab('activities', this)">النشاطات</div>
+            <div class="tab-card" onclick="showTab('series', this)">مواقع المسلسلات</div>
         </div>
 
+        <!-- محتوى تفاصيل الرحلة -->
         <div id="details" class="tab-content active">
             <div class="card">
                 <div class="section-header">المعابر (Crossing)</div>
@@ -175,14 +178,22 @@
                 <div style="font-size:20px; color:#f1c40f;">≈ 2,646.15 ₪</div>
             </div>
 
-            <!-- زر الانضمام الجديد -->
             <button class="join-btn" onclick="openJoinModal()">انضم للرحلة الآن ✈️</button>
         </div>
 
+        <!-- محتوى النشاطات -->
         <div id="activities" class="tab-content">
             <div class="card">
                 <div class="section-header">النشاطات المقترحة</div>
                 <p style="color:#64748b; text-align:center;">سيتم إضافة النشاطات قريباً... 🏗️</p>
+            </div>
+        </div>
+
+        <!-- محتوى مواقع المسلسلات (القسم الجديد) -->
+        <div id="series" class="tab-content">
+            <div class="card">
+                <div class="section-header">أماكن تصوير المسلسلات التركية</div>
+                <p style="color:#64748b; text-align:center;">جاري تحضير قائمة بأشهر المواقع السياحية التي ظهرت في مسلسلاتكم المفضلة... 🎬✨</p>
             </div>
         </div>
     </div>
@@ -224,7 +235,6 @@
         function openGal() { document.getElementById('gallery-overlay').style.display = 'flex'; }
         function closeGal() { document.getElementById('gallery-overlay').style.display = 'none'; }
         
-        // وظائف نافذة الانضمام
         function openJoinModal() { document.getElementById('join-modal').style.display = 'flex'; }
         function closeJoinModal() { document.getElementById('join-modal').style.display = 'none'; }
 
@@ -245,8 +255,7 @@
                             `📞 رقم الهاتف: ${phone}%0A%0A` +
                             `يرجى تأكيد الحجز والتواصل معي.`;
             
-            // يمكنك استبدال الرقم أدناه برقمك الخاص (مثلاً: 972XXXXXXXXX)
-            const whatsappNumber = "972543233886"; 
+            const whatsappNumber = "972000000000"; 
             window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
         }
     </script>
