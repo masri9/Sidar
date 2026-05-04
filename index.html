@@ -13,12 +13,14 @@
 
         body, html { margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; background: #f8fafc; min-height: 100vh; color: var(--text-main); }
         
+        /* شاشة البداية - دايركت */
         #splash-layer {
             position: fixed; inset: 0; background: #050505; z-index: 10000;
             display: flex; justify-content: center; align-items: center; transition: 0.8s ease;
         }
         .splash-wrap { text-align: center; }
         .splash-logo { color: white; font-size: 4rem; font-weight: 900; margin: 0; text-shadow: 0 0 20px rgba(255, 69, 0, 0.5); }
+        .splash-logo span { color: var(--primary-lava); }
         .loader-bar { width: 150px; height: 3px; background: rgba(255,255,255,0.1); margin: 20px auto; border-radius: 10px; overflow: hidden; }
         .loader-progress { width: 0%; height: 100%; background: var(--primary-lava); animation: loadProgress 2.5s ease-in-out forwards; }
         @keyframes loadProgress { to { width: 100%; } }
@@ -27,7 +29,12 @@
         .sidar-robot { position: fixed; left: 10px; top: 20px; width: 110px; z-index: 10; animation: robotFloat 4s ease-in-out infinite; }
         @keyframes robotFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
-        .app-container { position: relative; z-index: 1; padding: 100px 20px 40px; display: none; max-width: 600px; margin: 0 auto; opacity: 0; transition: 1s ease; }
+        #login-screen { position: fixed; inset: 0; background: #fff; z-index: 9999; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: 0.5s; }
+        .login-box { text-align: center; width: 85%; max-width: 350px; }
+        input { width: 100%; padding: 16px; border: 2px solid #f1f5f9; border-radius: 20px; font-size: 18px; text-align: center; outline: none; margin-bottom: 15px; }
+        .login-btn { width: 100%; padding: 16px; background: var(--primary-lava); color: white; border: none; border-radius: 20px; font-weight: 800; cursor: pointer; }
+
+        .app-container { position: relative; z-index: 1; padding: 100px 20px 40px; display: none; max-width: 600px; margin: 0 auto; }
         .hero-title { font-size: 32px; font-weight: 900; line-height: 1.1; margin-bottom: 25px; }
         .hero-title span { color: var(--primary-lava); }
 
@@ -35,11 +42,10 @@
         .section-header { border-right: 5px solid var(--primary-lava); padding-right: 15px; margin-bottom: 15px; font-weight: 900; font-size: 19px; }
         
         .item-box { padding: 12px 0; border-bottom: 1px solid #f1f5f9; }
-        .item-box:last-child { border-bottom: none; }
         .price-row { display: flex; justify-content: space-between; align-items: center; }
         .price-main { font-weight: 800; font-size: 16px; }
         .price-sub { font-size: 13px; color: var(--primary-lava); font-weight: 700; }
-        .note { font-size: 12px; color: #64748b; margin-top: 4px; display: block; line-height: 1.5; }
+        .note { font-size: 11px; color: #64748b; margin-top: 4px; display: block; }
 
         .btn-action { flex: 1; padding: 14px; border-radius: 18px; border: 1.5px solid var(--primary-lava); background: transparent; color: var(--primary-lava); font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 13px; }
 
@@ -63,112 +69,90 @@
     <div class="header-bg"></div>
     <img src="https://plain-eeur-prod-public.komododecks.com/202604/20/U4I3P5a9xfiovTcHKNJk/image.png" class="sidar-robot">
 
-    <div class="app-container" id="app">
-        <h1 class="hero-title">IST Travel ✈️</h1>
-        <p style="margin-top:-20px; color:#64748b; font-size:14px; margin-bottom:30px;">
-            24/09/2026 - 01/10/2026 في إسطنبول[span_1](start_span)[span_1](end_span)<br>
-            01/10/2026 - 02/10/2026 في عمان[span_2](start_span)[span_2](end_span)
-        </p>
-
-        <!-- المعابر -->
-        <div class="card">
-            <div class="section-header">المعابر (Crossing)</div>
-            <div class="item-box">
-                <span class="note">المعبر إلى إسرائيل[span_3](start_span)[span_3](end_span)</span>
-                <div class="price-row"><span class="price-main">120 ₪[span_4](start_span)[span_4](end_span)</span></div>
-            </div>
-            <div class="item-box">
-                <span class="note">المعبر إلى الأردن[span_5](start_span)[span_5](end_span)</span>
-                <div class="price-row">
-                    <span class="price-main">20 JOD[span_6](start_span)[span_6](end_span)</span>
-                    <span class="price-sub">83.34 ILS[span_7](start_span)[span_7](end_span)</span>
-                </div>
-                <span class="note">10 دنانير للدخول و 10 دنانير للخروج[span_8](start_span)[span_8](end_span)</span>
-            </div>
-        </div>
-
-        <!-- الطيران -->
-        <div class="card">
-            <div class="section-header">تذاكر الطيران (Plane Ticket)</div>
-            <div class="item-box">
-                <span class="note" style="color: #c8102e; font-weight: bold;">Turkish Airlines 🇹🇷[span_9](start_span)[span_9](end_span)</span>
-                <span class="note">من مطار الملكة علياء إلى مطار صبيحة (AMM ↔ SAW)[span_10](start_span)[span_10](end_span)</span>
-                <div class="price-row">
-                    <span class="price-main">360.890 JOD[span_11](start_span)[span_11](end_span)</span>
-                    <span class="price-sub">1,503.89 ILS[span_12](start_span)[span_12](end_span)</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- الفنادق -->
-        <div class="card">
-            <div class="section-header">الإقامة والفنادق (Hotel)</div>
-            <div class="item-box">
-                <span class="note">1. فندق إسطنبول (IST) من 24/9 إلى 1/10[span_13](start_span)[span_13](end_span)</span>
-                <div class="price-row">
-                    <span class="price-main">841.92 JOD (إجمالي)[span_14](start_span)[span_14](end_span)</span>
-                    <span class="price-sub">3,508.42 ILS[span_15](start_span)[span_15](end_span)</span>
-                </div>
-                <div class="price-row" style="margin-top: 8px;">
-                    <span class="price-main" style="color:var(--primary-lava);">168.384 JOD (للشخص)[span_16](start_span)[span_16](end_span)</span>
-                    <span class="price-sub">701.68 ILS[span_17](start_span)[span_17](end_span)</span>
-                </div>
-            </div>
-            <div class="item-box">
-                <span class="note">2. ليلة واحدة في عمان[span_18](start_span)[span_18](end_span)</span>
-                <div class="price-row">
-                    <span class="price-main">25 JOD[span_19](start_span)[span_19](end_span)</span>
-                    <span class="price-sub">104.18 ILS[span_20](start_span)[span_20](end_span)</span>
-                </div>
-            </div>
-            <div style="display:flex; gap:10px; margin-top:15px;">
-                <button class="btn-action" onclick="openGal()">🖼️ صور الفندق</button>
-                <button class="btn-action" onclick="window.open('https://www.google.com/maps/search/?api=1&query=Beyoğlu/İstanbul')">📍 موقع الفندق[span_21](start_span)[span_21](end_span)</button>
-            </div>
-        </div>
-
-        <!-- التنقلات -->
-        <div class="card">
-            <div class="section-header">التنقلات والتاكسي (Transfer & Taxi)</div>
-            <div class="item-box">
-                <span class="note">المواصلات من المطار إلى الفندق[span_22](start_span)[span_22](end_span)</span>
-                <div class="price-row">
-                    <span class="price-main">59 $ (إجمالي)[span_23](start_span)[span_23](end_span)</span>
-                    <span class="price-sub">174.00 ILS[span_24](start_span)[span_24](end_span)</span>
-                </div>
-                <span class="note">للشخص الواحد: 11.8 $ = 34.80 ILS[span_25](start_span)[span_25](end_span)</span>
-            </div>
-            <div class="item-box">
-                <span class="note">تاكسي من المعبر إلى المطار[span_26](start_span)[span_26](end_span)</span>
-                <div class="price-row">
-                    <span class="price-main">30 JOD (إجمالي)[span_27](start_span)[span_27](end_span)</span>
-                    <span class="price-sub">125.01 ILS[span_28](start_span)[span_28](end_span)</span>
-                </div>
-                <span class="note">للشخص الواحد: 6 دنانير = 25.00 شيكل[span_29](start_span)[span_29](end_span)</span>
-            </div>
-            <div class="item-box">
-                <span class="note">رحلة العودة (And the oud)[span_30](start_span)[span_30](end_span)</span>
-                <div class="price-row">
-                    <span class="price-main">30 JOD (إجمالي)[span_31](start_span)[span_31](end_span)</span>
-                    <span class="price-sub">125.01 ILS[span_32](start_span)[span_32](end_span)</span>
-                </div>
-                <span class="note">للشخص الواحد: 6 دنانير = 25.00 شيكل[span_33](start_span)[span_33](end_span)</span>
-            </div>
-        </div>
-
-        <!-- المجموع الكلي -->
-        <div class="total-banner">
-            <div style="font-size:14px; opacity:0.8;">المجموع الكلي التقريبي لكل شخص[span_34](start_span)[span_34](end_span)</div>
-            <div style="font-size:38px; font-weight:900; color:var(--primary-lava);">635 JOD[span_35](start_span)[span_35](end_span)</div>
-            <div style="font-size:20px; color:#f1c40f;">≈ 2,646.15 ILS[span_36](start_span)[span_36](end_span)</div>
+    <div id="login-screen">
+        <div class="login-box">
+            <h1 style="color:var(--primary-lava); font-weight:900;">SIDAR AI</h1>
+            <input type="password" id="pass" placeholder="رمز الدخول (0000)">
+            <button class="login-btn" onclick="auth()">عرض الميزانية</button>
         </div>
     </div>
 
-    <!-- معرض الصور -->
+    <div class="app-container" id="app">
+        <h1 class="hero-title">IST Travel <span>✈️</span></h1>
+        <p style="margin-top:-20px; color:#64748b; font-size:14px; margin-bottom:30px;">24/9/2026 - 02/10/2026</p>
+
+        <div class="card">
+            <div class="section-header">المعابر (Crossing)[span_2](start_span)[span_2](end_span)</div>
+            <div class="item-box">
+                <span class="note">معبر إسرائيل[span_3](start_span)[span_3](end_span)</span>
+                <div class="price-row"><span class="price-main">120 ₪[span_4](start_span)[span_4](end_span)</span></div>
+            </div>
+            <div class="item-box">
+                <span class="note">معبر الأردن (دخول 10 JOD وخروج 10 JOD)[span_5](start_span)[span_5](end_span)</span>
+                <div class="price-row">
+                    <span class="price-main">20 JOD[span_6](start_span)[span_6](end_span)</span>
+                    <span class="price-sub">83.34 ₪[span_7](start_span)[span_7](end_span)</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-header">تذاكر الطيران (Plane Ticket)[span_8](start_span)[span_8](end_span)</div>
+            <div class="item-box">
+                <span class="note" style="color: #c8102e; font-weight: bold;">الشركة الناقلة: Turkish Airlines 🇹🇷[span_9](start_span)[span_9](end_span)</span>
+                <span class="note">مطار AMM <—> مطار SAW[span_10](start_span)[span_10](end_span)</span>
+                <div class="price-row">
+                    <span class="price-main">360.890 JOD[span_11](start_span)[span_11](end_span)</span>
+                    <span class="price-sub">1,503.89 ₪[span_12](start_span)[span_12](end_span)</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-header">الإقامة (Hotel)[span_13](start_span)[span_13](end_span)</div>
+            <div class="item-box">
+                <span class="note">إسطنبول (IST) - الفترة كاملة[span_14](start_span)[span_14](end_span)</span>
+                <div class="price-row"><span class="price-main">841.92 JOD[span_15](start_span)[span_15](end_span)</span><span class="price-sub">3,508.42 ₪[span_16](start_span)[span_16](end_span)</span></div>
+            </div>
+            <div class="item-box">
+                <span class="note">إسطنبول - للشخص الواحد[span_17](start_span)[span_17](end_span)</span>
+                <div class="price-row"><span class="price-main">168.384 JOD[span_18](start_span)[span_18](end_span)</span><span class="price-sub">701.68 ₪[span_19](start_span)[span_19](end_span)</span></div>
+            </div>
+            <div class="item-box">
+                <span class="note">ليلة واحدة في عمان[span_20](start_span)[span_20](end_span)</span>
+                <div class="price-row"><span class="price-main">25 JOD[span_21](start_span)[span_21](end_span)</span><span class="price-sub">104.18 ₪[span_22](start_span)[span_22](end_span)</span></div>
+            </div>
+            <div style="display:flex; gap:10px; margin-top:15px;">
+                <button class="btn-action" onclick="openGal()">🖼️ صور الفندق[span_23](start_span)[span_23](end_span)</button>
+                <button class="btn-action" onclick="window.open('https://www.google.com/maps/search/?api=1&query=Şahkulu,+İstiklal+Cd.+No:+233,+34421+Beyoğlu/İstanbul,+Türkiye')">📍 الموقع[span_24](start_span)[span_24](end_span)</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-header">التنقلات (Transfer & Taxi)[span_25](start_span)[span_25](end_span)</div>
+            <div class="item-box">
+                <span class="note">من المطار إلى الفندق (ذهاب وإياب)[span_26](start_span)[span_26](end_span)</span>
+                <div class="price-row"><span class="price-main">118 $[span_27](start_span)[span_27](end_span)</span><span class="price-sub">348.00 ₪[span_28](start_span)[span_28](end_span)</span></div>
+                <span class="note">للشخص: 11.8$ = 34.80 ₪[span_29](start_span)[span_29](end_span)</span>
+            </div>
+            <div class="item-box">
+                <span class="note">تاكسي المعبر للمطار + العودة (The Oud)[span_30](start_span)[span_30](end_span)</span>
+                <div class="price-row"><span class="price-main">60 JOD[span_31](start_span)[span_31](end_span)</span><span class="price-sub">250.02 ₪[span_32](start_span)[span_32](end_span)</span></div>
+                <span class="note">للشخص: 12 JOD = 50.00 ₪[span_33](start_span)[span_33](end_span)</span>
+            </div>
+        </div>
+
+        <div class="total-banner">
+            <div style="font-size:14px; opacity:0.8;">المجموع الكلي المطلوب لكل شخص[span_34](start_span)[span_34](end_span)</div>
+            <div style="font-size:38px; font-weight:900; color:var(--primary-lava);">635 JOD[span_35](start_span)[span_35](end_span)</div>
+            <div style="font-size:20px; color:#f1c40f;">≈ 2,646.15 ₪[span_36](start_span)[span_36](end_span)</div>
+        </div>
+    </div>
+
     <div id="gallery-overlay">
         <div class="gallery-card">
             <div class="gallery-close" onclick="closeGal()">✕</div>
-            <h3 style="text-align:center; color:var(--primary-lava);">صور الفندق - إسطنبول</h3>
+            <h3 style="text-align:center; color:var(--primary-lava);">صور فندق بيوغلو - إسطنبول[span_37](start_span)[span_37](end_span)</h3>
             <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/i6qnBDrkuUUOaNblMTrD/image.jpg" class="gallery-img">
             <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/22GCFsWDTlNSt72XtfaR/image.jpg" class="gallery-img">
             <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/aLpPSVAxaDvtSQwzr0qE/image.jpg" class="gallery-img">
@@ -177,21 +161,25 @@
     </div>
 
     <script>
-        window.addEventListener('load', function() {
-            setTimeout(function() {
-                var splash = document.getElementById('splash-layer');
-                if(splash) splash.style.opacity = '0';
-                setTimeout(function() {
-                    if(splash) splash.style.display = 'none';
-                    var app = document.getElementById('app');
-                    if(app) {
-                        app.style.display = 'block';
-                        setTimeout(function() { app.style.opacity = '1'; }, 50);
-                    }
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('splash-layer').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('splash-layer').style.display = 'none';
+                    const login = document.getElementById('login-screen');
+                    login.style.visibility = 'visible';
+                    login.style.opacity = '1';
                 }, 800);
             }, 3000);
         });
 
+        function auth() {
+            const p = document.getElementById('pass').value;
+            if(p === "0000" || p === "9999") {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('app').style.display = 'block';
+            } else { alert("الرمز خاطئ"); }
+        }
         function openGal() { document.getElementById('gallery-overlay').style.display = 'flex'; }
         function closeGal() { document.getElementById('gallery-overlay').style.display = 'none'; }
     </script>
