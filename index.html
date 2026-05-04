@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SIDAR AI - تفاصيل الرحلة</title>
+    <title>SIDAR AI - تفاصيل والنشاطات</title>
     <style>
         :root {
             --lava: #ff4500; 
@@ -12,27 +12,15 @@
             --glass: rgba(255, 255, 255, 0.95);
         }
 
-        body, html { 
-            margin: 0; padding: 0;
-            font-family: 'Segoe UI', sans-serif;
-            background: #fff;
-            min-height: 100vh;
-            color: var(--text-main);
-        }
-
-        .header-bg {
-            position: fixed; top: 0; left: 0; right: 0; height: 45vh;
-            background-image: url('https://plain-eeur-prod-public.komododecks.com/202604/19/FtJXvAZvXREKew6PJ3ew/image.png');
-            background-size: cover; background-position: center; z-index: 0;
-        }
-
-        .sidar-robot {
-            position: fixed; left: 10px; top: 20px; width: 110px; z-index: 10;
-            filter: drop-shadow(0 10px 15px rgba(255, 69, 0, 0.1));
-            animation: robotFloat 4s ease-in-out infinite;
-        }
-
+        body, html { margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; background: #fff; min-height: 100vh; color: var(--text-main); }
+        .header-bg { position: fixed; top: 0; left: 0; right: 0; height: 45vh; background-image: url('https://plain-eeur-prod-public.komododecks.com/202604/19/FtJXvAZvXREKew6PJ3ew/image.png'); background-size: cover; background-position: center; z-index: 0; }
+        .sidar-robot { position: fixed; left: 10px; top: 20px; width: 110px; z-index: 10; filter: drop-shadow(0 10px 15px rgba(255, 69, 0, 0.1)); animation: robotFloat 4s ease-in-out infinite; }
         @keyframes robotFloat { 0%, 100% { transform: translateY(0) rotate(1deg); } 50% { transform: translateY(-8px) rotate(-1deg); } }
+
+        /* Tabs System */
+        .tabs-container { display: flex; gap: 10px; margin-bottom: 20px; position: sticky; top: 0; z-index: 10; background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); padding: 10px 0; }
+        .tab-btn { flex: 1; padding: 12px; border: none; border-radius: 15px; background: #f1f5f9; color: #64748b; font-weight: 800; cursor: pointer; transition: 0.3s; font-size: 14px; }
+        .tab-btn.active { background: var(--lava); color: white; box-shadow: 0 5px 15px var(--lava-glow); }
 
         #login-screen { position: fixed; inset: 0; background: #fff; z-index: 9999; display: flex; align-items: center; justify-content: center; }
         .login-box { text-align: center; width: 85%; max-width: 350px; }
@@ -40,7 +28,7 @@
         button.login-btn { width: 100%; padding: 15px; background: var(--lava); color: white; border: none; border-radius: 20px; font-weight: 800; cursor: pointer; }
 
         .app-container { position: relative; z-index: 1; padding: 90px 20px 40px; display: none; }
-        .hero-title { font-size: 28px; font-weight: 900; line-height: 1.2; margin-bottom: 25px; }
+        .hero-title { font-size: 28px; font-weight: 900; line-height: 1.2; margin-bottom: 10px; }
         .hero-title span { color: var(--lava); }
 
         .card { background: var(--glass); backdrop-filter: blur(10px); border: 1.5px solid #f1f5f9; border-radius: 28px; padding: 22px; margin-bottom: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.03); }
@@ -53,7 +41,13 @@
         .price-sub { font-size: 13px; color: var(--lava); font-weight: 600; }
         .tag-info { font-size: 11px; background: #fff5f2; color: var(--lava); padding: 2px 10px; border-radius: 10px; margin-top: 5px; display: inline-block; font-weight: 700; }
 
-        .btn-link { width: 100%; margin-top: 15px; padding: 12px; border: 1.5px solid var(--lava); border-radius: 15px; background: transparent; color: var(--lava); font-size: 13px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .content-section { display: none; animation: fadeIn 0.4s ease-out; }
+        .content-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Activity Style */
+        .activity-card { display: flex; gap: 15px; align-items: center; margin-bottom: 15px; background: #fff; padding: 10px; border-radius: 20px; border: 1px solid #f1f5f9; }
+        .activity-icon { font-size: 24px; background: #fff5f2; padding: 10px; border-radius: 15px; }
     </style>
 </head>
 <body>
@@ -63,97 +57,88 @@
 
     <div id="login-screen">
         <div class="login-box">
-            <h1 style="color:var(--lava); font-weight: 900; margin-bottom: 10px;">SIDAR AI</h1>
-            <p style="color: #64748b; font-size: 14px; margin-bottom: 25px;">أهلاً بك، أدخل رمز الدخول للرحلة</p>
+            <h1 style="color:var(--lava); font-weight: 900;">SIDAR AI</h1>
             <input type="password" id="pass" placeholder="0000">
-            <button class="login-btn" onclick="auth()">تسجيل الدخول</button>
+            <button class="login-btn" onclick="auth()">دخول للرحلة</button>
         </div>
     </div>
 
     <div class="app-container" id="app">
-        <h1 class="hero-title">خطة رحلة <br><span>IST Travel ✈️</span></h1>
-        <p style="margin-top: -20px; color: #64748b; font-size: 14px; margin-bottom: 25px;">إسطنبول (24/9 - 1/10) & عمان (1/10 - 2/10)</p>
+        <h1 class="hero-title">رحلة <span>IST Travel</span></h1>
+        
+        <!-- Tabs -->
+        <div class="tabs-container">
+            <button class="tab-btn active" onclick="showTab('details', this)">تفاصيل الرحلة</button>
+            <button class="tab-btn" onclick="showTab('activities', this)">النشاطات</button>
+        </div>
 
-        <!-- المعابر -->
-        <div class="card">
-            <div class="section-header">رسوم المعابر</div>
-            <div class="item-box">
-                <span class="item-label">معبر إسرائيل</span>
-                <div class="price-row"><span class="price-main">120 ₪</span></div>
-            </div>
-            <div class="item-box">
-                <span class="item-label">معبر الأردن (دخول 10JOD وخروج 10JOD)</span>
-                <div class="price-row">
-                    <span class="price-main">20 JOD</span>
-                    <span class="price-sub">83.34 ₪</span>
+        <!-- قسم التفاصيل (نفس المحتوى السابق) -->
+        <div id="details" class="content-section active">
+            <div class="card">
+                <div class="section-header">رسوم المعابر والطيران</div>
+                <div class="item-box">
+                    <span class="item-label">مطار AMM ↔ مطار SAW</span>
+                    <div class="price-row"><span class="price-main">360.890 JOD</span><span class="price-sub">1,503.89 ₪</span></div>
                 </div>
+                <div class="item-box">
+                    <span class="item-label">معبر إسرائيل والأردن</span>
+                    <div class="price-row"><span class="price-main">140 ₪ + 20 JOD</span></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="section-header">الإقامة (فندق إسطنبول)</div>
+                <div class="item-box">
+                    <span class="item-label">التكلفة للشخص الواحد</span>
+                    <div class="price-row"><span class="price-main">168.384 JOD</span><span class="price-sub">701.68 ₪</span></div>
+                </div>
+                <button style="width:100%; margin-top:10px; padding:10px; border-radius:10px; border:1px solid var(--lava); color:var(--lava); background:none; font-weight:bold;" onclick="window.open('https://www.google.com/maps/search/?api=1&query=Beyoğlu/İstanbul')">📍 موقع الفندق</button>
+            </div>
+
+            <div class="card" style="background: var(--text-main); color: white; text-align: center; border: none;">
+                <div style="font-size: 13px; opacity: 0.8;">المجموع الكلي للشخص</div>
+                <div style="font-size: 32px; font-weight: 900; color: var(--lava);">635 JOD</div>
+                <div style="font-size: 16px; color: #f1c40f;">≈ 2,646.15 ₪</div>
             </div>
         </div>
 
-        <!-- الطيران -->
-        <div class="card">
-            <div class="section-header">تذاكر الطيران</div>
-            <div class="item-box">
-                <span class="item-label">مطار AMM ↔ مطار SAW</span>
-                <div class="price-row">
-                    <span class="price-main">360.890 JOD</span>
-                    <span class="price-sub">1,503.89 ₪</span>
+        <!-- قسم النشاطات (جديد) -->
+        <div id="activities" class="content-section">
+            <div class="card">
+                <div class="section-header">نشاطات إسطنبول المقترحة</div>
+                <div class="activity-card">
+                    <div class="activity-icon">🚢</div>
+                    <div>
+                        <div style="font-weight:bold;">جولة البسفور المسائية</div>
+                        <div style="font-size:12px; color:#64748b;">عشاء وعروض فلكلورية</div>
+                    </div>
+                </div>
+                <div class="activity-card">
+                    <div class="activity-icon">🏰</div>
+                    <div>
+                        <div style="font-weight:bold;">زيارة قصر توبكابي</div>
+                        <div style="font-size:12px; color:#64748b;">تاريخ الدولة العثمانية</div>
+                    </div>
+                </div>
+                <div class="activity-card">
+                    <div class="activity-icon">🛒</div>
+                    <div>
+                        <div style="font-weight:bold;">التسوق في الجراند بازار</div>
+                        <div style="font-size:12px; color:#64748b;">أكبر سوق مغطى بالعالم</div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- الفنادق -->
-        <div class="card">
-            <div class="section-header">الإقامة والفنادق</div>
-            <div class="item-box">
-                <span class="item-label">فندق إسطنبول (Şahkulu, İstiklal)</span>
-                <div class="price-row">
-                    <span class="price-main">841.92 JOD</span>
-                    <span class="price-sub">3,508.42 ₪</span>
-                </div>
-                <div class="tag-info">المجموعة كاملة</div>
-                <div class="price-row" style="margin-top:10px;">
-                    <span class="price-main" style="color:var(--lava);">168.384 JOD</span>
-                    <span class="price-sub">701.68 ₪</span>
-                </div>
-                <div class="tag-info">للشخص الواحد</div>
-            </div>
-            <div class="item-box">
-                <span class="item-label">ليلة واحدة في عمان</span>
-                <div class="price-row">
-                    <span class="price-main">25 JOD</span>
-                    <span class="price-sub">104.18 ₪</span>
+            <div class="card">
+                <div class="section-header">نشاطات عمان</div>
+                <div class="activity-card">
+                    <div class="activity-icon">🏛️</div>
+                    <div>
+                        <div style="font-weight:bold;">وسط البلد والمدرج الروماني</div>
+                        <div style="font-size:12px; color:#64748b;">عشاء في مطعم هاشم الشهير</div>
+                    </div>
                 </div>
             </div>
-            <button class="btn-link" onclick="window.open('https://www.google.com/maps/search/?api=1&query=Şahkulu,+İstiklal+Cd.+No:+233,+34421+Beyoğlu/İstanbul,+Türkiye')">📍 موقع فندق إسطنبول</button>
-        </div>
-
-        <!-- التنقلات والتاكسي -->
-        <div class="card">
-            <div class="section-header">التنقلات والتاكسي</div>
-            <div class="item-box">
-                <span class="item-label">من المطار إلى الفندق (ذهاب وإياب)</span>
-                <div class="price-row">
-                    <span class="price-main">118 $ (إجمالي)</span>
-                    <span class="price-sub">348.00 ₪</span>
-                </div>
-                <div class="tag-info">23.6$ للشخص (69.60 ₪)</div>
-            </div>
-            <div class="item-box">
-                <span class="item-label">تاكسي المعبر للمطار + العودة (The Oud)</span>
-                <div class="price-row">
-                    <span class="price-main">60 JOD (إجمالي)</span>
-                    <span class="price-sub">250.02 ₪</span>
-                </div>
-                <div class="tag-info">12 JOD للشخص (50.00 ₪)</div>
-            </div>
-        </div>
-
-        <!-- المجموع الكلي -->
-        <div class="card" style="background: var(--text-main); color: white; text-align: center; border: none;">
-            <div style="font-size: 13px; opacity: 0.8;">المجموع الكلي المطلوب من كل شخص</div>
-            <div style="font-size: 34px; font-weight: 900; color: var(--lava); margin: 10px 0;">635 JOD</div>
-            <div style="font-size: 18px; color: #f1c40f; font-weight: 800;">≈ 2,646.15 ₪</div>
         </div>
     </div>
 
@@ -164,6 +149,17 @@
                 document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('app').style.display = 'block';
             } else { alert("الرمز خاطئ"); }
+        }
+
+        function showTab(tabId, btn) {
+            // إخفاء الأقسام
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            // إظهار القسم المطلوب
+            document.getElementById(tabId).classList.add('active');
+            
+            // تغيير حالة الأزرار
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
         }
     </script>
 </body>
