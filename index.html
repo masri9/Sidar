@@ -1,4 +1,4 @@
-أبشر، تم استعادة **النسخة الأكثر تفصيلاً على الإطلاق**. تم إرجاع قسم "تفاصيل الرحلة" مع الحسابات الدقيقة لكل شخص بالدينار والشيكل، ومعرض صور الفندق الكامل المقسم لفئات، وقسم المطاعم بكامل صوره وروابطه الأصلية، بالإضافة إلى خريطة المسلسلات.
+أبشر، تم استعادة النسخة الكاملة والأكثر تفصيلاً لكافة الأقسام، مع الحفاظ على تقسيم تفاصيل الرحلة الدقيق، وإرجاع المطاعم الثلاثة (Sarayburnu، Best Lounge، و HuQQa) بكامل صورها وروابطها، وإبقاء خريطة المسلسلات وقائمة المواقع كما طلبت.
 إليك الكود المحدث بالكامل:
 ```html
 <!DOCTYPE html>
@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SIDAR AI - تفاصيل الرحلة كاملة</title>
+    <title>SIDAR AI - رحلة إسطنبول الشاملة</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
         :root {
@@ -47,8 +47,6 @@
         .price-sub { font-size: 13px; color: var(--primary-lava); font-weight: 700; }
         .note { font-size: 11px; color: #64748b; margin-top: 4px; display: block; }
 
-        .car-img { width: 100%; border-radius: 15px; margin-top: 10px; border: 1px solid #eee; }
-
         .food-gallery { display: flex; gap: 10px; overflow-x: auto; margin: 15px 0; padding-bottom: 5px; scroll-snap-type: x mandatory; }
         .food-gallery img { width: 90%; flex-shrink: 0; border-radius: 20px; height: 220px; object-fit: cover; scroll-snap-align: start; border: 1px solid #eee; }
 
@@ -56,9 +54,10 @@
 
         .total-banner { background: var(--text-main); color: white; border-radius: 32px; padding: 30px; text-align: center; margin-top: 30px; }
         .join-btn { width: 100%; padding: 20px; background: var(--whatsapp-green); color: white; border: none; border-radius: 25px; font-weight: 900; font-size: 18px; margin-top: 20px; cursor: pointer; box-shadow: 0 10px 20px rgba(37, 211, 102, 0.2); display: flex; align-items: center; justify-content: center; gap: 10px; }
-
+        
         #map { height: 400px; width: 100%; border-radius: 25px; margin-bottom: 20px; border: 2px solid white; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
         .location-item { background: #fff; padding: 15px; border-radius: 20px; margin-bottom: 10px; border: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+        .map-mini-btn { background: #f1f5f9; border: none; padding: 8px; border-radius: 10px; cursor: pointer; font-size: 14px; }
 
         #gallery-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 10000; align-items: center; justify-content: center; padding: 20px; }
         .gallery-card { background: white; border-radius: 35px; width: 100%; max-width: 450px; max-height: 85vh; overflow-y: auto; padding: 25px; position: relative; }
@@ -94,7 +93,7 @@
             </div>
         </div>
 
-        <!-- قسم تفاصيل الرحلة (الأصلي والمفصل) -->
+        <!-- قسم تفاصيل الرحلة المفصل بالكامل -->
         <div id="details" class="tab-content active">
             <div class="card">
                 <div class="section-header">المعابر (Crossing)</div>
@@ -119,7 +118,7 @@
                         <span class="price-main">360.890 JOD</span>
                         <span class="price-sub">1,503.89 ₪</span>
                     </div>
-                    <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/0Duto743s5C7AgINwhE9/image.jpg" class="car-img">
+                    <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/0Duto743s5C7AgINwhE9/image.jpg" style="width:100%; border-radius:20px; margin-top:10px;">
                 </div>
             </div>
 
@@ -142,16 +141,16 @@
             <div class="card">
                 <div class="section-header">التنقلات (Transfer & Taxi)</div>
                 <div class="item-box">
-                    <span class="note">من المطار إلى الفندق (ذهاب وإياب)</span>
+                    <span class="note">المطار <-> الفندق (ذهاب وإياب)</span>
                     <div class="price-row"><span class="price-main">118 $</span><span class="price-sub">348.00 ₪</span></div>
-                    <span class="note">حصة الشخص الواحد: 34.80 ₪</span>
-                    <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/Ag5Tsoef8vrr52VFUuoF/image.jpg" class="car-img">
+                    <span class="note">حصة الشخص: 34.80 ₪</span>
+                    <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/Ag5Tsoef8vrr52VFUuoF/image.jpg" style="width:100%; border-radius:20px; margin-top:10px;">
                 </div>
                 <div class="item-box">
                     <span class="note">تاكسي المعبر للمطار + العودة</span>
                     <div class="price-row"><span class="price-main">60 JOD</span><span class="price-sub">250.02 ₪</span></div>
-                    <span class="note">حصة الشخص الواحد: 50.00 ₪</span>
-                    <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/E0aQKw9K28BmP0nriRyu/image.jpg" class="car-img">
+                    <span class="note">حصة الشخص: 50.00 ₪</span>
+                    <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/E0aQKw9K28BmP0nriRyu/image.jpg" style="width:100%; border-radius:20px; margin-top:10px;">
                 </div>
             </div>
 
@@ -162,7 +161,7 @@
             <button class="join-btn">انضم للرحلة الآن ✈️</button>
         </div>
 
-        <!-- قسم المطاعم (بالصور والروابط) -->
+        <!-- قسم المطاعم (الثلاثة مطاعم بكامل تفاصيلها) -->
         <div id="restaurants" class="tab-content">
             <div class="card">
                 <div class="section-header">Sarayburnu Aile Çay bahçesi ☕</div>
@@ -181,11 +180,28 @@
             </div>
 
             <div class="card">
+                <div class="section-header">Best Lounge The Bosphorus ☕</div>
+                <span class="note">🕒 8:00 - 2:00 | فطور مميز</span>
+                <div class="food-gallery">
+                    <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/aCrx1mziFx0zgJ80JgPy/image.jpg">
+                    <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/DhdkZSmu6oWf6eqvlu8y/image.jpg">
+                </div>
+                <div style="display:flex; flex-direction:column; gap:10px;">
+                    <div style="display:flex; gap:10px;">
+                        <a href="https://wa.me/905401663434" class="btn-action" style="background:#25D366; color:white; border:none;">💬 واتساب</a>
+                        <button class="btn-action" onclick="window.open('https://www.google.com/maps/search/?api=1&query=Best+Lounge+The+Bosphorus')">📍 الموقع</button>
+                    </div>
+                    <button class="btn-action" style="border-color:#475569; color:#475569;" onclick="window.open('http://bestloungethebosphorus.com')">🌐 الموقع الإلكتروني</button>
+                </div>
+            </div>
+
+            <div class="card">
                 <div class="section-header">HuQQa Kuruçeشme 💨</div>
                 <span class="note">🕒 9:30 - 3:00 | مقهى وشيشة</span>
                 <div class="food-gallery">
                     <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/i05bEuzBkGZKZtLy8IZl/image.jpg">
                     <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/LEf6Accd61M17zyc2Q2y/image.jpg">
+                    <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/f3OsRqrQ0LgmxGsFI5v8/image.jpg">
                 </div>
                 <div style="display:flex; flex-direction:column; gap:10px;">
                     <div style="display:flex; gap:10px;">
@@ -197,17 +213,20 @@
             </div>
         </div>
 
-        <!-- قسم المسلسلات -->
+        <!-- قسم المسلسلات والخريطة -->
         <div id="series" class="tab-content">
             <div class="card">
                 <div class="section-header">خريطة مواقع التصوير 🎬</div>
                 <div id="map"></div>
+                <h4 style="margin: 20px 0 10px;">قائمة المواقع (رشيما):</h4>
                 <div id="location-list"></div>
             </div>
         </div>
+
+        <div id="activities" class="tab-content"><div class="card"><p style="text-align:center;">قريباً... 🎢</p></div></div>
     </div>
 
-    <!-- نافذة صور الفندق (6 صور متنوعة) -->
+    <!-- نافذة صور الفندق المقسمة -->
     <div id="gallery-overlay">
         <div class="gallery-card">
             <div class="close-circle" onclick="closeGal()">✕</div>
@@ -234,10 +253,14 @@
     <script>
         let map;
         const locations = [
-            { title: "جنينة وإطلالة بيكوز", desc: "08:00 - 17:00", coords: [41.0827, 29.0664], gmaps: "https://www.google.com/maps/search/?api=1&query=41.0827,29.0664" },
-            { title: "مطل بانورامي", coords: [41.0875611, 29.0516241], gmaps: "https://www.google.com/maps/search/?api=1&query=41.0875611,29.0516241" },
-            { title: "منزل الطائر الرفراف", coords: [41.0452, 29.0456], gmaps: "https://www.google.com/maps/search/?api=1&query=41.0452,29.0456" },
-            { title: "منزل عمار الكوسوفي", coords: [41.0315, 28.9482], gmaps: "https://www.google.com/maps/search/?api=1&query=41.0315,28.9482" }
+            { title: "جنينة وإطلالة فخمة (بيكوز)", desc: "08:00 - 17:00", coords: [41.0827, 29.0664], gmaps: "https://www.google.com/maps/search/?api=1&query=41.0827,29.0664" },
+            { title: "مطل بانورامي فخم", desc: "إحداثيات خاصة", coords: [41.0875611, 29.0516241], gmaps: "https://www.google.com/maps/search/?api=1&query=41.0875611,29.0516241" },
+            { title: "موقع الطائر الرفراف", desc: "Beylerbeyi, Üsküdar", coords: [41.0452, 29.0456], gmaps: "https://www.google.com/maps/search/?api=1&query=41.0452,29.0456" },
+            { title: "فندق حلم أشرف", desc: "Harbiye, Şişli", coords: [41.0442, 28.9912], gmaps: "https://www.google.com/maps/search/?api=1&query=41.0442,28.9912" },
+            { title: "بيت نيسان (حلم أشرف)", desc: "Beyoğlu", coords: [41.026529, 28.973463], gmaps: "https://www.google.com/maps/search/?api=1&query=41.026529,28.973463" },
+            { title: "منزل عمار الكوسوفي", desc: "Balat, Fatih", coords: [41.0315, 28.9482], gmaps: "https://www.google.com/maps/search/?api=1&query=41.0315,28.9482" },
+            { title: "مقر شرطة العشق الأسود", desc: "Binbirdirek, Fatih", coords: [41.0068, 28.9754], gmaps: "https://www.google.com/maps/search/?api=1&query=41.0068,28.9754" },
+            { title: "شجرة عمار ونيرمين", desc: "دموع الورد", coords: [41.113876, 29.087660], gmaps: "https://www.google.com/maps/search/?api=1&query=41.113876,29.087660" }
         ];
 
         function showTab(tabId, element) {
@@ -257,11 +280,10 @@
                 L.marker(loc.coords).addTo(map).bindPopup(`<b>${loc.title}</b>`);
                 const item = document.createElement('div');
                 item.className = 'location-item';
-                item.innerHTML = `<div onclick="map.flyTo([${loc.coords}], 15)"><h4>📍 ${loc.title}</h4></div><button class="map-mini-btn" onclick="window.open('${loc.gmaps}')">🗺️</button>`;
+                item.innerHTML = `<div onclick="map.flyTo([${loc.coords}], 15)"><h4>📍 ${loc.title}</h4><p>${loc.desc}</p></div><button class="map-mini-btn" onclick="window.open('${loc.gmaps}')">🗺️ G-Maps</button>`;
                 listContainer.appendChild(item);
             });
         }
-
         function openGal() { document.getElementById('gallery-overlay').style.display = 'flex'; }
         function closeGal() { document.getElementById('gallery-overlay').style.display = 'none'; }
     </script>
