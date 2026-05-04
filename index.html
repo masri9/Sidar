@@ -1,4 +1,4 @@
-أبشر، تم تحويل قسم المطاعم إلى نظام تبويبات فرعية (فطور / غداء) داخل التبويب الرئيسي. بمجرد الضغط على "فطور" ستظهر بطاقات المطاعم التي أرسلتها، مع زر مخصص للموقع (Google Maps) وزر للاتصال المباشر.
+أبشر، تم تعديل قسم المطاعم ليدعم إضافة **عدة صور** لكل مطعم (مع إمكانية التمرير العرضي للصور)، وتمت استعادة قسم **تفاصيل الرحلة** بكامل تفاصيله الأصلية دون أي نقص.
 إليك الكود المحدث بالكامل:
 ```html
 <!DOCTYPE html>
@@ -45,11 +45,17 @@
         .food-section { display: none; }
         .food-section.active { display: block; }
 
+        /* معرض صور المطعم الممرر */
+        .food-gallery { display: flex; gap: 10px; overflow-x: auto; margin-bottom: 15px; padding-bottom: 5px; scroll-snap-type: x mandatory; }
+        .food-gallery img { width: 85%; flex-shrink: 0; border-radius: 20px; border: 1px solid #eee; scroll-snap-align: start; }
+
         .card { background: var(--glass); backdrop-filter: blur(12px); border: 1.5px solid #f1f5f9; border-radius: 30px; padding: 25px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.04); }
         .section-header { border-right: 5px solid var(--primary-lava); padding-right: 15px; margin-bottom: 15px; font-weight: 900; font-size: 19px; }
         
         .item-box { padding: 12px 0; border-bottom: 1px solid #f1f5f9; }
         .price-row { display: flex; justify-content: space-between; align-items: center; }
+        .price-main { font-weight: 800; font-size: 16px; }
+        .price-sub { font-size: 13px; color: var(--primary-lava); font-weight: 700; }
         .note { font-size: 11px; color: #64748b; margin-top: 4px; display: block; }
 
         .car-img { width: 100%; border-radius: 15px; margin-top: 10px; border: 1px solid #eee; }
@@ -96,7 +102,7 @@
             </div>
         </div>
 
-        <!-- قسم تفاصيل الرحلة -->
+        <!-- قسم تفاصيل الرحلة (مستعاد بالكامل) -->
         <div id="details" class="tab-content active">
             <div class="card">
                 <div class="section-header">المعابر (Crossing)</div>
@@ -128,12 +134,36 @@
             <div class="card">
                 <div class="section-header">الإقامة (Hotel)</div>
                 <div class="item-box">
-                    <span class="note">إسطنبول (IST) - للشخص الواحد</span>
+                    <span class="note">إسطنبول (IST) - الفترة كاملة</span>
+                    <div class="price-row"><span class="price-main">841.92 JOD</span><span class="price-sub">3,508.42 ₪</span></div>
+                </div>
+                <div class="item-box">
+                    <span class="note">إسطنبول - للشخص الواحد</span>
                     <div class="price-row"><span class="price-main">168.384 JOD</span><span class="price-sub">701.68 ₪</span></div>
+                </div>
+                <div class="item-box">
+                    <span class="note">ليلة واحدة في عمان</span>
+                    <div class="price-row"><span class="price-main">25 JOD</span><span class="price-sub">104.18 ₪</span></div>
                 </div>
                 <div style="display:flex; gap:10px; margin-top:15px;">
                     <button class="btn-action" onclick="openGal()">🖼️ صور الفندق</button>
                     <button class="btn-action" onclick="window.open('https://www.google.com/maps/search/?api=1&query=Şahkulu,+İstiklal+Cd.+No:+233,+34421+Beyoğlu/İstanbul,+Türkiye')">📍 الموقع</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="section-header">التنقلات (Transfer & Taxi)</div>
+                <div class="item-box">
+                    <span class="note">من المطار إلى الفندق (ذهاب وإياب)</span>
+                    <div class="price-row"><span class="price-main">118 $</span><span class="price-sub">348.00 ₪</span></div>
+                    <span class="note">للشخص: 11.8$ = 34.80 ₪</span>
+                    <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/Ag5Tsoef8vrr52VFUuoF/image.jpg" class="car-img">
+                </div>
+                <div class="item-box">
+                    <span class="note">تاكسي المعبر للمطار + العودة (The Oud)</span>
+                    <div class="price-row"><span class="price-main">60 JOD</span><span class="price-sub">250.02 ₪</span></div>
+                    <span class="note">للشخص: 12 JOD = 50.00 ₪</span>
+                    <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/E0aQKw9K28BmP0nriRyu/image.jpg" class="car-img">
                 </div>
             </div>
 
@@ -144,37 +174,37 @@
             <button class="join-btn" onclick="openJoinModal()">انضم للرحلة الآن ✈️</button>
         </div>
 
-        <!-- قسم النشاطات -->
-        <div id="activities" class="tab-content">
-            <div class="card"><div class="section-header">النشاطات المقترحة</div><p style="text-align:center; color:#64748b;">قريباً... 🎢</p></div>
-        </div>
-
-        <!-- قسم المطاعم (المعدل) -->
+        <!-- قسم المطاعم (مع ميزة المعارض المتعددة) -->
         <div id="restaurants" class="tab-content">
             <div class="food-tabs">
                 <button class="food-btn active" onclick="switchFood('breakfast', this)">الفطور ☕</button>
                 <button class="food-btn" onclick="switchFood('lunch', this)">الغداء 🍖</button>
             </div>
 
-            <!-- قسم الفطور -->
             <div id="breakfast" class="food-section active">
                 <div class="card">
                     <div class="section-header">The House Cafe Ortaköy</div>
-                    <span class="note">📍 Beşiktaş/İstanbul</span>
-                    <img src="image.png" class="car-img" style="margin-bottom:15px;">
+                    <div class="food-gallery">
+                        <img src="image.png" alt="صورة 1">
+                        <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/i6qnBDrkuUUOaNblMTrD/image.jpg" alt="صورة 2">
+                        <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/22GCFsWDTlNSt72XtfaR/image.jpg" alt="صورة 3">
+                    </div>
                     <div style="display:flex; gap:10px;">
-                        <a href="tel:+902122272699" class="btn-action">📞 اتصل الآن</a>
+                        <a href="tel:+902122272699" class="btn-action">📞 اتصل</a>
                         <button class="btn-action" onclick="window.open('https://www.google.com/maps/search/?api=1&query=The+House+Cafe+Ortaköy')">📍 الخريطة</button>
                     </div>
                 </div>
 
                 <div class="card">
                     <div class="section-header">Lokma</div>
-                    <span class="note">📍 Rumeli Hisarı, Sarıyer</span>
-                    <p style="font-size:12px; color:#64748b;">مطعم فطور مطل على البوسفور مباشرة</p>
+                    <p style="font-size:12px; color:#64748b; margin-bottom:10px;">مطعم فطور مطل على البوسفور</p>
+                    <div class="food-gallery">
+                        <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/0Duto743s5C7AgINwhE9/image.jpg" alt="صورة 1">
+                        <img src="https://plain-eeur-prod-public.komododecks.com/202604/19/FtJXvAZvXREKew6PJ3ew/image.png" alt="صورة 2">
+                    </div>
                     <div style="display:flex; flex-direction:column; gap:10px;">
                         <div style="display:flex; gap:10px;">
-                            <a href="tel:+902122657171" class="btn-action">📞 اتصل الآن</a>
+                            <a href="tel:+902122657171" class="btn-action">📞 اتصل</a>
                             <button class="btn-action" onclick="window.open('https://www.google.com/maps/search/?api=1&query=Lokma+Rumeli+Hisarı')">📍 الخريطة</button>
                         </div>
                         <button class="btn-action" style="border-color:#475569; color:#475569;" onclick="window.open('https://lokma.com.tr')">🌐 الموقع الإلكتروني</button>
@@ -182,23 +212,19 @@
                 </div>
             </div>
 
-            <!-- قسم الغداء -->
             <div id="lunch" class="food-section">
-                <div class="card">
-                    <p style="text-align:center; color:#64748b;">سيتم إضافة مطاعم الغداء قريباً... 🥩</p>
-                </div>
+                <div class="card"><p style="text-align:center; color:#64748b;">قريباً... 🥩</p></div>
             </div>
         </div>
 
-        <!-- قسم المسلسلات -->
-        <div id="series" class="tab-content">
-            <div class="card"><div class="section-header">مواقع المسلسلات</div><p style="text-align:center; color:#64748b;">قريباً... 🎬</p></div>
-        </div>
+        <!-- الأقسام الأخرى -->
+        <div id="activities" class="tab-content"><div class="card"><div class="section-header">النشاطات المقترحة</div><p style="text-align:center; color:#64748b;">قريباً...</p></div></div>
+        <div id="series" class="tab-content"><div class="card"><div class="section-header">مواقع المسلسلات</div><p style="text-align:center; color:#64748b;">قريباً...</p></div></div>
     </div>
 
-    <!-- نوافذ Modal السابقة... -->
-    <div id="join-modal"><div class="modal-content"><div class="close-circle" onclick="closeJoinModal()">✕</div><h2 style="text-align:center; color:var(--primary-lava);">بيانات المسافر</h2><input type="text" id="traveler-name" class="modal-input" placeholder="الاسم الكامل"><button class="join-btn" onclick="sendToWhatsApp()">إرسال واتساب ✅</button></div></div>
-    <div id="gallery-overlay"><div class="gallery-card"><div class="close-circle" onclick="closeGal()">✕</div><h3 style="text-align:center; color:var(--primary-lava);">صور الفندق</h3><img src="https://plain-eeur-prod-public.komododecks.com/202605/04/i6qnBDrkuUUOaNblMTrD/image.jpg" style="width:100%; border-radius:15px;"><img src="https://plain-eeur-prod-public.komododecks.com/202605/04/22GCFsWDTlNSt72XtfaR/image.jpg" style="width:100%; border-radius:15px; margin-top:10px;"></div></div>
+    <!-- نوافذ Modal -->
+    <div id="join-modal"><div class="modal-content"><div class="close-circle" onclick="closeJoinModal()">✕</div><h2 style="text-align:center; color:var(--primary-lava);">بيانات المسافر</h2><input type="text" id="traveler-name" class="modal-input" placeholder="الاسم الكامل"><input type="text" id="traveler-dob" class="modal-input" placeholder="تاريخ الميلاد"><input type="tel" id="traveler-phone" class="modal-input" placeholder="رقم الهاتف"><button class="join-btn" onclick="sendToWhatsApp()">إرسال واتساب ✅</button></div></div>
+    <div id="gallery-overlay"><div class="gallery-card"><div class="close-circle" onclick="closeGal()">✕</div><h3 style="text-align:center; color:var(--primary-lava);">صور الفندق</h3><img src="https://plain-eeur-prod-public.komododecks.com/202605/04/i6qnBDrkuUUOaNblMTrD/image.jpg" style="width:100%; border-radius:15px; margin-bottom:10px;"><img src="https://plain-eeur-prod-public.komododecks.com/202605/04/22GCFsWDTlNSt72XtfaR/image.jpg" style="width:100%; border-radius:15px;"></div></div>
 
     <script>
         function showTab(tabId, element) {
@@ -217,6 +243,14 @@
         function closeGal() { document.getElementById('gallery-overlay').style.display = 'none'; }
         function openJoinModal() { document.getElementById('join-modal').style.display = 'flex'; }
         function closeJoinModal() { document.getElementById('join-modal').style.display = 'none'; }
+        function sendToWhatsApp() {
+            const name = document.getElementById('traveler-name').value;
+            const dob = document.getElementById('traveler-dob').value;
+            const phone = document.getElementById('traveler-phone').value;
+            if(!name || !dob || !phone) { alert("يرجى ملء كافة الحقول"); return; }
+            const message = `أود الانضمام لرحلة إسطنبول ✈️%0Aالاسم: ${name}%0Aالتاريخ: ${dob}%0Aالهاتف: ${phone}`;
+            window.open(`https://wa.me/972000000000?text=${message}`, '_blank');
+        }
     </script>
 </body>
 </html>
