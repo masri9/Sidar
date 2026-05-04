@@ -1,5 +1,4 @@
-أبشر، تم استعادة قسم **تفاصيل الرحلة** بكامل تفاصيله الأصلية (المعابر، الطيران، الفنادق، التنقلات، بطاقة المجموع، والزر)، كما تم **تفريغ قسم الفطور** بالكامل ليكون جاهزاً لإضافاتك الجديدة.
-إليك الكود المحدث والمنظم:
+تم تحديث الكود بإضافة مطعم **Sarayburnu Aile Çay bahçesi** إلى قسم الفطور بتصميم أنيق يتضمن معرض صور منزلق، ساعات العمل، وأزرار الاتصال والموقع، مع الحفاظ الكامل على قسم "تفاصيل الرحلة" دون أي تغيير.
 ```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
@@ -43,6 +42,10 @@
 
         .food-section { display: none; }
         .food-section.active { display: block; }
+
+        /* معرض صور المطعم الممرر */
+        .food-gallery { display: flex; gap: 10px; overflow-x: auto; margin-bottom: 15px; padding-bottom: 5px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
+        .food-gallery img { width: 90%; flex-shrink: 0; border-radius: 20px; border: 1px solid #eee; scroll-snap-align: start; height: 220px; object-fit: cover; }
 
         .card { background: var(--glass); backdrop-filter: blur(12px); border: 1.5px solid #f1f5f9; border-radius: 30px; padding: 25px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.04); }
         .section-header { border-right: 5px solid var(--primary-lava); padding-right: 15px; margin-bottom: 15px; font-weight: 900; font-size: 19px; }
@@ -97,7 +100,7 @@
             </div>
         </div>
 
-        <!-- قسم تفاصيل الرحلة (مستعاد بالكامل) -->
+        <!-- قسم تفاصيل الرحلة -->
         <div id="details" class="tab-content active">
             <div class="card">
                 <div class="section-header">المعابر (Crossing)</div>
@@ -172,7 +175,7 @@
             <button class="join-btn" onclick="openJoinModal()">انضم للرحلة الآن ✈️</button>
         </div>
 
-        <!-- قسم المطاعم (مفرغ) -->
+        <!-- قسم المطاعم -->
         <div id="restaurants" class="tab-content">
             <div class="food-tabs">
                 <button class="food-btn active" onclick="switchFood('breakfast', this)">الفطور ☕</button>
@@ -180,7 +183,26 @@
             </div>
 
             <div id="breakfast" class="food-section active">
-                <div class="card"><p style="text-align:center; color:#64748b;">قريباً... ☕</p></div>
+                <div class="card">
+                    <div class="section-header">Sarayburnu Aile Çay bahçesi</div>
+                    <span class="note">🕒 يومياً من 8:00 صباحاً حتى 3:00 بعد منتصف الليل</span>
+                    
+                    <!-- معرض صور المطعم -->
+                    <div class="food-gallery">
+                        <img src="https://kommodo.ai/i/Wch2fAogoDONqIGo7KRk" alt="صورة 1">
+                        <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/QtdYAfdMcwmJ9LgO8V8G/image.jpg" alt="صورة 2">
+                        <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/Vq1EAhcdfc4eTN0LSQsW/image.jpg" alt="صورة 3">
+                        <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/noxsrNyyXoeMNnr6RP38/image.jpg" alt="صورة 4">
+                    </div>
+
+                    <div style="display:flex; flex-direction:column; gap:10px;">
+                        <div style="display:flex; gap:10px;">
+                            <a href="tel:+902125221397" class="btn-action">📞 اتصل الآن</a>
+                            <button class="btn-action" onclick="window.open('https://www.google.com/maps/search/?api=1&query=Hoca+Paşa,+Kennedy+Cad.+No:8,+34110+Fatih/İstanbul,+Türkiye')">📍 الموقع</button>
+                        </div>
+                        <button class="btn-action" style="border-color:#475569; color:#475569;" onclick="window.open('http://sarayburnuailecaybahcesi.com')">🌐 الموقع الإلكتروني</button>
+                    </div>
+                </div>
             </div>
 
             <div id="lunch" class="food-section">
@@ -188,6 +210,7 @@
             </div>
         </div>
 
+        <!-- الأقسام الأخرى -->
         <div id="activities" class="tab-content"><div class="card"><div class="section-header">النشاطات المقترحة</div><p style="text-align:center; color:#64748b;">قريباً...</p></div></div>
         <div id="series" class="tab-content"><div class="card"><div class="section-header">مواقع المسلسلات</div><p style="text-align:center; color:#64748b;">قريباً...</p></div></div>
     </div>
