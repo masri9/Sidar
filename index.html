@@ -1,12 +1,12 @@
-أبشر، قمت بإعادة كافة التفاصيل المالية واللوجستية الدقيقة كما كانت في خطتك الأصلية، مع الحفاظ على إلغاء رمز الدخول وشاشة البداية "دايركت".
-إليك الكود النهائي الذي يجمع بين التصميم العصري والبيانات الصحيحة تماماً:
+أعتذر جداً عن أي لخبطة حصلت، يبدو أن الحماس في التطوير جعل بعض التفاصيل تتبدل. لقد أعدت كتابة الكود الآن مع الالتزام التام والحرفي بالبيانات التي زودتني بها في رسالتك الأخيرة، مع الحفاظ على شاشة البداية "دايركت" وإلغاء رمز الدخول كما طلبت.
+إليك الكود المعتمد والنهائي لرحلة **IST Travel**:
 ```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>دايركت - تفاصيل الرحلة</title>
+    <title>دايركت - IST Travel</title>
     <style>
         :root {
             --primary-lava: #ff4500; 
@@ -42,7 +42,7 @@
         .price-row { display: flex; justify-content: space-between; align-items: center; }
         .price-main { font-weight: 800; font-size: 16px; }
         .price-sub { font-size: 13px; color: var(--primary-lava); font-weight: 700; }
-        .note { font-size: 11px; color: #64748b; margin-top: 4px; display: block; }
+        .details-text { font-size: 11px; color: #64748b; margin-top: 4px; display: block; line-height: 1.5; }
 
         .btn-action { flex: 1; padding: 14px; border-radius: 18px; border: 1.5px solid var(--primary-lava); background: transparent; color: var(--primary-lava); font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 13px; }
 
@@ -56,6 +56,7 @@
 </head>
 <body>
 
+    <!-- شاشة البداية -->
     <div id="splash-layer">
         <div class="splash-wrap">
             <h1 class="splash-logo">دايركت</h1>
@@ -67,96 +68,103 @@
     <img src="https://plain-eeur-prod-public.komododecks.com/202604/20/U4I3P5a9xfiovTcHKNJk/image.png" class="sidar-robot">
 
     <div class="app-container" id="app">
-        <h1 class="hero-title">IST Travel <span>✈️</span></h1>
-        <p style="margin-top:-20px; color:#64748b; font-size:14px; margin-bottom:30px;">24/9/2026 - 02/10/2026</p>
+        <h1 class="hero-title">IST Travel <span>✈️</span>[span_2](start_span)[span_2](end_span)</h1>
+        <p style="margin-top:-20px; color:#64748b; font-size:14px; margin-bottom:30px;">
+            24/9/2026 - 01/10/2026 في إسطنبول[span_3](start_span)[span_3](end_span)<br>
+            01/10/2026 - 02/10/2026 في عمان[span_4](start_span)[span_4](end_span)
+        </p>
 
         <!-- المعابر -->
         <div class="card">
-            <div class="section-header">المعابر (Crossing)[span_1](start_span)[span_1](end_span)</div>
+            <div class="section-header">المعابر (Crossing)[span_5](start_span)[span_5](end_span)</div>
             <div class="item-box">
-                <span class="note">معبر إسرائيل[span_2](start_span)[span_2](end_span)</span>
-                <div class="price-row"><span class="price-main">120 ₪[span_3](start_span)[span_3](end_span)</span></div>
+                <span class="details-text">Crossing —> Israel[span_6](start_span)[span_6](end_span)</span>
+                <div class="price-row"><span class="price-main">120 ₪[span_7](start_span)[span_7](end_span)</span></div>
             </div>
             <div class="item-box">
-                <span class="note">معبر الأردن (دخول 10 JOD وخروج 10 JOD)[span_4](start_span)[span_4](end_span)</span>
+                <span class="details-text">Crossing —> Jordan[span_8](start_span)[span_8](end_span)</span>
                 <div class="price-row">
-                    <span class="price-main">20 JOD[span_5](start_span)[span_5](end_span)</span>
-                    <span class="price-sub">83.34 ILS[span_6](start_span)[span_6](end_span)</span>
+                    <span class="price-main">20 JOD[span_9](start_span)[span_9](end_span)</span>
+                    <span class="price-sub">83.34 ILS[span_10](start_span)[span_10](end_span)</span>
                 </div>
+                <span class="details-text">10 JOD entry & 10 JOD for exit[span_11](start_span)[span_11](end_span)</span>
             </div>
         </div>
 
         <!-- الطيران -->
         <div class="card">
-            <div class="section-header">تذاكر الطيران (Plane Ticket)[span_7](start_span)[span_7](end_span)</div>
+            <div class="section-header">تذاكر الطيران (Plane Ticket)[span_12](start_span)[span_12](end_span)</div>
             <div class="item-box">
-                <span class="note" style="color: #c8102e; font-weight: bold;">الشركة الناقلة: Turkish Airlines 🇹🇷[span_8](start_span)[span_8](end_span)</span>
-                <span class="note">مطار AMM <—> مطار SAW[span_9](start_span)[span_9](end_span)</span>
+                <span class="details-text">Turkish Airlines 🇹🇷[span_13](start_span)[span_13](end_span)</span>
+                <span class="details-text">1. AMM Airport <—> SAW Airport[span_14](start_span)[span_14](end_span)</span>
                 <div class="price-row">
-                    <span class="price-main">360.890 JOD[span_10](start_span)[span_10](end_span)</span>
-                    <span class="price-sub">1,503.89 ILS[span_11](start_span)[span_11](end_span)</span>
+                    <span class="price-main">360.890 JOD[span_15](start_span)[span_15](end_span)</span>
+                    <span class="price-sub">1,503.89 ILS[span_16](start_span)[span_16](end_span)</span>
                 </div>
             </div>
         </div>
 
         <!-- الفنادق -->
         <div class="card">
-            <div class="section-header">الإقامة (Hotel)[span_12](start_span)[span_12](end_span)</div>
+            <div class="section-header">الإقامة (Hotel)[span_17](start_span)[span_17](end_span)</div>
             <div class="item-box">
-                <span class="note">إسطنبول (IST) - من 24/9/2026 إلى 1/10/2026[span_13](start_span)[span_13](end_span)</span>
+                <span class="details-text">1. IST => from — 24/9/2026 —> 1/10/2026[span_18](start_span)[span_18](end_span)</span>
                 <div class="price-row">
-                    <span class="price-main">841.92 JOD[span_14](start_span)[span_14](end_span)</span>
-                    <span class="price-sub">3,508.42 ILS[span_15](start_span)[span_15](end_span)</span>
+                    <span class="price-main">841.92 JOD (إجمالي)[span_19](start_span)[span_19](end_span)</span>
+                    <span class="price-sub">3,508.42 ILS[span_20](start_span)[span_20](end_span)</span>
                 </div>
-                <span class="note">نصيب الشخص الواحد: 168.384 JOD = 701.68 ILS[span_16](start_span)[span_16](end_span)</span>
+                <div class="price-row" style="margin-top: 8px;">
+                    <span class="price-main" style="color:var(--primary-lava);">168.384 JOD (للشخص)[span_21](start_span)[span_21](end_span)</span>
+                    <span class="price-sub">701.68 ILS[span_22](start_span)[span_22](end_span)</span>
+                </div>
             </div>
             <div class="item-box">
-                <span class="note">ليلة واحدة في عمان[span_17](start_span)[span_17](end_span)</span>
+                <span class="details-text">2. One night in amman[span_23](start_span)[span_23](end_span)</span>
                 <div class="price-row">
-                    <span class="price-main">25 JOD[span_18](start_span)[span_18](end_span)</span>
-                    <span class="price-sub">104.18 ILS[span_19](start_span)[span_19](end_span)</span>
+                    <span class="price-main">25 JOD[span_24](start_span)[span_24](end_span)</span>
+                    <span class="price-sub">104.18 ILS[span_25](start_span)[span_25](end_span)</span>
                 </div>
             </div>
             <div style="display:flex; gap:10px; margin-top:15px;">
-                <button class="btn-action" onclick="openGal()">🖼️ صور الفندق[span_20](start_span)[span_20](end_span)</button>
-                <button class="btn-action" onclick="window.open('https://www.google.com/maps/search/?api=1&query=Şahkulu,+İstiklal+Cd.+No:+233,+34421+Beyoğlu/İstanbul,+Türkiye')">📍 الموقع[span_21](start_span)[span_21](end_span)</button>
+                <button class="btn-action" onclick="openGal()">🖼️ صور الفندق[span_26](start_span)[span_26](end_span)</button>
+                <button class="btn-action" onclick="window.open('https://www.google.com/maps/search/?api=1&query=Şahkulu,+İstiklal+Cd.+No:+233,+34421+Beyoğlu/İstanbul,+Türkiye')">📍 الموقع[span_27](start_span)[span_27](end_span)</button>
             </div>
         </div>
 
         <!-- التنقلات -->
         <div class="card">
-            <div class="section-header">التنقلات (Transfer & Taxi)[span_22](start_span)[span_22](end_span)</div>
+            <div class="section-header">التنقلات (Transfer & Taxi)[span_28](start_span)[span_28](end_span)</div>
             <div class="item-box">
-                <span class="note">من المطار إلى الفندق[span_23](start_span)[span_23](end_span)</span>
+                <span class="details-text">From airport to hotel (إياب وذهاب)[span_29](start_span)[span_29](end_span)</span>
                 <div class="price-row">
-                    <span class="price-main">59 $[span_24](start_span)[span_24](end_span)</span>
-                    <span class="price-sub">174.00 ILS[span_25](start_span)[span_25](end_span)</span>
+                    <span class="price-main">118 $ (إجمالي)[span_30](start_span)[span_30](end_span)</span>
+                    <span class="price-sub">348.00 ILS[span_31](start_span)[span_31](end_span)</span>
                 </div>
-                <span class="note">للشخص الواحد: 11.8 $ = 34.80 ILS[span_26](start_span)[span_26](end_span)</span>
+                <span class="details-text">On one person —> 11.8$ = 34.80 ILS[span_32](start_span)[span_32](end_span)</span>
             </div>
             <div class="item-box">
-                <span class="note">تاكسي المعبر للمطار[span_27](start_span)[span_27](end_span)</span>
+                <span class="details-text">Crossing to airport[span_33](start_span)[span_33](end_span)</span>
                 <div class="price-row">
-                    <span class="price-main">30 JOD[span_28](start_span)[span_28](end_span)</span>
-                    <span class="price-sub">125.01 ILS[span_29](start_span)[span_29](end_span)</span>
+                    <span class="price-main">30 JOD (إجمالي)[span_34](start_span)[span_34](end_span)</span>
+                    <span class="price-sub">125.01 ILS[span_35](start_span)[span_35](end_span)</span>
                 </div>
-                <span class="note">للشخص الواحد: 6 JOD = 25.00 ILS[span_30](start_span)[span_30](end_span)</span>
+                <span class="details-text">On one person —> 6 JOD = 25.00 ILS[span_36](start_span)[span_36](end_span)</span>
             </div>
             <div class="item-box">
-                <span class="note">العودة (And the oud)[span_31](start_span)[span_31](end_span)</span>
+                <span class="details-text">And the oud (العودة)[span_37](start_span)[span_37](end_span)</span>
                 <div class="price-row">
-                    <span class="price-main">30 JOD[span_32](start_span)[span_32](end_span)</span>
-                    <span class="price-sub">125.01 ILS[span_33](start_span)[span_33](end_span)</span>
+                    <span class="price-main">30 JOD (إجمالي)[span_38](start_span)[span_38](end_span)</span>
+                    <span class="price-sub">125.01 ILS[span_39](start_span)[span_39](end_span)</span>
                 </div>
-                <span class="note">للشخص الواحد: 6 JOD = 25.00 ILS[span_34](start_span)[span_34](end_span)</span>
+                <span class="details-text">On one person —> 6 JOD = 25.00 ILS[span_40](start_span)[span_40](end_span)</span>
             </div>
         </div>
 
-        <!-- المجموع -->
+        <!-- المجموع الكلي -->
         <div class="total-banner">
-            <div style="font-size:14px; opacity:0.8;">المجموع الكلي التقريبي لكل شخص[span_35](start_span)[span_35](end_span)</div>
-            <div style="font-size:38px; font-weight:900; color:var(--primary-lava);">635 JOD[span_36](start_span)[span_36](end_span)</div>
-            <div style="font-size:20px; color:#f1c40f;">≈ 2,646.15 ILS[span_37](start_span)[span_37](end_span)</div>
+            <div style="font-size:14px; opacity:0.8;">Total (المجموع الكلي لكل شخص)[span_41](start_span)[span_41](end_span)</div>
+            <div style="font-size:38px; font-weight:900; color:var(--primary-lava);">635 JOD[span_42](start_span)[span_42](end_span)</div>
+            <div style="font-size:20px; color:#f1c40f;">≈ 2,646.15 ILS[span_43](start_span)[span_43](end_span)</div>
         </div>
     </div>
 
@@ -164,7 +172,7 @@
     <div id="gallery-overlay">
         <div class="gallery-card">
             <div class="gallery-close" onclick="closeGal()">✕</div>
-            <h3 style="text-align:center; color:var(--primary-lava);">صور فندق بيوغلو - إسطنبول[span_38](start_span)[span_38](end_span)</h3>
+            <h3 style="text-align:center; color:var(--primary-lava);">صور الفندق - إسطنبول[span_44](start_span)[span_44](end_span)</h3>
             <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/i6qnBDrkuUUOaNblMTrD/image.jpg" class="gallery-img">
             <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/22GCFsWDTlNSt72XtfaR/image.jpg" class="gallery-img">
             <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/aLpPSVAxaDvtSQwzr0qE/image.jpg" class="gallery-img">
@@ -173,6 +181,7 @@
     </div>
 
     <script>
+        // إخفاء الـ Splash وإظهار المحتوى[span_45](start_span)[span_45](end_span)
         window.addEventListener('load', () => {
             setTimeout(() => {
                 document.getElementById('splash-layer').style.opacity = '0';
