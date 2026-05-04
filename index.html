@@ -1,3 +1,6 @@
+فهمت عليك تماماً، الفكرة هي تحويل الصفحة إلى نظام **تبويبات (Tabs)** بحيث تكون البطاقات الحالية مخفية داخل زر "التفاصيل"، وعند الضغط على زر "النشاطات" تظهر مساحة فارغة للنشاطات المستقبلية.
+لقد قمت بتعديل الكود ليحتوي على هذه الأزرار (البطاقتين العلوية) مع الحفاظ على كافة تفاصيلك السابقة وتنسيقاتك كما هي:
+```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -17,10 +20,29 @@
         .sidar-robot { position: fixed; left: 10px; top: 20px; width: 110px; z-index: 10; animation: robotFloat 4s ease-in-out infinite; }
         @keyframes robotFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
-        /* تم تعديل الحاوية لتظهر مباشرة */
         .app-container { position: relative; z-index: 1; padding: 100px 20px 40px; display: block; max-width: 600px; margin: 0 auto; }
         .hero-title { font-size: 32px; font-weight: 900; line-height: 1.1; margin-bottom: 25px; }
         .hero-title span { color: var(--primary-lava); }
+
+        /* تنسيق أزرار التبديل (البطاقات العلوية) */
+        .tab-container { display: flex; gap: 10px; margin-bottom: 25px; }
+        .tab-card { 
+            flex: 1; 
+            background: var(--glass); 
+            padding: 15px; 
+            border-radius: 20px; 
+            text-align: center; 
+            font-weight: 800; 
+            cursor: pointer; 
+            border: 2px solid transparent;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: 0.3s;
+        }
+        .tab-card.active { border-color: var(--primary-lava); color: var(--primary-lava); }
+
+        /* إخفاء المحتوى الافتراضي */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
 
         .card { background: var(--glass); backdrop-filter: blur(12px); border: 1.5px solid #f1f5f9; border-radius: 30px; padding: 25px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.04); }
         .section-header { border-right: 5px solid var(--primary-lava); padding-right: 15px; margin-bottom: 15px; font-weight: 900; font-size: 19px; }
@@ -50,76 +72,93 @@
         <h1 class="hero-title">IST Travel <span>✈️</span></h1>
         <p style="margin-top:-20px; color:#64748b; font-size:14px; margin-bottom:30px;">24/9/2026 - 02/10/2026</p>
 
-        <!-- المعابر -->
-        <div class="card">
-            <div class="section-header">المعابر (Crossing)</div>
-            <div class="item-box">
-                <span class="note">معبر إسرائيل</span>
-                <div class="price-row"><span class="price-main">120 ₪</span></div>
-            </div>
-            <div class="item-box">
-                <span class="note">معبر الأردن (دخول 10 JOD وخروج 10 JOD)</span>
-                <div class="price-row">
-                    <span class="price-main">20 JOD</span>
-                    <span class="price-sub">83.34 ₪</span>
+        <!-- أزرار التبديل العلوية -->
+        <div class="tab-container">
+            <div class="tab-card active" onclick="showTab('details', this)">تفاصيل الرحلة</div>
+            <div class="tab-card" onclick="showTab('activities', this)">النشاطات</div>
+        </div>
+
+        <!-- محتوى تفاصيل الرحلة -->
+        <div id="details" class="tab-content active">
+            <!-- المعابر -->
+            <div class="card">
+                <div class="section-header">المعابر (Crossing)</div>
+                <div class="item-box">
+                    <span class="note">معبر إسرائيل</span>
+                    <div class="price-row"><span class="price-main">120 ₪</span></div>
+                </div>
+                <div class="item-box">
+                    <span class="note">معبر الأردن (دخول 10 JOD وخروج 10 JOD)</span>
+                    <div class="price-row">
+                        <span class="price-main">20 JOD</span>
+                        <span class="price-sub">83.34 ₪</span>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- الطيران -->
-        <div class="card">
-            <div class="section-header">تذاكر الطيران (Plane Ticket)</div>
-            <div class="item-box">
-                <span class="note" style="color: #c8102e; font-weight: bold;">الشركة الناقلة: Turkish Airlines 🇹🇷</span>
-                <span class="note">مطار AMM <—> مطار SAW</span>
-                <div class="price-row">
-                    <span class="price-main">360.890 JOD</span>
-                    <span class="price-sub">1,503.89 ₪</span>
+            <!-- الطيران -->
+            <div class="card">
+                <div class="section-header">تذاكر الطيران (Plane Ticket)</div>
+                <div class="item-box">
+                    <span class="note" style="color: #c8102e; font-weight: bold;">الشركة الناقلة: Turkish Airlines 🇹🇷</span>
+                    <span class="note">مطار AMM <—> مطار SAW</span>
+                    <div class="price-row">
+                        <span class="price-main">360.890 JOD</span>
+                        <span class="price-sub">1,503.89 ₪</span>
+                    </div>
                 </div>
             </div>
+
+            <!-- الفنادق -->
+            <div class="card">
+                <div class="section-header">الإقامة (Hotel)</div>
+                <div class="item-box">
+                    <span class="note">إسطنبول (IST) - الفترة كاملة</span>
+                    <div class="price-row"><span class="price-main">841.92 JOD</span><span class="price-sub">3,508.42 ₪</span></div>
+                </div>
+                <div class="item-box">
+                    <span class="note">إسطنبول - للشخص الواحد</span>
+                    <div class="price-row"><span class="price-main">168.384 JOD</span><span class="price-sub">701.68 ₪</span></div>
+                </div>
+                <div class="item-box">
+                    <span class="note">ليلة واحدة في عمان</span>
+                    <div class="price-row"><span class="price-main">25 JOD</span><span class="price-sub">104.18 ₪</span></div>
+                </div>
+                <div style="display:flex; gap:10px; margin-top:15px;">
+                    <button class="btn-action" onclick="openGal()">🖼️ صور الفندق</button>
+                    <button class="btn-action" onclick="window.open('https://www.google.com/maps/search/?api=1&query=Şahkulu,+İstiklal+Cd.+No:+233,+34421+Beyoğlu/İstanbul,+Türkiye')">📍 الموقع</button>
+                </div>
+            </div>
+
+            <!-- النقل -->
+            <div class="card">
+                <div class="section-header">التنقلات (Transfer & Taxi)</div>
+                <div class="item-box">
+                    <span class="note">من المطار إلى الفندق (ذهاب وإياب)</span>
+                    <div class="price-row"><span class="price-main">118 $</span><span class="price-sub">348.00 ₪</span></div>
+                    <span class="note">للشخص: 11.8$ = 34.80 ₪</span>
+                </div>
+                <div class="item-box">
+                    <span class="note">تاكسي المعبر للمطار + العودة (The Oud)</span>
+                    <div class="price-row"><span class="price-main">60 JOD</span><span class="price-sub">250.02 ₪</span></div>
+                    <span class="note">للشخص: 12 JOD = 50.00 ₪</span>
+                </div>
+            </div>
+
+            <!-- المجموع -->
+            <div class="total-banner">
+                <div style="font-size:14px; opacity:0.8;">المجموع الكلي المطلوب لكل شخص</div>
+                <div style="font-size:38px; font-weight:900; color:var(--primary-lava);">635 JOD</div>
+                <div style="font-size:20px; color:#f1c40f;">≈ 2,646.15 ₪</div>
+            </div>
         </div>
 
-        <!-- الفنادق -->
-        <div class="card">
-            <div class="section-header">الإقامة (Hotel)</div>
-            <div class="item-box">
-                <span class="note">إسطنبول (IST) - الفترة كاملة</span>
-                <div class="price-row"><span class="price-main">841.92 JOD</span><span class="price-sub">3,508.42 ₪</span></div>
+        <!-- محتوى النشاطات (فارغ حالياً كما طلبت) -->
+        <div id="activities" class="tab-content">
+            <div class="card">
+                <div class="section-header">النشاطات المقترحة</div>
+                <p style="color:#64748b; text-align:center;">سيتم إضافة النشاطات قريباً... 🏗️</p>
             </div>
-            <div class="item-box">
-                <span class="note">إسطنبول - للشخص الواحد</span>
-                <div class="price-row"><span class="price-main">168.384 JOD</span><span class="price-sub">701.68 ₪</span></div>
-            </div>
-            <div class="item-box">
-                <span class="note">ليلة واحدة في عمان</span>
-                <div class="price-row"><span class="price-main">25 JOD</span><span class="price-sub">104.18 ₪</span></div>
-            </div>
-            <div style="display:flex; gap:10px; margin-top:15px;">
-                <button class="btn-action" onclick="openGal()">🖼️ صور الفندق</button>
-                <button class="btn-action" onclick="window.open('https://www.google.com/maps/search/?api=1&query=Şahkulu,+İstiklal+Cd.+No:+233,+34421+Beyoğlu/İstanbul,+Türkiye')">📍 الموقع</button>
-            </div>
-        </div>
-
-        <!-- النقل -->
-        <div class="card">
-            <div class="section-header">التنقلات (Transfer & Taxi)</div>
-            <div class="item-box">
-                <span class="note">من المطار إلى الفندق (ذهاب وإياب)</span>
-                <div class="price-row"><span class="price-main">118 $</span><span class="price-sub">348.00 ₪</span></div>
-                <span class="note">للشخص: 11.8$ = 34.80 ₪</span>
-            </div>
-            <div class="item-box">
-                <span class="note">تاكسي المعبر للمطار + العودة (The Oud)</span>
-                <div class="price-row"><span class="price-main">60 JOD</span><span class="price-sub">250.02 ₪</span></div>
-                <span class="note">للشخص: 12 JOD = 50.00 ₪</span>
-            </div>
-        </div>
-
-        <!-- المجموع -->
-        <div class="total-banner">
-            <div style="font-size:14px; opacity:0.8;">المجموع الكلي المطلوب لكل شخص</div>
-            <div style="font-size:38px; font-weight:900; color:var(--primary-lava);">635 JOD</div>
-            <div style="font-size:20px; color:#f1c40f;">≈ 2,646.15 ₪</div>
         </div>
     </div>
 
@@ -136,8 +175,24 @@
     </div>
 
     <script>
+        function showTab(tabId, element) {
+            // إخفاء كل المحتويات
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            // إزالة الحالة النشطة من الأزرار
+            document.querySelectorAll('.tab-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            // إظهار المحتوى المختار وتفعيل الزر
+            document.getElementById(tabId).classList.add('active');
+            element.classList.add('active');
+        }
+
         function openGal() { document.getElementById('gallery-overlay').style.display = 'flex'; }
         function closeGal() { document.getElementById('gallery-overlay').style.display = 'none'; }
     </script>
 </body>
 </html>
+
+```
