@@ -1,4 +1,4 @@
-تم تنفيذ طلبك بدقة. قمت بإزالة قسم **Our Services** (بالأيقونات الخاصة به) وقسم **Communities** (بما في ذلك شريط "Ask Community")، مع الحفاظ على كافة الخصائص البرمجية، الأنماط (CSS)، وحركات الروبوت والبطاقات كما هي دون أي تغيير.
+تم تحديث الكود بناءً على طلبك. قمت بإزالة قسم **Live Moments** بالكامل، وأضفت بدلاً منه شريط أيقونات جديد (Pills) يحتوي على: **تفاصيل الرحلة**، **نشاطات**، **مطاعم**، و**مسلسلات**.
 إليك الكود المحدث:
 ```html
 <!DOCTYPE html>
@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sidarapp - Slim Edition</title>
+    <title>Sidarapp - Custom Edition</title>
     
     <style>
         :root {
@@ -25,7 +25,6 @@
             overflow-x: hidden;
         }
 
-        /* نظام إخفاء وإظهار الصفحات */
         .app-page { display: none; animation: slideUp 0.4s ease-out; }
         .app-page.active { display: block; }
 
@@ -34,7 +33,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* --- Splash Screen --- */
         #splash-screen {
             position: fixed; inset: 0; background: #ffffff;
             display: flex; justify-content: center; align-items: center;
@@ -53,7 +51,6 @@
             padding: 60px 20px 120px; box-sizing: border-box;
         }
 
-        /* --- Hero Section & Robot --- */
         .hero-section { position: relative; }
         .hero-title { font-size: 34px; font-weight: 800; line-height: 1.1; color: var(--text-main); margin-bottom: 25px; }
         .hero-title span { color: var(--primary-lava); }
@@ -73,7 +70,6 @@
             50% { transform: translateY(-12px) rotate(2deg); }
         }
 
-        /* --- Search Bar --- */
         .search-wrapper {
             background: rgba(255,255,255,0.9); backdrop-filter: blur(15px);
             border-radius: 20px; padding: 12px 18px; display: flex; align-items: center;
@@ -91,7 +87,22 @@
         .search-wrapper input:focus + .fake-placeholder,
         .search-wrapper input:not(:placeholder-shown) + .fake-placeholder { opacity: 0; }
 
-        /* --- Stacked Cards --- */
+        /* --- New Custom Icons (Pills) --- */
+        .custom-pills-container {
+            display: flex; gap: 10px; overflow-x: auto; padding: 5px 0 25px; scrollbar-width: none;
+        }
+        .custom-pills-container::-webkit-scrollbar { display: none; }
+        
+        .pill-item {
+            display: flex; align-items: center; gap: 8px; background: #f8fafc; 
+            border: 1.5px solid #f1f5f9; padding: 10px 18px; border-radius: 50px; 
+            flex-shrink: 0; transition: 0.3s; cursor: pointer;
+        }
+        .pill-item span { font-weight: 700; font-size: 14px; color: var(--text-main); }
+        .pill-item:active { transform: scale(0.95); border-color: var(--primary-lava); }
+        .pill-item.active { background: rgba(255, 69, 0, 0.1); border-color: var(--primary-lava); }
+        .pill-item.active span { color: var(--primary-lava); }
+
         .stacked-cards-wrapper {
             position: relative; width: 100%; height: 260px;
             display: flex; justify-content: center; align-items: center;
@@ -128,28 +139,6 @@
         .dot { width: 6px; height: 6px; background: #e2e8f0; border-radius: 50%; transition: 0.4s; }
         .dot.active { background: var(--primary-lava); width: 15px; border-radius: 10px; }
 
-        /* --- Section Styling (Stories) --- */
-        .section-header { display: flex; justify-content: space-between; align-items: flex-end; margin: 40px 0 15px; padding: 0 5px; }
-        .section-header h3 { font-size: 22px; font-weight: 900; color: var(--text-main); margin: 0; letter-spacing: -0.5px; }
-        .section-header span { font-size: 13px; color: var(--primary-lava); font-weight: 700; cursor: pointer; }
-
-        .stories-container { display: flex; gap: 18px; overflow-x: auto; padding: 10px 5px 20px; scrollbar-width: none; margin-bottom: 30px; }
-        .story-item { flex-shrink: 0; width: 75px; text-align: center; }
-        .story-ring { width: 70px; height: 70px; border-radius: 24px; padding: 3px; background: linear-gradient(45deg, var(--primary-lava), #ff8c00); box-shadow: 0 8px 15px var(--lava-glow); margin-bottom: 8px; position: relative; }
-        .story-ring img { width: 100%; height: 100%; border-radius: 21px; object-fit: cover; background: #fff; border: 2px solid #fff; }
-        .live-tag { position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%); background: var(--primary-lava); color: #fff; font-size: 8px; padding: 2px 8px; border-radius: 10px; font-weight: 900; border: 2px solid #fff; }
-        .story-item span { font-size: 11px; font-weight: 700; color: var(--text-main); }
-
-        /* --- Profile Styling --- */
-        .profile-container { padding-top: 20px; }
-        .profile-card { text-align: center; margin-bottom: 30px; }
-        .profile-avatar-wrapper { position: relative; width: 120px; height: 120px; margin: 0 auto 15px; }
-        .profile-avatar-wrapper img { width: 100%; height: 100%; border-radius: 45px; object-fit: cover; border: 4px solid #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        .edit-badge { position: absolute; bottom: 5px; right: 5px; background: var(--primary-lava); color: #fff; width: 30px; height: 30px; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: 3px solid #fff; font-size: 14px; }
-        .user-info h2 { font-size: 26px; font-weight: 800; color: var(--text-main); margin: 0; }
-        .user-info p { color: #94a3b8; font-weight: 600; margin: 5px 0 0; }
-
-        /* --- Navigation --- */
         .bottom-nav {
             position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%);
             width: 90%; max-width: 400px; background: #ffffff; border-radius: 40px;
@@ -191,15 +180,12 @@
                 <div class="fake-placeholder">Ask <span class="lava-text">Sidar</span> any thing...</div>
             </div>
 
-            <div class="section-header">
-                <h3>Live Moments</h3>
-                <span>View Map</span>
-            </div>
-            <div class="stories-container">
-                <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/150?u=a" alt=""><div class="live-tag">Live</div></div><span>Alex</span></div>
-                <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/150?u=b" alt=""></div><span>Sarah</span></div>
-                <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/150?u=c" alt=""></div><span>Yasin</span></div>
-                <div class="story-item"><div class="story-ring"><img src="https://i.pravatar.cc/150?u=d" alt=""><div class="live-tag">Live</div></div><span>Mona</span></div>
+            <!-- New Custom Icons Section -->
+            <div class="custom-pills-container">
+                <div class="pill-item active"><span>📍 تفاصيل الرحلة</span></div>
+                <div class="pill-item"><span>🏃 نشاطات</span></div>
+                <div class="pill-item"><span>🍽️ مطاعم</span></div>
+                <div class="pill-item"><span>🎬 مسلسلات</span></div>
             </div>
 
             <div class="stacked-cards-wrapper" id="cardsWrapper">
@@ -212,18 +198,14 @@
             <div class="dots-container" id="dotsContainer"></div>
         </div>
 
+        <!-- Profile Page (Remains Same) -->
         <div id="profile-page" class="app-page">
-            <div class="profile-container">
-                <div class="profile-card">
-                    <div class="profile-avatar-wrapper">
-                        <img src="https://i.pravatar.cc/150?u=myaccount" alt="User">
-                        <div class="edit-badge">✎</div>
-                    </div>
-                    <div class="user-info">
-                        <h2>Sidar Explorer</h2>
-                        <p>Traveler & Content Creator</p>
-                    </div>
+            <div style="padding-top: 20px; text-align: center;">
+                <div style="width: 120px; height: 120px; margin: 0 auto 15px; position: relative;">
+                    <img src="https://i.pravatar.cc/150?u=myaccount" style="width: 100%; height: 100%; border-radius: 45px; object-fit: cover; border: 4px solid #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
                 </div>
+                <h2 style="color: var(--text-main); margin: 0;">Sidar Explorer</h2>
+                <p style="color: #94a3b8; font-weight: 600;">Traveler & Content Creator</p>
             </div>
         </div>
     </div>
@@ -231,9 +213,9 @@
     <div id="info-overlay">
         <div class="info-content">
             <div class="close-btn" onclick="closeInfo()">×</div>
-            <span class="info-tag" id="target-tag">Category</span>
-            <h2 class="info-title" id="target-title">Location Name</h2>
-            <p id="target-desc">Description goes here...</p>
+            <span id="target-tag" style="color: var(--primary-lava); font-weight: 800; font-size: 12px; text-transform: uppercase;">Category</span>
+            <h2 id="target-title" style="margin: 10px 0; font-size: 28px; color: var(--text-main);">Location Name</h2>
+            <p id="target-desc" style="color: #64748b; line-height: 1.6;">Description goes here...</p>
         </div>
     </div>
 
@@ -331,23 +313,6 @@
                 document.getElementById('heroBg').style.filter = 'none';
             }
         }
-
-        async function askSidarAI(query) {
-            const robot = document.querySelector('.sidar-robot');
-            if (!query) return;
-            robot.style.filter = "drop-shadow(0 0 30px #fff) brightness(1.2)";
-            document.getElementById('target-title').innerText = "Thinking...";
-            document.getElementById('info-overlay').classList.add('open');
-            setTimeout(() => {
-                robot.style.filter = "drop-shadow(0 0 15px var(--lava-glow))";
-                document.getElementById('target-title').innerText = "Sidar's Insights";
-                document.getElementById('target-desc').innerText = "I am ready to help you explore! ✈️";
-            }, 1500);
-        }
-
-        document.querySelector('.search-wrapper input').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') askSidarAI(this.value);
-        });
     </script>
 </body>
 </html>
