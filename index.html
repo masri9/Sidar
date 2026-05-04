@@ -1,18 +1,16 @@
-تم تحديث الكود بناءً على طلبك. قمت بإزالة قسم **Live Moments** بالكامل، وأضفت بدلاً منه شريط أيقونات جديد (Pills) يحتوي على: **تفاصيل الرحلة**، **نشاطات**، **مطاعم**، و**مسلسلات**.
-إليك الكود المحدث:
-```html
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sidarapp - Custom Edition</title>
+    <title>Sidarapp - Grid Edition</title>
     
     <style>
         :root {
             --primary-lava: #ff4500; 
             --lava-glow: rgba(255, 69, 0, 0.4); 
             --text-main: #0f172a; 
+            --bg-light: #f8fafc;
         }
 
         .lava-text { color: var(--primary-lava); font-weight: 700; }
@@ -57,10 +55,7 @@
 
         .sidar-robot {
             position: absolute;
-            right: 5px;      
-            top: -20px;     
-            width: 120px;    
-            z-index: 10;
+            right: 5px; top: -20px; width: 120px; z-index: 10;
             filter: drop-shadow(0 0 15px var(--lava-glow));
             animation: robotFloat 3s ease-in-out infinite;
         }
@@ -73,45 +68,53 @@
         .search-wrapper {
             background: rgba(255,255,255,0.9); backdrop-filter: blur(15px);
             border-radius: 20px; padding: 12px 18px; display: flex; align-items: center;
-            border: 2px solid var(--primary-lava); margin-bottom: 25px; position: relative;
+            border: 2px solid var(--primary-lava); margin-bottom: 30px; position: relative;
         }
-        .search-icon { z-index: 2; margin-right: 10px; font-size: 18px; }
-        .search-wrapper input { 
-            flex: 1; border: none; background: transparent; outline: none; 
-            font-size: 16px; width: 100%; position: relative; z-index: 2; color: var(--text-main);
-        }
-        .fake-placeholder {
-            position: absolute; left: 45px; top: 50%; transform: translateY(-50%);
-            color: #94a3b8; font-size: 16px; pointer-events: none; z-index: 1; transition: 0.2s;
-        }
-        .search-wrapper input:focus + .fake-placeholder,
-        .search-wrapper input:not(:placeholder-shown) + .fake-placeholder { opacity: 0; }
+        .search-icon { margin-right: 10px; font-size: 18px; }
+        .search-wrapper input { flex: 1; border: none; background: transparent; outline: none; font-size: 16px; color: var(--text-main); }
 
-        /* --- New Custom Icons (Pills) --- */
-        .custom-pills-container {
-            display: flex; gap: 10px; overflow-x: auto; padding: 5px 0 25px; scrollbar-width: none;
+        /* --- Grid Icons Section --- */
+        .category-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 35px;
         }
-        .custom-pills-container::-webkit-scrollbar { display: none; }
-        
-        .pill-item {
-            display: flex; align-items: center; gap: 8px; background: #f8fafc; 
-            border: 1.5px solid #f1f5f9; padding: 10px 18px; border-radius: 50px; 
-            flex-shrink: 0; transition: 0.3s; cursor: pointer;
-        }
-        .pill-item span { font-weight: 700; font-size: 14px; color: var(--text-main); }
-        .pill-item:active { transform: scale(0.95); border-color: var(--primary-lava); }
-        .pill-item.active { background: rgba(255, 69, 0, 0.1); border-color: var(--primary-lava); }
-        .pill-item.active span { color: var(--primary-lava); }
 
+        .grid-item {
+            background: white;
+            border: 1.5px solid #f1f5f9;
+            border-radius: 24px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            cursor: pointer;
+        }
+
+        .grid-item:active { transform: scale(0.95); background: #fffaf9; border-color: var(--primary-lava); }
+
+        .grid-icon {
+            font-size: 32px;
+            margin-bottom: 5px;
+        }
+
+        .grid-label {
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--text-main);
+            text-align: center;
+        }
+
+        /* --- Cards & Dots --- */
         .stacked-cards-wrapper {
             position: relative; width: 100%; height: 260px;
             display: flex; justify-content: center; align-items: center;
-            perspective: 1200px; margin-top: 10px;
-        }
-        @keyframes border-pulse {
-            0% { border-color: rgba(255, 69, 0, 0.4); }
-            50% { border-color: rgba(255, 69, 0, 1); }
-            100% { border-color: rgba(255, 69, 0, 0.4); }
+            perspective: 1200px;
         }
         .card-item {
             position: absolute; width: 200px; height: 240px; 
@@ -121,33 +124,23 @@
             padding-bottom: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.08);
             opacity: 0; pointer-events: none; border: 2px solid transparent; 
         }
-        .card-item.active { 
-            opacity: 1; transform: translateX(0) translateZ(50px) scale(1); 
-            z-index: 10; pointer-events: auto; animation: border-pulse 2.5s infinite ease-in-out;
-        }
+        .card-item.active { opacity: 1; transform: translateX(0) translateZ(50px) scale(1); z-index: 10; pointer-events: auto; border-color: var(--primary-lava); }
         .card-item.prev { opacity: 0.4; transform: translateX(-100px) translateZ(-100px) scale(0.8); z-index: 5; filter: blur(1px); }
         .card-item.next { opacity: 0.4; transform: translateX(100px) translateZ(-100px) scale(0.8); z-index: 5; filter: blur(1px); }
 
-        .see-more-btn {
-            background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(12px);
-            color: #fff; border-radius: 50px; padding: 8px 30px;
-            font-weight: 700; font-size: 11px; border: 1px solid rgba(255,255,255,0.3);
-            text-transform: uppercase;
-        }
-
-        .dots-container { display: flex; justify-content: center; gap: 8px; margin-top: 15px; }
+        .dots-container { display: flex; justify-content: center; gap: 8px; margin-top: 15px; margin-bottom: 20px; }
         .dot { width: 6px; height: 6px; background: #e2e8f0; border-radius: 50%; transition: 0.4s; }
         .dot.active { background: var(--primary-lava); width: 15px; border-radius: 10px; }
 
         .bottom-nav {
-            position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%);
-            width: 90%; max-width: 400px; background: #ffffff; border-radius: 40px;
+            position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 400px; background: #fff; border-radius: 40px;
             display: flex; justify-content: space-around; align-items: center; padding: 8px; 
-            border: 2px solid var(--primary-lava); z-index: 1000;
+            border: 2px solid var(--primary-lava); z-index: 1000; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
         .nav-item { display: flex; align-items: center; justify-content: center; padding: 10px 15px; color: #94a3b8; transition: 0.3s; border-radius: 30px; }
         .nav-item.active { background: rgba(255, 69, 0, 0.1); color: var(--primary-lava); }
-        .nav-item span { max-width: 0; overflow: hidden; white-space: nowrap; transition: 0.3s; font-weight: 700; font-size: 14px; }
+        .nav-item span { max-width: 0; overflow: hidden; white-space: nowrap; transition: 0.3s; font-weight: 700; }
         .nav-item.active span { max-width: 80px; margin-left: 8px; }
         .nav-item svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2.2; }
 
@@ -156,7 +149,7 @@
             z-index: 2000; display: flex; align-items: flex-end; visibility: hidden; opacity: 0; transition: 0.4s;
         }
         #info-overlay.open { visibility: visible; opacity: 1; }
-        .info-content { width: 100%; background: #fff; border-radius: 40px 40px 0 0; padding: 40px 30px; box-sizing: border-box; transform: translateY(100%); transition: 0.5s; position: relative; }
+        .info-content { width: 100%; background: #fff; border-radius: 40px 40px 0 0; padding: 40px 30px; transform: translateY(100%); transition: 0.5s; position: relative; }
         #info-overlay.open .info-content { transform: translateY(0); }
         .close-btn { position: absolute; top: 20px; right: 25px; width: 35px; height: 35px; background: #f1f5f9; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; cursor: pointer; }
     </style>
@@ -170,42 +163,49 @@
         
         <div id="home-page" class="app-page active">
             <div class="hero-section">
-                <img src="https://plain-eeur-prod-public.komododecks.com/202604/20/zpRwsd9YMgeCmtSTOjFQ/image.png" class="sidar-robot" alt="Sidar AI Robot">
+                <img src="https://plain-eeur-prod-public.komododecks.com/202604/20/zpRwsd9YMgeCmtSTOjFQ/image.png" class="sidar-robot" alt="Sidar AI">
                 <h1 class="hero-title">Where do you <br><span>wanna go?</span></h1>
             </div>
 
             <div class="search-wrapper">
                 <span class="search-icon">🔍</span>
-                <input type="text" placeholder=" ">
-                <div class="fake-placeholder">Ask <span class="lava-text">Sidar</span> any thing...</div>
+                <input type="text" placeholder="Ask Sidar anything...">
             </div>
 
-            <!-- New Custom Icons Section -->
-            <div class="custom-pills-container">
-                <div class="pill-item active"><span>📍 تفاصيل الرحلة</span></div>
-                <div class="pill-item"><span>🏃 نشاطات</span></div>
-                <div class="pill-item"><span>🍽️ مطاعم</span></div>
-                <div class="pill-item"><span>🎬 مسلسلات</span></div>
+            <!-- Category Grid Section -->
+            <div class="category-grid">
+                <div class="grid-item">
+                    <span class="grid-icon">📄</span>
+                    <span class="grid-label">Trip Details</span>
+                </div>
+                <div class="grid-item">
+                    <span class="grid-icon">🎢</span>
+                    <span class="grid-label">Activities</span>
+                </div>
+                <div class="grid-item">
+                    <span class="grid-icon">🍽️</span>
+                    <span class="grid-label">Restaurants</span>
+                </div>
+                <div class="grid-item">
+                    <span class="grid-icon">🎬</span>
+                    <span class="grid-label">Series Sites</span>
+                </div>
             </div>
 
             <div class="stacked-cards-wrapper" id="cardsWrapper">
-                <div class="card-item" id="card0" onclick="showInfo(0)"><div class="see-more-btn">See More</div></div>
-                <div class="card-item" id="card1" onclick="showInfo(1)"><div class="see-more-btn">See More</div></div>
-                <div class="card-item" id="card2" onclick="showInfo(2)"><div class="see-more-btn">See More</div></div>
-                <div class="card-item" id="card3" onclick="showInfo(3)"><div class="see-more-btn">See More</div></div>
+                <div class="card-item" id="card0" onclick="showInfo(0)"><div style="background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); padding: 8px 20px; border-radius: 20px; color: white; font-size: 12px; font-weight: bold; border: 1px solid rgba(255,255,255,0.3);">EXPLORE</div></div>
+                <div class="card-item" id="card1" onclick="showInfo(1)"><div style="background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); padding: 8px 20px; border-radius: 20px; color: white; font-size: 12px; font-weight: bold; border: 1px solid rgba(255,255,255,0.3);">EXPLORE</div></div>
+                <div class="card-item" id="card2" onclick="showInfo(2)"><div style="background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); padding: 8px 20px; border-radius: 20px; color: white; font-size: 12px; font-weight: bold; border: 1px solid rgba(255,255,255,0.3);">EXPLORE</div></div>
+                <div class="card-item" id="card3" onclick="showInfo(3)"><div style="background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); padding: 8px 20px; border-radius: 20px; color: white; font-size: 12px; font-weight: bold; border: 1px solid rgba(255,255,255,0.3);">EXPLORE</div></div>
             </div>
 
             <div class="dots-container" id="dotsContainer"></div>
         </div>
 
-        <!-- Profile Page (Remains Same) -->
         <div id="profile-page" class="app-page">
-            <div style="padding-top: 20px; text-align: center;">
-                <div style="width: 120px; height: 120px; margin: 0 auto 15px; position: relative;">
-                    <img src="https://i.pravatar.cc/150?u=myaccount" style="width: 100%; height: 100%; border-radius: 45px; object-fit: cover; border: 4px solid #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
-                </div>
-                <h2 style="color: var(--text-main); margin: 0;">Sidar Explorer</h2>
-                <p style="color: #94a3b8; font-weight: 600;">Traveler & Content Creator</p>
+            <div style="padding-top: 40px; text-align: center;">
+                <img src="https://i.pravatar.cc/150?u=myaccount" style="width: 100px; height: 100px; border-radius: 35px; border: 3px solid white; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
+                <h2 style="margin-top: 15px; color: var(--text-main);">Explorer</h2>
             </div>
         </div>
     </div>
@@ -213,9 +213,8 @@
     <div id="info-overlay">
         <div class="info-content">
             <div class="close-btn" onclick="closeInfo()">×</div>
-            <span id="target-tag" style="color: var(--primary-lava); font-weight: 800; font-size: 12px; text-transform: uppercase;">Category</span>
-            <h2 id="target-title" style="margin: 10px 0; font-size: 28px; color: var(--text-main);">Location Name</h2>
-            <p id="target-desc" style="color: #64748b; line-height: 1.6;">Description goes here...</p>
+            <h2 id="target-title">Location</h2>
+            <p id="target-desc">Details content...</p>
         </div>
     </div>
 
@@ -237,10 +236,10 @@
         };
 
         const DATA = [
-            { tag: "Iconic", title: "Turkey", desc: "Guide to famous Turkish drama locations." },
-            { tag: "Action", title: "Global Spots", desc: "Where the world films its best scenes." },
-            { tag: "Nature", title: "Hidden Gems", desc: "Breath-taking scenery for creators." },
-            { tag: "Urban", title: "City Vibes", desc: "The pulse of cinematic cityscapes." }
+            { title: "Trip to Turkey", desc: "Experience the magic of Istanbul and more." },
+            { title: "Famous Locations", desc: "Discover where your favorite movies were made." },
+            { title: "Hidden Gems", desc: "Nature spots away from the crowds." },
+            { title: "Urban Vibes", desc: "The heart of modern city life." }
         ];
 
         function applyImages() {
@@ -267,7 +266,6 @@
 
         function showInfo(index) {
             const item = DATA[index];
-            document.getElementById('target-tag').innerText = item.tag;
             document.getElementById('target-title').innerText = item.title;
             document.getElementById('target-desc').innerText = item.desc;
             document.getElementById('info-overlay').classList.add('open');
@@ -307,7 +305,7 @@
             document.querySelectorAll('.app-page').forEach(page => page.classList.remove('active'));
             if (tabName === 'profile') {
                 document.getElementById('profile-page').classList.add('active');
-                document.getElementById('heroBg').style.filter = 'blur(10px) brightness(0.6)';
+                document.getElementById('heroBg').style.filter = 'blur(15px) brightness(0.6)';
             } else {
                 document.getElementById('home-page').classList.add('active');
                 document.getElementById('heroBg').style.filter = 'none';
@@ -316,5 +314,3 @@
     </script>
 </body>
 </html>
-
-```
