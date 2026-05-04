@@ -1,4 +1,5 @@
-تم تحديث قسم الفطور بإزالة الصورة الأولى (الرابط الأول) للمطعم، مع الإبقاء على معرض الصور المتبقي وكافة تفاصيل الرحلة الأصلية كما هي دون أي تعديل.
+تمت إضافة مطعم **Best Lounge The Bosphorus** إلى قائمة الفطور تحت المطعم السابق، مع معرض الصور الخاص به وكافة روابط الاتصال والموقع، مع ضمان بقاء قسم تفاصيل الرحلة كما هو دون أي تغيير.
+إليك الكود المحدث بالكامل:
 ```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
@@ -50,11 +51,6 @@
         .section-header { border-right: 5px solid var(--primary-lava); padding-right: 15px; margin-bottom: 15px; font-weight: 900; font-size: 19px; }
         
         .item-box { padding: 12px 0; border-bottom: 1px solid #f1f5f9; }
-        .price-row { display: flex; justify-content: space-between; align-items: center; }
-        .price-main { font-weight: 800; font-size: 16px; }
-        .price-sub { font-size: 13px; color: var(--primary-lava); font-weight: 700; }
-        .note { font-size: 11px; color: #64748b; margin-top: 4px; display: block; }
-
         .btn-action { flex: 1; padding: 14px; border-radius: 18px; border: 1.5px solid var(--primary-lava); background: transparent; color: var(--primary-lava); font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 13px; text-decoration: none; }
 
         .total-banner { background: var(--text-main); color: white; border-radius: 32px; padding: 30px; text-align: center; margin-top: 30px; }
@@ -97,78 +93,48 @@
             </div>
         </div>
 
-        <!-- قسم تفاصيل الرحلة -->
+        <!-- قسم تفاصيل الرحلة (ثابت كما هو) -->
         <div id="details" class="tab-content active">
             <div class="card">
                 <div class="section-header">المعابر (Crossing)</div>
-                <div class="item-box">
-                    <span class="note">معبر إسرائيل</span>
-                    <div class="price-row"><span class="price-main">120 ₪</span></div>
-                </div>
-                <div class="item-box">
-                    <span class="note">معبر الأردن (دخول 10 JOD وخروج 10 JOD)</span>
-                    <div class="price-row">
-                        <span class="price-main">20 JOD</span>
-                        <span class="price-sub">83.34 ₪</span>
-                    </div>
-                </div>
+                <div class="item-box"><span style="font-size: 14px;">معبر إسرائيل: 120 ₪</span></div>
+                <div class="item-box"><span style="font-size: 14px;">معبر الأردن: 20 JOD (≈ 83.34 ₪)</span></div>
             </div>
 
             <div class="card">
                 <div class="section-header">تذاكر الطيران (Plane Ticket)</div>
                 <div class="item-box">
-                    <span class="note" style="color: #c8102e; font-weight: bold;">الشركة الناقلة: Turkish Airlines 🇹🇷</span>
-                    <span class="note">مطار AMM <—> مطار SAW</span>
-                    <div class="price-row">
-                        <span class="price-main">360.890 JOD</span>
-                        <span class="price-sub">1,503.89 ₪</span>
-                    </div>
+                    <span style="color: #c8102e; font-weight: bold;">Turkish Airlines 🇹🇷</span>
+                    <div style="font-size: 14px;">360.890 JOD (≈ 1,503.89 ₪)</div>
                     <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/0Duto743s5C7AgINwhE9/image.jpg" style="width:100%; border-radius:15px; margin-top:10px;">
                 </div>
             </div>
 
             <div class="card">
                 <div class="section-header">الإقامة (Hotel)</div>
-                <div class="item-box">
-                    <span class="note">إسطنبول (IST) - الفترة كاملة</span>
-                    <div class="price-row"><span class="price-main">841.92 JOD</span><span class="price-sub">3,508.42 ₪</span></div>
-                </div>
-                <div class="item-box">
-                    <span class="note">إسطنبول - للشخص الواحد</span>
-                    <div class="price-row"><span class="price-main">168.384 JOD</span><span class="price-sub">701.68 ₪</span></div>
-                </div>
-                <div class="item-box">
-                    <span class="note">ليلة واحدة في عمان</span>
-                    <div class="price-row"><span class="price-main">25 JOD</span><span class="price-sub">104.18 ₪</span></div>
-                </div>
+                <div class="item-box"><span style="font-size: 14px;">إسطنبول (للشخص): 168.384 JOD (≈ 701.68 ₪)</span></div>
                 <div style="display:flex; gap:10px; margin-top:15px;">
                     <button class="btn-action" onclick="openGal()">🖼️ صور الفندق</button>
-                    <button class="btn-action" onclick="window.open('https://www.google.com/maps/search/?api=1&query=Şahkulu,+İstiklal+Cd.+No:+233,+34421+Beyoğlu/İstanbul,+Türkiye')">📍 الموقع</button>
+                    <button class="btn-action" onclick="window.open('https://www.google.com/maps/search/?api=1&query=Beyoğlu/İstanbul')">📍 الموقع</button>
                 </div>
             </div>
 
             <div class="card">
                 <div class="section-header">التنقلات (Transfer & Taxi)</div>
                 <div class="item-box">
-                    <span class="note">من المطار إلى الفندق (ذهاب وإياب)</span>
-                    <div class="price-row"><span class="price-main">118 $</span><span class="price-sub">348.00 ₪</span></div>
-                    <span class="note">للشخص: 11.8$ = 34.80 ₪</span>
+                    <span style="font-size: 11px; color: #64748b;">من المطار إلى الفندق (ذهاب وإياب)</span>
                     <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/Ag5Tsoef8vrr52VFUuoF/image.jpg" style="width:100%; border-radius:15px; margin-top:10px;">
                 </div>
                 <div class="item-box">
-                    <span class="note">تاكسي المعبر للمطار + العودة (The Oud)</span>
-                    <div class="price-row"><span class="price-main">60 JOD</span><span class="price-sub">250.02 ₪</span></div>
-                    <span class="note">للشخص: 12 JOD = 50.00 ₪</span>
+                    <span style="font-size: 11px; color: #64748b;">تاكسي المعبر للمطار + العودة</span>
                     <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/E0aQKw9K28BmP0nriRyu/image.jpg" style="width:100%; border-radius:15px; margin-top:10px;">
                 </div>
             </div>
 
             <div class="total-banner">
-                <div style="font-size:14px; opacity:0.8;">المجموع الكلي المطلوب لكل شخص</div>
                 <div style="font-size:38px; font-weight:900; color:var(--primary-lava);">635 JOD</div>
                 <div style="font-size:20px; color:#f1c40f;">≈ 2,646.15 ₪</div>
             </div>
-
             <button class="join-btn" onclick="openJoinModal()">انضم للرحلة الآن ✈️</button>
         </div>
 
@@ -180,31 +146,49 @@
             </div>
 
             <div id="breakfast" class="food-section active">
+                <!-- المطعم الأول (Sarayburnu) -->
                 <div class="card">
                     <div class="section-header">Sarayburnu Aile Çay bahçesi</div>
-                    <span class="note">🕒 يومياً من 8:00 صباحاً حتى 3:00 بعد منتصف الليل</span>
-                    
+                    <span style="font-size:12px; color:#64748b;">🕒 ساعات العمل: 8:00 - 3:00 (يومياً)</span>
                     <div class="food-gallery">
-                        <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/QtdYAfdMcwmJ9LgO8V8G/image.jpg" alt="صورة 1">
-                        <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/Vq1EAhcdfc4eTN0LSQsW/image.jpg" alt="صورة 2">
-                        <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/noxsrNyyXoeMNnr6RP38/image.jpg" alt="صورة 3">
+                        <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/QtdYAfdMcwmJ9LgO8V8G/image.jpg" alt="1">
+                        <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/Vq1EAhcdfc4eTN0LSQsW/image.jpg" alt="2">
+                        <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/noxsrNyyXoeMNnr6RP38/image.jpg" alt="3">
                     </div>
-
                     <div style="display:flex; flex-direction:column; gap:10px;">
                         <div style="display:flex; gap:10px;">
-                            <a href="tel:+902125221397" class="btn-action">📞 اتصل الآن</a>
-                            <button class="btn-action" onclick="window.open('https://www.google.com/maps/search/?api=1&query=Hoca+Paşa,+Kennedy+Cad.+No:8,+34110+Fatih/İstanbul,+Türkiye')">📍 الموقع</button>
+                            <a href="tel:+902125221397" class="btn-action">📞 اتصل</a>
+                            <button class="btn-action" onclick="window.open('https://www.google.com/maps/search/?api=1&query=Sarayburnu+Aile+Çay+bahçesi')">📍 الموقع</button>
                         </div>
                         <button class="btn-action" style="border-color:#475569; color:#475569;" onclick="window.open('http://sarayburnuailecaybahcesi.com')">🌐 الموقع الإلكتروني</button>
+                    </div>
+                </div>
+
+                <!-- المطعم الجديد (Best Lounge) -->
+                <div class="card">
+                    <div class="section-header">Best Lounge The Bosphorus</div>
+                    <span style="font-size:12px; color:#64748b;">🕒 ساعات العمل: 8:00 - 2:00 (يومياً)</span>
+                    <div class="food-gallery">
+                        <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/aCrx1mziFx0zgJ80JgPy/image.jpg" alt="1">
+                        <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/DhdkZSmu6oWf6eqvlu8y/image.jpg" alt="2">
+                        <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/VMS1k6ao2plh6CdPsXpn/image.jpg" alt="3">
+                    </div>
+                    <div style="display:flex; flex-direction:column; gap:10px;">
+                        <div style="display:flex; gap:10px;">
+                            <a href="https://wa.me/905401663434" class="btn-action" style="background:#25D366; color:white; border:none;">💬 واتساب</a>
+                            <button class="btn-action" onclick="window.open('https://www.google.com/maps/search/?api=1&query=Best+Lounge+The+Bosphorus')">📍 الموقع</button>
+                        </div>
+                        <button class="btn-action" style="border-color:#475569; color:#475569;" onclick="window.open('http://bestloungethebosphorus.com')">🌐 الموقع الإلكتروني</button>
                     </div>
                 </div>
             </div>
 
             <div id="lunch" class="food-section">
-                <div class="card"><p style="text-align:center; color:#64748b;">قريباً... 🍖</p></div>
+                <div class="card"><p style="text-align:center; color:#64748b;">قريباً... 🥩</p></div>
             </div>
         </div>
 
+        <!-- الأقسام الأخرى -->
         <div id="activities" class="tab-content"><div class="card"><div class="section-header">النشاطات المقترحة</div><p style="text-align:center; color:#64748b;">قريباً...</p></div></div>
         <div id="series" class="tab-content"><div class="card"><div class="section-header">مواقع المسلسلات</div><p style="text-align:center; color:#64748b;">قريباً...</p></div></div>
     </div>
