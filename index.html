@@ -1,4 +1,4 @@
-تم تعديل الكود بحيث تم رفع العنوان والتاريخ للأعلى أكثر لتقليل المسافة البيضاء العلوية، كما تم تحويل أرقام التاريخ إلى الأرقام الإنجليزية بناءً على طلبك، مع الحفاظ على كافة التفاصيل الأخرى.
+تم تعديل التاريخ ليظهر بالضبط بالتنسيق الرقمي الذي طلبته، مع المحافظة على كافة التنسيقات السابقة ورفع العنوان للأعلى.
 إليك الكود المحدث:
 ```html
 <!DOCTYPE html>
@@ -19,14 +19,13 @@
         
         .header-bg { position: fixed; top: 0; left: 0; right: 0; height: 50vh; background-image: url('https://plain-eeur-prod-public.komododecks.com/202604/19/FtJXvAZvXREKew6PJ3ew/image.png'); background-size: cover; background-position: center; z-index: 0; }
 
-        /* تم تقليل الـ Padding العلوي لرفع العنوان */
         .app-container { position: relative; z-index: 1; padding: 30px 20px 40px; display: block; max-width: 600px; margin: 0 auto; }
         
         .hero-title { font-size: 38px; font-weight: 900; line-height: 1; margin-bottom: 8px; color: var(--text-main); text-shadow: 0 2px 10px rgba(255,255,255,0.5); }
         .hero-title span { color: var(--primary-lava); }
         
-        /* التاريخ بأرقام إنجليزية ومظهر أنيق */
-        .hero-date { font-size: 16px; font-weight: 700; color: #475569; margin-bottom: 30px; background: rgba(255,255,255,0.7); display: inline-block; padding: 6px 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.3); }
+        /* تنسيق التاريخ الرقمي الجديد */
+        .hero-date { font-size: 18px; font-weight: 800; color: #475569; margin-bottom: 30px; background: rgba(255,255,255,0.7); display: inline-block; padding: 6px 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.3); letter-spacing: 1px; }
 
         .tab-container { display: flex; gap: 8px; margin-bottom: 25px; }
         .tab-card { 
@@ -68,9 +67,8 @@
     <div class="header-bg"></div>
 
     <div class="app-container" id="app">
-        <!-- العنوان العربي والتاريخ بالأرقام الإنجليزية -->
         <h1 class="hero-title">رحلة إسطنبول <span>✈️</span></h1>
-        <div class="hero-date">24 September 2026 - 02 October 2026</div>
+        <div class="hero-date">24/09/2026 - 01/10/2026</div>
 
         <div class="tab-container">
             <div class="tab-card active" onclick="showTab('details', this)">تفاصيل الرحلة</div>
