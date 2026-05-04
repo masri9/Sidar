@@ -1,6 +1,3 @@
-أبشر، تم تعديل قسم المطاعم ليدعم إضافة **عدة صور** لكل مطعم (مع إمكانية التمرير العرضي للصور)، وتمت استعادة قسم **تفاصيل الرحلة** بكامل تفاصيله الأصلية دون أي نقص.
-إليك الكود المحدث بالكامل:
-```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -37,7 +34,6 @@
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        /* تنسيق تبويبات الطعام الفرعية */
         .food-tabs { display: flex; gap: 10px; margin-bottom: 20px; }
         .food-btn { flex: 1; padding: 10px; border-radius: 12px; border: 1.5px solid var(--primary-lava); background: transparent; color: var(--primary-lava); font-weight: 800; cursor: pointer; }
         .food-btn.active { background: var(--primary-lava); color: white; }
@@ -45,9 +41,8 @@
         .food-section { display: none; }
         .food-section.active { display: block; }
 
-        /* معرض صور المطعم الممرر */
         .food-gallery { display: flex; gap: 10px; overflow-x: auto; margin-bottom: 15px; padding-bottom: 5px; scroll-snap-type: x mandatory; }
-        .food-gallery img { width: 85%; flex-shrink: 0; border-radius: 20px; border: 1px solid #eee; scroll-snap-align: start; }
+        .food-gallery img { width: 85%; flex-shrink: 0; border-radius: 20px; border: 1px solid #eee; scroll-snap-align: start; height: 200px; object-fit: cover; }
 
         .card { background: var(--glass); backdrop-filter: blur(12px); border: 1.5px solid #f1f5f9; border-radius: 30px; padding: 25px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.04); }
         .section-header { border-right: 5px solid var(--primary-lava); padding-right: 15px; margin-bottom: 15px; font-weight: 900; font-size: 19px; }
@@ -102,7 +97,7 @@
             </div>
         </div>
 
-        <!-- قسم تفاصيل الرحلة (مستعاد بالكامل) -->
+        <!-- قسم تفاصيل الرحلة -->
         <div id="details" class="tab-content active">
             <div class="card">
                 <div class="section-header">المعابر (Crossing)</div>
@@ -141,10 +136,6 @@
                     <span class="note">إسطنبول - للشخص الواحد</span>
                     <div class="price-row"><span class="price-main">168.384 JOD</span><span class="price-sub">701.68 ₪</span></div>
                 </div>
-                <div class="item-box">
-                    <span class="note">ليلة واحدة في عمان</span>
-                    <div class="price-row"><span class="price-main">25 JOD</span><span class="price-sub">104.18 ₪</span></div>
-                </div>
                 <div style="display:flex; gap:10px; margin-top:15px;">
                     <button class="btn-action" onclick="openGal()">🖼️ صور الفندق</button>
                     <button class="btn-action" onclick="window.open('https://www.google.com/maps/search/?api=1&query=Şahkulu,+İstiklal+Cd.+No:+233,+34421+Beyoğlu/İstanbul,+Türkiye')">📍 الموقع</button>
@@ -156,13 +147,11 @@
                 <div class="item-box">
                     <span class="note">من المطار إلى الفندق (ذهاب وإياب)</span>
                     <div class="price-row"><span class="price-main">118 $</span><span class="price-sub">348.00 ₪</span></div>
-                    <span class="note">للشخص: 11.8$ = 34.80 ₪</span>
                     <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/Ag5Tsoef8vrr52VFUuoF/image.jpg" class="car-img">
                 </div>
                 <div class="item-box">
-                    <span class="note">تاكسي المعبر للمطار + العودة (The Oud)</span>
+                    <span class="note">تاكسي المعبر للمطار + العودة</span>
                     <div class="price-row"><span class="price-main">60 JOD</span><span class="price-sub">250.02 ₪</span></div>
-                    <span class="note">للشخص: 12 JOD = 50.00 ₪</span>
                     <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/E0aQKw9K28BmP0nriRyu/image.jpg" class="car-img">
                 </div>
             </div>
@@ -174,7 +163,7 @@
             <button class="join-btn" onclick="openJoinModal()">انضم للرحلة الآن ✈️</button>
         </div>
 
-        <!-- قسم المطاعم (مع ميزة المعارض المتعددة) -->
+        <!-- قسم المطاعم -->
         <div id="restaurants" class="tab-content">
             <div class="food-tabs">
                 <button class="food-btn active" onclick="switchFood('breakfast', this)">الفطور ☕</button>
@@ -182,12 +171,30 @@
             </div>
 
             <div id="breakfast" class="food-section active">
+                <!-- المطعم الجديد -->
+                <div class="card">
+                    <div class="section-header">Sarayburnu Aile Çay bahçesi</div>
+                    <span class="note">🕒 يومياً: 8:00 AM - 3:00 AM</span>
+                    <div class="food-gallery">
+                        <img src="https://kommodo.ai/i/Wch2fAogoDONqIGo7KRk" alt="صورة 1">
+                        <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/QtdYAfdMcwmJ9LgO8V8G/image.jpg" alt="صورة 2">
+                        <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/Vq1EAhcdfc4eTN0LSQsW/image.jpg" alt="صورة 3">
+                        <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/noxsrNyyXoeMNnr6RP38/image.jpg" alt="صورة 4">
+                    </div>
+                    <div style="display:flex; flex-direction:column; gap:10px;">
+                        <div style="display:flex; gap:10px;">
+                            <a href="tel:+902125221397" class="btn-action">📞 اتصل</a>
+                            <button class="btn-action" onclick="window.open('https://www.google.com/maps/search/?api=1&query=Hoca+Paşa,+Kennedy+Cad.+No:8,+34110+Fatih/İstanbul,+Türkiye')">📍 الخريطة</button>
+                        </div>
+                        <button class="btn-action" style="border-color:#475569; color:#475569;" onclick="window.open('http://sarayburnuailecaybahcesi.com')">🌐 الموقع الإلكتروني</button>
+                    </div>
+                </div>
+
+                <!-- المطاعم السابقة -->
                 <div class="card">
                     <div class="section-header">The House Cafe Ortaköy</div>
                     <div class="food-gallery">
-                        <img src="image.png" alt="صورة 1">
-                        <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/i6qnBDrkuUUOaNblMTrD/image.jpg" alt="صورة 2">
-                        <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/22GCFsWDTlNSt72XtfaR/image.jpg" alt="صورة 3">
+                        <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/i6qnBDrkuUUOaNblMTrD/image.jpg" alt="صورة 1">
                     </div>
                     <div style="display:flex; gap:10px;">
                         <a href="tel:+902122272699" class="btn-action">📞 اتصل</a>
@@ -197,17 +204,12 @@
 
                 <div class="card">
                     <div class="section-header">Lokma</div>
-                    <p style="font-size:12px; color:#64748b; margin-bottom:10px;">مطعم فطور مطل على البوسفور</p>
                     <div class="food-gallery">
                         <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/0Duto743s5C7AgINwhE9/image.jpg" alt="صورة 1">
-                        <img src="https://plain-eeur-prod-public.komododecks.com/202604/19/FtJXvAZvXREKew6PJ3ew/image.png" alt="صورة 2">
                     </div>
-                    <div style="display:flex; flex-direction:column; gap:10px;">
-                        <div style="display:flex; gap:10px;">
-                            <a href="tel:+902122657171" class="btn-action">📞 اتصل</a>
-                            <button class="btn-action" onclick="window.open('https://www.google.com/maps/search/?api=1&query=Lokma+Rumeli+Hisarı')">📍 الخريطة</button>
-                        </div>
-                        <button class="btn-action" style="border-color:#475569; color:#475569;" onclick="window.open('https://lokma.com.tr')">🌐 الموقع الإلكتروني</button>
+                    <div style="display:flex; gap:10px;">
+                        <a href="tel:+902122657171" class="btn-action">📞 اتصل</a>
+                        <button class="btn-action" onclick="window.open('https://www.google.com/maps/search/?api=1&query=Lokma+Rumeli+Hisarı')">📍 الخريطة</button>
                     </div>
                 </div>
             </div>
@@ -254,5 +256,3 @@
     </script>
 </body>
 </html>
-
-```
