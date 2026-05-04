@@ -3,209 +3,235 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIDAR AI Travel - Prototype</title>
+    <title>SIDAR AI - Volcanic Edition</title>
     <style>
         :root {
-            --glass: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --accent-cyan: #00f2fe;
-            --accent-purple: #7028ff;
-            --text-main: #ffffff;
-            --bg-dark: #050505;
+            /* لوحة الألوان البركانية والفواتح */
+            --volcano-lava: #ff4d00;
+            --volcano-deep: #2b0b00;
+            --light-bg: #fdfdfd;
+            --light-card: rgba(255, 255, 255, 0.9);
+            --text-dark: #1a1a1a;
+            --accent-orange: #e65100;
         }
 
         body, html {
-            margin: 0; padding: 0; height: 100%;
+            margin: 0; padding: 0; min-height: 100%;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: var(--text-main);
+            color: var(--text-dark);
+            background-color: var(--light-bg);
             overflow-x: hidden;
-            background: var(--bg-dark);
         }
 
-        /* الخلفية المتحركة Gradient */
-        .bg-animate {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -2;
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e, #050505);
-            background-size: 400% 400%;
-            animation: gradientMove 15s ease infinite;
-        }
-
-        @keyframes gradientMove {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* تأثير الجزيئات المتحركة */
-        .particles {
+        /* خلفية متحركة بركانية ناعمة */
+        .bg-vibe {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
-            background: radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px);
-            background-size: 50px 50px;
-            animation: starsMove 100s linear infinite;
+            background: radial-gradient(circle at 10% 20%, rgba(255, 77, 0, 0.05) 0%, rgba(255, 255, 255, 1) 90%);
         }
 
-        @keyframes starsMove {
-            from { background-position: 0 0; }
-            to { background-position: 1000px 1000px; }
+        .lava-glow {
+            position: fixed;
+            width: 400px; height: 400px;
+            background: var(--volcano-lava);
+            filter: blur(150px);
+            opacity: 0.1;
+            border-radius: 50%;
+            z-index: -1;
+            animation: moveGlow 10s infinite alternate;
         }
 
-        /* شاشة تسجيل الدخول */
+        @keyframes moveGlow {
+            from { top: -100px; right: -100px; }
+            to { bottom: -100px; left: -100px; }
+        }
+
+        /* شاشة الدخول */
         #login-screen {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            height: 100vh; text-align: center;
+            display: flex; align-items: center; justify-content: center; height: 100vh;
         }
 
-        .glass-card {
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            backdrop-filter: blur(20px);
+        .login-card {
+            background: var(--light-card);
+            border: 1px solid #eee;
             padding: 40px;
-            border-radius: 30px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-            width: 350px;
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(43, 11, 0, 0.1);
+            text-align: center;
+            width: 320px;
         }
 
-        h1.logo {
-            font-size: 2.5rem; margin-bottom: 10px;
-            background: linear-gradient(to right, var(--accent-cyan), var(--accent-purple));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            letter-spacing: 2px; font-weight: 900;
+        h1.brand {
+            font-size: 2.2rem; margin-bottom: 10px;
+            color: var(--volcano-deep);
+            border-bottom: 3px solid var(--volcano-lava);
+            display: inline-block;
         }
 
         input {
-            width: 100%; padding: 15px; background: rgba(255,255,255,0.03);
-            border: 1px solid var(--glass-border); border-radius: 15px;
-            color: white; text-align: center; font-size: 1.2rem;
-            outline: none; margin-bottom: 20px;
+            width: 100%; padding: 15px; margin: 20px 0;
+            border: 2px solid #eee; border-radius: 12px;
+            font-size: 1.1rem; text-align: center; outline: none;
+            transition: 0.3s;
         }
+        input:focus { border-color: var(--volcano-lava); box-shadow: 0 0 10px rgba(255, 77, 0, 0.1); }
 
-        .btn-login {
-            width: 100%; padding: 15px; border: none; border-radius: 15px;
-            background: linear-gradient(45deg, var(--accent-purple), var(--accent-cyan));
-            color: white; font-weight: bold; cursor: pointer; transition: 0.3s;
+        .btn-action {
+            width: 100%; padding: 15px; border: none; border-radius: 12px;
+            background: var(--volcano-deep); color: white;
+            font-weight: bold; cursor: pointer; transition: 0.3s;
         }
+        .btn-action:hover { background: var(--volcano-lava); transform: translateY(-2px); }
 
         /* محتوى التطبيق */
-        #app-content { display: none; padding: 20px; max-width: 800px; margin: 0 auto; animation: fadeIn 1s; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        #app-content { display: none; padding: 30px; max-width: 800px; margin: 0 auto; }
 
         .card {
-            background: var(--glass); border: 1px solid var(--glass-border);
-            backdrop-filter: blur(15px); border-radius: 25px;
-            padding: 25px; margin-bottom: 20px;
+            background: var(--light-card);
+            border-right: 5px solid var(--volcano-lava);
+            border-radius: 15px;
+            padding: 25px; margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+            backdrop-filter: blur(10px);
         }
 
-        .section-header h3 { color: var(--accent-cyan); border-right: 4px solid var(--accent-cyan); padding-right: 10px; }
-        .item-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .currency-ils { color: #f1c40f; margin-right: 8px; font-size: 0.9rem; }
+        .section-title { color: var(--volcano-deep); font-weight: 800; margin-bottom: 15px; font-size: 1.2rem; }
+        .row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f0f0f0; }
+        .price-jod { font-weight: bold; color: var(--volcano-deep); }
+        .price-ils { color: var(--accent-orange); font-size: 0.9rem; margin-right: 10px; }
 
-        /* التشات */
-        #chat-widget {
-            position: fixed; bottom: 30px; left: 30px; width: 300px;
-            height: 400px; background: rgba(10, 10, 10, 0.95);
-            border: 1px solid var(--glass-border); border-radius: 20px;
-            display: none; flex-direction: column; z-index: 1000;
+        /* مساعد التشات */
+        #chat-ui {
+            position: fixed; bottom: 20px; left: 20px; width: 300px;
+            background: white; border-radius: 20px; display: none;
+            flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 1px solid #eee; overflow: hidden;
         }
-        .chat-head { background: linear-gradient(to left, var(--accent-purple), var(--accent-cyan)); padding: 12px; font-weight: bold; border-radius: 20px 20px 0 0; }
-        #chat-msgs { flex: 1; padding: 15px; overflow-y: auto; font-size: 0.85rem; }
-        .chat-input { padding: 10px; background: #111; border: none; border-top: 1px solid #333; color: white; border-radius: 0 0 20px 20px; }
+        .chat-header { background: var(--volcano-deep); color: white; padding: 15px; font-size: 0.9rem; }
+        #messages { height: 200px; padding: 15px; overflow-y: auto; font-size: 0.85rem; background: #fffcfb; }
+        .chat-input { padding: 12px; border: none; border-top: 1px solid #eee; outline: none; }
 
-        .admin-badge { background: #ff4757; padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; margin-bottom: 15px; display: inline-block; }
+        .admin-tag { background: #ffebee; color: #c62828; padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: bold; margin-bottom: 10px; display: inline-block; }
     </style>
 </head>
 <body>
 
-    <div class="bg-animate"></div>
-    <div class="particles"></div>
+    <div class="bg-vibe"></div>
+    <div class="lava-glow"></div>
 
     <div id="login-screen">
-        <div class="glass-card">
-            <h1 class="logo">SIDAR AI</h1>
-            <input type="password" id="passcode" placeholder="رمز الدخول">
-            <button class="btn-login" onclick="checkAuth()">دخول ذكي</button>
+        <div class="login-card">
+            <h1 class="brand">SIDAR</h1>
+            <p style="color: #666; font-size: 0.9rem;">الجيل القادم من السياحة الذكية</p>
+            <input type="password" id="code" placeholder="أدخل الرمز الخاص بك">
+            <button class="btn-action" onclick="login()">دخول للنظام</button>
         </div>
     </div>
 
     <div id="app-content">
-        <div id="admin-banner" style="display:none; text-align:center;">
-            <div class="admin-badge">وضع المسؤول مفعل ✍️</div>
+        <div id="admin-badge-area" style="display:none;">
+            <div class="admin-tag">لوحة تحكم المسؤول - التعديل متاح</div>
         </div>
 
-        <div class="card" style="text-align:center;">
-            <h1 class="logo">IST Travel ✈️</h1>
-            <p>24/9/2026 - 01/10/2026 (إسطنبول)</p>
-            <p>01/10/2026 - 02/10/2026 (عمان)</p>
+        <div class="card" style="text-align: center; border-right: none; border-top: 5px solid var(--volcano-lava);">
+            <h2 id="t1">برنامج رحلة IST Travel ✈️</h2>
+            <p id="t2" style="color: #666;">إسطنبول (24/9 - 1/10) | عمان (1/10 - 2/10)</p>
         </div>
 
-        <!-- تفاصيل التكاليف -->
         <div class="card">
-            <div class="section-header"><h3>المعابر و الطيران</h3></div>
-            <div class="item-row">
-                <span>المعبر لإسرائيل</span>
-                <span id="edit1">120 ₪</span>
+            <div class="section-title">✈️ الطيران والمعابر</div>
+            <div class="row">
+                <span>تذكرة الطيران (الذهاب والعودة)</span>
+                <span class="price-jod"><span id="p1">360.89</span> JOD <span class="price-ils">≈ 1505 ILS</span></span>
             </div>
-            <div class="item-row">
-                <span>المعبر للأردن</span>
-                <span>20 JOD <span class="currency-ils">= 83.41 ILS</span></span>
+            <div class="row">
+                <span>رسوم معبر إسرائيل</span>
+                <span class="price-jod"><span id="p2">120</span> ₪</span>
             </div>
-            <div class="item-row">
-                <span>تذكرة الطيران</span>
-                <span>360.890 JOD <span class="currency-ils">= 1,505.16 ILS</span></span>
+            <div class="row">
+                <span>رسوم دخول/خروج الأردن</span>
+                <span class="price-jod"><span id="p3">20</span> JOD <span class="price-ils">≈ 83 ILS</span></span>
             </div>
         </div>
 
         <div class="card">
-            <div class="section-header"><h3>الفنادق والتنقل</h3></div>
-            <div class="item-row">
-                <span>فندق إسطنبول (فترة كاملة)</span>
-                <span>841.92 JOD <span class="currency-ils">= 3,511.39 ILS</span></span>
+            <div class="section-title">🏨 الإقامة والفنادق</div>
+            <div class="row">
+                <span>فندق إسطنبول (للشخص الواحد)</span>
+                <span class="price-jod"><span id="p4">168.38</span> JOD <span class="price-ils">≈ 702 ILS</span></span>
             </div>
-            <div class="item-row">
-                <span>تكلفة الشخص (إسطنبول)</span>
-                <span>168.384 JOD <span class="currency-ils">= 702.28 ILS</span></span>
-            </div>
-            <div class="item-row">
-                <span>ليلة عمان</span>
-                <span>25 JOD <span class="currency-ils">= 104.18 ILS</span></span>
-            </div>
-            <div class="item-row">
-                <span>تاكسي المعبر للمطار</span>
-                <span>30 JOD <span class="currency-ils">= 125.01 ILS</span></span>
+            <div class="row">
+                <span>فندق عمان (ليلة واحدة)</span>
+                <span class="price-jod"><span id="p5">25</span> JOD <span class="price-ils">≈ 104 ILS</span></span>
             </div>
         </div>
 
-        <div class="card" style="border: 2px solid var(--accent-cyan); background: rgba(0,242,254,0.05);">
-            <div class="item-row" style="font-size: 1.4rem; font-weight: bold;">
-                <span>المجموع الكلي</span>
-                <span style="color: var(--accent-cyan);">635 JOD <span class="currency-ils" style="font-size: 1.1rem;">≈ 2,646.15 ILS</span></span>
+        <div class="card">
+            <div class="section-title">🚕 التنقلات (Transfer)</div>
+            <div class="row">
+                <span>تاكسي المعبر للمطار (عمان)</span>
+                <span class="price-jod"><span id="p6">30</span> JOD <span class="price-ils">≈ 125 ILS</span></span>
+            </div>
+            <div class="row">
+                <span>توصيل مطار إسطنبول (VIP)</span>
+                <span class="price-jod"><span id="p7">11.8</span> $ <span class="price-ils">≈ 35 ILS</span></span>
+            </div>
+        </div>
+
+        <div class="card" style="background: var(--volcano-deep); color: white;">
+            <div class="row" style="border: none;">
+                <span style="font-size: 1.2rem;">المجموع التقريبي لكل شخص</span>
+                <span style="font-size: 1.5rem; color: var(--volcano-lava);">635 JOD <span style="font-size: 0.9rem; color: #ffab91;">(2,646 ₪)</span></span>
             </div>
         </div>
     </div>
 
-    <div id="chat-widget">
-        <div class="chat-head">مساعد SIDAR AI</div>
-        <div id="chat-msgs">مرحباً! كيف أساعدك في تفاصيل رحلتك؟</div>
-        <input type="text" class="chat-input" placeholder="اكتب سؤالك هنا...">
+    <div id="chat-ui">
+        <div class="chat-header">🔥 SIDAR AI Assistant</div>
+        <div id="messages">أهلاً بك! كيف يمكنني مساعدتك في حساب تكاليف رحلتك إلى إسطنبول؟</div>
+        <input type="text" class="chat-input" placeholder="اسألني أي شيء..." onkeypress="chat(event)">
     </div>
 
     <script>
-        function checkAuth() {
-            const code = document.getElementById('passcode').value;
-            if (code === "0000") {
-                document.getElementById('login-screen').style.display = 'none';
-                document.getElementById('app-content').style.display = 'block';
-                document.getElementById('chat-widget').style.display = 'flex';
-            } else if (code === "9999") {
-                document.getElementById('login-screen').style.display = 'none';
-                document.getElementById('app-content').style.display = 'block';
-                document.getElementById('admin-banner').style.display = 'block';
-                document.querySelectorAll('.card span').forEach(el => el.contentEditable = true);
+        function login() {
+            const val = document.getElementById('code').value;
+            const screen = document.getElementById('login-screen');
+            const app = document.getElementById('app-content');
+            const chat = document.getElementById('chat-ui');
+
+            if(val === "0000") {
+                screen.style.display = 'none';
+                app.style.display = 'block';
+                chat.style.display = 'flex';
+            } else if(val === "9999") {
+                screen.style.display = 'none';
+                app.style.display = 'block';
+                document.getElementById('admin-badge-area').style.display = 'block';
+                enableEdit();
             } else {
-                alert("رمز خاطئ!");
+                alert("الرمز غير صحيح");
+            }
+        }
+
+        function enableEdit() {
+            const ids = ['t1', 't2', 'p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'p7'];
+            ids.forEach(id => {
+                document.getElementById(id).contentEditable = true;
+                document.getElementById(id).style.background = "#fff9f6";
+            });
+        }
+
+        function chat(e) {
+            if(e.key === 'Enter') {
+                const msg = e.target.value;
+                const box = document.getElementById('messages');
+                box.innerHTML += `<div style="margin-top:10px; color:var(--volcano-lava)"><b>أنت:</b> ${msg}</div>`;
+                e.target.value = "";
+                setTimeout(() => {
+                    box.innerHTML += `<div style="margin-top:5px;"><b>SIDAR:</b> بناءً على بياناتك، التكلفة شاملة الطيران والفنادق هي 635 دينار.</div>`;
+                    box.scrollTop = box.scrollHeight;
+                }, 800);
             }
         }
     </script>
