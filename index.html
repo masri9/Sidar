@@ -27,7 +27,7 @@
         }
         @keyframes robotFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
-        /* Login */
+        /* Login Screen */
         #login-screen { position: fixed; inset: 0; background: #fff; z-index: 9999; display: flex; align-items: center; justify-content: center; }
         .login-box { text-align: center; width: 85%; max-width: 350px; }
         input { width: 100%; padding: 15px; border: 2px solid #f1f5f9; border-radius: 20px; font-size: 18px; text-align: center; outline: none; margin-bottom: 15px; box-sizing: border-box; }
@@ -39,28 +39,17 @@
         .hero-title span { color: var(--lava); }
 
         .card { background: var(--white-glass); backdrop-filter: blur(10px); border: 1.5px solid #f1f5f9; border-radius: 28px; padding: 20px; margin-bottom: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.02); }
-        .section-header { border-right: 4px solid var(--lava); padding-right: 12px; margin-bottom: 15px; font-weight: 900; display: flex; justify-content: space-between; align-items: center; }
+        .section-header { border-right: 4px solid var(--lava); padding-right: 12px; margin-bottom: 15px; font-weight: 900; }
         
         .item-box { padding: 10px 0; border-bottom: 1px solid #f1f5f9; }
         .item-label { font-size: 14px; font-weight: 700; color: #64748b; margin-bottom: 5px; display: block; }
         .price-row { display: flex; justify-content: space-between; align-items: center; }
         .price-main { font-weight: 800; font-size: 16px; }
         .price-sub { font-size: 12px; color: var(--lava); font-weight: 600; }
-        .per-person { font-size: 11px; background: #fff5f2; color: var(--lava); padding: 2px 8px; border-radius: 10px; margin-top: 4px; display: inline-block; }
+        .tag-info { font-size: 11px; background: #fff5f2; color: var(--lava); padding: 2px 8px; border-radius: 10px; margin-top: 4px; display: inline-block; }
 
-        /* Media Buttons */
         .media-actions { display: flex; gap: 10px; margin-top: 15px; }
-        .btn-view { flex: 1; padding: 8px; border: 1.5px solid var(--lava); border-radius: 12px; background: transparent; color: var(--lava); font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; }
-        .btn-view:hover { background: var(--lava); color: white; }
-
-        /* Modal Area */
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 10000; align-items: center; justify-content: center; padding: 20px; }
-        .modal-content { background: white; border-radius: 25px; width: 100%; max-width: 400px; overflow: hidden; position: relative; }
-        .modal-close { position: absolute; top: 15px; left: 15px; background: white; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; }
-        .modal-img { width: 100%; height: 200px; object-fit: cover; }
-        .modal-info { padding: 20px; text-align: center; }
-
-        .admin-badge { background: #ffe4e1; color: #dc2626; padding: 5px 15px; border-radius: 20px; font-size: 11px; font-weight: 800; display: inline-block; margin-bottom: 10px; }
+        .btn-view { flex: 1; padding: 10px; border: 1.5px solid var(--lava); border-radius: 12px; background: transparent; color: var(--lava); font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; }
     </style>
 </head>
 <body>
@@ -68,98 +57,69 @@
     <div class="header-bg"></div>
     <img src="https://plain-eeur-prod-public.komododecks.com/202604/20/U4I3P5a9xfiovTcHKNJk/image.png" class="sidar-robot">
 
-    <!-- Login -->
     <div id="login-screen">
         <div class="login-box">
             <h1 style="color:var(--lava); font-weight: 900;">SIDAR AI</h1>
-            <input type="password" id="pass" placeholder="0000">
-            <button class="login-btn" onclick="auth()">دخول للرحلة</button>
+            <input type="password" id="pass" placeholder="أدخل الرمز (0000)">
+            <button class="login-btn" onclick="auth()">عرض تفاصيل الرحلة</button>
         </div>
     </div>
 
-    <!-- App Content -->
     <div class="app-container" id="app">
-        <div id="adm" style="display:none;"><div class="admin-badge">وضع المسؤول مفعل ✍️</div></div>
-        <h1 class="hero-title">ميزانية رحلة <br><span>تركيا والأردن ✈️</span></h1>
+        <h1 class="hero-title">تفاصيل ميزانية <br><span>رحلة إسطنبول ✈️</span></h1>
 
-        <!-- Section: Flights -->
+        <!-- قسم الفندق بتفصيل السعر والعنوان -->
         <div class="card">
-            <div class="section-header"><h3>التنقل الجوي والمعابر</h3></div>
+            <div class="section-header"><h3>فندق إسطنبول (بيوغلو)</h3></div>
+            <p style="font-size: 12px; color: #64748b; margin-top: -10px;">Şahkulu, İstiklal Cd. No: 233, Beyoğlu</p>
+            
             <div class="item-box">
-                <span class="item-label">تذاكر الطيران (AMM ↔ SAW)</span>
-                <div class="price-row">
-                    <span class="price-main">360.89 JOD</span>
-                    <span class="price-sub">1,505.16 ₪</span>
-                </div>
-                <div class="per-person">المبلغ للمجموعة كاملة</div>
-            </div>
-            <div class="item-box">
-                <span class="item-label">معبر إسرائيل (Crossing)</span>
-                <div class="price-row">
-                    <span class="price-main">120 ₪</span>
-                </div>
-                <div class="per-person">للشخص الواحد</div>
-            </div>
-        </div>
-
-        <!-- Section: Hotel IST -->
-        <div class="card">
-            <div class="section-header">
-                <h3>فندق إسطنبول (IST)</h3>
-                <span style="font-size: 10px; color: #64748b;">24/9 - 01/10</span>
-            </div>
-            <div class="item-box">
-                <span class="item-label">التكلفة الإجمالية (للفترة كاملة)</span>
+                <span class="item-label">التكلفة الإجمالية للفترة (المجموعة)</span>
                 <div class="price-row">
                     <span class="price-main">841.92 JOD</span>
                     <span class="price-sub">3,511.39 ₪</span>
                 </div>
             </div>
+
             <div class="item-box">
-                <span class="item-label">نصيب الشخص الواحد</span>
+                <span class="item-label">نصيب الشخص الواحد (للفترة كاملة)</span>
                 <div class="price-row">
                     <span class="price-main">168.38 JOD</span>
                     <span class="price-sub">702.28 ₪</span>
                 </div>
+                <div class="tag-info">مقسم على 5 أشخاص</div>
             </div>
+
             <div class="media-actions">
-                <button class="btn-view" onclick="openModal('hotel_ist')">🖼️ صور الفندق</button>
-                <button class="btn-view" onclick="window.open('https://maps.google.com')">📍 الموقع</button>
+                <button class="btn-view" onclick="alert('سيتم عرض صور الفندق هنا')">🖼️ صور الغرف</button>
+                <button class="btn-view" onclick="window.open('https://www.google.com/maps/search/?api=1&query=Şahkulu,+İstiklal+Cd.+No:+233,+34421+Beyoğlu/İstanbul,+Türkiye')">📍 موقع الفندق</button>
             </div>
         </div>
 
-        <!-- Section: Hotel Amman -->
+        <!-- قسم الطيران والمعابر -->
         <div class="card">
-            <div class="section-header"><h3>ليلة في عمان (Amman)</h3></div>
+            <div class="section-header"><h3>الطيران والعبور</h3></div>
             <div class="item-box">
-                <span class="item-label">سعر الغرفة/الليلة</span>
+                <span class="item-label">تذاكر الطيران (إجمالي المجموعة)</span>
                 <div class="price-row">
-                    <span class="price-main">25 JOD</span>
-                    <span class="price-sub">104.18 ₪</span>
+                    <span class="price-main">360.89 JOD</span>
+                    <span class="price-sub">1,505.16 ₪</span>
                 </div>
             </div>
-            <div class="media-actions">
-                <button class="btn-view" onclick="openModal('hotel_amm')">🖼️ المعاينة</button>
+            <div class="item-box">
+                <span class="item-label">رسوم المعابر (للشخص الواحد)</span>
+                <div class="price-row">
+                    <span class="price-main">140 ₪</span>
+                </div>
+                <div class="tag-info">شامل معبر إسرائيل والأردن</div>
             </div>
         </div>
 
-        <!-- Summary -->
+        <!-- إجمالي الشخص الواحد -->
         <div class="card" style="background: var(--text); color: white; text-align: center;">
-            <div style="font-size: 12px; opacity: 0.7;">إجمالي التكلفة التقريبية للشخص الواحد</div>
+            <div style="font-size: 12px; opacity: 0.7;">إجمالي المبلغ المطلوب من كل شخص</div>
             <div style="font-size: 32px; font-weight: 900; color: var(--lava); margin: 10px 0;">635 JOD</div>
-            <div style="font-size: 16px; color: #f1c40f;">≈ 2,646.15 ₪</div>
-        </div>
-    </div>
-
-    <!-- Image Modal -->
-    <div id="imgModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-close" onclick="closeModal()">✕</div>
-            <img src="" id="modalImg" class="modal-img">
-            <div class="modal-info">
-                <h4 id="modalTitle">معاينة الفندق</h4>
-                <p style="font-size: 13px; color: #666;">صور من المرفقات والواقع للفندق المختار في الرحلة.</p>
-            </div>
+            <div style="font-size: 16px; color: #f1c40f;">أي ما يعادل 2,646.15 ₪</div>
         </div>
     </div>
 
@@ -169,29 +129,8 @@
             if(p === "0000" || p === "9999") {
                 document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('app').style.display = 'block';
-                if(p === "9999") {
-                    document.getElementById('adm').style.display = 'block';
-                    document.querySelectorAll('.price-main, .price-sub').forEach(el => el.contentEditable = true);
-                }
             } else { alert("الرمز خاطئ"); }
         }
-
-        function openModal(type) {
-            const modal = document.getElementById('imgModal');
-            const img = document.getElementById('modalImg');
-            const title = document.getElementById('modalTitle');
-            
-            if(type === 'hotel_ist') {
-                img.src = "https://images.unsplash.com/photo-1551882547-ff43c63faf76?auto=format&fit=crop&w=400";
-                title.innerText = "فندق إسطنبول";
-            } else {
-                img.src = "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=400";
-                title.innerText = "فندق عمان";
-            }
-            modal.style.display = 'flex';
-        }
-
-        function closeModal() { document.getElementById('imgModal').style.display = 'none'; }
     </script>
 </body>
 </html>
