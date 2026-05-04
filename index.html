@@ -1,340 +1,192 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>دايركت | تفاصيل الرحلة</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>دايركت - IST Travel</title>
+    <style>
+        :root {
+            --primary-lava: #ff4500; 
+            --text-main: #0f172a; 
+            --glass: rgba(255, 255, 255, 0.98);
+        }
 
-<style>
-:root{
-    --primary:#ff4500;
-    --dark:#0f172a;
-    --gray:#64748b;
-    --bg:#f8fafc;
-}
+        body, html { margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; background: #f8fafc; min-height: 100vh; color: var(--text-main); }
+        
+        #splash-layer {
+            position: fixed; inset: 0; background: #050505; z-index: 10000;
+            display: flex; justify-content: center; align-items: center; transition: 0.8s ease;
+        }
+        .splash-wrap { text-align: center; }
+        .splash-logo { color: white; font-size: 4rem; font-weight: 900; margin: 0; text-shadow: 0 0 20px rgba(255, 69, 0, 0.5); }
+        .loader-bar { width: 150px; height: 3px; background: rgba(255,255,255,0.1); margin: 20px auto; border-radius: 10px; overflow: hidden; }
+        .loader-progress { width: 0%; height: 100%; background: var(--primary-lava); animation: loadProgress 2.5s ease-in-out forwards; }
+        @keyframes loadProgress { to { width: 100%; } }
 
-*{box-sizing:border-box}
+        .header-bg { position: fixed; top: 0; left: 0; right: 0; height: 50vh; background-image: url('https://plain-eeur-prod-public.komododecks.com/202604/19/FtJXvAZvXREKew6PJ3ew/image.png'); background-size: cover; background-position: center; z-index: 0; }
+        .sidar-robot { position: fixed; left: 10px; top: 20px; width: 110px; z-index: 10; animation: robotFloat 4s ease-in-out infinite; }
+        @keyframes robotFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
-body{
-    margin:0;
-    font-family:'Segoe UI',sans-serif;
-    background:var(--bg);
-    color:var(--dark);
-}
+        .app-container { position: relative; z-index: 1; padding: 100px 20px 40px; display: none; max-width: 600px; margin: 0 auto; opacity: 0; transition: 1s ease; }
+        .hero-title { font-size: 32px; font-weight: 900; line-height: 1.1; margin-bottom: 25px; }
+        .hero-title span { color: var(--primary-lava); }
 
-/* ===== Splash ===== */
-#splash{
-    position:fixed;
-    inset:0;
-    background:#000;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    z-index:9999;
-    flex-direction:column;
-}
+        .card { background: var(--glass); backdrop-filter: blur(12px); border: 1.5px solid #f1f5f9; border-radius: 30px; padding: 25px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.04); }
+        .section-header { border-right: 5px solid var(--primary-lava); padding-right: 15px; margin-bottom: 15px; font-weight: 900; font-size: 19px; }
+        
+        .item-box { padding: 12px 0; border-bottom: 1px solid #f1f5f9; }
+        .price-row { display: flex; justify-content: space-between; align-items: center; }
+        .price-main { font-weight: 800; font-size: 16px; }
+        .price-sub { font-size: 13px; color: var(--primary-lava); font-weight: 700; }
+        .note { font-size: 12px; color: #64748b; margin-top: 4px; display: block; }
 
-.logo{
-    color:white;
-    font-size:42px;
-    font-weight:900;
-}
+        .btn-action { flex: 1; padding: 14px; border-radius: 18px; border: 1.5px solid var(--primary-lava); background: transparent; color: var(--primary-lava); font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 13px; }
 
-.loader{
-    width:140px;
-    height:3px;
-    background:#222;
-    margin-top:20px;
-    overflow:hidden;
-}
-.loader div{
-    height:100%;
-    background:var(--primary);
-    width:0;
-    animation:load 1.5s forwards;
-}
-@keyframes load{to{width:100%}}
+        #gallery-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 10000; align-items: center; justify-content: center; padding: 20px; }
+        .gallery-card { background: white; border-radius: 35px; width: 100%; max-width: 450px; max-height: 80vh; overflow-y: auto; padding: 20px; position: relative; }
+        .gallery-close { position: sticky; top: 0; float: left; width: 35px; height: 35px; background: #eee; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .gallery-img { width: 100%; border-radius: 20px; margin-bottom: 15px; }
 
-/* ===== Header ===== */
-.header{
-    height:45vh;
-    background:url('https://plain-eeur-prod-public.komododecks.com/202604/19/FtJXvAZvXREKew6PJ3ew/image.png') center/cover;
-    position:relative;
-}
-.header::after{
-    content:"";
-    position:absolute;
-    inset:0;
-    background:linear-gradient(to bottom,rgba(0,0,0,.5),transparent);
-}
-
-/* ===== Container ===== */
-.container{
-    margin-top:-60px;
-    padding:20px;
-    max-width:600px;
-    margin-inline:auto;
-}
-
-/* ===== Card ===== */
-.card{
-    background:white;
-    border-radius:25px;
-    padding:20px;
-    margin-bottom:15px;
-    box-shadow:0 10px 25px rgba(0,0,0,0.05);
-}
-
-.title{
-    font-size:28px;
-    font-weight:900;
-    margin-bottom:5px;
-}
-
-.sub{
-    color:var(--gray);
-    font-size:13px;
-    margin-bottom:20px;
-}
-
-.section{
-    font-weight:800;
-    margin-bottom:10px;
-    border-right:4px solid var(--primary);
-    padding-right:10px;
-}
-
-/* ===== Rows ===== */
-.row{
-    display:flex;
-    justify-content:space-between;
-    padding:10px 0;
-    border-bottom:1px solid #eee;
-}
-.row:last-child{border:none}
-
-.note{
-    font-size:12px;
-    color:var(--gray);
-}
-
-.price{
-    font-weight:800;
-}
-
-.highlight{
-    color:var(--primary);
-}
-
-/* ===== Buttons ===== */
-.actions{
-    display:flex;
-    gap:10px;
-    margin-top:15px;
-}
-
-.btn{
-    flex:1;
-    padding:12px;
-    border-radius:15px;
-    border:2px solid var(--primary);
-    background:transparent;
-    font-weight:700;
-    cursor:pointer;
-}
-
-.btn.fill{
-    background:var(--primary);
-    color:white;
-}
-
-/* ===== Total ===== */
-.total{
-    background:linear-gradient(135deg,#0f172a,#1e293b);
-    color:white;
-    text-align:center;
-    padding:25px;
-    border-radius:25px;
-    margin-top:20px;
-}
-
-.total h1{
-    margin:10px 0;
-    color:var(--primary);
-}
-
-/* ===== Sticky Button ===== */
-.book{
-    position:fixed;
-    bottom:15px;
-    left:15px;
-    right:15px;
-    background:var(--primary);
-    color:white;
-    text-align:center;
-    padding:15px;
-    border-radius:20px;
-    font-weight:bold;
-    z-index:999;
-}
-
-/* ===== Gallery ===== */
-#gallery{
-    display:none;
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.9);
-    z-index:10000;
-    justify-content:center;
-    align-items:center;
-}
-
-.gallery-box{
-    background:white;
-    padding:15px;
-    border-radius:20px;
-    max-width:400px;
-    max-height:80vh;
-    overflow:auto;
-}
-
-.gallery-box img{
-    width:100%;
-    border-radius:15px;
-    margin-bottom:10px;
-}
-</style>
+        .total-banner { background: var(--text-main); color: white; border-radius: 32px; padding: 30px; text-align: center; margin-top: 30px; }
+    </style>
 </head>
-
 <body>
 
-<!-- Splash -->
-<div id="splash">
-    <div class="logo">دايركت</div>
-    <div class="loader"><div></div></div>
-</div>
-
-<!-- Header -->
-<div class="header"></div>
-
-<div class="container">
-
-<div class="card">
-    <div class="title">IST Travel ✈️</div>
-    <div class="sub">24/9 → 1/10 إسطنبول<br>1/10 → 2/10 عمّان</div>
-</div>
-
-<!-- Crossing -->
-<div class="card">
-    <div class="section">المعابر</div>
-    <div class="row">
-        <div>
-            <div>إسرائيل</div>
-            <div class="note">Crossing</div>
+    <div id="splash-layer">
+        <div class="splash-wrap">
+            <h1 class="splash-logo">دايركت</h1>
+            <div class="loader-bar"><div class="loader-progress"></div></div>
         </div>
-        <div class="price">120 ₪</div>
     </div>
 
-    <div class="row">
-        <div>
-            <div>الأردن</div>
-            <div class="note">10 دخول + 10 خروج</div>
+    <div class="header-bg"></div>
+    <img src="https://plain-eeur-prod-public.komododecks.com/202604/20/U4I3P5a9xfiovTcHKNJk/image.png" class="sidar-robot">
+
+    <div class="app-container" id="app">
+        <h1 class="hero-title">IST Travel ✈️</h1>
+        <p style="margin-top:-20px; color:#64748b; font-size:14px; margin-bottom:30px;">
+            24/9/2026 - 01/10/2026 في إسطنبول<br>
+            01/10/2026 - 02/10/2026 في عمان
+        </p>
+
+        <div class="card">
+            <div class="section-header">المعابر (Crossing)</div>
+            <div class="item-box">
+                <span class="note">Crossing —> Israel</span>
+                <div class="price-row"><span class="price-main">120 ₪</span></div>
+            </div>
+            <div class="item-box">
+                <span class="note">Crossing —> Jordan</span>
+                <div class="price-row">
+                    <span class="price-main">20 JOD</span>
+                    <span class="price-sub">83.34 ILS</span>
+                </div>
+                <span class="note">10 JOD entry & 10 JOD for exit</span>
+            </div>
         </div>
-        <div class="price">20 JOD</div>
-    </div>
-</div>
 
-<!-- Flight -->
-<div class="card">
-    <div class="section">الطيران</div>
-    <div class="row">
-        <div>
-            <div>Turkish Airlines</div>
-            <div class="note">AMM ↔ SAW</div>
+        <div class="card">
+            <div class="section-header">تذاكر الطيران (Plane Ticket)</div>
+            <div class="item-box">
+                <span class="note" style="color: #c8102e; font-weight: bold;">Turkish Airlines 🇹🇷</span>
+                <span class="note">1. AMM Airport <—> SAW Airport</span>
+                <div class="price-row">
+                    <span class="price-main">360.890 JOD</span>
+                    <span class="price-sub">1,503.89 ILS</span>
+                </div>
+            </div>
         </div>
-        <div class="price">360 JOD</div>
-    </div>
-</div>
 
-<!-- Hotel -->
-<div class="card">
-    <div class="section">الفنادق</div>
-
-    <div class="row">
-        <div>
-            <div>إسطنبول</div>
-            <div class="note">7 ليالي</div>
+        <div class="card">
+            <div class="section-header">الإقامة (Hotel)</div>
+            <div class="item-box">
+                <span class="note">1. IST => from — 24/9/2026 —> 1/10/2026</span>
+                <div class="price-row">
+                    <span class="price-main">841.92 JOD (إجمالي)</span>
+                    <span class="price-sub">3,508.42 ILS</span>
+                </div>
+                <div class="price-row" style="margin-top: 8px;">
+                    <span class="price-main" style="color:var(--primary-lava);">168.384 JOD (للشخص)</span>
+                    <span class="price-sub">701.68 ILS</span>
+                </div>
+            </div>
+            <div class="item-box">
+                <span class="note">2. One night in amman</span>
+                <div class="price-row">
+                    <span class="price-main">25 JOD</span>
+                    <span class="price-sub">104.18 ILS</span>
+                </div>
+            </div>
+            <div style="display:flex; gap:10px; margin-top:15px;">
+                <button class="btn-action" onclick="openGal()">🖼️ صور الفندق</button>
+                <button class="btn-action" onclick="window.open('https://www.google.com/maps/search/?api=1&query=Şahkulu,+İstiklal+Cd.+No:+233,+34421+Beyoğlu/İstanbul,+Türkiye')">📍 الموقع</button>
+            </div>
         </div>
-        <div class="price highlight">168 JOD</div>
-    </div>
 
-    <div class="row">
-        <div>
-            <div>عمّان</div>
-            <div class="note">ليلة واحدة</div>
+        <div class="card">
+            <div class="section-header">التنقلات (Transfer & Taxi)</div>
+            <div class="item-box">
+                <span class="note">From airport to hotel (إياب وذهاب)</span>
+                <div class="price-row">
+                    <span class="price-main">59 $ (إجمالي)</span>
+                    <span class="price-sub">174.00 ILS</span>
+                </div>
+                <span class="note">On one person —> 11.8$ = 34.80 ILS</span>
+            </div>
+            <div class="item-box">
+                <span class="note">Crossing to airport</span>
+                <div class="price-row">
+                    <span class="price-main">30 JOD (إجمالي)</span>
+                    <span class="price-sub">125.01 ILS</span>
+                </div>
+                <span class="note">On one person —> 6 JOD = 25.00 ILS</span>
+            </div>
+            <div class="item-box">
+                <span class="note">And the oud (العودة)</span>
+                <div class="price-row">
+                    <span class="price-main">30 JOD (إجمالي)</span>
+                    <span class="price-sub">125.01 ILS</span>
+                </div>
+                <span class="note">On one person —> 6 JOD = 25.00 ILS</span>
+            </div>
         </div>
-        <div class="price">25 JOD</div>
+
+        <div class="total-banner">
+            <div style="font-size:14px; opacity:0.8;">Total (المجموع الكلي لكل شخص)</div>
+            <div style="font-size:38px; font-weight:900; color:var(--primary-lava);">635 JOD</div>
+            <div style="font-size:20px; color:#f1c40f;">≈ 2,646.15 ILS</div>
+        </div>
     </div>
 
-    <div class="actions">
-        <button class="btn fill" onclick="openGallery()">صور</button>
-        <button class="btn" onclick="openMap()">الموقع</button>
-    </div>
-</div>
-
-<!-- Transport -->
-<div class="card">
-    <div class="section">التنقل</div>
-
-    <div class="row">
-        <div>مطار ↔ فندق</div>
-        <div class="price">34 ILS</div>
+    <div id="gallery-overlay">
+        <div class="gallery-card">
+            <div class="gallery-close" onclick="closeGal()">✕</div>
+            <h3 style="text-align:center; color:var(--primary-lava);">صور الفندق - إسطنبول</h3>
+            <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/i6qnBDrkuUUOaNblMTrD/image.jpg" class="gallery-img">
+            <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/22GCFsWDTlNSt72XtfaR/image.jpg" class="gallery-img">
+            <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/aLpPSVAxaDvtSQwzr0qE/image.jpg" class="gallery-img">
+            <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/aGQl3zT0iM9g9R8cEYCF/image.jpg" class="gallery-img">
+        </div>
     </div>
 
-    <div class="row">
-        <div>المعبر ↔ المطار</div>
-        <div class="price">25 ILS</div>
-    </div>
-</div>
+    <script>
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                var splash = document.getElementById('splash-layer');
+                if(splash) splash.style.opacity = '0';
+                setTimeout(function() {
+                    if(splash) splash.style.display = 'none';
+                    var app = document.getElementById('app');
+                    if(app) {
+                        app.style.display = 'block';
+                        setTimeout(function() { app.style.opacity = '1'; }, 50);
+                    }
+                }, 800);
+            }, 3000);
+        });
 
-<!-- Total -->
-<div class="total">
-    <div>المجموع للشخص</div>
-    <h1>635 JOD</h1>
-    <div>≈ 2646 ILS</div>
-</div>
-
-</div>
-
-<!-- Sticky -->
-<div class="book">احجز الآن ✈️</div>
-
-<!-- Gallery -->
-<div id="gallery" onclick="closeGallery()">
-    <div class="gallery-box">
-        <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/i6qnBDrkuUUOaNblMTrD/image.jpg">
-        <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/22GCFsWDTlNSt72XtfaR/image.jpg">
-        <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/aLpPSVAxaDvtSQwzr0qE/image.jpg">
-    </div>
-</div>
-
-<script>
-setTimeout(()=>{
-    document.getElementById("splash").style.display="none";
-},1500);
-
-function openGallery(){
-    document.getElementById("gallery").style.display="flex";
-}
-
-function closeGallery(){
-    document.getElementById("gallery").style.display="none";
-}
-
-function openMap(){
-    window.open("https://www.google.com/maps?q=Şahkulu,+İstanbul","_blank");
-}
-</script>
-
+        function openGal() { document.getElementById('gallery-overlay').style.display = 'flex'; }
+        function closeGal() { document.getElementById('gallery-overlay').style.display = 'none'; }
+    </script>
 </body>
 </html>
