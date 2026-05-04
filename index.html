@@ -1,5 +1,5 @@
-أبشر، تم استعادة قسم **تفاصيل الرحلة** بكامل تفاصيله الأصلية (المعابر، الطيران، الإقامة، التنقلات، بطاقة المجموع، وزر الانضمام)، مع الحفاظ على قسم المطاعم الذي أضفناه مؤخراً.
-إليك الكود الكامل والمحدث:
+أبشر، تم تحديث روابط صور الفندق في نافذة العرض (Gallery) بناءً على الروابط الجديدة التي أرسلتها، مع الحفاظ على كامل تفاصيل الرحلة والأقسام الأخرى دون أي تغيير.
+إليك الكود المحدث:
 ```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
@@ -100,7 +100,7 @@
             </div>
         </div>
 
-        <!-- قسم تفاصيل الرحلة (الأصلي بالكامل) -->
+        <!-- قسم تفاصيل الرحلة -->
         <div id="details" class="tab-content active">
             <div class="card">
                 <div class="section-header">المعابر (Crossing)</div>
@@ -227,9 +227,44 @@
         <div id="series" class="tab-content"><div class="card"><div class="section-header">مواقع المسلسلات</div><p style="text-align:center; color:#64748b;">قريباً...</p></div></div>
     </div>
 
-    <!-- نوافذ Modal -->
-    <div id="join-modal"><div class="modal-content"><div class="close-circle" onclick="closeJoinModal()">✕</div><h2 style="text-align:center; color:var(--primary-lava);">بيانات المسافر</h2><input type="text" id="traveler-name" class="modal-input" placeholder="الاسم الكامل"><input type="text" id="traveler-dob" class="modal-input" placeholder="تاريخ الميلاد"><input type="tel" id="traveler-phone" class="modal-input" placeholder="رقم الهاتف"><button class="join-btn" onclick="sendToWhatsApp()">إرسال واتساب ✅</button></div></div>
-    <div id="gallery-overlay"><div class="gallery-card"><div class="close-circle" onclick="closeGal()">✕</div><h3 style="text-align:center; color:var(--primary-lava);">صور الفندق</h3><img src="https://plain-eeur-prod-public.komododecks.com/202605/04/i6qnBDrkuUUOaNblMTrD/image.jpg" style="width:100%; border-radius:15px; margin-bottom:10px;"><img src="https://plain-eeur-prod-public.komododecks.com/202605/04/22GCFsWDTlNSt72XtfaR/image.jpg" style="width:100%; border-radius:15px;"></div></div>
+    <!-- نافذة الانضمام -->
+    <div id="join-modal">
+        <div class="modal-content">
+            <div class="close-circle" onclick="closeJoinModal()">✕</div>
+            <h2 style="text-align:center; color:var(--primary-lava);">بيانات المسافر</h2>
+            <input type="text" id="traveler-name" class="modal-input" placeholder="الاسم الكامل">
+            <input type="text" id="traveler-dob" class="modal-input" placeholder="تاريخ الميلاد">
+            <input type="tel" id="traveler-phone" class="modal-input" placeholder="رقم الهاتف">
+            <button class="join-btn" onclick="sendToWhatsApp()">إرسال واتساب ✅</button>
+        </div>
+    </div>
+
+    <!-- معرض صور الفندق (المحدث بالروابط الجديدة) -->
+    <div id="gallery-overlay">
+        <div class="gallery-card">
+            <div class="close-circle" onclick="closeGal()">✕</div>
+            <h3 style="text-align:center; color:var(--primary-lava);">صور الفندق - إسطنبول</h3>
+            
+            <!-- المنظر -->
+            <p style="font-size: 13px; font-weight: 700; margin: 10px 0 5px;">الإطلالة والمنظر</p>
+            <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/i6qnBDrkuUUOaNblMTrD/image.jpg" style="width:100%; border-radius:15px; margin-bottom:10px;">
+            <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/7rqbW7I5jIQj50Bg4dKb/image.jpg" style="width:100%; border-radius:15px; margin-bottom:10px;">
+            
+            <!-- الصالون -->
+            <p style="font-size: 13px; font-weight: 700; margin: 10px 0 5px;">الصالون / المعيشة</p>
+            <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/22GCFsWDTlNSt72XtfaR/image.jpg" style="width:100%; border-radius:15px; margin-bottom:10px;">
+            <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/0C3sFKIaJx1z3ic6FhSB/image.jpg" style="width:100%; border-radius:15px; margin-bottom:10px;">
+
+            <!-- غرف النوم -->
+            <p style="font-size: 13px; font-weight: 700; margin: 10px 0 5px;">غرف النوم</p>
+            <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/aLpPSVAxaDvtSQwzr0qE/image.jpg" style="width:100%; border-radius:15px; margin-bottom:10px;">
+            <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/gbpDX9QxJWArNc6BnASZ/image.jpg" style="width:100%; border-radius:15px; margin-bottom:10px;">
+
+            <!-- الحمام -->
+            <p style="font-size: 13px; font-weight: 700; margin: 10px 0 5px;">الحمام</p>
+            <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/aGQl3zT0iM9g9R8cEYCF/image.jpg" style="width:100%; border-radius:15px; margin-bottom:10px;">
+        </div>
+    </div>
 
     <script>
         function showTab(tabId, element) {
