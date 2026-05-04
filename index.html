@@ -1,5 +1,5 @@
-أبشر، تم استعادة قسم **تفاصيل الرحلة** بكامل بياناته الأصلية وتنسيقه السابق، مع الحفاظ على التعديلات الأخيرة في قسم **المقاهي** وصور الفندق المحدثة كما هي.
-إليك الكود المحدث بالكامل:
+أبشر، تم إضافة معرض الصور الخاص بمقهى **HuQQa Kuruçeşme** باستخدام الروابط الجديدة التي أرسلتها، مع الحفاظ الكامل على قسم "تفاصيل الرحلة" وكافة الأقسام الأخرى دون أي تغيير.
+إليك الكود المحدث:
 ```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
@@ -44,7 +44,7 @@
         .food-section { display: none; }
         .food-section.active { display: block; }
 
-        .food-gallery { display: flex; gap: 10px; overflow-x: auto; margin-bottom: 15px; padding-bottom: 5px; scroll-snap-type: x mandatory; }
+        .food-gallery { display: flex; gap: 10px; overflow-x: auto; margin-bottom: 15px; padding-bottom: 5px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
         .food-gallery img { width: 90%; flex-shrink: 0; border-radius: 20px; height: 220px; object-fit: cover; scroll-snap-align: start; border: 1px solid #eee; }
 
         .card { background: var(--glass); backdrop-filter: blur(12px); border: 1.5px solid #f1f5f9; border-radius: 30px; padding: 25px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.04); }
@@ -95,7 +95,7 @@
             </div>
         </div>
 
-        <!-- قسم تفاصيل الرحلة المستعاد بالكامل -->
+        <!-- قسم تفاصيل الرحلة -->
         <div id="details" class="tab-content active">
             <div class="card">
                 <div class="section-header">المعابر (Crossing)</div>
@@ -170,7 +170,7 @@
             <button class="join-btn" onclick="alert('سيتم فتح نموذج الانضمام قريباً!')">انضم للرحلة الآن ✈️</button>
         </div>
 
-        <!-- قسم المطاعم والمقاهي -->
+        <!-- قسم المطاعم -->
         <div id="restaurants" class="tab-content">
             <div class="food-tabs">
                 <button class="food-btn active" onclick="switchFood('breakfast', this)">الفطور ☕</button>
@@ -182,7 +182,15 @@
                 <div class="card">
                     <div class="section-header">HuQQa Kuruçeşme 💨</div>
                     <span class="note">🕒 9:30 AM - 3:00 AM</span>
-                    <p style="font-size: 13px; margin: 10px 0;">أفضل مقهى للأراجيل والفطور بإطلالة ساحرة في إسطنبول.</p>
+                    
+                    <!-- معرض صور المقهى المحدث -->
+                    <div class="food-gallery">
+                        <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/i05bEuzBkGZKZtLy8IZl/image.jpg" alt="1">
+                        <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/LEf6Accd61M17zyc2Q2y/image.jpg" alt="2">
+                        <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/lViPmEelqy6g4bsp0UDv/image.jpg" alt="3">
+                        <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/f3OsRqrQ0LgmxGsFI5v8/image.jpg" alt="4">
+                    </div>
+
                     <div style="display:flex; flex-direction:column; gap:10px;">
                         <div style="display:flex; gap:10px;">
                             <a href="tel:+902122650666" class="btn-action">📞 اتصل</a>
@@ -216,7 +224,7 @@
         <div id="series" class="tab-content"><div class="card"><p style="text-align:center;">قريباً...</p></div></div>
     </div>
 
-    <!-- نافذة صور الفندق (المحدثة) -->
+    <!-- نافذة صور الفندق -->
     <div id="gallery-overlay">
         <div class="gallery-card">
             <div class="close-circle" onclick="closeGal()">✕</div>
