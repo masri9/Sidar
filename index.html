@@ -1,9 +1,12 @@
+لدمج محتوى المطاعم في هذا الكود مع الحفاظ على التصميم والأنيميشن، قمت بإضافة "صفحة المطاعم" كقسم مستقل مخفي يظهر فقط عند النقر على الأيقونة.
+إليك الكود المحدث بالكامل:
+```html
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sidarapp - Grid Edition</title>
+    <title>Sidarapp - Restaurants Integrated</title>
     
     <style>
         :root {
@@ -11,6 +14,7 @@
             --lava-glow: rgba(255, 69, 0, 0.4); 
             --text-main: #0f172a; 
             --bg-light: #f8fafc;
+            --whatsapp-green: #25D366;
         }
 
         .lava-text { color: var(--primary-lava); font-weight: 700; }
@@ -21,6 +25,7 @@
             background: #fff;
             min-height: 100vh;
             overflow-x: hidden;
+            scroll-behavior: smooth;
         }
 
         .app-page { display: none; animation: slideUp 0.4s ease-out; }
@@ -98,17 +103,8 @@
 
         .grid-item:active { transform: scale(0.95); background: #fffaf9; border-color: var(--primary-lava); }
 
-        .grid-icon {
-            font-size: 32px;
-            margin-bottom: 5px;
-        }
-
-        .grid-label {
-            font-weight: 700;
-            font-size: 14px;
-            color: var(--text-main);
-            text-align: center;
-        }
+        .grid-icon { font-size: 32px; margin-bottom: 5px; }
+        .grid-label { font-weight: 700; font-size: 14px; color: var(--text-main); text-align: center; }
 
         /* --- Cards & Dots --- */
         .stacked-cards-wrapper {
@@ -132,6 +128,16 @@
         .dot { width: 6px; height: 6px; background: #e2e8f0; border-radius: 50%; transition: 0.4s; }
         .dot.active { background: var(--primary-lava); width: 15px; border-radius: 10px; }
 
+        /* --- Restaurants Page Elements --- */
+        .back-btn { width: 40px; height: 40px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); cursor: pointer; margin-bottom: 20px; font-weight: bold; }
+        .res-card { background: rgba(255,255,255,0.98); border-radius: 30px; padding: 25px; margin-bottom: 20px; border: 1.5px solid #f1f5f9; box-shadow: 0 10px 30px rgba(0,0,0,0.04); direction: rtl; text-align: right; }
+        .res-header { border-right: 5px solid var(--primary-lava); padding-right: 15px; margin-bottom: 15px; font-weight: 900; font-size: 19px; }
+        .res-gallery { display: flex; gap: 10px; overflow-x: auto; margin: 15px 0; scrollbar-width: none; }
+        .res-gallery img { width: 90%; flex-shrink: 0; border-radius: 20px; height: 220px; object-fit: cover; border: 1px solid #eee; }
+        .res-actions { display: flex; gap: 10px; }
+        .res-btn { flex: 1; padding: 14px; border-radius: 18px; border: 1.5px solid var(--primary-lava); background: transparent; color: var(--primary-lava); font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 13px; text-decoration: none; }
+
+        /* --- Navigation --- */
         .bottom-nav {
             position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%);
             width: 90%; max-width: 400px; background: #fff; border-radius: 40px;
@@ -161,6 +167,7 @@
 
     <div class="app-container" id="main-app" style="opacity: 0; transition: 1s;">
         
+        <!-- --- HOME PAGE --- -->
         <div id="home-page" class="app-page active">
             <div class="hero-section">
                 <img src="https://plain-eeur-prod-public.komododecks.com/202604/20/zpRwsd9YMgeCmtSTOjFQ/image.png" class="sidar-robot" alt="Sidar AI">
@@ -172,7 +179,6 @@
                 <input type="text" placeholder="Ask Sidar anything...">
             </div>
 
-            <!-- Category Grid Section -->
             <div class="category-grid">
                 <div class="grid-item">
                     <span class="grid-icon">📄</span>
@@ -182,7 +188,8 @@
                     <span class="grid-icon">🎢</span>
                     <span class="grid-label">Activities</span>
                 </div>
-                <div class="grid-item">
+                <!-- المطاعم تفتح الصفحة المخصصة -->
+                <div class="grid-item" onclick="navTo('restaurants-page')">
                     <span class="grid-icon">🍽️</span>
                     <span class="grid-label">Restaurants</span>
                 </div>
@@ -202,6 +209,43 @@
             <div class="dots-container" id="dotsContainer"></div>
         </div>
 
+        <!-- --- RESTAURANTS PAGE --- -->
+        <div id="restaurants-page" class="app-page">
+            <div class="back-btn" onclick="navTo('home-page')">←</div>
+            
+            <!-- المطعم الأول -->
+            <div class="res-card">
+                <div class="res-header">Sarayburnu Aile Çay bahçesi ☕</div>
+                <div style="font-size: 12px; color: #64748b; margin-bottom: 10px;">🕒 8:00 - 3:00 | إطلالة بحرية ساحرة</div>
+                <div class="res-gallery">
+                    <img src="https://kommodo.ai/i/Wch2fAogoDONqIGo7KRk">
+                    <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/QtdYAfdMcwmJ9LgO8V8G/image.jpg">
+                    <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/Vq1EAhcdfc4eTN0LSQsW/image.jpg">
+                    <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/noxsrNyyXoeMNnr6RP38/image.jpg">
+                </div>
+                <div class="res-actions">
+                    <a href="tel:+902125221397" class="res-btn">📞 اتصل</a>
+                    <button class="res-btn" onclick="window.open('https://www.google.com/maps/search/?api=1&query=Hoca+Paşa,+Kennedy+Cad.+No:8,+34110+Fatih/İstanbul')">📍 الموقع</button>
+                </div>
+                <button class="res-btn" style="margin-top:10px; width:100%; border-color:#cbd5e1; color:#475569;" onclick="window.open('http://sarayburnuailecaybahcesi.com')">🌐 الموقع الإلكتروني</button>
+            </div>
+
+            <!-- المطعم الثاني -->
+            <div class="res-card">
+                <div class="res-header">Best Lounge The Bosphorus ☕</div>
+                <div style="font-size: 12px; color: #64748b; margin-bottom: 10px;">🕒 8:00 - 2:00 | فطور مع إطلالة</div>
+                <div class="res-gallery">
+                    <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/aCrx1mziFx0zgJ80JgPy/image.jpg">
+                </div>
+                <div class="res-actions">
+                    <a href="https://wa.me/905401663434" class="res-btn" style="background:var(--whatsapp-green); color:white; border:none;">💬 واتساب</a>
+                    <button class="res-btn" onclick="window.open('https://www.google.com/maps/search/?api=1&query=Demirtaş,+Kepenekçi+Sk.+No:6,+34134+Fatih/İstanbul')">📍 الموقع</button>
+                </div>
+                <button class="res-btn" style="margin-top:10px; width:100%; border-color:#cbd5e1; color:#475569;" onclick="window.open('http://bestloungethebosphorus.com')">🌐 الموقع الإلكتروني</button>
+            </div>
+        </div>
+
+        <!-- --- PROFILE PAGE --- -->
         <div id="profile-page" class="app-page">
             <div style="padding-top: 40px; text-align: center;">
                 <img src="https://i.pravatar.cc/150?u=myaccount" style="width: 100px; height: 100px; border-radius: 35px; border: 3px solid white; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
@@ -219,10 +263,10 @@
     </div>
 
     <nav class="bottom-nav">
-        <div class="nav-item active" onclick="tab(this)"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg><span>Home</span></div>
-        <div class="nav-item" onclick="tab(this)"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg><span>Map</span></div>
-        <div class="nav-item" onclick="tab(this)"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line></svg><span>Reels</span></div>
-        <div class="nav-item" onclick="tab(this)"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg><span>Profile</span></div>
+        <div class="nav-item active" onclick="navTo('home-page')"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg><span>Home</span></div>
+        <div class="nav-item" onclick="navTo('map')"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg><span>Map</span></div>
+        <div class="nav-item" onclick="navTo('reels')"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line></svg><span>Reels</span></div>
+        <div class="nav-item" onclick="navTo('profile-page')"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg><span>Profile</span></div>
     </nav>
 
     <script>
@@ -298,19 +342,35 @@
             }
         }, 4000);
 
-        function tab(el) {
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            el.classList.add('active');
-            const tabName = el.querySelector('span').innerText.toLowerCase();
-            document.querySelectorAll('.app-page').forEach(page => page.classList.remove('active'));
-            if (tabName === 'profile') {
-                document.getElementById('profile-page').classList.add('active');
-                document.getElementById('heroBg').style.filter = 'blur(15px) brightness(0.6)';
-            } else {
-                document.getElementById('home-page').classList.add('active');
-                document.getElementById('heroBg').style.filter = 'none';
+        // وظيفة التنقل بين الصفحات
+        function navTo(pageId) {
+            // إخفاء كل الصفحات
+            document.querySelectorAll('.app-page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // إظهار الصفحة المطلوبة (في حال وجودها)
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
             }
+
+            // تحديث شريط التنقل السفلي
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('onclick').includes(pageId)) {
+                    item.classList.add('active');
+                }
+            });
+
+            // إضافة بلور للخلفية إذا خرجنا من الرئيسية
+            const bg = document.getElementById('heroBg');
+            bg.style.filter = (pageId === 'home-page') ? 'none' : 'blur(15px) brightness(0.6)';
+            
+            window.scrollTo(0, 0);
         }
     </script>
 </body>
 </html>
+
+```
