@@ -3,108 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SIDAR AI - Trip Details</title>
-    
+    <title>SIDAR AI - Trip Planner</title>
     <style>
         :root {
-            --primary-lava: #ff4500; 
-            --lava-glow: rgba(255, 69, 0, 0.4); 
-            --lava-glow-soft: rgba(255, 69, 0, 0.1); 
-            --text-main: #0f172a; 
-            --light-card: rgba(255, 255, 255, 0.95);
+            --lava: #ff4500; 
+            --lava-soft: rgba(255, 69, 0, 0.1); 
+            --text: #0f172a; 
+            --white-glass: rgba(255, 255, 255, 0.96);
         }
 
-        body, html { 
-            margin: 0; padding: 0;
-            font-family: 'Segoe UI', Roboto, sans-serif;
-            background: #fff;
-            min-height: 100vh;
-            color: var(--text-main);
-        }
-
-        /* استعارة تصميم الخلفية من التطبيق الأساسي */
+        body, html { margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; background: #fff; color: var(--text); }
+        
         .header-bg {
             position: fixed; top: 0; left: 0; right: 0; height: 45vh;
             background-image: url('https://plain-eeur-prod-public.komododecks.com/202604/19/FtJXvAZvXREKew6PJ3ew/image.png');
             background-size: cover; background-position: center; z-index: 0;
         }
 
-        /* الروبوت سيدار بتأثير الدخول والاهتزاز */
         .sidar-robot {
-            position: fixed; right: 10px; top: 20px; width: 120px; z-index: 10;
-            filter: drop-shadow(0 10px 15px var(--lava-glow-soft));
-            animation: robotEntrance 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, 
-                       robotFloat 4s ease-in-out infinite 1.2s;
+            position: fixed; left: 15px; top: 20px; width: 110px; z-index: 10;
+            filter: drop-shadow(0 10px 15px var(--lava-soft));
+            animation: robotFloat 4s ease-in-out infinite;
         }
+        @keyframes robotFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
-        @keyframes robotEntrance {
-            0% { opacity: 0; transform: translateY(-50px) scale(0.6); }
-            100% { opacity: 1; transform: translateY(0) scale(1); }
-        }
+        /* Login */
+        #login-screen { position: fixed; inset: 0; background: #fff; z-index: 9999; display: flex; align-items: center; justify-content: center; }
+        .login-box { text-align: center; width: 85%; max-width: 350px; }
+        input { width: 100%; padding: 15px; border: 2px solid #f1f5f9; border-radius: 20px; font-size: 18px; text-align: center; outline: none; margin-bottom: 15px; box-sizing: border-box; }
+        button.login-btn { width: 100%; padding: 15px; background: var(--lava); color: white; border: none; border-radius: 20px; font-weight: 800; cursor: pointer; }
 
-        @keyframes robotFloat { 
-            0%, 100% { transform: translateY(0) rotate(1deg); } 
-            50% { transform: translateY(-7px) rotate(-1deg); } 
-        }
+        /* Content Area */
+        .app-container { position: relative; z-index: 1; padding: 100px 20px 40px; display: none; }
+        .hero-title { font-size: 28px; font-weight: 900; margin-bottom: 25px; }
+        .hero-title span { color: var(--lava); }
 
-        /* شاشة الدخول */
-        #login-screen {
-            position: fixed; inset: 0; background: #fff; z-index: 9999;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .login-box { text-align: center; width: 80%; max-width: 320px; }
-        .login-box h1 { color: var(--primary-lava); font-weight: 900; margin-bottom: 20px; }
-        .login-box input { 
-            width: 100%; padding: 15px; border: 2px solid #f1f5f9; border-radius: 20px;
-            font-size: 18px; text-align: center; outline: none; margin-bottom: 15px;
-        }
-        .login-box button {
-            width: 100%; padding: 15px; background: var(--primary-lava); color: white;
-            border: none; border-radius: 20px; font-weight: 800; cursor: pointer;
-        }
+        .card { background: var(--white-glass); backdrop-filter: blur(10px); border: 1.5px solid #f1f5f9; border-radius: 28px; padding: 20px; margin-bottom: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.02); }
+        .section-header { border-right: 4px solid var(--lava); padding-right: 12px; margin-bottom: 15px; font-weight: 900; display: flex; justify-content: space-between; align-items: center; }
+        
+        .item-box { padding: 10px 0; border-bottom: 1px solid #f1f5f9; }
+        .item-label { font-size: 14px; font-weight: 700; color: #64748b; margin-bottom: 5px; display: block; }
+        .price-row { display: flex; justify-content: space-between; align-items: center; }
+        .price-main { font-weight: 800; font-size: 16px; }
+        .price-sub { font-size: 12px; color: var(--lava); font-weight: 600; }
+        .per-person { font-size: 11px; background: #fff5f2; color: var(--lava); padding: 2px 8px; border-radius: 10px; margin-top: 4px; display: inline-block; }
 
-        /* حاوية المحتوى */
-        .app-container {
-            position: relative; z-index: 1; padding: 40px 20px;
-            display: none; animation: slideUp 0.5s ease-out;
-        }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        /* Media Buttons */
+        .media-actions { display: flex; gap: 10px; margin-top: 15px; }
+        .btn-view { flex: 1; padding: 8px; border: 1.5px solid var(--lava); border-radius: 12px; background: transparent; color: var(--lava); font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; }
+        .btn-view:hover { background: var(--lava); color: white; }
 
-        .hero-title { font-size: 30px; font-weight: 900; color: var(--text-main); margin-bottom: 30px; margin-top: 60px; }
-        .hero-title span { color: var(--primary-lava); }
+        /* Modal Area */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 10000; align-items: center; justify-content: center; padding: 20px; }
+        .modal-content { background: white; border-radius: 25px; width: 100%; max-width: 400px; overflow: hidden; position: relative; }
+        .modal-close { position: absolute; top: 15px; left: 15px; background: white; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; }
+        .modal-img { width: 100%; height: 200px; object-fit: cover; }
+        .modal-info { padding: 20px; text-align: center; }
 
-        /* البطاقات البركانية الفاتحة */
-        .card {
-            background: var(--light-card);
-            backdrop-filter: blur(10px);
-            border: 1.5px solid #f1f5f9;
-            border-radius: 28px;
-            padding: 22px;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.03);
-        }
-
-        .section-header { display: flex; align-items: center; margin-bottom: 15px; border-right: 4px solid var(--primary-lava); padding-right: 10px; }
-        .section-header h3 { margin: 0; font-size: 18px; font-weight: 900; }
-
-        .item-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
-        .price-jod { font-weight: 800; color: var(--text-main); }
-        .price-ils { color: var(--primary-lava); font-weight: 600; margin-right: 8px; font-size: 12px; }
-
-        .total-card {
-            background: var(--text-main); color: white; border: none; text-align: center;
-        }
-        .total-amount { font-size: 24px; font-weight: 900; color: var(--primary-lava); margin-top: 5px; }
-
-        /* مساعد التشات */
-        #chat-trigger {
-            position: fixed; bottom: 30px; left: 20px; width: 60px; height: 60px;
-            background: var(--primary-lava); border-radius: 50%; display: none;
-            justify-content: center; align-items: center; font-size: 24px; color: white;
-            box-shadow: 0 10px 20px var(--lava-glow); z-index: 100;
-        }
-
-        .admin-banner { background: #fee2e2; color: #ef4444; padding: 8px 15px; border-radius: 50px; font-size: 12px; font-weight: 800; display: inline-block; margin-bottom: 15px; }
+        .admin-badge { background: #ffe4e1; color: #dc2626; padding: 5px 15px; border-radius: 20px; font-size: 11px; font-weight: 800; display: inline-block; margin-bottom: 10px; }
     </style>
 </head>
 <body>
@@ -112,112 +68,130 @@
     <div class="header-bg"></div>
     <img src="https://plain-eeur-prod-public.komododecks.com/202604/20/U4I3P5a9xfiovTcHKNJk/image.png" class="sidar-robot">
 
-    <!-- شاشة الدخول -->
+    <!-- Login -->
     <div id="login-screen">
         <div class="login-box">
-            <h1>SIDAR <span>AI</span></h1>
-            <p style="color: #64748b; font-size: 14px; margin-bottom: 30px;">أدخل الرمز لمشاهدة تفاصيل الرحلة</p>
-            <input type="password" id="passcode" placeholder="0000">
-            <button onclick="checkAuth()">دخول آمن</button>
+            <h1 style="color:var(--lava); font-weight: 900;">SIDAR AI</h1>
+            <input type="password" id="pass" placeholder="0000">
+            <button class="login-btn" onclick="auth()">دخول للرحلة</button>
         </div>
     </div>
 
-    <!-- حاوية التطبيق -->
-    <div class="app-container" id="main-content">
-        <div id="admin-view" style="display:none;">
-            <div class="admin-banner">وضع المسؤول مفعل ✍️</div>
-        </div>
+    <!-- App Content -->
+    <div class="app-container" id="app">
+        <div id="adm" style="display:none;"><div class="admin-badge">وضع المسؤول مفعل ✍️</div></div>
+        <h1 class="hero-title">ميزانية رحلة <br><span>تركيا والأردن ✈️</span></h1>
 
-        <h1 class="hero-title">تفاصيل رحلة <br><span>IST Travel ✈️</span></h1>
-
-        <!-- قسم التذاكر والمعابر -->
+        <!-- Section: Flights -->
         <div class="card">
-            <div class="section-header"><h3>الطيران والمعابر</h3></div>
-            <div class="item-row">
-                <span>تذكرة AMM ↔ SAW</span>
-                <span class="price-jod"><span id="p1">360.89</span> JOD <span class="price-ils">≈ 1,505 ₪</span></span>
+            <div class="section-header"><h3>التنقل الجوي والمعابر</h3></div>
+            <div class="item-box">
+                <span class="item-label">تذاكر الطيران (AMM ↔ SAW)</span>
+                <div class="price-row">
+                    <span class="price-main">360.89 JOD</span>
+                    <span class="price-sub">1,505.16 ₪</span>
+                </div>
+                <div class="per-person">المبلغ للمجموعة كاملة</div>
             </div>
-            <div class="item-row">
-                <span>معبر إسرائيل</span>
-                <span class="price-jod"><span id="p2">120</span> ₪</span>
-            </div>
-            <div class="item-row">
-                <span>معبر الأردن (دخول/خروج)</span>
-                <span class="price-jod"><span id="p3">20</span> JOD <span class="price-ils">≈ 83 ₪</span></span>
+            <div class="item-box">
+                <span class="item-label">معبر إسرائيل (Crossing)</span>
+                <div class="price-row">
+                    <span class="price-main">120 ₪</span>
+                </div>
+                <div class="per-person">للشخص الواحد</div>
             </div>
         </div>
 
-        <!-- قسم الإقامة -->
+        <!-- Section: Hotel IST -->
         <div class="card">
-            <div class="section-header"><h3>الإقامة والفنادق</h3></div>
-            <div class="item-row">
-                <span>فندق إسطنبول (فترة كاملة)</span>
-                <span class="price-jod"><span id="p4">168.38</span> JOD <span class="price-ils">≈ 702 ₪</span></span>
+            <div class="section-header">
+                <h3>فندق إسطنبول (IST)</h3>
+                <span style="font-size: 10px; color: #64748b;">24/9 - 01/10</span>
             </div>
-            <div class="item-row">
-                <span>ليلة واحدة في عمان</span>
-                <span class="price-jod"><span id="p5">25</span> JOD <span class="price-ils">≈ 104 ₪</span></span>
+            <div class="item-box">
+                <span class="item-label">التكلفة الإجمالية (للفترة كاملة)</span>
+                <div class="price-row">
+                    <span class="price-main">841.92 JOD</span>
+                    <span class="price-sub">3,511.39 ₪</span>
+                </div>
+            </div>
+            <div class="item-box">
+                <span class="item-label">نصيب الشخص الواحد</span>
+                <div class="price-row">
+                    <span class="price-main">168.38 JOD</span>
+                    <span class="price-sub">702.28 ₪</span>
+                </div>
+            </div>
+            <div class="media-actions">
+                <button class="btn-view" onclick="openModal('hotel_ist')">🖼️ صور الفندق</button>
+                <button class="btn-view" onclick="window.open('https://maps.google.com')">📍 الموقع</button>
             </div>
         </div>
 
-        <!-- قسم التنقلات -->
+        <!-- Section: Hotel Amman -->
         <div class="card">
-            <div class="section-header"><h3>التنقلات والتاكسي</h3></div>
-            <div class="item-row">
-                <span>تاكسي المعبر للمطار</span>
-                <span class="price-jod"><span id="p6">30</span> JOD <span class="price-ils">≈ 125 ₪</span></span>
+            <div class="section-header"><h3>ليلة في عمان (Amman)</h3></div>
+            <div class="item-box">
+                <span class="item-label">سعر الغرفة/الليلة</span>
+                <div class="price-row">
+                    <span class="price-main">25 JOD</span>
+                    <span class="price-sub">104.18 ₪</span>
+                </div>
             </div>
-            <div class="item-row">
-                <span>توصيل مطار (شخص واحد)</span>
-                <span class="price-jod"><span id="p7">11.8</span> $ <span class="price-ils">≈ 35 ₪</span></span>
+            <div class="media-actions">
+                <button class="btn-view" onclick="openModal('hotel_amm')">🖼️ المعاينة</button>
             </div>
         </div>
 
-        <!-- المجموع -->
-        <div class="card total-card">
-            <div style="font-size: 14px; opacity: 0.8;">المجموع الكلي لكل شخص</div>
-            <div class="total-amount" id="total-val">635 JOD</div>
-            <div style="font-size: 12px; color: var(--primary-lava);">ما يعادل تقريباً 2,646 ₪</div>
+        <!-- Summary -->
+        <div class="card" style="background: var(--text); color: white; text-align: center;">
+            <div style="font-size: 12px; opacity: 0.7;">إجمالي التكلفة التقريبية للشخص الواحد</div>
+            <div style="font-size: 32px; font-weight: 900; color: var(--lava); margin: 10px 0;">635 JOD</div>
+            <div style="font-size: 16px; color: #f1c40f;">≈ 2,646.15 ₪</div>
         </div>
     </div>
 
-    <!-- زر التشات -->
-    <div id="chat-trigger" onclick="alert('مساعد سيدار: سأكون معك قريباً!')">💬</div>
+    <!-- Image Modal -->
+    <div id="imgModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-close" onclick="closeModal()">✕</div>
+            <img src="" id="modalImg" class="modal-img">
+            <div class="modal-info">
+                <h4 id="modalTitle">معاينة الفندق</h4>
+                <p style="font-size: 13px; color: #666;">صور من المرفقات والواقع للفندق المختار في الرحلة.</p>
+            </div>
+        </div>
+    </div>
 
     <script>
-        function checkAuth() {
-            const code = document.getElementById('passcode').value;
-            const screen = document.getElementById('login-screen');
-            const content = document.getElementById('main-content');
-            const chat = document.getElementById('chat-trigger');
-
-            if (code === "0000") {
-                screen.style.opacity = '0';
-                setTimeout(() => {
-                    screen.style.display = 'none';
-                    content.style.display = 'block';
-                    chat.style.display = 'flex';
-                }, 500);
-            } else if (code === "9999") {
-                screen.style.display = 'none';
-                content.style.display = 'block';
-                document.getElementById('admin-view').style.display = 'block';
-                enableEdit();
-            } else {
-                alert("الرمز خاطئ، جرب 0000");
-            }
-        }
-
-        function enableEdit() {
-            const editableFields = ['p1','p2','p3','p4','p5','p6','p7','total-val'];
-            editableFields.forEach(id => {
-                const el = document.getElementById(id);
-                if(el) {
-                    el.contentEditable = true;
-                    el.style.borderBottom = "1px dashed var(--primary-lava)";
+        function auth() {
+            const p = document.getElementById('pass').value;
+            if(p === "0000" || p === "9999") {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('app').style.display = 'block';
+                if(p === "9999") {
+                    document.getElementById('adm').style.display = 'block';
+                    document.querySelectorAll('.price-main, .price-sub').forEach(el => el.contentEditable = true);
                 }
-            });
+            } else { alert("الرمز خاطئ"); }
         }
+
+        function openModal(type) {
+            const modal = document.getElementById('imgModal');
+            const img = document.getElementById('modalImg');
+            const title = document.getElementById('modalTitle');
+            
+            if(type === 'hotel_ist') {
+                img.src = "https://images.unsplash.com/photo-1551882547-ff43c63faf76?auto=format&fit=crop&w=400";
+                title.innerText = "فندق إسطنبول";
+            } else {
+                img.src = "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=400";
+                title.innerText = "فندق عمان";
+            }
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() { document.getElementById('imgModal').style.display = 'none'; }
     </script>
 </body>
 </html>
