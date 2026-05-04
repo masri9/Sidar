@@ -1,4 +1,4 @@
-تم تحديث الكود بإضافة مطعم **Sarayburnu Aile Çay bahçesi** إلى قسم الفطور بتصميم أنيق يتضمن معرض صور منزلق، ساعات العمل، وأزرار الاتصال والموقع، مع الحفاظ الكامل على قسم "تفاصيل الرحلة" دون أي تغيير.
+تم تحديث قسم الفطور بإزالة الصورة الأولى (الرابط الأول) للمطعم، مع الإبقاء على معرض الصور المتبقي وكافة تفاصيل الرحلة الأصلية كما هي دون أي تعديل.
 ```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
@@ -43,7 +43,6 @@
         .food-section { display: none; }
         .food-section.active { display: block; }
 
-        /* معرض صور المطعم الممرر */
         .food-gallery { display: flex; gap: 10px; overflow-x: auto; margin-bottom: 15px; padding-bottom: 5px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
         .food-gallery img { width: 90%; flex-shrink: 0; border-radius: 20px; border: 1px solid #eee; scroll-snap-align: start; height: 220px; object-fit: cover; }
 
@@ -55,8 +54,6 @@
         .price-main { font-weight: 800; font-size: 16px; }
         .price-sub { font-size: 13px; color: var(--primary-lava); font-weight: 700; }
         .note { font-size: 11px; color: #64748b; margin-top: 4px; display: block; }
-
-        .car-img { width: 100%; border-radius: 15px; margin-top: 10px; border: 1px solid #eee; }
 
         .btn-action { flex: 1; padding: 14px; border-radius: 18px; border: 1.5px solid var(--primary-lava); background: transparent; color: var(--primary-lava); font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 13px; text-decoration: none; }
 
@@ -126,7 +123,7 @@
                         <span class="price-main">360.890 JOD</span>
                         <span class="price-sub">1,503.89 ₪</span>
                     </div>
-                    <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/0Duto743s5C7AgINwhE9/image.jpg" class="car-img">
+                    <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/0Duto743s5C7AgINwhE9/image.jpg" style="width:100%; border-radius:15px; margin-top:10px;">
                 </div>
             </div>
 
@@ -156,13 +153,13 @@
                     <span class="note">من المطار إلى الفندق (ذهاب وإياب)</span>
                     <div class="price-row"><span class="price-main">118 $</span><span class="price-sub">348.00 ₪</span></div>
                     <span class="note">للشخص: 11.8$ = 34.80 ₪</span>
-                    <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/Ag5Tsoef8vrr52VFUuoF/image.jpg" class="car-img">
+                    <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/Ag5Tsoef8vrr52VFUuoF/image.jpg" style="width:100%; border-radius:15px; margin-top:10px;">
                 </div>
                 <div class="item-box">
                     <span class="note">تاكسي المعبر للمطار + العودة (The Oud)</span>
                     <div class="price-row"><span class="price-main">60 JOD</span><span class="price-sub">250.02 ₪</span></div>
                     <span class="note">للشخص: 12 JOD = 50.00 ₪</span>
-                    <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/E0aQKw9K28BmP0nriRyu/image.jpg" class="car-img">
+                    <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/E0aQKw9K28BmP0nriRyu/image.jpg" style="width:100%; border-radius:15px; margin-top:10px;">
                 </div>
             </div>
 
@@ -187,12 +184,10 @@
                     <div class="section-header">Sarayburnu Aile Çay bahçesi</div>
                     <span class="note">🕒 يومياً من 8:00 صباحاً حتى 3:00 بعد منتصف الليل</span>
                     
-                    <!-- معرض صور المطعم -->
                     <div class="food-gallery">
-                        <img src="https://kommodo.ai/i/Wch2fAogoDONqIGo7KRk" alt="صورة 1">
-                        <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/QtdYAfdMcwmJ9LgO8V8G/image.jpg" alt="صورة 2">
-                        <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/Vq1EAhcdfc4eTN0LSQsW/image.jpg" alt="صورة 3">
-                        <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/noxsrNyyXoeMNnr6RP38/image.jpg" alt="صورة 4">
+                        <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/QtdYAfdMcwmJ9LgO8V8G/image.jpg" alt="صورة 1">
+                        <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/Vq1EAhcdfc4eTN0LSQsW/image.jpg" alt="صورة 2">
+                        <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/noxsrNyyXoeMNnr6RP38/image.jpg" alt="صورة 3">
                     </div>
 
                     <div style="display:flex; flex-direction:column; gap:10px;">
@@ -210,7 +205,6 @@
             </div>
         </div>
 
-        <!-- الأقسام الأخرى -->
         <div id="activities" class="tab-content"><div class="card"><div class="section-header">النشاطات المقترحة</div><p style="text-align:center; color:#64748b;">قريباً...</p></div></div>
         <div id="series" class="tab-content"><div class="card"><div class="section-header">مواقع المسلسلات</div><p style="text-align:center; color:#64748b;">قريباً...</p></div></div>
     </div>
