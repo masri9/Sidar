@@ -1,227 +1,126 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sidarapp - Dynamic Robot Entrance</title>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIDAR Travel - Prototype</title>
     <style>
-        :root {
-            --primary-lava: #ff4500; 
-            --lava-glow: rgba(255, 69, 0, 0.4); 
-            --lava-glow-soft: rgba(255, 69, 0, 0.2); 
-            --text-main: #0f172a; 
-        }
+        :root { --primary: #2c3e50; --accent: #e67e22; --light: #f4f4f4; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--light); margin: 0; padding: 20px; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        
+        /* Login Style */
+        #login-screen { text-align: center; margin-top: 100px; }
+        input { padding: 10px; font-size: 18px; width: 80%; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px; text-align: center; }
+        button { padding: 10px 20px; background: var(--primary); color: white; border: none; border-radius: 5px; cursor: pointer; }
 
-        body, html { 
-            margin: 0; padding: 0;
-            font-family: 'Segoe UI', Roboto, sans-serif;
-            background: #fff;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
+        /* Content Style */
+        #app-content { display: none; }
+        .trip-header { border-bottom: 2px solid var(--accent); padding-bottom: 10px; margin-bottom: 20px; }
+        .section { margin-bottom: 20px; padding: 10px; background: #fffaf5; border-radius: 5px; }
+        .price { color: #d35400; font-weight: bold; }
+        .admin-badge { background: red; color: white; padding: 2px 8px; border-radius: 10px; font-size: 12px; }
 
-        .app-page { display: none; animation: slideUp 0.4s ease-out; }
-        .app-page.active { display: block; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        #splash-screen {
-            position: fixed; inset: 0; background: #ffffff;
-            display: flex; justify-content: center; align-items: center;
-            z-index: 9999; transition: opacity 0.5s ease;
-        }
-        .splash-image { width: 180px; }
-
-        .header-bg {
-            position: absolute; top: 0; left: 0; right: 0; height: 50vh;
-            background-size: cover; background-position: center; z-index: 0;
-            transition: 0.5s;
-        }
-
-        .app-container {
-            position: relative; z-index: 1;
-            padding: 60px 20px 80px; 
-            box-sizing: border-box;
-        }
-
-        .hero-section { position: relative; margin-bottom: 5px; } 
-        .hero-title { font-size: 34px; font-weight: 800; line-height: 1.1; color: var(--text-main); margin-bottom: 45px; position: relative; z-index: 1; }
-        .hero-title span { color: var(--primary-lava); }
-
-        /* --- الروبوت: أنيميشن دخول من الأعلى ثم اهتزاز مستمر --- */
-        .sidar-robot {
-            position: absolute; 
-            right: 0px;    
-            top: 45px;      
-            width: 145px;    
-            z-index: 10; 
-            filter: drop-shadow(0 10px 15px var(--lava-glow-soft));
-            pointer-events: none;
-            opacity: 0; /* يبدأ مخفي */
-
-            /* الأنيميشن: الدخول أولاً ثم الاهتزاز بعد 1.2 ثانية */
-            animation: 
-                robotEntrance 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, 
-                robotFloat 4s ease-in-out infinite 1.2s;
-        }
-
-        /* أنيميشن الدخول: سقوط مع ارتداد بسيط */
-        @keyframes robotEntrance {
-            0% { 
-                opacity: 0; 
-                transform: translateY(-80px) scale(0.6) rotate(-15deg); 
-            }
-            60% { 
-                opacity: 1; 
-                transform: translateY(10px) scale(1.05) rotate(5deg); 
-            }
-            100% { 
-                opacity: 1; 
-                transform: translateY(0) scale(1) rotate(1deg); 
-            }
-        }
-
-        /* أنيميشن الاهتزاز الهادئ */
-        @keyframes robotFloat { 
-            0%, 100% { transform: translateY(0) rotate(1deg); } 
-            50% { transform: translateY(-7px) rotate(-1deg); } 
-        }
-
-        /* Search Bar */
-        .search-wrapper {
-            background: rgba(255,255,255,0.95); backdrop-filter: blur(15px);
-            border-radius: 20px; padding: 12px 18px; display: flex; align-items: center;
-            border: 2px solid var(--primary-lava); margin-bottom: 30px; position: relative;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-        }
-        .search-wrapper input { flex: 1; border: none; background: transparent; outline: none; font-size: 16px; color: var(--text-main); width: 100%; }
-        .fake-placeholder { position: absolute; left: 45px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 16px; pointer-events: none; }
-        .lava-text { color: var(--primary-lava); font-weight: 700; }
-
-        /* Services Grid */
-        .section-header { display: flex; justify-content: space-between; align-items: flex-end; margin: 25px 0 12px; padding: 0 5px; }
-        .section-header h3 { font-size: 20px; font-weight: 900; color: var(--text-main); margin: 0; }
-
-        .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 5px 5px 20px; }
-        .service-card {
-            background: #ffffff; border: 1.5px solid #f1f5f9; border-radius: 24px; padding: 8px; text-align: center;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; display: flex; flex-direction: column; align-items: center;
-        }
-        .service-card.clicked { background: var(--primary-lava) !important; border-color: var(--primary-lava); transform: scale(0.92); box-shadow: 0 10px 20px var(--lava-glow); }
-        .service-card-image { width: 100%; height: 80px; background: #fff5f2; border-radius: 18px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; overflow: hidden; }
-        .service-card-image img { width: 100%; height: 100%; object-fit: cover; }
-        .service-card-info h4 { margin: 0; font-size: 13px; font-weight: 800; color: var(--text-main); }
-        .service-card-info p { margin: 1px 0 4px; font-size: 9px; color: #94a3b8; font-weight: 600; }
-
-        /* Stacked Cards */
-        .stacked-cards-wrapper { position: relative; width: 100%; height: 240px; display: flex; justify-content: center; align-items: center; perspective: 1200px; }
-        .card-item { 
-            position: absolute; width: 190px; height: 230px; border-radius: 28px; background-size: cover; background-position: center; transition: 0.7s; 
-            display: flex; align-items: flex-end; justify-content: center; padding-bottom: 15px; opacity: 0; pointer-events: none; border: 1.5px solid var(--lava-glow-soft);
-        }
-        .card-item.active { opacity: 1; transform: translateX(0) translateZ(50px) scale(1); z-index: 10; pointer-events: auto; border-color: var(--primary-lava); box-shadow: 0 8px 25px var(--lava-glow-soft); }
-        .card-item.prev { opacity: 0.4; transform: translateX(-90px) translateZ(-100px) scale(0.8); z-index: 5; }
-        .card-item.next { opacity: 0.4; transform: translateX(90px) translateZ(-100px) scale(0.8); z-index: 5; }
-        .see-more-btn { background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(12px); color: #fff; border-radius: 50px; padding: 6px 25px; font-weight: 700; font-size: 10px; border: 1px solid rgba(255,255,255,0.3); }
-
-        .trending-scroll { display: flex; gap: 15px; overflow-x: auto; padding: 5px 5px; scrollbar-width: none; }
-        .trend-card { flex-shrink: 0; width: 100px; text-align: center; }
-        .trend-icon-box { width: 90px; height: 90px; border-radius: 22px; background: #f8fafc; border: 1.5px solid #f1f5f9; display: flex; align-items: center; justify-content: center; font-size: 35px; margin-bottom: 6px; }
+        /* Chat Style */
+        #chat-box { position: fixed; bottom: 20px; right: 20px; width: 250px; background: white; border: 1px solid #ccc; border-radius: 10px; display: none; }
+        #chat-header { background: var(--primary); color: white; padding: 10px; border-radius: 10px 10px 0 0; font-size: 14px; }
+        #chat-messages { height: 150px; overflow-y: auto; padding: 10px; font-size: 13px; }
+        #chat-input { width: 100%; border: none; border-top: 1px solid #eee; padding: 10px; box-sizing: border-box; }
     </style>
 </head>
 <body>
 
-    <div id="splash-screen"><img id="splashLogo" src="" class="splash-image"></div>
-    <div class="header-bg" id="heroBg"></div>
+    <!-- شاشة تسجيل الدخول -->
+    <div id="login-screen" class="container">
+        <h1>SIDAR Travel ✈️</h1>
+        <p>الرجاء إدخال رمز الدخول</p>
+        <input type="password" id="passcode" placeholder="0000">
+        <br>
+        <button onclick="login()">دخول</button>
+    </div>
 
-    <div class="app-container" id="main-app" style="opacity: 0; transition: 1s;">
-        
-        <div id="home-page" class="app-page active">
-            <div class="hero-section">
-                <img src="https://plain-eeur-prod-public.komododecks.com/202604/20/U4I3P5a9xfiovTcHKNJk/image.png" class="sidar-robot">
-                <h1 class="hero-title">Where do you <br><span>wanna go?</span></h1>
-            </div>
-
-            <div class="search-wrapper">
-                <input type="text" placeholder=" ">
-                <div class="fake-placeholder">Ask <span class="lava-text">Sidar</span> anything...</div>
-            </div>
-
-            <div class="section-header"><h3>Our Services</h3></div>
-            <div class="services-grid">
-                <div class="service-card" onclick="handleServiceClick(this, 'esim')">
-                    <div class="service-card-image"><img src="https://plain-eeur-prod-public.komododecks.com/202604/20/wTHcH8IlMhZ65t0JMbMB/image.png"></div>
-                    <div class="service-card-info"><h4>eSIM</h4><p>Instant Data</p></div>
-                </div>
-                <div class="service-card" onclick="handleServiceClick(this, 'events')">
-                    <div class="service-card-image"><img src="https://plain-eeur-prod-public.komododecks.com/202604/20/vPIXv8ss1tI7CGpQywpo/image.png"></div>
-                    <div class="service-card-info"><h4>Events</h4><p>Explore Fun</p></div>
-                </div>
-                <div class="service-card" onclick="handleServiceClick(this, 'transfer')">
-                    <div class="service-card-image"><img src="https://plain-eeur-prod-public.komododecks.com/202604/20/n5ssXxQhHi4IvqHeO0rR/image.png"></div>
-                    <div class="service-card-info"><h4>Transfer</h4><p>Send Money</p></div>
-                </div>
-            </div>
-
-            <div class="stacked-cards-wrapper" id="cardsWrapper">
-                <div class="card-item" id="card0"><div class="see-more-btn">See More</div></div>
-                <div class="card-item" id="card1"><div class="see-more-btn">See More</div></div>
-                <div class="card-item" id="card2"><div class="see-more-btn">See More</div></div>
-                <div class="card-item" id="card3"><div class="see-more-btn">See More</div></div>
-            </div>
-
-            <div class="section-header"><h3>Trending</h3></div>
-            <div class="trending-scroll">
-                <div class="trend-card"><div class="trend-icon-box">🕌</div><span>Istanbul</span></div>
-                <div class="trend-card"><div class="trend-icon-box">🏙️</div><span>Dubai</span></div>
-                <div class="trend-card"><div class="trend-icon-box">🏔️</div><span>Georgia</span></div>
-            </div>
+    <!-- محتوى التطبيق -->
+    <div id="app-content" class="container">
+        <div id="admin-indicator"></div>
+        <div class="trip-header">
+            <h2 id="title" contenteditable="false">رحلة IST Travel ✈️</h2>
+            <p id="dates" contenteditable="false">
+                24/9/2026 - 01/10/2026 في إسطنبول<br>
+                01/10/2026 - 02/10/2026 في عمان
+            </p>
         </div>
+
+        <div class="section">
+            <h3>التكاليف الأساسية</h3>
+            <p>المعابر (الأردن/إسرائيل): <span class="price" id="crossing-cost" contenteditable="false">140 JOD إجمالي</span></p>
+            <p>تذكرة الطيران: <span class="price" id="flight-cost" contenteditable="false">360.89 JOD</span></p>
+        </div>
+
+        <div class="section">
+            <h3>الفنادق والتنقلات</h3>
+            <p>فندق إسطنبول (للشخص): <span class="price" id="hotel-cost" contenteditable="false">168.38 JOD</span></p>
+            <p>المواصلات والتاكسي: <span class="price" id="taxi-cost" contenteditable="false">11.8$ + 6JOD</span></p>
+        </div>
+
+        <hr>
+        <h3>المجموع الكلي التقريبي: <span class="price" id="total-cost" contenteditable="false">635 JOD</span></h3>
+    </div>
+
+    <!-- نافذة التشات للزبائن -->
+    <div id="chat-box">
+        <div id="chat-header">اسأل SIDAR أي شيء..</div>
+        <div id="chat-messages">مرحباً بك! كيف يمكننا مساعدتك في رحلتك؟</div>
+        <input type="text" id="chat-input" placeholder="اكتب رسالتك..." onkeypress="sendMessage(event)">
     </div>
 
     <script>
-        const MY_IMAGES = {
-            splashLogo: 'https://plain-eeur-prod-public.komododecks.com/202604/19/y0zyi6uOKg2CaNATvHPZ/image.png',
-            heroBackground: 'https://plain-eeur-prod-public.komododecks.com/202604/19/FtJXvAZvXREKew6PJ3ew/image.png',
-            card0: 'https://plain-eeur-prod-public.komododecks.com/202604/19/Zs148rIHaZ5l8sjqw4S4/image.png',
-            card1: 'https://plain-eeur-prod-public.komododecks.com/202604/19/xK3pwCpVUtFZFveFLbt2/image.png',
-            card2: 'https://plain-eeur-prod-public.komododecks.com/202604/19/Ri6ookm2NesWdMC7Mcbc/image.png',
-            card3: 'https://plain-eeur-prod-public.komododecks.com/202604/19/qzr51sWPt6GgM3gTZH8K/image.png'
-        };
+        let isAdmin = false;
 
-        function handleServiceClick(el, id) {
-            el.classList.add('clicked');
-            setTimeout(() => el.classList.remove('clicked'), 400);
+        function login() {
+            const code = document.getElementById('passcode').value;
+            const loginScreen = document.getElementById('login-screen');
+            const appContent = document.getElementById('app-content');
+            const chatBox = document.getElementById('chat-box');
+
+            if (code === "0000") {
+                isAdmin = false;
+                loginScreen.style.display = 'none';
+                appContent.style.display = 'block';
+                chatBox.style.display = 'block';
+            } else if (code === "9999") {
+                isAdmin = true;
+                loginScreen.style.display = 'none';
+                appContent.style.display = 'block';
+                enableAdminMode();
+            } else {
+                alert("الرمز خاطئ، جرب 0000 للزبون أو 9999 للمسؤول");
+            }
         }
 
-        window.addEventListener('load', () => {
-            document.getElementById('splashLogo').src = MY_IMAGES.splashLogo;
-            document.getElementById('heroBg').style.backgroundImage = `url('${MY_IMAGES.heroBackground}')`;
-            const cardItems = document.querySelectorAll('.card-item');
-            cardItems.forEach((c, i) => c.style.backgroundImage = `url('${MY_IMAGES['card'+i]}')`);
-            
-            // انتهاء الـ Splash وظهور التطبيق
-            setTimeout(() => {
-                document.getElementById('splash-screen').style.opacity = '0';
-                setTimeout(() => {
-                    document.getElementById('splash-screen').style.display = 'none';
-                    document.getElementById('main-app').style.opacity = '1';
-                }, 500);
-            }, 2000);
-        });
-
-        let stackIdx = 0;
-        setInterval(() => {
-            const items = document.querySelectorAll('.card-item');
-            if(items.length === 0) return;
-            items.forEach((c, i) => {
-                c.classList.remove('active', 'prev', 'next');
-                if (i === stackIdx) c.classList.add('active');
-                else if (i === (stackIdx - 1 + items.length) % items.length) c.classList.add('prev');
-                else if (i === (stackIdx + 1) % items.length) c.classList.add('next');
+        function enableAdminMode() {
+            document.getElementById('admin-indicator').innerHTML = '<span class="admin-badge">وضع المسؤول - يمكنك التعديل مباشرة</span>';
+            // السماح بتعديل النصوص
+            const editableElements = ['title', 'dates', 'crossing-cost', 'flight-cost', 'hotel-cost', 'taxi-cost', 'total-cost'];
+            editableElements.forEach(id => {
+                document.getElementById(id).contentEditable = "true";
+                document.getElementById(id).style.border = "1px dashed #ccc";
             });
-            stackIdx = (stackIdx + 1) % items.length;
-        }, 4000);
+        }
+
+        function sendMessage(event) {
+            if (event.key === "Enter") {
+                const input = document.getElementById('chat-input');
+                const messages = document.getElementById('chat-messages');
+                if (input.value.trim() !== "") {
+                    messages.innerHTML += `<div><b>أنت:</b> ${input.value}</div>`;
+                    setTimeout(() => {
+                        messages.innerHTML += `<div><b>SIDAR:</b> شكراً لسؤالك، سيقوم أحد موظفينا بالرد عليك قريباً.</div>`;
+                        messages.scrollTop = messages.scrollHeight;
+                    }, 1000);
+                    input.value = "";
+                }
+            }
+        }
     </script>
 </body>
 </html>
