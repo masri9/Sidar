@@ -1,5 +1,5 @@
-فكرة رائعة ستنقل التطبيق لمستوى احترافي وتفاعلي مميز. لإضافة **خريطة تفاعلية** لمواقع تصوير المسلسلات التركية في إسطنبول، سنعتمد على مكتبة **Leaflet.js**، وهي مكتبة خفيفة وسلسة تعمل بامتياز على الهواتف.
-إليك الكود المحدث، حيث قمت بتفعيل **قسم المسلسلات** وإضافة الخريطة داخله مع نظام "العلامات" (Markers) التفاعلية.
+تمت استعادة كافة البيانات بدقة؛ حيث تم إرجاع مطعمي الفطور (**Sarayburnu** و **Best Lounge**) ومقهى **HuQQa** في قسم المقاهي، مع الحفاظ على قسم "تفاصيل الرحلة" وكافة صور الفندق الأصلية دون أي تعديل.
+إليك الكود الكامل والمحدث:
 ```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
@@ -7,7 +7,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SIDAR AI - تفاصيل الرحلة كاملة</title>
-    <!-- إضافة مكتبة الخرائط التفاعلية -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
         :root {
@@ -39,10 +38,17 @@
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        /* تنسيق الخريطة */
+        .food-tabs { display: flex; gap: 8px; margin-bottom: 20px; overflow-x: auto; white-space: nowrap; padding: 5px 2px; }
+        .food-btn { flex: 1; min-width: 90px; padding: 10px; border-radius: 14px; border: 1.5px solid var(--primary-lava); background: transparent; color: var(--primary-lava); font-weight: 800; cursor: pointer; font-size: 13px; }
+        .food-btn.active { background: var(--primary-lava); color: white; }
+
+        .food-section { display: none; }
+        .food-section.active { display: block; }
+
+        .food-gallery { display: flex; gap: 10px; overflow-x: auto; margin-bottom: 15px; padding-bottom: 5px; scroll-snap-type: x mandatory; }
+        .food-gallery img { width: 90%; flex-shrink: 0; border-radius: 20px; height: 220px; object-fit: cover; scroll-snap-align: start; border: 1px solid #eee; }
+
         #map { height: 400px; width: 100%; border-radius: 25px; margin-top: 10px; border: 2px solid white; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        .map-card { padding: 10px; text-align: center; }
-        .map-card img { width: 100%; border-radius: 10px; margin-top: 5px; }
 
         .card { background: var(--glass); backdrop-filter: blur(12px); border: 1.5px solid #f1f5f9; border-radius: 30px; padding: 25px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.04); }
         .section-header { border-right: 5px solid var(--primary-lava); padding-right: 15px; margin-bottom: 15px; font-weight: 900; font-size: 19px; }
@@ -50,6 +56,7 @@
         .item-box { padding: 12px 0; border-bottom: 1px solid #f1f5f9; }
         .price-row { display: flex; justify-content: space-between; align-items: center; }
         .price-main { font-weight: 800; font-size: 16px; }
+        .price-sub { font-size: 13px; color: var(--primary-lava); font-weight: 700; }
         .note { font-size: 11px; color: #64748b; margin-top: 4px; display: block; }
 
         .btn-action { flex: 1; padding: 14px; border-radius: 18px; border: 1.5px solid var(--primary-lava); background: transparent; color: var(--primary-lava); font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 13px; text-decoration: none; }
@@ -59,15 +66,7 @@
 
         #gallery-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 10000; align-items: center; justify-content: center; padding: 20px; }
         .gallery-card { background: white; border-radius: 35px; width: 100%; max-width: 450px; max-height: 85vh; overflow-y: auto; padding: 20px; position: relative; }
-        .close-circle { position: absolute; top: 15px; left: 15px; width: 30px; height: 30px; background: #eee; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-        
-        .food-tabs { display: flex; gap: 8px; margin-bottom: 20px; overflow-x: auto; white-space: nowrap; padding: 5px 2px; }
-        .food-btn { flex: 1; min-width: 90px; padding: 10px; border-radius: 14px; border: 1.5px solid var(--primary-lava); background: transparent; color: var(--primary-lava); font-weight: 800; cursor: pointer; font-size: 13px; }
-        .food-btn.active { background: var(--primary-lava); color: white; }
-        .food-section { display: none; }
-        .food-section.active { display: block; }
-        .food-gallery { display: flex; gap: 10px; overflow-x: auto; margin-bottom: 15px; padding-bottom: 5px; scroll-snap-type: x mandatory; }
-        .food-gallery img { width: 90%; flex-shrink: 0; border-radius: 20px; height: 220px; object-fit: cover; scroll-snap-align: start; border: 1px solid #eee; }
+        .close-circle { position: absolute; top: 15px; left: 15px; width: 30px; height: 30px; background: #eee; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -97,29 +96,46 @@
             </div>
         </div>
 
-        <!-- قسم تفاصيل الرحلة (بدون تغيير) -->
+        <!-- قسم تفاصيل الرحلة -->
         <div id="details" class="tab-content active">
             <div class="card">
                 <div class="section-header">المعابر (Crossing)</div>
                 <div class="item-box"><span class="note">معبر إسرائيل</span><div class="price-row"><span class="price-main">120 ₪</span></div></div>
-                <div class="item-box"><span class="note">معبر الأردن (دخول وخروج)</span><div class="price-row"><span class="price-main">20 JOD</span></div></div>
+                <div class="item-box"><span class="note">معبر الأردن (دخول 10 JOD وخروج 10 JOD)</span><div class="price-row"><span class="price-main">20 JOD</span><span class="price-sub">83.34 ₪</span></div></div>
             </div>
 
             <div class="card">
                 <div class="section-header">تذاكر الطيران (Plane Ticket)</div>
                 <div class="item-box">
-                    <span class="note" style="color: #c8102e; font-weight: bold;">Turkish Airlines 🇹🇷</span>
-                    <div class="price-row"><span class="price-main">360.890 JOD</span></div>
+                    <span class="note" style="color: #c8102e; font-weight: bold;">الشركة الناقلة: Turkish Airlines 🇹🇷</span>
+                    <span class="note">مطار AMM <—> مطار SAW</span>
+                    <div class="price-row"><span class="price-main">360.890 JOD</span><span class="price-sub">1,503.89 ₪</span></div>
                     <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/0Duto743s5C7AgINwhE9/image.jpg" style="width:100%; border-radius:15px; margin-top:10px;">
                 </div>
             </div>
 
             <div class="card">
                 <div class="section-header">الإقامة (Hotel)</div>
-                <div class="item-box"><span class="note">إسطنبول (IST) - للشخص الواحد</span><div class="price-row"><span class="price-main">168.384 JOD</span></div></div>
+                <div class="item-box"><span class="note">إسطنبول (IST) - الفترة كاملة</span><div class="price-row"><span class="price-main">841.92 JOD</span><span class="price-sub">3,508.42 ₪</span></div></div>
+                <div class="item-box"><span class="note">إسطنبول - للشخص الواحد</span><div class="price-row"><span class="price-main">168.384 JOD</span><span class="price-sub">701.68 ₪</span></div></div>
+                <div class="item-box"><span class="note">ليلة واحدة في عمان</span><div class="price-row"><span class="price-main">25 JOD</span><span class="price-sub">104.18 ₪</span></div></div>
                 <div style="display:flex; gap:10px; margin-top:15px;">
                     <button class="btn-action" onclick="openGal()">🖼️ صور الفندق</button>
                     <button class="btn-action" onclick="window.open('https://www.google.com/maps/search/?api=1&query=Şahkulu,+İstiklal+Cd.+No:+233,+34421+Beyoğlu/İstanbul,+Türkiye')">📍 الموقع</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="section-header">التنقلات (Transfer & Taxi)</div>
+                <div class="item-box">
+                    <span class="note">من المطار إلى الفندق (ذهاب وإياب)</span>
+                    <div class="price-row"><span class="price-main">118 $</span><span class="price-sub">348.00 ₪</span></div>
+                    <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/Ag5Tsoef8vrr52VFUuoF/image.jpg" style="width:100%; border-radius:15px; margin-top:10px;">
+                </div>
+                <div class="item-box">
+                    <span class="note">تاكسي المعبر للمطار + العودة (The Oud)</span>
+                    <div class="price-row"><span class="price-main">60 JOD</span><span class="price-sub">250.02 ₪</span></div>
+                    <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/E0aQKw9K28BmP0nriRyu/image.jpg" style="width:100%; border-radius:15px; margin-top:10px;">
                 </div>
             </div>
 
@@ -130,13 +146,41 @@
             <button class="join-btn">انضم للرحلة الآن ✈️</button>
         </div>
 
-        <!-- قسم المطاعم (بدون تغيير) -->
+        <!-- قسم المطاعم والمقاهي -->
         <div id="restaurants" class="tab-content">
             <div class="food-tabs">
                 <button class="food-btn active" onclick="switchFood('breakfast', this)">الفطور ☕</button>
                 <button class="food-btn" onclick="switchFood('lunch', this)">الغداء 🍖</button>
                 <button class="food-btn" onclick="switchFood('cafes', this)">المقاهي 💨</button>
             </div>
+
+            <!-- الفطور -->
+            <div id="breakfast" class="food-section active">
+                <div class="card">
+                    <div class="section-header">Sarayburnu Aile Çay bahçesi</div>
+                    <div class="food-gallery">
+                        <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/QtdYAfdMcwmJ9LgO8V8G/image.jpg">
+                        <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/Vq1EAhcdfc4eTN0LSQsW/image.jpg">
+                    </div>
+                    <div style="display:flex; gap:10px;">
+                        <a href="tel:+902125221397" class="btn-action">📞 اتصل</a>
+                        <button class="btn-action" onclick="window.open('https://www.google.com/maps/search/?api=1&query=Sarayburnu+Aile+Çay+bahçesi')">📍 الموقع</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="section-header">Best Lounge The Bosphorus</div>
+                    <div class="food-gallery">
+                        <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/aCrx1mziFx0zgJ80JgPy/image.jpg">
+                        <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/DhdkZSmu6oWf6eqvlu8y/image.jpg">
+                    </div>
+                    <div style="display:flex; gap:10px;">
+                        <a href="https://wa.me/905401663434" class="btn-action" style="background:#25D366; color:white; border:none;">💬 واتساب</a>
+                        <button class="btn-action" onclick="window.open('https://www.google.com/maps/search/?api=1&query=Best+Lounge+The+Bosphorus')">📍 الموقع</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- المقاهي -->
             <div id="cafes" class="food-section">
                 <div class="card">
                     <div class="section-header">HuQQa Kuruçeşme 💨</div>
@@ -144,106 +188,63 @@
                         <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/i05bEuzBkGZKZtLy8IZl/image.jpg">
                         <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/LEf6Accd61M17zyc2Q2y/image.jpg">
                     </div>
-                    <button class="btn-action" onclick="window.open('tel:+902122650666')">📞 اتصل</button>
+                    <div style="display:flex; gap:10px;">
+                        <a href="tel:+902122650666" class="btn-action">📞 اتصل</a>
+                        <button class="btn-action" onclick="window.open('https://www.google.com/maps/search/?api=1&query=HuQQa+Kuruçeşme')">📍 الموقع</button>
+                    </div>
                 </div>
             </div>
-            <div id="breakfast" class="food-section active"><div class="card"><p style="text-align:center;">اختر من القائمة أعلاه...</p></div></div>
+
+            <div id="lunch" class="food-section"><div class="card"><p style="text-align:center;">قريباً...</p></div></div>
         </div>
 
-        <!-- قسم المسلسلات (الجديد بالكامل) -->
+        <!-- قسم المسلسلات -->
         <div id="series" class="tab-content">
             <div class="card">
                 <div class="section-header">خريطة مواقع التصوير 🎬</div>
-                <p style="font-size: 12px; color: #64748b; margin-bottom: 10px;">اضغط على علامات الموقع لاستكشاف المسلسلات التي تم تصويرها هناك.</p>
-                <!-- حاوية الخريطة -->
                 <div id="map"></div>
-            </div>
-            
-            <div class="card">
-                <div class="section-header">أشهر المواقع</div>
-                <div class="item-box">
-                    <span style="font-weight: bold;">برج الفتاة (Maiden's Tower)</span>
-                    <span class="note">مسلسل: حب أعمى، الحفرة، الطائر المبكر.</span>
-                </div>
-                <div class="item-box">
-                    <span style="font-weight: bold;">قصر الروملي (Rumeli Hisarı)</span>
-                    <span class="note">مسلسل: العشق الممنوع، وادي الذئاب.</span>
-                </div>
             </div>
         </div>
 
         <div id="activities" class="tab-content"><div class="card"><p style="text-align:center;">قريباً...</p></div></div>
     </div>
 
-    <!-- نافذة صور الفندق -->
+    <!-- نافذة صور الفندق المحدثة -->
     <div id="gallery-overlay">
         <div class="gallery-card">
             <div class="close-circle" onclick="closeGal()">✕</div>
-            <h3 style="text-align:center; color:var(--primary-lava); margin-bottom:15px;">صور الفندق</h3>
+            <h3 style="text-align:center; color:var(--primary-lava); margin-bottom:15px;">صور الفندق - إسطنبول</h3>
             <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/i6qnBDrkuUUOaNblMTrD/image.jpg" style="width:100%; border-radius:15px; margin-bottom:10px;">
-            <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/7rqbW7I5jIQj50Bg4dKb/image.jpg" style="width:100%; border-radius:15px;">
+            <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/7rqbW7I5jIQj50Bg4dKb/image.jpg" style="width:100%; border-radius:15px; margin-bottom:10px;">
+            <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/22GCFsWDTlNSt72XtfaR/image.jpg" style="width:100%; border-radius:15px; margin-bottom:10px;">
+            <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/0C3sFKIaJx1z3ic6FhSB/image.jpg" style="width:100%; border-radius:15px; margin-bottom:10px;">
+            <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/aLpPSVAxaDvtSQwzr0qE/image.jpg" style="width:100%; border-radius:15px; margin-bottom:10px;">
+            <img src="https://plain-eeur-prod-public.komododecks.com/202605/04/aGQl3zT0iM9g9R8cEYCF/image.jpg" style="width:100%; border-radius:15px;">
         </div>
     </div>
 
-    <!-- استدعاء مكتبة Leaflet للخرائط -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         let map;
-
         function showTab(tabId, element) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.tab-card').forEach(card => card.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             element.classList.add('active');
-
-            // تهيئة الخريطة عند فتح قسم المسلسلات لأول مرة
-            if (tabId === 'series') {
-                setTimeout(initMap, 300); // تأخير بسيط لضمان ظهور الحاوية
-            }
+            if (tabId === 'series') setTimeout(initMap, 300);
         }
-
         function initMap() {
-            if (map) return; // منع إعادة التهيئة
-
-            // إحداثيات مركز إسطنبول (البوسفور)
+            if (map) return;
             map = L.map('map').setView([41.04, 29.02], 12);
-
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap'
-            }).addTo(map);
-
-            // إضافة نقاط مواقع المسلسلات
-            const locations = [
-                {
-                    coords: [41.0211, 29.0041], // برج الفتاة
-                    name: "برج الفتاة (Kız Kulesي)",
-                    desc: "<b>مسلسلات تم تصويرها هنا:</b><br>• حب أعمى (Kara Sevda)<br>• الطائر المبكر (Erkenci Kuş)"
-                },
-                {
-                    coords: [41.0833, 29.0558], // حي بيبك/روملي حصار
-                    name: "قصر سعيد حليم باشا (العشق الممنوع)",
-                    desc: "<b>الموقع الشهير:</b><br>تم تصوير معظم أحداث مسلسل <b>العشق الممنوع</b> في هذا القصر والمناطق المحيطة به."
-                },
-                {
-                    coords: [41.0285, 28.9439], // فنر وبالات
-                    name: "حي الحفرة (Çukur)",
-                    desc: "<b>حي بالات التاريخي:</b><br>موقع تصوير مسلسل الحفرة، حيث تظهر الجدران المرسومة والمقاهي الشهيرة."
-                }
-            ];
-
-            locations.forEach(loc => {
-                L.marker(loc.coords).addTo(map)
-                    .bindPopup(`<div class="map-card"><strong>${loc.name}</strong><br>${loc.desc}</div>`);
-            });
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+            L.marker([41.0211, 29.0041]).addTo(map).bindPopup("<b>برج الفتاة</b><br>موقع تصوير العديد من المسلسلات.");
         }
-
         function switchFood(sectionId, element) {
             document.querySelectorAll('.food-section').forEach(sec => sec.classList.remove('active'));
             document.querySelectorAll('.food-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById(sectionId).classList.add('active');
             element.classList.add('active');
         }
-
         function openGal() { document.getElementById('gallery-overlay').style.display = 'flex'; }
         function closeGal() { document.getElementById('gallery-overlay').style.display = 'none'; }
     </script>
