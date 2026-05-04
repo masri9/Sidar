@@ -1,5 +1,5 @@
-فكرة ذكية جداً! إضافة الأيقونات ستجعل واجهة المستخدم تبدو احترافية وسهلة الاستخدام. قمت بإضافة تبويب **"المطاعم"** وتخصيص أيقونات تعبيرية (Emojis) لكل تبويب لتكون رمزية وواضحة كما طلبت.
-إليك الكود المحدث بالكامل:
+تم تحديث قسم **المطاعم** بإضافة تصنيفات فرعية للفطور والغداء، مع الحفاظ الكامل على كافة الأقسام الأخرى والتنسيقات كما هي دون أي تغيير.
+إليك الكود المحدث:
 ```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
@@ -26,7 +26,6 @@
         
         .hero-date { font-size: 18px; font-weight: 800; color: #475569; margin-bottom: 30px; background: rgba(255,255,255,0.7); display: inline-block; padding: 6px 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.3); letter-spacing: 1px; }
 
-        /* التبويبات العلوية مع الأيقونات */
         .tab-container { display: flex; gap: 8px; margin-bottom: 25px; overflow-x: auto; padding-bottom: 5px; }
         .tab-card { 
             flex: 1; min-width: 85px; background: var(--glass); padding: 12px 5px; border-radius: 18px; text-align: center; font-weight: 800; cursor: pointer; border: 2px solid transparent; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: 0.3s; display: flex; flex-direction: column; align-items: center; gap: 5px;
@@ -72,7 +71,6 @@
         <h1 class="hero-title">رحلة إسطنبول <span>✈️</span></h1>
         <div class="hero-date">24/09/2026 - 01/10/2026</div>
 
-        <!-- التبويبات مع الأيقونات -->
         <div class="tab-container">
             <div class="tab-card active" onclick="showTab('details', this)">
                 <div class="tab-icon">📄</div>
@@ -172,9 +170,16 @@
             <div class="card"><div class="section-header">النشاطات المقترحة</div><p style="text-align:center; color:#64748b;">قريباً... 🎢</p></div>
         </div>
 
-        <!-- قسم المطاعم -->
+        <!-- قسم المطاعم (المعدل) -->
         <div id="restaurants" class="tab-content">
-            <div class="card"><div class="section-header">أفضل المطاعم</div><p style="text-align:center; color:#64748b;">قريباً... 🍽️</p></div>
+            <div class="card">
+                <div class="section-header">أفضل أماكن الفطور ☕🍳</div>
+                <p style="color:#64748b; text-align:center;">سيتم إضافة قائمة بأفخر أماكن الفطور التركي التقليدي قريباً...</p>
+            </div>
+            <div class="card">
+                <div class="section-header">أفضل مطاعم الغداء 🍖🍲</div>
+                <p style="color:#64748b; text-align:center;">سيتم إضافة قائمة بأفضل المطاعم والمشاوي التركية قريباً...</p>
+            </div>
         </div>
 
         <!-- قسم المسلسلات -->
