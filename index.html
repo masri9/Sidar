@@ -17,12 +17,8 @@
         .sidar-robot { position: fixed; left: 10px; top: 20px; width: 110px; z-index: 10; animation: robotFloat 4s ease-in-out infinite; }
         @keyframes robotFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
-        #login-screen { position: fixed; inset: 0; background: #fff; z-index: 9999; display: flex; align-items: center; justify-content: center; }
-        .login-box { text-align: center; width: 85%; max-width: 350px; }
-        input { width: 100%; padding: 16px; border: 2px solid #f1f5f9; border-radius: 20px; font-size: 18px; text-align: center; outline: none; margin-bottom: 15px; }
-        .login-btn { width: 100%; padding: 16px; background: var(--primary-lava); color: white; border: none; border-radius: 20px; font-weight: 800; cursor: pointer; }
-
-        .app-container { position: relative; z-index: 1; padding: 100px 20px 40px; display: none; max-width: 600px; margin: 0 auto; }
+        /* تم تعديل الحاوية لتظهر مباشرة */
+        .app-container { position: relative; z-index: 1; padding: 100px 20px 40px; display: block; max-width: 600px; margin: 0 auto; }
         .hero-title { font-size: 32px; font-weight: 900; line-height: 1.1; margin-bottom: 25px; }
         .hero-title span { color: var(--primary-lava); }
 
@@ -49,14 +45,6 @@
 
     <div class="header-bg"></div>
     <img src="https://plain-eeur-prod-public.komododecks.com/202604/20/U4I3P5a9xfiovTcHKNJk/image.png" class="sidar-robot">
-
-    <div id="login-screen">
-        <div class="login-box">
-            <h1 style="color:var(--primary-lava); font-weight:900;">SIDAR AI</h1>
-            <input type="password" id="pass" placeholder="رمز الدخول (0000)">
-            <button class="login-btn" onclick="auth()">عرض الميزانية</button>
-        </div>
-    </div>
 
     <div class="app-container" id="app">
         <h1 class="hero-title">IST Travel <span>✈️</span></h1>
@@ -148,13 +136,6 @@
     </div>
 
     <script>
-        function auth() {
-            const p = document.getElementById('pass').value;
-            if(p === "0000" || p === "9999") {
-                document.getElementById('login-screen').style.display = 'none';
-                document.getElementById('app').style.display = 'block';
-            } else { alert("الرمز خاطئ"); }
-        }
         function openGal() { document.getElementById('gallery-overlay').style.display = 'flex'; }
         function closeGal() { document.getElementById('gallery-overlay').style.display = 'none'; }
     </script>
