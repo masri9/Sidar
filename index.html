@@ -1,116 +1,176 @@
 import 'package:flutter/material.dart';
-import 'dart:io';
 
-void main() => runApp(GuardianShieldApp());
+void main() {
+  runApp(const GuardianShieldApp());
+}
 
 class GuardianShieldApp extends StatelessWidget {
+  const GuardianShieldApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: Color(0xFF121212),
-        primaryColor: Colors.orange[900],
+        scaffoldBackgroundColor: const Color(0xFF0A0A0A), // أسود عميق
+        primaryColor: const Color(0xFFFF4500), // برتقالي بركاني
       ),
-      home: OperationCenter(),
+      home: const Dashboard(),
     );
   }
 }
 
-class OperationCenter extends StatefulWidget {
+class Dashboard extends StatefulWidget {
+  const Dashboard({super.key});
+
   @override
-  _OperationCenterState createState() => _OperationCenterState();
+  State<Dashboard> createState() => _DashboardState();
 }
 
-class _OperationCenterState extends State<OperationCenter> {
+class _DashboardState extends State<Dashboard> {
   final TextEditingController _urlController = TextEditingController();
-  List<String> logs = ["> System Ready. Waiting for target URL..."];
+  final List<String> _consoleLogs = [
+    "[SYSTEM] Security modules initialized...",
+    "[SYSTEM] Ready for operation. Waiting for target URL."
+  ];
 
-  void _addLog(String message) {
+  void _addLog(String msg) {
     setState(() {
-      logs.add("> ${DateTime.now().toString().split(' ')[1].split('.')[0]} $message");
+      _consoleLogs.add("[${DateTime.now().hour}:${DateTime.now().minute}] $msg");
     });
-  }
-
-  // فنكشن لتشغيل سكريبت البايثون محلياً
-  void _startOperation() async {
-    _addLog("Initializing Stealth Mode...");
-    _addLog("Launching Distributed Reporting Nodes...");
-    
-    // ملاحظة: هنا يتم استدعاء سكريبت البايثون الموجود في جهازك
-    // Process.run('python3', ['engine.py', _urlController.text]);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("GUARDIAN SHIELD v1.0", style: TextStyle(letterSpacing: 2, color: Colors.orange[800])),
-        backgroundColor: Colors.black,
-        elevation: 0,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: _urlController,
-              decoration: InputDecoration(
-                hintText: "Enter Suspicious Account URL...",
-                filled: true,
-                fillColor: Colors.grey[900],
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                prefixIcon: Icon(Icons.link, color: Colors.orange),
-              ),
-            ),
-            SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _buildActionButton("Mass Report", Icons.report_problem, Colors.red),
-                _buildActionButton("Archive Evidence", Icons.archive, Colors.blue),
+      body: Row(
+        children: [
+          // شريط جانبي (Sidebar)
+          Container(
+            width: 70,
+            color: Colors.black,
+            child: Column(
+              children: const [
+                SizedBox(height: 20),
+                Icon(Icons.shield, color: Color(0xFFFF4500), size: 35),
+                SizedBox(height: 40),
+                Icon(Icons.radar, color: Colors.white70),
+                SizedBox(height: 30),
+                Icon(Icons.history, color: Colors.white70),
+                Spacer(),
+                Icon(Icons.settings, color: Colors.white70),
+                SizedBox(height: 20),
               ],
             ),
-            SizedBox(height: 20),
-            Expanded(
-              child: Container(
-                width: double.infinity,
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(5),
-                  border: Border.all(color: Colors.orange.withOpacity(0.3)),
-                ),
-                child: ListView.builder(
-                  itemCount: logs.length,
-                  itemBuilder: (context, index) => Text(
-                    logs[index],
-                    style: TextStyle(fontFamily: 'Courier', color: Colors.greenAccent),
+          ),
+          // المحتوى الرئيسي
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(25.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "SHADOW COMMAND CENTER",
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.5,
+                      color: Color(0xFFFF4500),
+                    ),
                   ),
-                ),
+                  const SizedBox(height: 25),
+                  // حقل الإدخال
+                  TextField(
+                    controller: _urlController,
+                    decoration: InputDecoration(
+                      hintText: "Enter Target Profile URL (Instagram, FB, TikTok)...",
+                      prefixIcon: const Icon(Icons.link, color: Color(0xFFFF4500)),
+                      filled: true,
+                      fillColor: const Color(0xFF1A1A1A),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  // أزرار العمليات
+                  Row(
+                    children: [
+                      _buildOperationButton("MASS REPORT", Icons.bolt, Colors.redAccent),
+                      const SizedBox(width: 15),
+                      _buildOperationButton("GATHER EVIDENCE", Icons.camera_enhance, Colors.blueAccent),
+                    ],
+                  ),
+                  const SizedBox(height: 25),
+                  // الشاشة السوداء (Console)
+                  const Text("LIVE OPERATION LOGS", style: TextStyle(fontSize: 12, color: Colors.grey)),
+                  const SizedBox(height: 8),
+                  Expanded(
+                    child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: Colors.white10),
+                      ),
+                      padding: const EdgeInsets.all(15),
+                      child: ListView.builder(
+                        itemCount: _consoleLogs.length,
+                        itemBuilder: (context, index) {
+                          return Text(
+                            _consoleLogs[index],
+                            style: const TextStyle(
+                              fontFamily: 'monospace',
+                              color: Colors.greenAccent,
+                              fontSize: 13,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  // زر التنفيذ الكبير
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (_urlController.text.isNotEmpty) {
+                          _addLog("Starting Silent Attack on: ${_urlController.text}");
+                          _addLog("Deploying 15 Distributed Reporting Nodes...");
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFFF4500),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      ),
+                      child: const Text("EXECUTE PROTOCOL", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                    ),
+                  ),
+                ],
               ),
             ),
-            SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: _startOperation,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.orange[900],
-                padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-              ),
-              child: Text("EXECUTE SILENT OPERATION", style: TextStyle(fontWeight: FontWeight.bold)),
-            )
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildActionButton(String label, IconData icon, Color color) {
-    return ActionChip(
-      avatar: Icon(icon, size: 16, color: Colors.white),
-      label: Text(label),
-      onPressed: () => _addLog("Mode selected: $label"),
-      backgroundColor: color.withOpacity(0.2),
+  Widget _buildOperationButton(String label, IconData icon, Color color) {
+    return Expanded(
+      child: OutlinedButton.icon(
+        onPressed: () => _addLog("Mode Selected: $label"),
+        icon: Icon(icon, size: 18, color: color),
+        label: Text(label, style: const TextStyle(color: Colors.white)),
+        style: OutlinedButton.styleFrom(
+          side: BorderSide(color: color.withOpacity(0.5)),
+          padding: const EdgeInsets.symmetric(vertical: 15),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        ),
+      ),
     );
   }
 }
