@@ -1,0 +1,116 @@
+import 'package:flutter/material.dart';
+import 'dart:io';
+
+void main() => runApp(GuardianShieldApp());
+
+class GuardianShieldApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData.dark().copyWith(
+        scaffoldBackgroundColor: Color(0xFF121212),
+        primaryColor: Colors.orange[900],
+      ),
+      home: OperationCenter(),
+    );
+  }
+}
+
+class OperationCenter extends StatefulWidget {
+  @override
+  _OperationCenterState createState() => _OperationCenterState();
+}
+
+class _OperationCenterState extends State<OperationCenter> {
+  final TextEditingController _urlController = TextEditingController();
+  List<String> logs = ["> System Ready. Waiting for target URL..."];
+
+  void _addLog(String message) {
+    setState(() {
+      logs.add("> ${DateTime.now().toString().split(' ')[1].split('.')[0]} $message");
+    });
+  }
+
+  // فنكشن لتشغيل سكريبت البايثون محلياً
+  void _startOperation() async {
+    _addLog("Initializing Stealth Mode...");
+    _addLog("Launching Distributed Reporting Nodes...");
+    
+    // ملاحظة: هنا يتم استدعاء سكريبت البايثون الموجود في جهازك
+    // Process.run('python3', ['engine.py', _urlController.text]);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("GUARDIAN SHIELD v1.0", style: TextStyle(letterSpacing: 2, color: Colors.orange[800])),
+        backgroundColor: Colors.black,
+        elevation: 0,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: _urlController,
+              decoration: InputDecoration(
+                hintText: "Enter Suspicious Account URL...",
+                filled: true,
+                fillColor: Colors.grey[900],
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                prefixIcon: Icon(Icons.link, color: Colors.orange),
+              ),
+            ),
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _buildActionButton("Mass Report", Icons.report_problem, Colors.red),
+                _buildActionButton("Archive Evidence", Icons.archive, Colors.blue),
+              ],
+            ),
+            SizedBox(height: 20),
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(5),
+                  border: Border.all(color: Colors.orange.withOpacity(0.3)),
+                ),
+                child: ListView.builder(
+                  itemCount: logs.length,
+                  itemBuilder: (context, index) => Text(
+                    logs[index],
+                    style: TextStyle(fontFamily: 'Courier', color: Colors.greenAccent),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: _startOperation,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.orange[900],
+                padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+              ),
+              child: Text("EXECUTE SILENT OPERATION", style: TextStyle(fontWeight: FontWeight.bold)),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildActionButton(String label, IconData icon, Color color) {
+    return ActionChip(
+      avatar: Icon(icon, size: 16, color: Colors.white),
+      label: Text(label),
+      onPressed: () => _addLog("Mode selected: $label"),
+      backgroundColor: color.withOpacity(0.2),
+    );
+  }
+}
