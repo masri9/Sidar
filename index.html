@@ -148,6 +148,16 @@
     font-size:12px;
     margin-top:4px;
   }
+  .admin-select{
+    width:100%;
+    background:#1c2846;
+    border:1px solid rgba(255,140,0,0.5);
+    color:#fff;
+    padding:8px 12px;
+    border-radius:10px;
+    font-size:12px;
+    margin-top:4px;
+  }
 
   #toast-wrap{position:fixed; top:18px; left:50%; transform:translateX(-50%); z-index:80; display:flex; flex-direction:column; gap:8px; align-items:center;}
   .toast{
@@ -241,7 +251,7 @@
       <i data-lucide="plane" class="w-4 h-4 text-orange-500"></i>
       <h3 class="font-display font-bold text-sm text-slate-500">تفاصيل الطيران</h3>
     </div>
-    <div onclick="openFlightDetail()" class="glass rounded-3xl p-5 relative overflow-hidden card-hover cursor-pointer scale-tap">
+    <div onclick="openFlightDetail('outbound')" class="glass rounded-3xl p-5 relative overflow-hidden card-hover cursor-pointer scale-tap">
       <div class="relative flex items-center justify-between mb-4">
         <span id="flight-card-airline" class="en font-display font-black text-lg tracking-wide text-[var(--navy)]"></span>
         <div class="w-9 h-9 rounded-xl bg-orange-50 flex items-center justify-center">
@@ -265,7 +275,7 @@
 
       <div class="relative flex items-center justify-between text-xs text-slate-500 pt-2 border-t border-slate-100">
         <span id="flight-card-num" class="en font-semibold"></span>
-        <span class="flex items-center gap-1 text-orange-500 font-bold">عرض جميع تفاصيل الذهاب والعودة <i data-lucide="chevron-left" class="w-4 h-4 rtl-flip"></i></span>
+        <span class="flex items-center gap-1 text-orange-500 font-bold">عرض تفاصيل المسار <i data-lucide="chevron-left" class="w-4 h-4 rtl-flip"></i></span>
       </div>
     </div>
   </div>
@@ -290,50 +300,157 @@
     </div>
   </div>
 
-  <!-- ADMIN PANEL -->
+  <!-- SUPPORT CARD (زر التواصل مع الدعم في الصفحة الرئيسية) -->
+  <div class="mt-5">
+    <div class="flex items-center gap-2 mb-2 px-1">
+      <i data-lucide="headphones" class="w-4 h-4 text-orange-500"></i>
+      <h3 class="font-display font-bold text-sm text-slate-500">الدعم والمساعدة</h3>
+    </div>
+    <a id="support-card-link" href="#" target="_blank" class="glass rounded-3xl p-4 flex items-center justify-between card-hover cursor-pointer scale-tap block">
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-600">
+          <i data-lucide="message-square" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h4 class="font-bold text-sm text-[var(--navy)]">التواصل مع الدعم الفني</h4>
+          <p class="text-xs text-slate-400">فريقنا متواجد لخدمتك طوال الرحلة</p>
+        </div>
+      </div>
+      <i data-lucide="chevron-left" class="w-5 h-5 text-slate-400 rtl-flip"></i>
+    </a>
+  </div>
+
+  <!-- ADVANCED ADMIN PANEL (لوحة التحكم المتقدمة) -->
   <div id="admin-panel-wrap" class="hidden mt-6">
     <button onclick="toggleAdminPanel()" class="w-full glass-dark rounded-2xl py-3.5 flex items-center justify-center gap-2 text-orange-300 font-bold text-sm scale-tap">
-      <i data-lucide="settings-2" class="w-4 h-4"></i> لوحة تحكم المسؤول والتعديل
+      <i data-lucide="settings-2" class="w-4 h-4"></i> لوحة تحكم المسؤول الشاملة
     </button>
     <div id="admin-panel" class="hidden mt-3 glass-dark rounded-2xl p-4 space-y-4 text-white">
+      
+      <!-- 1. قسم إدارة الهواتف -->
+      <div class="bg-white/5 p-3 rounded-2xl border border-white/10">
+        <p class="text-xs text-orange-400 font-bold mb-2 flex items-center gap-1">
+          <i data-lucide="users" class="w-3.5 h-3.5"></i> إدارة أرقام الهواتف المسموحة
+        </p>
+        <div class="flex gap-2">
+          <input id="new-phone-input" type="text" placeholder="إضافة رقم جديد (مثال: 0521234567)" class="admin-input mt-0" />
+          <button onclick="addNewPhone()" class="bg-orange-500 hover:bg-orange-600 text-white font-bold px-3 py-1.5 rounded-xl text-xs shrink-0">إضافة</button>
+        </div>
+        
+        <p class="text-[10px] text-slate-400 mt-2 mb-1">الأرقام المسجلة حالياً (اضغط لحذف رقم):</p>
+        <div id="phone-list-tags" class="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto"></div>
+      </div>
+
+      <!-- 2. قسم اختيار رقم الهاتف للتعديل -->
+      <div class="bg-orange-500/10 p-3 rounded-2xl border border-orange-500/30">
+        <label class="text-xs text-orange-300 font-bold block mb-1">اختر الرقم المراد تعديل تفاصيل رحلته:</label>
+        <select id="adm-target-phone" class="admin-select" onchange="loadTargetPhoneData()"></select>
+      </div>
+
+      <!-- 3. إعدادات الشعار والواجهة -->
       <div>
         <p class="text-xs text-orange-400 font-bold mb-1">إعدادات الشعار والواجهة</p>
         <label class="text-[11px] block">رابط الشعار (Image URL):</label>
         <input id="admin-logo-url" type="text" class="admin-input" />
+        <label class="text-[11px] block mt-1">رابط الواتساب / الدعم:</label>
+        <input id="admin-wa-num" type="text" class="admin-input" placeholder="+972501234567" />
       </div>
       
       <hr class="border-white/10" />
       
+      <!-- 4. رحلة الذهاب (الجزء الأول والثاني والترانزيت) -->
       <div>
-        <p class="text-xs text-orange-400 font-bold mb-1">تفاصيل رحلة الذهاب</p>
+        <p class="text-xs text-orange-400 font-bold mb-1">تفاصيل رحلة الذهاب الكاملة</p>
+        <p class="text-[10px] text-orange-300 font-bold">المقطع الأول (رحلة 1):</p>
         <div class="grid grid-cols-2 gap-2">
-          <div><label class="text-[10px]">شركة الطيران</label><input id="adm-out-airline" class="admin-input"/></div>
-          <div><label class="text-[10px]">رقم الرحلة</label><input id="adm-out-num" class="admin-input"/></div>
-          <div><label class="text-[10px]">من (رمز)</label><input id="adm-out-from" class="admin-input"/></div>
-          <div><label class="text-[10px]">إلى (رمز)</label><input id="adm-out-to" class="admin-input"/></div>
-          <div><label class="text-[10px]">الساعة والمدة</label><input id="adm-out-dur" class="admin-input"/></div>
-          <div><label class="text-[10px]">الترانزيت ومدته</label><input id="adm-out-lay" class="admin-input"/></div>
+          <div><label class="text-[10px]">شركة الطيران</label><input id="adm-out1-airline" class="admin-input"/></div>
+          <div><label class="text-[10px]">رقم الرحلة</label><input id="adm-out1-num" class="admin-input"/></div>
+          <div><label class="text-[10px]">من (رمز المطار)</label><input id="adm-out1-from" class="admin-input"/></div>
+          <div><label class="text-[10px]">مدينة المغادرة</label><input id="adm-out1-from-city" class="admin-input"/></div>
+          <div><label class="text-[10px]">إلى (رمز المطار)</label><input id="adm-out1-to" class="admin-input"/></div>
+          <div><label class="text-[10px]">مدينة الوصول</label><input id="adm-out1-to-city" class="admin-input"/></div>
+          <div><label class="text-[10px]">ساعة الانطلاق</label><input id="adm-out1-dep" class="admin-input" placeholder="08:00"/></div>
+          <div><label class="text-[10px]">ساعة الوصول</label><input id="adm-out1-arr" class="admin-input" placeholder="12:30"/></div>
+        </div>
+
+        <div class="my-2 bg-white/5 p-2 rounded-xl">
+          <label class="text-[10px] text-orange-300 font-bold block">مدة وتفاصيل الترانزيت (بين 1 و 2):</label>
+          <input id="adm-out-layover" class="admin-input" placeholder="مثال: 2h 30m - دبي (DXB)"/>
+        </div>
+
+        <p class="text-[10px] text-orange-300 font-bold">المقطع الثاني (رحلة 2):</p>
+        <div class="grid grid-cols-2 gap-2">
+          <div><label class="text-[10px]">شركة الطيران</label><input id="adm-out2-airline" class="admin-input"/></div>
+          <div><label class="text-[10px]">رقم الرحلة</label><input id="adm-out2-num" class="admin-input"/></div>
+          <div><label class="text-[10px]">من (رمز المطار)</label><input id="adm-out2-from" class="admin-input"/></div>
+          <div><label class="text-[10px]">مدينة المغادرة</label><input id="adm-out2-from-city" class="admin-input"/></div>
+          <div><label class="text-[10px]">إلى (رمز المطار)</label><input id="adm-out2-to" class="admin-input"/></div>
+          <div><label class="text-[10px]">مدينة الوصول</label><input id="adm-out2-to-city" class="admin-input"/></div>
+          <div><label class="text-[10px]">ساعة الانطلاق</label><input id="adm-out2-dep" class="admin-input" placeholder="15:00"/></div>
+          <div><label class="text-[10px]">ساعة الوصول</label><input id="adm-out2-arr" class="admin-input" placeholder="23:30"/></div>
         </div>
       </div>
 
       <hr class="border-white/10" />
 
+      <!-- 5. رحلة العودة (الجزء الأول والثاني والترانزيت) -->
       <div>
-        <p class="text-xs text-orange-400 font-bold mb-1">تفاصيل رحلة العودة</p>
+        <p class="text-xs text-orange-400 font-bold mb-1">تفاصيل رحلة العودة الكاملة</p>
+        <p class="text-[10px] text-orange-300 font-bold">المقطع الأول (رحلة 1):</p>
         <div class="grid grid-cols-2 gap-2">
-          <div><label class="text-[10px]">شركة الطيران</label><input id="adm-ret-airline" class="admin-input"/></div>
-          <div><label class="text-[10px]">رقم الرحلة</label><input id="adm-ret-num" class="admin-input"/></div>
-          <div><label class="text-[10px]">من (رمز)</label><input id="adm-ret-from" class="admin-input"/></div>
-          <div><label class="text-[10px]">إلى (رمز)</label><input id="adm-ret-to" class="admin-input"/></div>
-          <div><label class="text-[10px]">الساعة والمدة</label><input id="adm-ret-dur" class="admin-input"/></div>
-          <div><label class="text-[10px]">الترانزيت ومدته</label><input id="adm-ret-lay" class="admin-input"/></div>
+          <div><label class="text-[10px]">شركة الطيران</label><input id="adm-ret1-airline" class="admin-input"/></div>
+          <div><label class="text-[10px]">رقم الرحلة</label><input id="adm-ret1-num" class="admin-input"/></div>
+          <div><label class="text-[10px]">من (رمز المطار)</label><input id="adm-ret1-from" class="admin-input"/></div>
+          <div><label class="text-[10px]">مدينة المغادرة</label><input id="adm-ret1-from-city" class="admin-input"/></div>
+          <div><label class="text-[10px]">إلى (رمز المطار)</label><input id="adm-ret1-to" class="admin-input"/></div>
+          <div><label class="text-[10px]">مدينة الوصول</label><input id="adm-ret1-to-city" class="admin-input"/></div>
+          <div><label class="text-[10px]">ساعة الانطلاق</label><input id="adm-ret1-dep" class="admin-input" placeholder="10:00"/></div>
+          <div><label class="text-[10px]">ساعة الوصول</label><input id="adm-ret1-arr" class="admin-input" placeholder="16:00"/></div>
+        </div>
+
+        <div class="my-2 bg-white/5 p-2 rounded-xl">
+          <label class="text-[10px] text-orange-300 font-bold block">مدة وتفاصيل الترانزيت (بين 1 و 2):</label>
+          <input id="adm-ret-layover" class="admin-input" placeholder="مثال: 3h 10m - الدوحة (DOH)"/>
+        </div>
+
+        <p class="text-[10px] text-orange-300 font-bold">المقطع الثاني (رحلة 2):</p>
+        <div class="grid grid-cols-2 gap-2">
+          <div><label class="text-[10px]">شركة الطيران</label><input id="adm-ret2-airline" class="admin-input"/></div>
+          <div><label class="text-[10px]">رقم الرحلة</label><input id="adm-ret2-num" class="admin-input"/></div>
+          <div><label class="text-[10px]">من (رمز المطار)</label><input id="adm-ret2-from" class="admin-input"/></div>
+          <div><label class="text-[10px]">مدينة المغادرة</label><input id="adm-ret2-from-city" class="admin-input"/></div>
+          <div><label class="text-[10px]">إلى (رمز المطار)</label><input id="adm-ret2-to" class="admin-input"/></div>
+          <div><label class="text-[10px]">مدينة الوصول</label><input id="adm-ret2-to-city" class="admin-input"/></div>
+          <div><label class="text-[10px]">ساعة الانطلاق</label><input id="adm-ret2-dep" class="admin-input" placeholder="19:10"/></div>
+          <div><label class="text-[10px]">ساعة الوصول</label><input id="adm-ret2-arr" class="admin-input" placeholder="23:45"/></div>
         </div>
       </div>
 
       <hr class="border-white/10" />
 
+      <!-- 6. التحكم بنقاط ومراحل الرحلة (النقاط المتوهجة) -->
       <div>
-        <p class="text-xs text-orange-400 font-bold mb-1">بيانات السكن الخارجي الكاملة</p>
+        <p class="text-xs text-orange-400 font-bold mb-1">التحكم بالمراحل والنقاط المتوهجة</p>
+        <div class="grid grid-cols-2 gap-2 text-xs">
+          <div>
+            <label class="text-[10px] block">المرحلة المكتملة (رقم):</label>
+            <input id="adm-step-completed" type="number" min="0" max="5" class="admin-input" placeholder="مثال: 2"/>
+          </div>
+          <div>
+            <label class="text-[10px] block">تفعيل توهج المرحلة الحالية:</label>
+            <select id="adm-step-glow" class="admin-select">
+              <option value="true">مفعّل (يتوهج)</option>
+              <option value="false">معطل</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <hr class="border-white/10" />
+
+      <!-- 7. بيانات الفندق والسكن -->
+      <div>
+        <p class="text-xs text-orange-400 font-bold mb-1">بيانات السكن الخارجي</p>
         <div class="grid grid-cols-2 gap-2 mb-2">
           <div><label class="text-[10px]">المدينة</label><input id="adm-hotel-city" class="admin-input"/></div>
           <div><label class="text-[10px]">اسم الفندق / السكن</label><input id="adm-hotel-name" class="admin-input"/></div>
@@ -350,21 +467,36 @@
         <input id="adm-hotel-phone" class="admin-input"/>
       </div>
 
-      <button onclick="saveAdminChanges()" class="w-full bg-orange-500 text-white font-bold py-2.5 rounded-xl text-xs mt-2">
-        حفظ وتحديث البيانات لهذا الرقم
+      <button onclick="saveAdminChanges()" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-xl text-xs mt-2 shadow-lg shadow-orange-500/30">
+        حفظ وتحديث البيانات للرقم المحدد
       </button>
     </div>
   </div>
 
 </div>
 
-<!-- FLIGHT DETAIL SLIDE-OVER -->
+<!-- FLIGHT DETAIL SLIDE-OVER (شاشة تفاصيل الطيران المتقدمة) -->
 <div id="flight-detail" class="slide-panel">
   <div class="absolute inset-0 bg-gradient-to-b from-[var(--navy)] to-[#1c2846] overflow-y-auto">
     <div class="max-w-lg mx-auto px-5 pt-6 pb-16 text-white">
-      <button onclick="closeFlightDetail()" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center mb-6 scale-tap">
-        <i data-lucide="arrow-right" class="w-5 h-5 rtl-flip"></i>
-      </button>        
+      <div class="flex items-center justify-between mb-6">
+        <button onclick="closeFlightDetail()" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center scale-tap">
+          <i data-lucide="arrow-right" class="w-5 h-5 rtl-flip"></i>
+        </button>
+        <h2 class="font-display font-black text-lg text-orange-400">تفاصيل الطيران والمسارات</h2>
+      </div>
+      
+      <!-- TAB SELECTOR (أيقونتين ذهاب وعودة في الأعلى) -->
+      <div class="grid grid-cols-2 gap-2 bg-white/10 p-1.5 rounded-2xl mb-6">
+        <button id="tab-btn-outbound" onclick="switchFlightTab('outbound')" class="py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 bg-orange-500 text-white shadow-md">
+          <i data-lucide="plane-takeoff" class="w-4 h-4"></i> رحلة الذهاب
+        </button>
+        <button id="tab-btn-return" onclick="switchFlightTab('return')" class="py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 text-white/70 hover:text-white">
+          <i data-lucide="plane-landing" class="w-4 h-4"></i> رحلة العودة
+        </button>
+      </div>
+
+      <!-- TABS CONTENT AREA -->
       <div id="flight-detail-content"></div>
     </div>
   </div>
@@ -389,27 +521,40 @@
 <script>
 lucide.createIcons();
 
+// الحالة الافتراضية للبيانات بالكامل
 const defaultState = {
   logoUrl:"https://api.iconify.design/lucide/plane.svg?color=%23FF6B00",
   greeting:"صباح الخير! ☀️",
   title:"رحلتك القادمة تنتظرك!",
   subtitle:"استعد لتجربة لا تُنسى",
   whatsapp:"+972501234567",
+  stepCompleted: 2, // عدد الخطوات المكتملة
+  stepGlow: true,   // توهج الخطوة الحالية
   outbound:{
-    airline:"EMIRATES",
-    from:"TLV", fromCity:"تل أبيب",
-    to:"HKT", toCity:"بوكيت",
-    flightNumber:"EK 932",
-    duration:"11h 20m",
-    layover:"2h 30m - دبي (DXB)"
+    layover:"2h 30m - دبي (DXB)",
+    leg1:{
+      airline:"EMIRATES", flightNumber:"EK 932",
+      from:"TLV", fromCity:"تل أبيب", depTime:"18:05",
+      to:"DXB", toCity:"دبي", arrTime:"22:35"
+    },
+    leg2:{
+      airline:"EMIRATES", flightNumber:"EK 392",
+      from:"DXB", fromCity:"دبي", depTime:"01:05",
+      to:"HKT", toCity:"بوكيت", arrTime:"10:20"
+    }
   },
   return:{
-    airline:"QATAR AIRWAYS",
-    from:"HKT", fromCity:"بوكيت",
-    to:"TLV", toCity:"تل أبيب",
-    flightNumber:"QR 838",
-    duration:"12h 05m",
-    layover:"3h 10m - الدوحة (DOH)"
+    layover:"3h 10m - الدوحة (DOH)",
+    leg1:{
+      airline:"QATAR AIRWAYS", flightNumber:"QR 838",
+      from:"HKT", fromCity:"بوكيت", depTime:"09:30",
+      to:"DOH", toCity:"الدوحة", arrTime:"12:40"
+    },
+    leg2:{
+      airline:"QATAR AIRWAYS", flightNumber:"QR 921",
+      from:"DOH", fromCity:"الدوحة", depTime:"15:50",
+      to:"TLV", toCity:"تل أبيب", arrTime:"18:55"
+    }
   },
   hotel:{
     city:"PHUKET",
@@ -427,6 +572,8 @@ const defaultState = {
 let currentPhone = "";
 let currentData = {};
 let isAdmin = false;
+let activeFlightTab = 'outbound';
+let allowedPhones = ["9", "admin", "0500000000"];
 
 function initParticles(){
   const wrap = document.getElementById('particles');
@@ -445,7 +592,16 @@ function initParticles(){
 }
 initParticles();
 
+// تحميل الأرقام المسجلة
+function loadAllowedPhones(){
+  const saved = localStorage.getItem('allowed_phones');
+  if(saved){
+    try { allowedPhones = JSON.parse(saved); } catch(e){}
+  }
+}
+
 window.addEventListener('load', ()=>{
+  loadAllowedPhones();
   setTimeout(()=>{
     document.getElementById('splash').classList.add('hide');
     document.getElementById('login-backdrop').classList.add('open');
@@ -453,7 +609,6 @@ window.addEventListener('load', ()=>{
   }, 1000);
 });
 
-// تعديل دالة الدخول وتطهير مدخلات النص
 function handleLogin(){
   const rawVal = document.getElementById('phone-input').value;
   const val = rawVal ? rawVal.trim().toLowerCase() : '';
@@ -461,10 +616,13 @@ function handleLogin(){
   
   if(!val){ err.textContent = 'الرجاء إدخال رقم الهاتف'; return; }
   
-  currentPhone = val;
+  if(!allowedPhones.includes(val)){
+    err.textContent = 'عذراً، هذا الرقم غير مسجل للوصول';
+    return;
+  }
   
-  // تحقق متساهل يشمل أصل المسافات والأحرف
-  if(val === '9' || val === 'admin' || val === '0500000000' || val.includes('admin') || val.includes('0500000000')){
+  currentPhone = val;
+  if(val === '9' || val === 'admin' || val === '0500000000'){
     isAdmin = true;
   } else {
     isAdmin = false;
@@ -472,11 +630,7 @@ function handleLogin(){
   
   const saved = localStorage.getItem('user_data_' + currentPhone);
   if(saved){
-    try {
-      currentData = JSON.parse(saved);
-    } catch(e) {
-      currentData = JSON.parse(JSON.stringify(defaultState));
-    }
+    try { currentData = JSON.parse(saved); } catch(e) { currentData = JSON.parse(JSON.stringify(defaultState)); }
   } else {
     currentData = JSON.parse(JSON.stringify(defaultState));
   }
@@ -484,10 +638,18 @@ function handleLogin(){
   document.getElementById('login-backdrop').classList.remove('open');
   document.getElementById('app').classList.remove('hidden');
   document.getElementById('fab').classList.remove('hidden');
-  document.getElementById('wa-link').href = 'https://wa.me/'+currentData.whatsapp.replace(/[^0-9]/g,'');
+  
+  const cleanWa = (currentData.whatsapp || defaultState.whatsapp).replace(/[^0-9]/g,'');
+  document.getElementById('wa-link').href = 'https://wa.me/' + cleanWa;
+  document.getElementById('support-card-link').href = 'https://wa.me/' + cleanWa;
 
   document.getElementById('admin-ribbon').classList.toggle('hidden', !isAdmin);
   document.getElementById('admin-panel-wrap').classList.toggle('hidden', !isAdmin);
+
+  if(isAdmin){
+    renderPhoneListAdmin();
+    populateTargetPhoneSelect();
+  }
 
   renderAll();
   if(isAdmin) showToast('تم تسجيل الدخول كمسؤول', 'shield-check');
@@ -505,139 +667,338 @@ function showToast(msg, icon='check-circle'){
   setTimeout(()=> t.remove(), 2700);
 }
 
+// دالة العرض الرئيسية
 function renderAll(){
-  document.getElementById('logo-img').src = currentData.logoUrl;
-  document.getElementById('greeting-text').textContent = currentData.greeting;
-  document.getElementById('title-text').textContent = currentData.title;
-  document.getElementById('subtitle-text').textContent = currentData.subtitle;
+  document.getElementById('logo-img').src = currentData.logoUrl || defaultState.logoUrl;
+  document.getElementById('greeting-text').textContent = currentData.greeting || defaultState.greeting;
+  document.getElementById('title-text').textContent = currentData.title || defaultState.title;
+  document.getElementById('subtitle-text').textContent = currentData.subtitle || defaultState.subtitle;
 
-  document.getElementById('flight-card-airline').textContent = currentData.outbound.airline;
-  document.getElementById('flight-card-from').textContent = currentData.outbound.from;
-  document.getElementById('flight-card-from-city').textContent = currentData.outbound.fromCity;
-  document.getElementById('flight-card-to').textContent = currentData.return.to;
-  document.getElementById('flight-card-to-city').textContent = currentData.return.toCity;
-  document.getElementById('flight-card-num').textContent = currentData.outbound.flightNumber + " / " + currentData.return.flightNumber;
+  const out1 = currentData.outbound.leg1;
+  const ret2 = currentData.return.leg2 || currentData.return.leg1;
+
+  document.getElementById('flight-card-airline').textContent = out1.airline;
+  document.getElementById('flight-card-from').textContent = out1.from;
+  document.getElementById('flight-card-from-city').textContent = out1.fromCity;
+  document.getElementById('flight-card-to').textContent = ret2.to;
+  document.getElementById('flight-card-to-city').textContent = ret2.toCity;
+  document.getElementById('flight-card-num').textContent = out1.flightNumber + " / " + ret2.flightNumber;
 
   document.getElementById('hotel-city').textContent = currentData.hotel.city;
   document.getElementById('hotel-name').textContent = currentData.hotel.name;
   document.getElementById('hotel-dates').textContent = `${currentData.hotel.dateFrom} → ${currentData.hotel.dateTo}`;
 
-  if(isAdmin){
-    document.getElementById('admin-logo-url').value = currentData.logoUrl;
-    document.getElementById('adm-out-airline').value = currentData.outbound.airline;
-    document.getElementById('adm-out-num').value = currentData.outbound.flightNumber;
-    document.getElementById('adm-out-from').value = currentData.outbound.from;
-    document.getElementById('adm-out-to').value = currentData.outbound.to;
-    document.getElementById('adm-out-dur').value = currentData.outbound.duration;
-    document.getElementById('adm-out-lay').value = currentData.outbound.layover;
-
-    document.getElementById('adm-ret-airline').value = currentData.return.airline;
-    document.getElementById('adm-ret-num').value = currentData.return.flightNumber;
-    document.getElementById('adm-ret-from').value = currentData.return.from;
-    document.getElementById('adm-ret-to').value = currentData.return.to;
-    document.getElementById('adm-ret-dur').value = currentData.return.duration;
-    document.getElementById('adm-ret-lay').value = currentData.return.layover;
-
-    document.getElementById('adm-hotel-city').value = currentData.hotel.city;
-    document.getElementById('adm-hotel-name').value = currentData.hotel.name;
-    document.getElementById('adm-hotel-dateFrom').value = currentData.hotel.dateFrom;
-    document.getElementById('adm-hotel-dateTo').value = currentData.hotel.dateTo;
-    document.getElementById('adm-hotel-checkin').value = currentData.hotel.checkIn;
-    document.getElementById('adm-hotel-checkout').value = currentData.hotel.checkOut;
-    document.getElementById('adm-hotel-address').value = currentData.hotel.address;
-    document.getElementById('adm-hotel-map').value = currentData.hotel.mapUrl;
-    document.getElementById('adm-hotel-phone').value = currentData.hotel.phone;
-  }
-
   lucide.createIcons();
 }
 
-function toggleAdminPanel(){
-  const p = document.getElementById('admin-panel');
-  p.classList.toggle('hidden');
+// ---- إدارة لوحة التحكم والتحكم بالأرقام ---- //
+function renderPhoneListAdmin(){
+  const wrap = document.getElementById('phone-list-tags');
+  wrap.innerHTML = '';
+  allowedPhones.forEach(p => {
+    const tag = document.createElement('span');
+    tag.className = 'bg-white/10 text-slate-200 text-[11px] px-2.5 py-1 rounded-lg flex items-center gap-1.5 border border-white/10';
+    tag.innerHTML = `<span>${p}</span><button onclick="removePhone('${p}')" class="text-red-400 hover:text-red-300 font-bold ml-1">×</button>`;
+    wrap.appendChild(tag);
+  });
+}
+
+function populateTargetPhoneSelect(){
+  const sel = document.getElementById('adm-target-phone');
+  sel.innerHTML = '';
+  allowedPhones.forEach(p => {
+    const opt = document.createElement('option');
+    opt.value = p;
+    opt.textContent = `رقم: ${p}` + (p === currentPhone ? ' (حسابك الحالي)' : '');
+    sel.appendChild(opt);
+  });
+  sel.value = currentPhone;
+  loadTargetPhoneData();
+}
+
+function addNewPhone(){
+  const input = document.getElementById('new-phone-input');
+  const val = input.value.trim().toLowerCase();
+  if(!val) return;
+  if(!allowedPhones.includes(val)){
+    allowedPhones.push(val);
+    localStorage.setItem('allowed_phones', JSON.stringify(allowedPhones));
+    input.value = '';
+    renderPhoneListAdmin();
+    populateTargetPhoneSelect();
+    showToast('تمت إضافة الرقم بنجاح', 'user-plus');
+  }
+}
+
+function removePhone(phone){
+  if(phone === 'admin' || phone === '9'){
+    showToast('لا يمكن حذف رقم المسؤول الأساسي', 'alert-circle');
+    return;
+  }
+  allowedPhones = allowedPhones.filter(p => p !== phone);
+  localStorage.setItem('allowed_phones', JSON.stringify(allowedPhones));
+  renderPhoneListAdmin();
+  populateTargetPhoneSelect();
+  showToast('تم حذف الرقم', 'trash-2');
+}
+
+// تحميل بيانات الرقم المحدد في لوحة التحكم
+function loadTargetPhoneData(){
+  const targetPhone = document.getElementById('adm-target-phone').value;
+  const saved = localStorage.getItem('user_data_' + targetPhone);
+  let data = saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(defaultState));
+
+  document.getElementById('admin-logo-url').value = data.logoUrl || defaultState.logoUrl;
+  document.getElementById('admin-wa-num').value = data.whatsapp || defaultState.whatsapp;
+
+  // الذهاب 1
+  document.getElementById('adm-out1-airline').value = data.outbound.leg1.airline;
+  document.getElementById('adm-out1-num').value = data.outbound.leg1.flightNumber;
+  document.getElementById('adm-out1-from').value = data.outbound.leg1.from;
+  document.getElementById('adm-out1-from-city').value = data.outbound.leg1.fromCity;
+  document.getElementById('adm-out1-to').value = data.outbound.leg1.to;
+  document.getElementById('adm-out1-to-city').value = data.outbound.leg1.toCity;
+  document.getElementById('adm-out1-dep').value = data.outbound.leg1.depTime || '';
+  document.getElementById('adm-out1-arr').value = data.outbound.leg1.arrTime || '';
+
+  document.getElementById('adm-out-layover').value = data.outbound.layover || '';
+
+  // الذهاب 2
+  document.getElementById('adm-out2-airline').value = data.outbound.leg2.airline;
+  document.getElementById('adm-out2-num').value = data.outbound.leg2.flightNumber;
+  document.getElementById('adm-out2-from').value = data.outbound.leg2.from;
+  document.getElementById('adm-out2-from-city').value = data.outbound.leg2.fromCity;
+  document.getElementById('adm-out2-to').value = data.outbound.leg2.to;
+  document.getElementById('adm-out2-to-city').value = data.outbound.leg2.toCity;
+  document.getElementById('adm-out2-dep').value = data.outbound.leg2.depTime || '';
+  document.getElementById('adm-out2-arr').value = data.outbound.leg2.arrTime || '';
+
+  // العودة 1
+  document.getElementById('adm-ret1-airline').value = data.return.leg1.airline;
+  document.getElementById('adm-ret1-num').value = data.return.leg1.flightNumber;
+  document.getElementById('adm-ret1-from').value = data.return.leg1.from;
+  document.getElementById('adm-ret1-from-city').value = data.return.leg1.fromCity;
+  document.getElementById('adm-ret1-to').value = data.return.leg1.to;
+  document.getElementById('adm-ret1-to-city').value = data.return.leg1.toCity;
+  document.getElementById('adm-ret1-dep').value = data.return.leg1.depTime || '';
+  document.getElementById('adm-ret1-arr').value = data.return.leg1.arrTime || '';
+
+  document.getElementById('adm-ret-layover').value = data.return.layover || '';
+
+  // العودة 2
+  document.getElementById('adm-ret2-airline').value = data.return.leg2.airline;
+  document.getElementById('adm-ret2-num').value = data.return.leg2.flightNumber;
+  document.getElementById('adm-ret2-from').value = data.return.leg2.from;
+  document.getElementById('adm-ret2-from-city').value = data.return.leg2.fromCity;
+  document.getElementById('adm-ret2-to').value = data.return.leg2.to;
+  document.getElementById('adm-ret2-to-city').value = data.return.leg2.toCity;
+  document.getElementById('adm-ret2-dep').value = data.return.leg2.depTime || '';
+  document.getElementById('adm-ret2-arr').value = data.return.leg2.arrTime || '';
+
+  // مراحل الرحلة
+  document.getElementById('adm-step-completed').value = data.stepCompleted !== undefined ? data.stepCompleted : 2;
+  document.getElementById('adm-step-glow').value = (data.stepGlow !== false).toString();
+
+  // الفندق
+  document.getElementById('adm-hotel-city').value = data.hotel.city;
+  document.getElementById('adm-hotel-name').value = data.hotel.name;
+  document.getElementById('adm-hotel-dateFrom').value = data.hotel.dateFrom;
+  document.getElementById('adm-hotel-dateTo').value = data.hotel.dateTo;
+  document.getElementById('adm-hotel-checkin').value = data.hotel.checkIn;
+  document.getElementById('adm-hotel-checkout').value = data.hotel.checkOut;
+  document.getElementById('adm-hotel-address').value = data.hotel.address;
+  document.getElementById('adm-hotel-map').value = data.hotel.mapUrl;
+  document.getElementById('adm-hotel-phone').value = data.hotel.phone;
 }
 
 function saveAdminChanges(){
-  currentData.logoUrl = document.getElementById('admin-logo-url').value;
-  
-  currentData.outbound.airline = document.getElementById('adm-out-airline').value;
-  currentData.outbound.flightNumber = document.getElementById('adm-out-num').value;
-  currentData.outbound.from = document.getElementById('adm-out-from').value;
-  currentData.outbound.to = document.getElementById('adm-out-to').value;
-  currentData.outbound.duration = document.getElementById('adm-out-dur').value;
-  currentData.outbound.layover = document.getElementById('adm-out-lay').value;
+  const targetPhone = document.getElementById('adm-target-phone').value;
+  const saved = localStorage.getItem('user_data_' + targetPhone);
+  let data = saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(defaultState));
 
-  currentData.return.airline = document.getElementById('adm-ret-airline').value;
-  currentData.return.flightNumber = document.getElementById('adm-ret-num').value;
-  currentData.return.from = document.getElementById('adm-ret-from').value;
-  currentData.return.to = document.getElementById('adm-ret-to').value;
-  currentData.return.duration = document.getElementById('adm-ret-dur').value;
-  currentData.return.layover = document.getElementById('adm-ret-lay').value;
+  data.logoUrl = document.getElementById('admin-logo-url').value;
+  data.whatsapp = document.getElementById('admin-wa-num').value;
 
-  currentData.hotel.city = document.getElementById('adm-hotel-city').value;
-  currentData.hotel.name = document.getElementById('adm-hotel-name').value;
-  currentData.hotel.dateFrom = document.getElementById('adm-hotel-dateFrom').value;
-  currentData.hotel.dateTo = document.getElementById('adm-hotel-dateTo').value;
-  currentData.hotel.checkIn = document.getElementById('adm-hotel-checkin').value;
-  currentData.hotel.checkOut = document.getElementById('adm-hotel-checkout').value;
-  currentData.hotel.address = document.getElementById('adm-hotel-address').value;
-  currentData.hotel.mapUrl = document.getElementById('adm-hotel-map').value;
-  currentData.hotel.phone = document.getElementById('adm-hotel-phone').value;
+  data.outbound.layover = document.getElementById('adm-out-layover').value;
+  data.outbound.leg1 = {
+    airline: document.getElementById('adm-out1-airline').value,
+    flightNumber: document.getElementById('adm-out1-num').value,
+    from: document.getElementById('adm-out1-from').value,
+    fromCity: document.getElementById('adm-out1-from-city').value,
+    to: document.getElementById('adm-out1-to').value,
+    toCity: document.getElementById('adm-out1-to-city').value,
+    depTime: document.getElementById('adm-out1-dep').value,
+    arrTime: document.getElementById('adm-out1-arr').value
+  };
+  data.outbound.leg2 = {
+    airline: document.getElementById('adm-out2-airline').value,
+    flightNumber: document.getElementById('adm-out2-num').value,
+    from: document.getElementById('adm-out2-from').value,
+    fromCity: document.getElementById('adm-out2-from-city').value,
+    to: document.getElementById('adm-out2-to').value,
+    toCity: document.getElementById('adm-out2-to-city').value,
+    depTime: document.getElementById('adm-out2-dep').value,
+    arrTime: document.getElementById('adm-out2-arr').value
+  };
 
-  localStorage.setItem('user_data_' + currentPhone, JSON.stringify(currentData));
-  renderAll();
-  showToast('تم حفظ التغييرات الخاصة بالرقم', 'save');
+  data.return.layover = document.getElementById('adm-ret-layover').value;
+  data.return.leg1 = {
+    airline: document.getElementById('adm-ret1-airline').value,
+    flightNumber: document.getElementById('adm-ret1-num').value,
+    from: document.getElementById('adm-ret1-from').value,
+    fromCity: document.getElementById('adm-ret1-from-city').value,
+    to: document.getElementById('adm-ret1-to').value,
+    toCity: document.getElementById('adm-ret1-to-city').value,
+    depTime: document.getElementById('adm-ret1-dep').value,
+    arrTime: document.getElementById('adm-ret1-arr').value
+  };
+  data.return.leg2 = {
+    airline: document.getElementById('adm-ret2-airline').value,
+    flightNumber: document.getElementById('adm-ret2-num').value,
+    from: document.getElementById('adm-ret2-from').value,
+    fromCity: document.getElementById('adm-ret2-from-city').value,
+    to: document.getElementById('adm-ret2-to').value,
+    toCity: document.getElementById('adm-ret2-to-city').value,
+    depTime: document.getElementById('adm-ret2-dep').value,
+    arrTime: document.getElementById('adm-ret2-arr').value
+  };
+
+  data.stepCompleted = parseInt(document.getElementById('adm-step-completed').value) || 0;
+  data.stepGlow = document.getElementById('adm-step-glow').value === 'true';
+
+  data.hotel.city = document.getElementById('adm-hotel-city').value;
+  data.hotel.name = document.getElementById('adm-hotel-name').value;
+  data.hotel.dateFrom = document.getElementById('adm-hotel-dateFrom').value;
+  data.hotel.dateTo = document.getElementById('adm-hotel-dateTo').value;
+  data.hotel.checkIn = document.getElementById('adm-hotel-checkin').value;
+  data.hotel.checkOut = document.getElementById('adm-hotel-checkout').value;
+  data.hotel.address = document.getElementById('adm-hotel-address').value;
+  data.hotel.mapUrl = document.getElementById('adm-hotel-map').value;
+  data.hotel.phone = document.getElementById('adm-hotel-phone').value;
+
+  localStorage.setItem('user_data_' + targetPhone, JSON.stringify(data));
+  if(targetPhone === currentPhone){
+    currentData = data;
+    renderAll();
+  }
+  showToast(`تم حفظ بيانات الرقم ${targetPhone}`, 'save');
 }
 
-function openFlightDetail(){
-  const c = document.getElementById('flight-detail-content');
-  const out = currentData.outbound;
-  const ret = currentData.return;
+function toggleAdminPanel(){
+  document.getElementById('admin-panel').classList.toggle('hidden');
+}
 
-  c.innerHTML = `
-    <h2 class="font-display font-black text-2xl mb-6 text-orange-400">تفاصيل رحلتي الذهاب والعودة</h2>
-    
-    <div class="bg-white/5 rounded-3xl p-5 mb-5 border border-white/10 relative">
-      <span class="bg-orange-500 text-white text-xs px-3 py-1 rounded-full font-bold mb-3 inline-block">رحلة الذهاب</span>
-      <div class="flex items-center justify-between mb-2">
-        <p class="en font-display font-black text-xl">${out.airline}</p>
-        <p class="en text-slate-300 text-xs">${out.flightNumber}</p>
-      </div>
-      <div class="flex items-center justify-between my-4">
-        <div><p class="en font-black text-2xl">${out.from}</p><p class="text-xs text-slate-400">${out.fromCity}</p></div>
-        <div class="route-line"><i data-lucide="plane" class="plane-icon w-4 h-4 text-orange-400"></i></div>
-        <div><p class="en font-black text-2xl">${out.to}</p><p class="text-xs text-slate-400">${out.toCity}</p></div>
-      </div>
-      <div class="text-xs text-slate-300 space-y-1 pt-2 border-t border-white/10">
-        <p>المدة: ${out.duration}</p>
-        <p class="text-orange-300">الترانزيت: ${out.layover}</p>
-      </div>
-    </div>
-
-    <div class="bg-white/5 rounded-3xl p-5 border border-white/10 relative">
-      <span class="bg-orange-500 text-white text-xs px-3 py-1 rounded-full font-bold mb-3 inline-block">رحلة العودة</span>
-      <div class="flex items-center justify-between mb-2">
-        <p class="en font-display font-black text-xl">${ret.airline}</p>
-        <p class="en text-slate-300 text-xs">${ret.flightNumber}</p>
-      </div>
-      <div class="flex items-center justify-between my-4">
-        <div><p class="en font-black text-2xl">${ret.from}</p><p class="text-xs text-slate-400">${ret.fromCity}</p></div>
-        <div class="route-line"><i data-lucide="plane" class="plane-icon w-4 h-4 text-orange-400"></i></div>
-        <div><p class="en font-black text-2xl">${ret.to}</p><p class="text-xs text-slate-400">${ret.toCity}</p></div>
-      </div>
-      <div class="text-xs text-slate-300 space-y-1 pt-2 border-t border-white/10">
-        <p>المدة: ${ret.duration}</p>
-        <p class="text-orange-300">الترانزيت: ${ret.layover}</p>
-      </div>
-    </div>
-  `;
-  lucide.createIcons();
+// ---- شاشة تفاصيل الطيران المتقدمة (التبويب والنقاط المتوهجة) ---- //
+function openFlightDetail(tab = 'outbound'){
+  activeFlightTab = tab;
+  updateFlightTabUI();
+  renderFlightDetailTabContent();
   document.getElementById('flight-detail').classList.add('open');
 }
+
 function closeFlightDetail(){
   document.getElementById('flight-detail').classList.remove('open');
 }
 
+function switchFlightTab(tab){
+  activeFlightTab = tab;
+  updateFlightTabUI();
+  renderFlightDetailTabContent();
+}
+
+function updateFlightTabUI(){
+  const btnOut = document.getElementById('tab-btn-outbound');
+  const btnRet = document.getElementById('tab-btn-return');
+
+  if(activeFlightTab === 'outbound'){
+    btnOut.className = "py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 bg-orange-500 text-white shadow-md";
+    btnRet.className = "py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 text-white/70 hover:text-white";
+  } else {
+    btnRet.className = "py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 bg-orange-500 text-white shadow-md";
+    btnOut.className = "py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 text-white/70 hover:text-white";
+  }
+}
+
+// عرض بطاقات المسار والترانزيت والمراحل
+function renderFlightDetailTabContent(){
+  const container = document.getElementById('flight-detail-content');
+  const routeData = activeFlightTab === 'outbound' ? currentData.outbound : currentData.return;
+  const leg1 = routeData.leg1;
+  const leg2 = routeData.leg2;
+  const steps = ["تم الحجز", "إنجاز السفر", "بطاقة الصعود", "في الجو", "الوصول"];
+  const completedIdx = currentData.stepCompleted !== undefined ? currentData.stepCompleted : 2;
+  const isGlow = currentData.stepGlow !== false;
+
+  // تتبع النقاط
+  let stepperHtml = `
+    <div class="bg-white/5 rounded-2xl p-4 mb-5 border border-white/10">
+      <p class="text-xs text-orange-300 font-bold mb-3 text-center">مراحل الرحلة الحالية</p>
+      <div class="flex items-center justify-between relative px-2">
+  `;
+  steps.forEach((step, idx) => {
+    let dotClass = "step-dot";
+    if(idx < completedIdx) dotClass += " done";
+    else if(idx === completedIdx) dotClass += isGlow ? " active" : " done";
+
+    stepperHtml += `
+      <div class="flex flex-col items-center z-10">
+        <div class="${dotClass}"></div>
+        <span class="text-[9px] text-slate-300 mt-1.5 font-semibold">${step}</span>
+      </div>
+    `;
+    if(idx < steps.length - 1){
+      let lineClass = "step-line";
+      if(idx < completedIdx) lineClass += " done";
+      stepperHtml += `<div class="${lineClass}"></div>`;
+    }
+  });
+  stepperHtml += `</div></div>`;
+
+  // بطاقات الرحلات
+  function renderLegCard(leg, title){
+    return `
+      <div class="bg-white/5 rounded-3xl p-5 border border-white/10 relative">
+        <div class="flex items-center justify-between mb-3">
+          <span class="bg-orange-500/20 text-orange-300 border border-orange-500/30 text-[11px] px-3 py-1 rounded-full font-bold">${title}</span>
+          <span class="en text-slate-300 text-xs font-bold">${leg.airline} — ${leg.flightNumber}</span>
+        </div>
+        <div class="flex items-center justify-between my-3">
+          <div class="text-right">
+            <p class="en font-black text-2xl text-white">${leg.from}</p>
+            <p class="text-xs text-slate-400">${leg.fromCity}</p>
+            ${leg.depTime ? `<p class="en text-xs text-orange-400 mt-1 font-bold">الانطلاق: ${leg.depTime}</p>` : ''}
+          </div>
+          <div class="route-line"><i data-lucide="plane" class="plane-icon w-4 h-4 text-orange-400"></i></div>
+          <div class="text-left">
+            <p class="en font-black text-2xl text-white">${leg.to}</p>
+            <p class="text-xs text-slate-400">${leg.toCity}</p>
+            ${leg.arrTime ? `<p class="en text-xs text-orange-400 mt-1 font-bold">الوصول: ${leg.arrTime}</p>` : ''}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  let content = stepperHtml + renderLegCard(leg1, "المقطع الأول (رحلة 1)");
+
+  if(routeData.layover){
+    content += `
+      <div class="my-3 py-2 px-4 rounded-2xl bg-orange-500/10 border border-orange-500/20 text-center flex items-center justify-center gap-2">
+        <i data-lucide="clock" class="w-4 h-4 text-orange-400 shrink-0"></i>
+        <span class="text-xs text-orange-300 font-bold">مدة الانتظار والترانزيت: ${routeData.layover}</span>
+      </div>
+    `;
+  }
+
+  if(leg2 && leg2.from){
+    content += renderLegCard(leg2, "المقطع الثاني (رحلة 2)");
+  }
+
+  container.innerHTML = content;
+  lucide.createIcons();
+}
+
+// مودال الفندق
 function openHotelModal(){
   const h = currentData.hotel;
   document.getElementById('hotel-modal-content').innerHTML = `
