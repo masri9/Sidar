@@ -1,139 +1,656 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" x-data="travelApp()" x-init="initApp()">
+<html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TravelX - MVP</title>
-    <!-- Tailwind CSS لضمان التصميم العصري الرقمي -->
-    <script src="https://jsdelivr.net"></script>
-    <!-- Alpine.js لإدارة التفاعلات والترجمة الفورية -->
-    <script defer src="https://jsdelivr.net"></script>
-    <!-- Lucide Icons للأيقونات الاحترافية -->
-    <script src="https://unpkg.com"></script>
-    <style>
-        [x-cloak] { display: none !important; }
-        .neon-shadow { box-shadow: 0 0 30px rgba(255, 90, 31, 0.4); }
-        .mint-shadow { box-shadow: 0 0 30px rgba(16, 185, 129, 0.3); }
-        body { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; }
-    </style>
-</head>
-<body class="bg-slate-50 text-slate-800 pb-24">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>رحلتك القادمة | Your Journey</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --orange:#FF6B00;
+    --orange-light:#FF8C00;
+    --white:#FFFFFF;
+    --slate:#F8F9FA;
+    --navy:#101A33;
+    --navy-soft:#28324a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Cairo','Outfit',sans-serif;
+    background:
+      radial-gradient(circle at 15% 10%, rgba(255,140,0,0.10), transparent 45%),
+      radial-gradient(circle at 90% 25%, rgba(255,107,0,0.08), transparent 40%),
+      var(--slate);
+    color:var(--navy);
+    min-height:100vh;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  .font-display{font-family:'Outfit','Cairo',sans-serif;}
+  .en{direction:ltr; font-family:'Outfit',sans-serif; letter-spacing:0.02em;}
 
-    <!-- 1. شاشة الـ Splash Screen الترحيبية -->
-    <div x-show="showSplash" 
-         x-transition:leave="transition ease-in duration-500 transform opacity-0 scale-95"
-         class="fixed inset-0 bg-slate-950 flex flex-col justify-center items-center z-50 text-white select-none">
-        <div class="w-24 h-24 bg-[#FF5A1F] rounded-3xl flex items-center justify-center neon-shadow mb-4 animate-bounce">
-            <i data-lucide="compass" class="w-12 h-12 text-white animate-spin"></i>
+  #particles{position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;}
+  .particle{
+    position:absolute; border-radius:50%;
+    background:radial-gradient(circle at 30% 30%, rgba(255,140,0,0.35), rgba(255,107,0,0.05) 70%);
+    filter:blur(1px);
+    animation:floatUp linear infinite;
+  }
+  @keyframes floatUp{
+    0%{transform:translateY(0) translateX(0) scale(1); opacity:0;}
+    10%{opacity:0.7;}
+    90%{opacity:0.5;}
+    100%{transform:translateY(-120vh) translateX(30px) scale(1.2); opacity:0;}
+  }
+
+  .glass{
+    background:rgba(255,255,255,0.72);
+    backdrop-filter:blur(18px) saturate(160%);
+    -webkit-backdrop-filter:blur(18px) saturate(160%);
+    border:1px solid rgba(255,255,255,0.6);
+    box-shadow:0 8px 32px rgba(16,26,51,0.08);
+  }
+  .glass-dark{
+    background:linear-gradient(135deg, rgba(16,26,51,0.95), rgba(40,50,74,0.92));
+    backdrop-filter:blur(18px);
+    border:1px solid rgba(255,140,0,0.18);
+  }
+
+  .fade-panel{animation:fadeSlide .45s cubic-bezier(.22,1,.36,1);}
+  @keyframes fadeSlide{
+    from{opacity:0; transform:translateY(10px) scale(.99);}
+    to{opacity:1; transform:translateY(0) scale(1);}
+  }
+
+  .route-line{
+    position:relative; height:2px;
+    background-image:repeating-linear-gradient(to right, var(--orange) 0 8px, transparent 8px 16px);
+    flex:1;
+    margin:0 10px;
+  }
+  .plane-icon{
+    position:absolute; top:50%;
+    animation:flyAcross 3.5s ease-in-out infinite;
+    filter:drop-shadow(0 2px 6px rgba(255,107,0,0.5));
+  }
+  @keyframes flyAcross{
+    0%{left:-2%; transform:translateY(-50%) scale(0.85) rotate(0deg);}
+    50%{transform:translateY(-65%) scale(1.05) rotate(0deg);}
+    100%{left:97%; transform:translateY(-50%) scale(0.85) rotate(0deg);}
+  }
+  [dir="rtl"] .plane-icon{ transform:translateY(-50%) scaleX(-1); }
+  [dir="rtl"] .flight-route{ flex-direction:row-reverse; }
+
+  .step-dot{
+    width:14px; height:14px; border-radius:50%;
+    background:#E2E5EA; transition:all .4s ease;
+    position:relative; z-index:2;
+  }
+  .step-dot.done{background:var(--orange);}
+  .step-dot.active{
+    background:var(--orange);
+    box-shadow:0 0 0 6px rgba(255,107,0,0.18);
+    animation:pulseGlow 1.6s ease-in-out infinite;
+  }
+  @keyframes pulseGlow{
+    0%,100%{box-shadow:0 0 0 4px rgba(255,107,0,0.20), 0 0 14px 2px rgba(255,140,0,.55);}
+    50%{box-shadow:0 0 0 10px rgba(255,107,0,0.06), 0 0 22px 6px rgba(255,140,0,.75);}
+  }
+  .step-line{height:2px; flex:1; background:#E2E5EA; transition:background .4s ease;}
+  .step-line.done{background:var(--orange);}
+
+  .card-hover{transition:transform .35s cubic-bezier(.22,1,.36,1), box-shadow .35s ease;}
+  .card-hover:hover{transform:translateY(-4px); box-shadow:0 20px 45px rgba(16,26,51,0.14);}
+  .card-hover:active{transform:translateY(-1px) scale(.995);}
+
+  .slide-panel{
+    position:fixed; inset:0; z-index:60;
+    transform:translateX(100%);
+    transition:transform .5s cubic-bezier(.22,1,.36,1);
+  }
+  [dir="rtl"] .slide-panel{ transform:translateX(-100%); }
+  .slide-panel.open{transform:translateX(0);}
+
+  .modal-backdrop{
+    position:fixed; inset:0; background:rgba(16,26,51,0.55);
+    backdrop-filter:blur(4px); z-index:55; opacity:0; pointer-events:none;
+    transition:opacity .35s ease;
+  }
+  .modal-backdrop.open{opacity:1; pointer-events:auto;}
+
+  .modal-sheet{
+    transform:translateY(30px) scale(.97); opacity:0;
+    transition:all .4s cubic-bezier(.22,1,.36,1);
+  }
+  .modal-backdrop.open .modal-sheet{transform:translateY(0) scale(1); opacity:1;}
+
+  .fab-pulse{
+    position:absolute; inset:0; border-radius:9999px;
+    background:#25D366; opacity:.6;
+    animation:fabPulse 2.2s ease-out infinite;
+  }
+  @keyframes fabPulse{
+    0%{transform:scale(1); opacity:.55;}
+    100%{transform:scale(1.9); opacity:0;}
+  }
+
+  .admin-input{
+    width:100%;
+    background:rgba(255,255,255,0.1);
+    border:1px solid rgba(255,140,0,0.4);
+    color:#fff;
+    padding:8px 12px;
+    border-radius:10px;
+    font-size:12px;
+    margin-top:4px;
+  }
+
+  #toast-wrap{position:fixed; top:18px; left:50%; transform:translateX(-50%); z-index:80; display:flex; flex-direction:column; gap:8px; align-items:center;}
+  .toast{
+    background:var(--navy); color:#fff; padding:10px 18px; border-radius:14px;
+    font-size:14px; font-weight:600; box-shadow:0 12px 30px rgba(16,26,51,.35);
+    display:flex; align-items:center; gap:8px;
+    animation:toastIn .35s cubic-bezier(.22,1,.36,1), toastOut .35s ease 2.3s forwards;
+    border:1px solid rgba(255,140,0,.35);
+  }
+  @keyframes toastIn{from{opacity:0; transform:translateY(-14px);} to{opacity:1; transform:translateY(0);}}
+  @keyframes toastOut{to{opacity:0; transform:translateY(-14px);}}
+
+  #splash{position:fixed; inset:0; z-index:100; background:linear-gradient(135deg,var(--navy),#1c2846 60%, #2a1a0f); display:flex; align-items:center; justify-content:center; transition:opacity .6s ease, visibility .6s ease;}
+  #splash.hide{opacity:0; visibility:hidden;}
+  .splash-plane{animation:splashFly 1.8s cubic-bezier(.5,0,.5,1) infinite;}
+  @keyframes splashFly{0%{transform:translateX(-30px) translateY(6px) rotate(-8deg);} 50%{transform:translateX(30px) translateY(-6px) rotate(8deg);} 100%{transform:translateX(-30px) translateY(6px) rotate(-8deg);}}
+
+  ::-webkit-scrollbar{width:8px;}
+  ::-webkit-scrollbar-thumb{background:rgba(255,107,0,0.35); border-radius:8px;}
+  .scale-tap:active{transform:scale(.96);}
+</style>
+</head>
+<body>
+
+<div id="particles"></div>
+<div id="toast-wrap"></div>
+
+<!-- SPLASH -->
+<div id="splash">
+  <div class="text-center px-6">
+    <div class="w-20 h-20 mx-auto mb-5 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-400 flex items-center justify-center splash-plane shadow-2xl">
+      <i data-lucide="plane" class="text-white w-10 h-10"></i>
+    </div>
+    <p class="text-white/90 font-display text-lg tracking-wide">جاري تجهيز رحلتك</p>
+  </div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div id="login-backdrop" class="modal-backdrop">
+  <div class="modal-sheet glass w-[92%] max-w-sm rounded-3xl p-7 relative overflow-hidden">
+    <div class="relative">
+      <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-400 flex items-center justify-center shadow-lg mb-4">
+        <i data-lucide="plane-takeoff" class="text-white w-7 h-7"></i>
+      </div>
+      <h2 class="font-display text-2xl font-extrabold text-[var(--navy)]">أهلاً بك ✈️</h2>
+      <p class="text-sm text-slate-500 mt-1 mb-5">أدخل رقم هاتفك لمشاهدة تفاصيل رحلتك الخاصة</p>
+      <input id="phone-input" type="text" placeholder="رقم الهاتف" dir="ltr"
+        class="w-full bg-white border-2 border-slate-200 focus:border-orange-400 rounded-2xl px-4 py-3.5 text-lg font-semibold text-center tracking-wider transition-colors" />
+      <p id="login-error" class="text-red-500 text-xs mt-2 h-4 text-center"></p>
+      <button id="login-btn" onclick="handleLogin()" class="scale-tap w-full mt-2 bg-gradient-to-r from-orange-500 to-orange-400 text-white font-bold py-3.5 rounded-2xl shadow-lg shadow-orange-500/30 flex items-center justify-center gap-2">
+        <span>دخول</span>
+        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- APP ROOT -->
+<div id="app" class="relative z-10 max-w-lg mx-auto px-4 pb-32 pt-5 hidden">
+
+  <!-- Admin ribbon -->
+  <div id="admin-ribbon" class="hidden mb-3">
+    <div class="glass-dark rounded-2xl px-4 py-2.5 flex items-center justify-between">
+      <div class="flex items-center gap-2 text-orange-300 text-xs font-bold">
+        <i data-lucide="shield-check" class="w-4 h-4"></i>
+        <span>وضع المسؤول — التعديل مفعّل</span>
+      </div>
+      <button onclick="logout()" class="text-white/60 hover:text-white text-xs flex items-center gap-1">
+        <i data-lucide="log-out" class="w-3.5 h-3.5"></i> خروج
+      </button>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <header class="relative mb-5">
+    <div class="glass rounded-3xl p-5 flex items-center gap-4 relative overflow-hidden card-hover">
+      <div class="relative shrink-0">
+        <img id="logo-img" src="" class="w-14 h-14 object-contain rounded-xl bg-white p-2 shadow-md" />
+      </div>
+      <div class="relative flex-1 min-w-0">
+        <p id="greeting-text" class="text-orange-500 font-bold text-sm mb-0.5"></p>
+        <h1 id="title-text" class="font-display font-extrabold text-xl text-[var(--navy)] leading-tight"></h1>
+        <p id="subtitle-text" class="text-slate-500 text-xs mt-0.5"></p>
+      </div>
+    </div>
+  </header>
+
+  <!-- SINGLE FLIGHT CARD -->
+  <div class="mb-5">
+    <div class="flex items-center gap-2 mb-2 px-1">
+      <i data-lucide="plane" class="w-4 h-4 text-orange-500"></i>
+      <h3 class="font-display font-bold text-sm text-slate-500">تفاصيل الطيران</h3>
+    </div>
+    <div onclick="openFlightDetail()" class="glass rounded-3xl p-5 relative overflow-hidden card-hover cursor-pointer scale-tap">
+      <div class="relative flex items-center justify-between mb-4">
+        <span id="flight-card-airline" class="en font-display font-black text-lg tracking-wide text-[var(--navy)]"></span>
+        <div class="w-9 h-9 rounded-xl bg-orange-50 flex items-center justify-center">
+          <i data-lucide="plane-takeoff" class="w-4 h-4 text-orange-500"></i>
         </div>
-        <h1 class="text-3xl font-black tracking-wider text-[#FF5A1F]">ترافل إكس | TravelX</h1>
-        <p class="text-slate-400 text-sm mt-2 font-light">Digital Travel Universe</p>
+      </div>
+
+      <div class="relative flex items-center flight-route mb-3">
+        <div class="text-center">
+          <p id="flight-card-from" class="en font-display font-black text-2xl text-[var(--navy)]"></p>
+          <p id="flight-card-from-city" class="text-[10px] text-slate-400 en"></p>
+        </div>
+        <div class="route-line">
+          <i data-lucide="plane" class="plane-icon w-4 h-4 text-orange-500"></i>
+        </div>
+        <div class="text-center">
+          <p id="flight-card-to" class="en font-display font-black text-2xl text-[var(--navy)]"></p>
+          <p id="flight-card-to-city" class="text-[10px] text-slate-400 en"></p>
+        </div>
+      </div>
+
+      <div class="relative flex items-center justify-between text-xs text-slate-500 pt-2 border-t border-slate-100">
+        <span id="flight-card-num" class="en font-semibold"></span>
+        <span class="flex items-center gap-1 text-orange-500 font-bold">عرض جميع تفاصيل الذهاب والعودة <i data-lucide="chevron-left" class="w-4 h-4 rtl-flip"></i></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOTEL CARD -->
+  <div class="mt-5">
+    <div class="flex items-center gap-2 mb-2 px-1">
+      <i data-lucide="bed-double" class="w-4 h-4 text-orange-500"></i>
+      <h3 class="font-display font-bold text-sm text-slate-500">مكان الإقامة</h3>
+    </div>
+    <div onclick="openHotelModal()" class="glass rounded-3xl p-5 relative overflow-hidden card-hover cursor-pointer scale-tap">
+      <div class="relative flex items-center justify-between">
+        <div>
+          <h2 id="hotel-city" class="font-display en font-black text-3xl text-[var(--navy)] tracking-tight"></h2>
+          <p id="hotel-name" class="text-slate-600 font-semibold text-sm mt-1"></p>
+          <p id="hotel-dates" class="en text-slate-400 text-xs mt-1"></p>
+        </div>
+        <div class="w-12 h-12 rounded-2xl bg-orange-50 flex items-center justify-center shrink-0">
+          <i data-lucide="chevron-left" class="w-5 h-5 text-orange-500 rtl-flip"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMIN PANEL -->
+  <div id="admin-panel-wrap" class="hidden mt-6">
+    <button onclick="toggleAdminPanel()" class="w-full glass-dark rounded-2xl py-3.5 flex items-center justify-center gap-2 text-orange-300 font-bold text-sm scale-tap">
+      <i data-lucide="settings-2" class="w-4 h-4"></i> لوحة تحكم المسؤول والتعديل
+    </button>
+    <div id="admin-panel" class="hidden mt-3 glass-dark rounded-2xl p-4 space-y-4 text-white">
+      <div>
+        <p class="text-xs text-orange-400 font-bold mb-1">إعدادات الشعار والواجهة</p>
+        <label class="text-[11px] block">رابط الشعار (Image URL):</label>
+        <input id="admin-logo-url" type="text" class="admin-input" />
+      </div>
+      
+      <hr class="border-white/10" />
+      
+      <div>
+        <p class="text-xs text-orange-400 font-bold mb-1">تفاصيل رحلة الذهاب</p>
+        <div class="grid grid-cols-2 gap-2">
+          <div><label class="text-[10px]">شركة الطيران</label><input id="adm-out-airline" class="admin-input"/></div>
+          <div><label class="text-[10px]">رقم الرحلة</label><input id="adm-out-num" class="admin-input"/></div>
+          <div><label class="text-[10px]">من (رمز)</label><input id="adm-out-from" class="admin-input"/></div>
+          <div><label class="text-[10px]">إلى (رمز)</label><input id="adm-out-to" class="admin-input"/></div>
+          <div><label class="text-[10px]">الساعة والمدة</label><input id="adm-out-dur" class="admin-input"/></div>
+          <div><label class="text-[10px]">الترانزيت ومدته</label><input id="adm-out-lay" class="admin-input"/></div>
+        </div>
+      </div>
+
+      <hr class="border-white/10" />
+
+      <div>
+        <p class="text-xs text-orange-400 font-bold mb-1">تفاصيل رحلة العودة</p>
+        <div class="grid grid-cols-2 gap-2">
+          <div><label class="text-[10px]">شركة الطيران</label><input id="adm-ret-airline" class="admin-input"/></div>
+          <div><label class="text-[10px]">رقم الرحلة</label><input id="adm-ret-num" class="admin-input"/></div>
+          <div><label class="text-[10px]">من (رمز)</label><input id="adm-ret-from" class="admin-input"/></div>
+          <div><label class="text-[10px]">إلى (رمز)</label><input id="adm-ret-to" class="admin-input"/></div>
+          <div><label class="text-[10px]">الساعة والمدة</label><input id="adm-ret-dur" class="admin-input"/></div>
+          <div><label class="text-[10px]">الترانزيت ومدته</label><input id="adm-ret-lay" class="admin-input"/></div>
+        </div>
+      </div>
+
+      <hr class="border-white/10" />
+
+      <div>
+        <p class="text-xs text-orange-400 font-bold mb-1">بيانات السكن الخارجي (خرائط جوجل ورقم السكن)</p>
+        <label class="text-[10px]">رابط Google Maps للموقع:</label>
+        <input id="adm-hotel-map" class="admin-input"/>
+        <label class="text-[10px] mt-2 block">رقم هاتف السكن:</label>
+        <input id="adm-hotel-phone" class="admin-input"/>
+      </div>
+
+      <button onclick="saveAdminChanges()" class="w-full bg-orange-500 text-white font-bold py-2.5 rounded-xl text-xs mt-2">
+        حفظ وتحديث البيانات لهذا الرقم
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<!-- FLIGHT DETAIL SLIDE-OVER -->
+<div id="flight-detail" class="slide-panel">
+  <div class="absolute inset-0 bg-gradient-to-b from-[var(--navy)] to-[#1c2846] overflow-y-auto">
+    <div class="max-w-lg mx-auto px-5 pt-6 pb-16 text-white">
+      <button onclick="closeFlightDetail()" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center mb-6 scale-tap">
+        <i data-lucide="arrow-right" class="w-5 h-5 rtl-flip"></i>
+      </button>      
+      <div id="flight-detail-content"></div>
+    </div>
+  </div>
+</div>
+
+<!-- HOTEL MODAL -->
+<div id="hotel-backdrop" class="modal-backdrop" onclick="if(event.target===this) closeHotelModal()">
+  <div class="modal-sheet glass w-[92%] max-w-md rounded-3xl p-6 mx-auto mt-24 relative">
+    <button onclick="closeHotelModal()" class="absolute top-4 end-4 w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center scale-tap"><i data-lucide="x" class="w-4 h-4"></i></button>
+    <div id="hotel-modal-content"></div>
+  </div>
+</div>
+
+<!-- WHATSAPP FAB -->
+<div id="fab" class="hidden fixed bottom-6 end-5 z-40 flex items-center gap-2">
+  <a id="wa-link" href="#" target="_blank" class="relative w-14 h-14 rounded-full bg-[#25D366] flex items-center justify-center shadow-xl scale-tap shrink-0">
+    <div class="fab-pulse"></div>
+    <i data-lucide="message-circle" class="text-white w-6 h-6 relative z-10"></i>
+  </a>
+</div>
+
+<script>
+lucide.createIcons();
+
+const defaultState = {
+  logoUrl:"https://api.iconify.design/lucide/plane.svg?color=%23FF6B00",
+  greeting:"صباح الخير! ☀️",
+  title:"رحلتك القادمة تنتظرك!",
+  subtitle:"استعد لتجربة لا تُنسى",
+  whatsapp:"+972501234567",
+  outbound:{
+    airline:"EMIRATES",
+    from:"TLV", fromCity:"تل أبيب",
+    to:"HKT", toCity:"بوكيت",
+    flightNumber:"EK 932",
+    duration:"11h 20m",
+    layover:"2h 30m - دبي (DXB)"
+  },
+  return:{
+    airline:"QATAR AIRWAYS",
+    from:"HKT", fromCity:"بوكيت",
+    to:"TLV", toCity:"تل أبيب",
+    flightNumber:"QR 838",
+    duration:"12h 05m",
+    layover:"3h 10m - الدوحة (DOH)"
+  },
+  hotel:{
+    city:"PHUKET",
+    name:"Katathani Beach Resort",
+    address:"14 Kata Noi Rd, Karon, Muang, Phuket 83100, Thailand",
+    phone:"+66 76 330 124",
+    dateFrom:"10/10/2026",
+    dateTo:"30/10/2026",
+    checkIn:"14:00",
+    checkOut:"12:00",
+    mapUrl:"https://maps.google.com/?q=Katathani+Beach+Resort+Phuket"
+  }
+};
+
+let currentPhone = "";
+let currentData = {};
+let isAdmin = false;
+
+function initParticles(){
+  const wrap = document.getElementById('particles');
+  const n = window.innerWidth < 640 ? 12 : 20;
+  for(let i=0;i<n;i++){
+    const p = document.createElement('div');
+    p.className='particle';
+    const size = 6 + Math.random()*22;
+    p.style.width=size+'px'; p.style.height=size+'px';
+    p.style.left = Math.random()*100+'%';
+    p.style.bottom = -50+'px';
+    p.style.animationDuration = (14+Math.random()*16)+'s';
+    p.style.animationDelay = (Math.random()*16)+'s';
+    wrap.appendChild(p);
+  }
+}
+initParticles();
+
+window.addEventListener('load', ()=>{
+  setTimeout(()=>{
+    document.getElementById('splash').classList.add('hide');
+    document.getElementById('login-backdrop').classList.add('open');
+    document.getElementById('phone-input').focus();
+  }, 1000);
+});
+
+// تعديل دالة الدخول وتطهير مدخلات النص
+function handleLogin(){
+  const rawVal = document.getElementById('phone-input').value;
+  const val = rawVal ? rawVal.trim().toLowerCase() : '';
+  const err = document.getElementById('login-error');
+  
+  if(!val){ err.textContent = 'الرجاء إدخال رقم الهاتف'; return; }
+  
+  currentPhone = val;
+  
+  // تحقق متساهل يشمل أصل المسافات والأحرف
+  if(val === '9' || val === 'admin' || val === '0500000000' || val.includes('admin') || val.includes('0500000000')){
+    isAdmin = true;
+  } else {
+    isAdmin = false;
+  }
+  
+  const saved = localStorage.getItem('user_data_' + currentPhone);
+  if(saved){
+    try {
+      currentData = JSON.parse(saved);
+    } catch(e) {
+      currentData = JSON.parse(JSON.stringify(defaultState));
+    }
+  } else {
+    currentData = JSON.parse(JSON.stringify(defaultState));
+  }
+
+  document.getElementById('login-backdrop').classList.remove('open');
+  document.getElementById('app').classList.remove('hidden');
+  document.getElementById('fab').classList.remove('hidden');
+  document.getElementById('wa-link').href = 'https://wa.me/'+currentData.whatsapp.replace(/[^0-9]/g,'');
+
+  document.getElementById('admin-ribbon').classList.toggle('hidden', !isAdmin);
+  document.getElementById('admin-panel-wrap').classList.toggle('hidden', !isAdmin);
+
+  renderAll();
+  if(isAdmin) showToast('تم تسجيل الدخول كمسؤول', 'shield-check');
+}
+
+function logout(){ location.reload(); }
+
+function showToast(msg, icon='check-circle'){
+  const wrap = document.getElementById('toast-wrap');
+  const t = document.createElement('div');
+  t.className='toast';
+  t.innerHTML = `<i data-lucide="${icon}" class="w-4 h-4 text-orange-400"></i><span>${msg}</span>`;
+  wrap.appendChild(t);
+  lucide.createIcons();
+  setTimeout(()=> t.remove(), 2700);
+}
+
+function renderAll(){
+  document.getElementById('logo-img').src = currentData.logoUrl;
+  document.getElementById('greeting-text').textContent = currentData.greeting;
+  document.getElementById('title-text').textContent = currentData.title;
+  document.getElementById('subtitle-text').textContent = currentData.subtitle;
+
+  document.getElementById('flight-card-airline').textContent = currentData.outbound.airline;
+  document.getElementById('flight-card-from').textContent = currentData.outbound.from;
+  document.getElementById('flight-card-from-city').textContent = currentData.outbound.fromCity;
+  document.getElementById('flight-card-to').textContent = currentData.return.to;
+  document.getElementById('flight-card-to-city').textContent = currentData.return.toCity;
+  document.getElementById('flight-card-num').textContent = currentData.outbound.flightNumber + " / " + currentData.return.flightNumber;
+
+  document.getElementById('hotel-city').textContent = currentData.hotel.city;
+  document.getElementById('hotel-name').textContent = currentData.hotel.name;
+  document.getElementById('hotel-dates').textContent = `${currentData.hotel.dateFrom} → ${currentData.hotel.dateTo}`;
+
+  if(isAdmin){
+    document.getElementById('admin-logo-url').value = currentData.logoUrl;
+    document.getElementById('adm-out-airline').value = currentData.outbound.airline;
+    document.getElementById('adm-out-num').value = currentData.outbound.flightNumber;
+    document.getElementById('adm-out-from').value = currentData.outbound.from;
+    document.getElementById('adm-out-to').value = currentData.outbound.to;
+    document.getElementById('adm-out-dur').value = currentData.outbound.duration;
+    document.getElementById('adm-out-lay').value = currentData.outbound.layover;
+
+    document.getElementById('adm-ret-airline').value = currentData.return.airline;
+    document.getElementById('adm-ret-num').value = currentData.return.flightNumber;
+    document.getElementById('adm-ret-from').value = currentData.return.from;
+    document.getElementById('adm-ret-to').value = currentData.return.to;
+    document.getElementById('adm-ret-dur').value = currentData.return.duration;
+    document.getElementById('adm-ret-lay').value = currentData.return.layover;
+
+    document.getElementById('adm-hotel-map').value = currentData.hotel.mapUrl;
+    document.getElementById('adm-hotel-phone').value = currentData.hotel.phone;
+  }
+
+  lucide.createIcons();
+}
+
+function toggleAdminPanel(){
+  const p = document.getElementById('admin-panel');
+  p.classList.toggle('hidden');
+}
+
+function saveAdminChanges(){
+  currentData.logoUrl = document.getElementById('admin-logo-url').value;
+  
+  currentData.outbound.airline = document.getElementById('adm-out-airline').value;
+  currentData.outbound.flightNumber = document.getElementById('adm-out-num').value;
+  currentData.outbound.from = document.getElementById('adm-out-from').value;
+  currentData.outbound.to = document.getElementById('adm-out-to').value;
+  currentData.outbound.duration = document.getElementById('adm-out-dur').value;
+  currentData.outbound.layover = document.getElementById('adm-out-lay').value;
+
+  currentData.return.airline = document.getElementById('adm-ret-airline').value;
+  currentData.return.flightNumber = document.getElementById('adm-ret-num').value;
+  currentData.return.from = document.getElementById('adm-ret-from').value;
+  currentData.return.to = document.getElementById('adm-ret-to').value;
+  currentData.return.duration = document.getElementById('adm-ret-dur').value;
+  currentData.return.layover = document.getElementById('adm-ret-lay').value;
+
+  currentData.hotel.mapUrl = document.getElementById('adm-hotel-map').value;
+  currentData.hotel.phone = document.getElementById('adm-hotel-phone').value;
+
+  localStorage.setItem('user_data_' + currentPhone, JSON.stringify(currentData));
+  renderAll();
+  showToast('تم حفظ التغييرات الخاصة بالرقم', 'save');
+}
+
+function openFlightDetail(){
+  const c = document.getElementById('flight-detail-content');
+  const out = currentData.outbound;
+  const ret = currentData.return;
+
+  c.innerHTML = `
+    <h2 class="font-display font-black text-2xl mb-6 text-orange-400">تفاصيل رحلتي الذهاب والعودة</h2>
+    
+    <div class="bg-white/5 rounded-3xl p-5 mb-5 border border-white/10 relative">
+      <span class="bg-orange-500 text-white text-xs px-3 py-1 rounded-full font-bold mb-3 inline-block">رحلة الذهاب</span>
+      <div class="flex items-center justify-between mb-2">
+        <p class="en font-display font-black text-xl">${out.airline}</p>
+        <p class="en text-slate-300 text-xs">${out.flightNumber}</p>
+      </div>
+      <div class="flex items-center justify-between my-4">
+        <div><p class="en font-black text-2xl">${out.from}</p><p class="text-xs text-slate-400">${out.fromCity}</p></div>
+        <div class="route-line"><i data-lucide="plane" class="plane-icon w-4 h-4 text-orange-400"></i></div>
+        <div><p class="en font-black text-2xl">${out.to}</p><p class="text-xs text-slate-400">${out.toCity}</p></div>
+      </div>
+      <div class="text-xs text-slate-300 space-y-1 pt-2 border-t border-white/10">
+        <p>المدة: ${out.duration}</p>
+        <p class="text-orange-300">الترانزيت: ${out.layover}</p>
+      </div>
     </div>
 
-    <!-- المحتوى الرئيسي بعد انتهاء شاشة العرض -->
-    <div x-show="!showSplash" x-cloak>
-        
-        <!-- الهيدر العلوي الثابت مع زر تبديل اللغة -->
-        <header class="sticky top-0 bg-white/80 backdrop-blur-md z-40 border-b border-slate-100 px-4 py-3 flex justify-between items-center shadow-xs">
-            <div class="flex items-center gap-2">
-                <div class="w-8 h-8 bg-[#FF5A1F] rounded-lg flex items-center justify-center text-white font-bold text-lg">X</div>
-                <span class="font-black text-xl tracking-tight text-slate-900" x-text="t('appName')"></span>
-            </div>
-            <button @click="toggleLang()" class="flex items-center gap-1 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-full text-xs font-bold transition-colors cursor-pointer">
-                <i data-lucide="globe" class="w-4 h-4 text-[#10B981]"></i>
-                <span x-text="lang === 'ar' ? 'English' : 'العربية'"></span>
-            </button>
-        </header>
+    <div class="bg-white/5 rounded-3xl p-5 border border-white/10 relative">
+      <span class="bg-orange-500 text-white text-xs px-3 py-1 rounded-full font-bold mb-3 inline-block">رحلة العودة</span>
+      <div class="flex items-center justify-between mb-2">
+        <p class="en font-display font-black text-xl">${ret.airline}</p>
+        <p class="en text-slate-300 text-xs">${ret.flightNumber}</p>
+      </div>
+      <div class="flex items-center justify-between my-4">
+        <div><p class="en font-black text-2xl">${ret.from}</p><p class="text-xs text-slate-400">${ret.fromCity}</p></div>
+        <div class="route-line"><i data-lucide="plane" class="plane-icon w-4 h-4 text-orange-400"></i></div>
+        <div><p class="en font-black text-2xl">${ret.to}</p><p class="text-xs text-slate-400">${ret.toCity}</p></div>
+      </div>
+      <div class="text-xs text-slate-300 space-y-1 pt-2 border-t border-white/10">
+        <p>المدة: ${ret.duration}</p>
+        <p class="text-orange-300">الترانزيت: ${ret.layover}</p>
+      </div>
+    </div>
+  `;
+  lucide.createIcons();
+  document.getElementById('flight-detail').classList.add('open');
+}
+function closeFlightDetail(){
+  document.getElementById('flight-detail').classList.remove('open');
+}
 
-        <!-- جسم التطبيق المتنقل المخصص للهواتف ذو عرض محدد -->
-        <main class="max-w-md mx-auto px-4 pt-4">
+function openHotelModal(){
+  const h = currentData.hotel;
+  document.getElementById('hotel-modal-content').innerHTML = `
+    <div class="w-12 h-12 rounded-2xl bg-orange-50 flex items-center justify-center mb-4">
+      <i data-lucide="bed-double" class="w-6 h-6 text-orange-500"></i>
+    </div>
+    <h3 class="font-display font-extrabold text-xl text-[var(--navy)]">${h.name}</h3>
+    <p class="text-slate-500 text-sm mt-1 leading-relaxed">${h.address}</p>
 
-            <!-- 🏠 التبويب الأول: الصفحة الرئيسية -->
-            <div x-show="currentTab === 'home'" x-transition class="space-y-6">
-                
-                <!-- بانل الإعلانات الذكي المكون من 3 صور ونصوص متغيرة -->
-                <div class="relative h-40 bg-gradient-to-r from-slate-900 to-slate-800 rounded-2xl overflow-hidden shadow-md flex items-center p-6 text-white">
-                    <div class="absolute inset-0 opacity-45 bg-cover bg-center" style="background-image: url('https://unsplash.com');"></div>
-                    <div class="relative z-10 space-y-2 max-w-[85%]">
-                        <span class="bg-[#10B981] text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">PROMO</span>
-                        <p class="text-base font-bold leading-tight" x-text="t('ads')[currentAdIndex]"></p>
-                    </div>
-                    <!-- قواطع النقاط السفلية للإعلان -->
-                    <div class="absolute bottom-3 flex gap-1.5 justify-center w-full left-0 right-0 z-20">
-                        <template x-for="(ad, idx) in t('ads')">
-                            <div class="w-2 h-2 rounded-full transition-all" :class="idx === currentAdIndex ? 'bg-[#FF5A1F] w-4' : 'bg-white/50'"></div>
-                        </template>
-                    </div>
-                </div>
+    <div class="grid grid-cols-2 gap-3 mt-5">
+      <div class="bg-slate-50 rounded-2xl p-3.5">
+        <p class="text-[11px] text-slate-400 mb-1">وصول</p>
+        <p class="font-bold en">${h.checkIn}</p>
+      </div>
+      <div class="bg-slate-50 rounded-2xl p-3.5">
+        <p class="text-[11px] text-slate-400 mb-1">مغادرة</p>
+        <p class="font-bold en">${h.checkOut}</p>
+      </div>
+    </div>
 
-                <!-- دوائر الخدمات السريعة الرقمية -->
-                <div class="grid grid-cols-4 gap-2 text-center">
-                    <div @click="currentTab = 'services'" class="flex flex-col items-center cursor-pointer group">
-                        <div class="w-14 h-14 bg-orange-100 text-[#FF5A1F] rounded-full flex items-center justify-center shadow-xs transition-transform group-hover:scale-105">
-                            <i data-lucide="car" class="w-6 h-6"></i>
-                        </div>
-                        <span class="text-xs font-semibold mt-2 text-slate-700 truncate w-full" x-text="t('airportPickup')"></span>
-                    </div>
-                    <div @click="currentTab = 'services'" class="flex flex-col items-center cursor-pointer group">
-                        <div class="w-14 h-14 bg-emerald-100 text-[#10B981] rounded-full flex items-center justify-center shadow-xs transition-transform group-hover:scale-105">
-                            <i data-lucide="calendar" class="w-6 h-6"></i>
-                        </div>
-                        <span class="text-xs font-semibold mt-2 text-slate-700 truncate w-full" x-text="t('localEvents')"></span>
-                    </div>
-                    <div @click="currentTab = 'services'" class="flex flex-col items-center cursor-pointer group">
-                        <div class="w-14 h-14 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center shadow-xs transition-transform group-hover:scale-105">
-                            <i data-lucide="compass" class="w-6 h-6"></i>
-                        </div>
-                        <span class="text-xs font-semibold mt-2 text-slate-700 truncate w-full" x-text="t('tourGuide')"></span>
-                    </div>
-                    <div @click="currentTab = 'services'" class="flex flex-col items-center cursor-pointer group">
-                        <div class="w-14 h-14 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center shadow-xs transition-transform group-hover:scale-105">
-                            <i data-lucide="user" class="w-6 h-6"></i>
-                        </div>
-                        <span class="text-xs font-semibold mt-2 text-slate-700 truncate w-full" x-text="t('hotelRes')"></span>
-                    </div>
-                </div>
-
-                <!-- خلاصة منشورات وريلز المشتركين -->
-                <div class="space-y-4">
-                    <template x-for="post in posts" :key="post.id">
-                        <div class="bg-white rounded-2xl overflow-hidden shadow-xs border border-slate-100">
-                            <!-- رأس المنشور -->
-                            <div class="p-3 flex items-center justify-between">
-                                <div class="flex items-center gap-2">
-                                    <img :src="post.avatar" class="w-9 h-9 rounded-full object-cover border border-slate-200" />
-                                    <div>
-                                        <h4 class="font-bold text-sm text-slate-900" x-text="post.user"></h4>
-                                        <p class="text-[10px] text-slate-400 flex items-center gap-0.5">
-                                            <i data-lucide="map-pin" class="w-3 h-3 text-[#FF5A1F]"></i>
-                                            <span x-text="post.location"></span>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- صورة الريل الفاخرة مع زر الحجز المباشر -->
-                            <div class="relative aspect-square bg-slate-900">
-                                <img :src="post.videoThumb" class="w-full h-full object-cover" />
-                                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-                                
-                                <button @click="currentTab = 'services'" class="absolute bottom-3 left-3 right-3 bg-[#FF5A1F] text-white py-2.5 px-4 rounded-xl text-xs font-bold shadow-lg flex items-center justify-center gap-2 cursor-pointer active:scale-95 transition-transform">
-                                    <i data-lucide="car" class="w-4 h-4"></i>
-                                    <span x-text="t('bookNow')"></span>
-                                </button>
-                            </div>
-
-                            <!-- التفاعلات واللايكات -->
-                            <div class="p-3 flex items-center justify-between text-slate-600 border-t border-slate-50">
-                                <div class="flex items-center gap-4">
-                                    <button @click="toggleLike(post.id)" class="flex items-center gap-1 hover:text-red-500 transition-colors cursor-pointer">
-                                        <i data-lucide="heart" :class="post.isLiked ? 'fill-red-500 text-red-500' : ''" class="w-5 h-5"></i>
-                                        <span class="text-xs font-bold" x-text="post.likes"></span>
-                                    </button>
-                                    <div class="flex items-center gap-1">
-                                        <i data-lucide="message-circle" class="w-5 h-5"></i>
-                                        <span class="text-xs font-bold" x-text="post.comments"></span>
-                                    </div>
-                                </div>
-                                <i data-lucide="share-2" class="w-5 h-5 cursor-pointer hover:text-[#10B981]"></i>
-                            </div>
+    <div class="mt-4 space-y-2">
+      <a href="${h.mapUrl}" target="_blank" class="flex items-center justify-between bg-orange-50 hover:bg-orange-100 rounded-2xl px-4 py-3.5 transition-colors scale-tap">
+        <span class="flex items-center gap-2 font-bold text-sm text-orange-600"><i data-lucide="map-pin" class="w-4 h-4"></i> فتح في خرائط جوجل</span>
+        <i data-lucide="chevron-left" class="w-4 h-4 text-orange-400 rtl-flip"></i>
+      </a>
+      <a href="tel:${h.phone}" class="flex items-center justify-between bg-slate-50 hover:bg-slate-100 rounded-2xl px-4 py-3.5 transition-colors scale-tap">
+        <span class="flex items-center gap-2 font-bold text-sm text-[var(--navy)]"><i data-lucide="phone" class="w-4 h-4 text-orange-500"></i> رقم هاتف السكن: ${h.phone}</span>
+        <i data-lucide="chevron-left" class="w-4 h-4 text-slate-400 rtl-flip"></i>
+      </a>
+    </div>
+  `;
+  lucide.createIcons();
+  document.getElementById('hotel-backdrop').classList.add('open');
+}
+function closeHotelModal(){
+  document.getElementById('hotel-backdrop').classList.remove('open');
+}
+</script>
+</body>
+</html>
