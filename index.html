@@ -333,8 +333,18 @@
       <hr class="border-white/10" />
 
       <div>
-        <p class="text-xs text-orange-400 font-bold mb-1">بيانات السكن الخارجي (خرائط جوجل ورقم السكن)</p>
-        <label class="text-[10px]">رابط Google Maps للموقع:</label>
+        <p class="text-xs text-orange-400 font-bold mb-1">بيانات السكن الخارجي الكاملة</p>
+        <div class="grid grid-cols-2 gap-2 mb-2">
+          <div><label class="text-[10px]">المدينة</label><input id="adm-hotel-city" class="admin-input"/></div>
+          <div><label class="text-[10px]">اسم الفندق / السكن</label><input id="adm-hotel-name" class="admin-input"/></div>
+          <div><label class="text-[10px]">تاريخ الدخول</label><input id="adm-hotel-dateFrom" class="admin-input"/></div>
+          <div><label class="text-[10px]">تاريخ المغادرة</label><input id="adm-hotel-dateTo" class="admin-input"/></div>
+          <div><label class="text-[10px]">ساعة الوصول (Check-in)</label><input id="adm-hotel-checkin" class="admin-input"/></div>
+          <div><label class="text-[10px]">ساعة المغادرة (Check-out)</label><input id="adm-hotel-checkout" class="admin-input"/></div>
+        </div>
+        <label class="text-[10px]">عنوان السكن التفصيلي:</label>
+        <input id="adm-hotel-address" class="admin-input"/>
+        <label class="text-[10px] mt-2 block">رابط Google Maps للموقع:</label>
         <input id="adm-hotel-map" class="admin-input"/>
         <label class="text-[10px] mt-2 block">رقم هاتف السكن:</label>
         <input id="adm-hotel-phone" class="admin-input"/>
@@ -354,7 +364,7 @@
     <div class="max-w-lg mx-auto px-5 pt-6 pb-16 text-white">
       <button onclick="closeFlightDetail()" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center mb-6 scale-tap">
         <i data-lucide="arrow-right" class="w-5 h-5 rtl-flip"></i>
-      </button>      
+      </button>        
       <div id="flight-detail-content"></div>
     </div>
   </div>
@@ -528,6 +538,13 @@ function renderAll(){
     document.getElementById('adm-ret-dur').value = currentData.return.duration;
     document.getElementById('adm-ret-lay').value = currentData.return.layover;
 
+    document.getElementById('adm-hotel-city').value = currentData.hotel.city;
+    document.getElementById('adm-hotel-name').value = currentData.hotel.name;
+    document.getElementById('adm-hotel-dateFrom').value = currentData.hotel.dateFrom;
+    document.getElementById('adm-hotel-dateTo').value = currentData.hotel.dateTo;
+    document.getElementById('adm-hotel-checkin').value = currentData.hotel.checkIn;
+    document.getElementById('adm-hotel-checkout').value = currentData.hotel.checkOut;
+    document.getElementById('adm-hotel-address').value = currentData.hotel.address;
     document.getElementById('adm-hotel-map').value = currentData.hotel.mapUrl;
     document.getElementById('adm-hotel-phone').value = currentData.hotel.phone;
   }
@@ -557,6 +574,13 @@ function saveAdminChanges(){
   currentData.return.duration = document.getElementById('adm-ret-dur').value;
   currentData.return.layover = document.getElementById('adm-ret-lay').value;
 
+  currentData.hotel.city = document.getElementById('adm-hotel-city').value;
+  currentData.hotel.name = document.getElementById('adm-hotel-name').value;
+  currentData.hotel.dateFrom = document.getElementById('adm-hotel-dateFrom').value;
+  currentData.hotel.dateTo = document.getElementById('adm-hotel-dateTo').value;
+  currentData.hotel.checkIn = document.getElementById('adm-hotel-checkin').value;
+  currentData.hotel.checkOut = document.getElementById('adm-hotel-checkout').value;
+  currentData.hotel.address = document.getElementById('adm-hotel-address').value;
   currentData.hotel.mapUrl = document.getElementById('adm-hotel-map').value;
   currentData.hotel.phone = document.getElementById('adm-hotel-phone').value;
 
