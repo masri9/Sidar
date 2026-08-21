@@ -22,7 +22,7 @@
   body{
     font-family:'Cairo','Outfit',sans-serif;
     background:
-      radial-gradient(circle at 15% 10%, rgba(255,140,0,0.10), transparent 45%),
+      radial-gradient(circle at 15% 10%, rgba(255,140,0,0.12), transparent 45%),
       radial-gradient(circle at 90% 25%, rgba(255,107,0,0.08), transparent 40%),
       var(--slate);
     color:var(--navy);
@@ -48,22 +48,16 @@
   }
 
   .glass{
-    background:rgba(255,255,255,0.72);
-    backdrop-filter:blur(18px) saturate(160%);
-    -webkit-backdrop-filter:blur(18px) saturate(160%);
-    border:1px solid rgba(255,255,255,0.6);
-    box-shadow:0 8px 32px rgba(16,26,51,0.08);
+    background:rgba(255,255,255,0.78);
+    backdrop-filter:blur(20px) saturate(160%);
+    -webkit-backdrop-filter:blur(20px) saturate(160%);
+    border:1px solid rgba(255,255,255,0.7);
+    box-shadow:0 8px 32px rgba(16,26,51,0.06);
   }
   .glass-dark{
-    background:linear-gradient(135deg, rgba(16,26,51,0.95), rgba(40,50,74,0.92));
-    backdrop-filter:blur(18px);
-    border:1px solid rgba(255,140,0,0.18);
-  }
-
-  .fade-panel{animation:fadeSlide .45s cubic-bezier(.22,1,.36,1);}
-  @keyframes fadeSlide{
-    from{opacity:0; transform:translateY(10px) scale(.99);}
-    to{opacity:1; transform:translateY(0) scale(1);}
+    background:linear-gradient(135deg, rgba(16,26,51,0.96), rgba(40,50,74,0.93));
+    backdrop-filter:blur(20px);
+    border:1px solid rgba(255,140,0,0.22);
   }
 
   .route-line{
@@ -104,7 +98,7 @@
   .step-line.done{background:var(--orange);}
 
   .card-hover{transition:transform .35s cubic-bezier(.22,1,.36,1), box-shadow .35s ease;}
-  .card-hover:hover{transform:translateY(-4px); box-shadow:0 20px 45px rgba(16,26,51,0.14);}
+  .card-hover:hover{transform:translateY(-4px); box-shadow:0 20px 45px rgba(16,26,51,0.12);}
   .card-hover:active{transform:translateY(-1px) scale(.995);}
 
   .slide-panel{
@@ -116,8 +110,8 @@
   .slide-panel.open{transform:translateX(0);}
 
   .modal-backdrop{
-    position:fixed; inset:0; background:rgba(16,26,51,0.55);
-    backdrop-filter:blur(4px); z-index:55; opacity:0; pointer-events:none;
+    position:fixed; inset:0; background:rgba(16,26,51,0.6);
+    backdrop-filter:blur(6px); z-index:55; opacity:0; pointer-events:none;
     transition:opacity .35s ease;
   }
   .modal-backdrop.open{opacity:1; pointer-events:auto;}
@@ -140,14 +134,16 @@
 
   .admin-input{
     width:100%;
-    background:rgba(255,255,255,0.1);
+    background:rgba(255,255,255,0.12);
     border:1px solid rgba(255,140,0,0.4);
     color:#fff;
     padding:8px 12px;
     border-radius:10px;
     font-size:12px;
     margin-top:4px;
+    outline:none;
   }
+  .admin-input:focus{ border-color:var(--orange); }
   .admin-select{
     width:100%;
     background:#1c2846;
@@ -157,12 +153,13 @@
     border-radius:10px;
     font-size:12px;
     margin-top:4px;
+    outline:none;
   }
 
   #toast-wrap{position:fixed; top:18px; left:50%; transform:translateX(-50%); z-index:80; display:flex; flex-direction:column; gap:8px; align-items:center;}
   .toast{
     background:var(--navy); color:#fff; padding:10px 18px; border-radius:14px;
-    font-size:14px; font-weight:600; box-shadow:0 12px 30px rgba(16,26,51,.35);
+    font-size:13px; font-weight:600; box-shadow:0 12px 30px rgba(16,26,51,.35);
     display:flex; align-items:center; gap:8px;
     animation:toastIn .35s cubic-bezier(.22,1,.36,1), toastOut .35s ease 2.3s forwards;
     border:1px solid rgba(255,140,0,.35);
@@ -175,8 +172,9 @@
   .splash-plane{animation:splashFly 1.8s cubic-bezier(.5,0,.5,1) infinite;}
   @keyframes splashFly{0%{transform:translateX(-30px) translateY(6px) rotate(-8deg);} 50%{transform:translateX(30px) translateY(-6px) rotate(8deg);} 100%{transform:translateX(-30px) translateY(6px) rotate(-8deg);}}
 
-  ::-webkit-scrollbar{width:8px;}
-  ::-webkit-scrollbar-thumb{background:rgba(255,107,0,0.35); border-radius:8px;}
+  ::-webkit-scrollbar{width:6px;}
+  ::-webkit-scrollbar-thumb{background:rgba(255,107,0,0.4); border-radius:8px;}
+  .scale-tap{transition:transform 0.15s ease;}
   .scale-tap:active{transform:scale(.96);}
 </style>
 </head>
@@ -191,7 +189,7 @@
     <div class="w-20 h-20 mx-auto mb-5 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-400 flex items-center justify-center splash-plane shadow-2xl">
       <i data-lucide="plane" class="text-white w-10 h-10"></i>
     </div>
-    <p class="text-white/90 font-display text-lg tracking-wide">جاري تجهيز رحلتك</p>
+    <p class="text-white/90 font-display text-lg tracking-wide">جاري تجهيز بيانات رحلتك...</p>
   </div>
 </div>
 
@@ -205,10 +203,10 @@
       <h2 class="font-display text-2xl font-extrabold text-[var(--navy)]">أهلاً بك ✈️</h2>
       <p class="text-sm text-slate-500 mt-1 mb-5">أدخل رقم هاتفك لمشاهدة تفاصيل رحلتك الخاصة</p>
       <input id="phone-input" type="text" placeholder="رقم الهاتف" dir="ltr"
-        class="w-full bg-white border-2 border-slate-200 focus:border-orange-400 rounded-2xl px-4 py-3.5 text-lg font-semibold text-center tracking-wider transition-colors" />
-      <p id="login-error" class="text-red-500 text-xs mt-2 h-4 text-center"></p>
+        class="w-full bg-white border-2 border-slate-200 focus:border-orange-400 rounded-2xl px-4 py-3.5 text-lg font-semibold text-center tracking-wider transition-colors outline-none" />
+      <p id="login-error" class="text-red-500 text-xs mt-2 h-4 text-center font-bold"></p>
       <button id="login-btn" onclick="handleLogin()" class="scale-tap w-full mt-2 bg-gradient-to-r from-orange-500 to-orange-400 text-white font-bold py-3.5 rounded-2xl shadow-lg shadow-orange-500/30 flex items-center justify-center gap-2">
-        <span>دخول</span>
+        <span>عرض الرحلة</span>
         <i data-lucide="arrow-left" class="w-4 h-4"></i>
       </button>
     </div>
@@ -225,7 +223,7 @@
         <i data-lucide="shield-check" class="w-4 h-4"></i>
         <span>وضع المسؤول — التعديل مفعّل</span>
       </div>
-      <button onclick="logout()" class="text-white/60 hover:text-white text-xs flex items-center gap-1">
+      <button onclick="logout()" class="text-white/60 hover:text-white text-xs flex items-center gap-1 font-bold">
         <i data-lucide="log-out" class="w-3.5 h-3.5"></i> خروج
       </button>
     </div>
@@ -235,7 +233,7 @@
   <header class="relative mb-5">
     <div class="glass rounded-3xl p-5 flex items-center gap-4 relative overflow-hidden card-hover">
       <div class="relative shrink-0">
-        <img id="logo-img" src="" class="w-14 h-14 object-contain rounded-xl bg-white p-2 shadow-md" />
+        <img id="logo-img" src="" class="w-14 h-14 object-contain rounded-xl bg-white p-2 shadow-md border border-slate-100" />
       </div>
       <div class="relative flex-1 min-w-0">
         <p id="greeting-text" class="text-orange-500 font-bold text-sm mb-0.5"></p>
@@ -262,18 +260,18 @@
       <div class="relative flex items-center flight-route mb-3">
         <div class="text-center">
           <p id="flight-card-from" class="en font-display font-black text-2xl text-[var(--navy)]"></p>
-          <p id="flight-card-from-city" class="text-[10px] text-slate-400 en"></p>
+          <p id="flight-card-from-city" class="text-[10px] text-slate-400 font-semibold en"></p>
         </div>
         <div class="route-line">
           <i data-lucide="plane" class="plane-icon w-4 h-4 text-orange-500"></i>
         </div>
         <div class="text-center">
           <p id="flight-card-to" class="en font-display font-black text-2xl text-[var(--navy)]"></p>
-          <p id="flight-card-to-city" class="text-[10px] text-slate-400 en"></p>
+          <p id="flight-card-to-city" class="text-[10px] text-slate-400 font-semibold en"></p>
         </div>
       </div>
 
-      <div class="relative flex items-center justify-between text-xs text-slate-500 pt-2 border-t border-slate-100">
+      <div class="relative flex items-center justify-between text-xs text-slate-500 pt-3 border-t border-slate-100">
         <span id="flight-card-num" class="en font-semibold"></span>
         <span class="flex items-center gap-1 text-orange-500 font-bold">عرض تفاصيل المسار <i data-lucide="chevron-left" class="w-4 h-4 rtl-flip"></i></span>
       </div>
@@ -291,7 +289,7 @@
         <div>
           <h2 id="hotel-city" class="font-display en font-black text-3xl text-[var(--navy)] tracking-tight"></h2>
           <p id="hotel-name" class="text-slate-600 font-semibold text-sm mt-1"></p>
-          <p id="hotel-dates" class="en text-slate-400 text-xs mt-1"></p>
+          <p id="hotel-dates" class="en text-slate-400 text-xs mt-1 font-semibold"></p>
         </div>
         <div class="w-12 h-12 rounded-2xl bg-orange-50 flex items-center justify-center shrink-0">
           <i data-lucide="chevron-left" class="w-5 h-5 text-orange-500 rtl-flip"></i>
@@ -300,7 +298,7 @@
     </div>
   </div>
 
-  <!-- SUPPORT CARD (زر التواصل مع الدعم في الصفحة الرئيسية) -->
+  <!-- SUPPORT CARD -->
   <div class="mt-5">
     <div class="flex items-center gap-2 mb-2 px-1">
       <i data-lucide="headphones" class="w-4 h-4 text-orange-500"></i>
@@ -313,21 +311,21 @@
         </div>
         <div>
           <h4 class="font-bold text-sm text-[var(--navy)]">التواصل مع الدعم الفني</h4>
-          <p class="text-xs text-slate-400">فريقنا متواجد لخدمتك طوال الرحلة</p>
+          <p class="text-xs text-slate-400">فريقنا متواجد لخدمتك طوال فترة الرحلة</p>
         </div>
       </div>
       <i data-lucide="chevron-left" class="w-5 h-5 text-slate-400 rtl-flip"></i>
     </a>
   </div>
 
-  <!-- ADVANCED ADMIN PANEL (لوحة التحكم المتقدمة) -->
+  <!-- ADVANCED ADMIN PANEL -->
   <div id="admin-panel-wrap" class="hidden mt-6">
     <button onclick="toggleAdminPanel()" class="w-full glass-dark rounded-2xl py-3.5 flex items-center justify-center gap-2 text-orange-300 font-bold text-sm scale-tap">
       <i data-lucide="settings-2" class="w-4 h-4"></i> لوحة تحكم المسؤول الشاملة
     </button>
     <div id="admin-panel" class="hidden mt-3 glass-dark rounded-2xl p-4 space-y-4 text-white">
       
-      <!-- 1. قسم إدارة الهواتف -->
+      <!-- 1. إدارة الهواتف -->
       <div class="bg-white/5 p-3 rounded-2xl border border-white/10">
         <p class="text-xs text-orange-400 font-bold mb-2 flex items-center gap-1">
           <i data-lucide="users" class="w-3.5 h-3.5"></i> إدارة أرقام الهواتف المسموحة
@@ -341,7 +339,7 @@
         <div id="phone-list-tags" class="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto"></div>
       </div>
 
-      <!-- 2. قسم اختيار رقم الهاتف للتعديل -->
+      <!-- 2. اختيار رقم الهاتف للتعديل -->
       <div class="bg-orange-500/10 p-3 rounded-2xl border border-orange-500/30">
         <label class="text-xs text-orange-300 font-bold block mb-1">اختر الرقم المراد تعديل تفاصيل رحلته:</label>
         <select id="adm-target-phone" class="admin-select" onchange="loadTargetPhoneData()"></select>
@@ -358,7 +356,7 @@
       
       <hr class="border-white/10" />
       
-      <!-- 4. رحلة الذهاب (الجزء الأول والثاني والترانزيت) -->
+      <!-- 4. رحلة الذهاب -->
       <div>
         <p class="text-xs text-orange-400 font-bold mb-1">تفاصيل رحلة الذهاب الكاملة</p>
         <p class="text-[10px] text-orange-300 font-bold">المقطع الأول (رحلة 1):</p>
@@ -393,7 +391,7 @@
 
       <hr class="border-white/10" />
 
-      <!-- 5. رحلة العودة (الجزء الأول والثاني والترانزيت) -->
+      <!-- 5. رحلة العودة -->
       <div>
         <p class="text-xs text-orange-400 font-bold mb-1">تفاصيل رحلة العودة الكاملة</p>
         <p class="text-[10px] text-orange-300 font-bold">المقطع الأول (رحلة 1):</p>
@@ -428,13 +426,13 @@
 
       <hr class="border-white/10" />
 
-      <!-- 6. التحكم بنقاط ومراحل الرحلة (النقاط المتوهجة) -->
+      <!-- 6. مراحل الرحلة النقاط المتوهجة -->
       <div>
         <p class="text-xs text-orange-400 font-bold mb-1">التحكم بالمراحل والنقاط المتوهجة</p>
         <div class="grid grid-cols-2 gap-2 text-xs">
           <div>
-            <label class="text-[10px] block">المرحلة المكتملة (رقم):</label>
-            <input id="adm-step-completed" type="number" min="0" max="5" class="admin-input" placeholder="مثال: 2"/>
+            <label class="text-[10px] block">المرحلة المكتملة (رقم من 0 إلى 4):</label>
+            <input id="adm-step-completed" type="number" min="0" max="4" class="admin-input" placeholder="مثال: 2"/>
           </div>
           <div>
             <label class="text-[10px] block">تفعيل توهج المرحلة الحالية:</label>
@@ -467,7 +465,7 @@
         <input id="adm-hotel-phone" class="admin-input"/>
       </div>
 
-      <button onclick="saveAdminChanges()" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-xl text-xs mt-2 shadow-lg shadow-orange-500/30">
+      <button onclick="saveAdminChanges()" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-xl text-xs mt-2 shadow-lg shadow-orange-500/30 scale-tap">
         حفظ وتحديث البيانات للرقم المحدد
       </button>
     </div>
@@ -475,7 +473,7 @@
 
 </div>
 
-<!-- FLIGHT DETAIL SLIDE-OVER (شاشة تفاصيل الطيران المتقدمة) -->
+<!-- FLIGHT DETAIL SLIDE-OVER -->
 <div id="flight-detail" class="slide-panel">
   <div class="absolute inset-0 bg-gradient-to-b from-[var(--navy)] to-[#1c2846] overflow-y-auto">
     <div class="max-w-lg mx-auto px-5 pt-6 pb-16 text-white">
@@ -486,7 +484,7 @@
         <h2 class="font-display font-black text-lg text-orange-400">تفاصيل الطيران والمسارات</h2>
       </div>
       
-      <!-- TAB SELECTOR (أيقونتين ذهاب وعودة في الأعلى) -->
+      <!-- TAB SELECTOR -->
       <div class="grid grid-cols-2 gap-2 bg-white/10 p-1.5 rounded-2xl mb-6">
         <button id="tab-btn-outbound" onclick="switchFlightTab('outbound')" class="py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 bg-orange-500 text-white shadow-md">
           <i data-lucide="plane-takeoff" class="w-4 h-4"></i> رحلة الذهاب
@@ -504,7 +502,7 @@
 
 <!-- HOTEL MODAL -->
 <div id="hotel-backdrop" class="modal-backdrop" onclick="if(event.target===this) closeHotelModal()">
-  <div class="modal-sheet glass w-[92%] max-w-md rounded-3xl p-6 mx-auto mt-24 relative">
+  <div class="modal-sheet glass w-[92%] max-w-md rounded-3xl p-6 mx-auto mt-20 relative">
     <button onclick="closeHotelModal()" class="absolute top-4 end-4 w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center scale-tap"><i data-lucide="x" class="w-4 h-4"></i></button>
     <div id="hotel-modal-content"></div>
   </div>
@@ -521,15 +519,15 @@
 <script>
 lucide.createIcons();
 
-// الحالة الافتراضية للبيانات بالكامل
+// الحالة الافتراضية للبيانات
 const defaultState = {
   logoUrl:"https://api.iconify.design/lucide/plane.svg?color=%23FF6B00",
   greeting:"صباح الخير! ☀️",
   title:"رحلتك القادمة تنتظرك!",
-  subtitle:"استعد لتجربة لا تُنسى",
+  subtitle:"استعد لتجربة سفر فريدة ومميزة",
   whatsapp:"+972501234567",
-  stepCompleted: 2, // عدد الخطوات المكتملة
-  stepGlow: true,   // توهج الخطوة الحالية
+  stepCompleted: 2,
+  stepGlow: true,
   outbound:{
     layover:"2h 30m - دبي (DXB)",
     leg1:{
@@ -592,7 +590,6 @@ function initParticles(){
 }
 initParticles();
 
-// تحميل الأرقام المسجلة
 function loadAllowedPhones(){
   const saved = localStorage.getItem('allowed_phones');
   if(saved){
@@ -617,16 +614,12 @@ function handleLogin(){
   if(!val){ err.textContent = 'الرجاء إدخال رقم الهاتف'; return; }
   
   if(!allowedPhones.includes(val)){
-    err.textContent = 'عذراً، هذا الرقم غير مسجل للوصول';
+    err.textContent = 'عذراً، هذا الرقم غير مسجل في النظام';
     return;
   }
   
   currentPhone = val;
-  if(val === '9' || val === 'admin' || val === '0500000000'){
-    isAdmin = true;
-  } else {
-    isAdmin = false;
-  }
+  isAdmin = (val === '9' || val === 'admin' || val === '0500000000');
   
   const saved = localStorage.getItem('user_data_' + currentPhone);
   if(saved){
@@ -667,7 +660,6 @@ function showToast(msg, icon='check-circle'){
   setTimeout(()=> t.remove(), 2700);
 }
 
-// دالة العرض الرئيسية
 function renderAll(){
   document.getElementById('logo-img').src = currentData.logoUrl || defaultState.logoUrl;
   document.getElementById('greeting-text').textContent = currentData.greeting || defaultState.greeting;
@@ -691,7 +683,7 @@ function renderAll(){
   lucide.createIcons();
 }
 
-// ---- إدارة لوحة التحكم والتحكم بالأرقام ---- //
+// ---- إدارة المسؤول والأرقام ----
 function renderPhoneListAdmin(){
   const wrap = document.getElementById('phone-list-tags');
   wrap.innerHTML = '';
@@ -742,7 +734,6 @@ function removePhone(phone){
   showToast('تم حذف الرقم', 'trash-2');
 }
 
-// تحميل بيانات الرقم المحدد في لوحة التحكم
 function loadTargetPhoneData(){
   const targetPhone = document.getElementById('adm-target-phone').value;
   const saved = localStorage.getItem('user_data_' + targetPhone);
@@ -751,7 +742,6 @@ function loadTargetPhoneData(){
   document.getElementById('admin-logo-url').value = data.logoUrl || defaultState.logoUrl;
   document.getElementById('admin-wa-num').value = data.whatsapp || defaultState.whatsapp;
 
-  // الذهاب 1
   document.getElementById('adm-out1-airline').value = data.outbound.leg1.airline;
   document.getElementById('adm-out1-num').value = data.outbound.leg1.flightNumber;
   document.getElementById('adm-out1-from').value = data.outbound.leg1.from;
@@ -763,7 +753,6 @@ function loadTargetPhoneData(){
 
   document.getElementById('adm-out-layover').value = data.outbound.layover || '';
 
-  // الذهاب 2
   document.getElementById('adm-out2-airline').value = data.outbound.leg2.airline;
   document.getElementById('adm-out2-num').value = data.outbound.leg2.flightNumber;
   document.getElementById('adm-out2-from').value = data.outbound.leg2.from;
@@ -773,7 +762,6 @@ function loadTargetPhoneData(){
   document.getElementById('adm-out2-dep').value = data.outbound.leg2.depTime || '';
   document.getElementById('adm-out2-arr').value = data.outbound.leg2.arrTime || '';
 
-  // العودة 1
   document.getElementById('adm-ret1-airline').value = data.return.leg1.airline;
   document.getElementById('adm-ret1-num').value = data.return.leg1.flightNumber;
   document.getElementById('adm-ret1-from').value = data.return.leg1.from;
@@ -785,7 +773,6 @@ function loadTargetPhoneData(){
 
   document.getElementById('adm-ret-layover').value = data.return.layover || '';
 
-  // العودة 2
   document.getElementById('adm-ret2-airline').value = data.return.leg2.airline;
   document.getElementById('adm-ret2-num').value = data.return.leg2.flightNumber;
   document.getElementById('adm-ret2-from').value = data.return.leg2.from;
@@ -795,11 +782,9 @@ function loadTargetPhoneData(){
   document.getElementById('adm-ret2-dep').value = data.return.leg2.depTime || '';
   document.getElementById('adm-ret2-arr').value = data.return.leg2.arrTime || '';
 
-  // مراحل الرحلة
   document.getElementById('adm-step-completed').value = data.stepCompleted !== undefined ? data.stepCompleted : 2;
   document.getElementById('adm-step-glow').value = (data.stepGlow !== false).toString();
 
-  // الفندق
   document.getElementById('adm-hotel-city').value = data.hotel.city;
   document.getElementById('adm-hotel-name').value = data.hotel.name;
   document.getElementById('adm-hotel-dateFrom').value = data.hotel.dateFrom;
@@ -881,14 +866,14 @@ function saveAdminChanges(){
     currentData = data;
     renderAll();
   }
-  showToast(`تم حفظ بيانات الرقم ${targetPhone}`, 'save');
+  showToast(`تم حفظ وتحديث بيانات الرقم ${targetPhone}`, 'save');
 }
 
 function toggleAdminPanel(){
   document.getElementById('admin-panel').classList.toggle('hidden');
 }
 
-// ---- شاشة تفاصيل الطيران المتقدمة (التبويب والنقاط المتوهجة) ---- //
+// ---- شاشة تفاصيل الطيران المتقدمة ----
 function openFlightDetail(tab = 'outbound'){
   activeFlightTab = tab;
   updateFlightTabUI();
@@ -919,7 +904,6 @@ function updateFlightTabUI(){
   }
 }
 
-// عرض بطاقات المسار والترانزيت والمراحل
 function renderFlightDetailTabContent(){
   const container = document.getElementById('flight-detail-content');
   const routeData = activeFlightTab === 'outbound' ? currentData.outbound : currentData.return;
@@ -929,10 +913,9 @@ function renderFlightDetailTabContent(){
   const completedIdx = currentData.stepCompleted !== undefined ? currentData.stepCompleted : 2;
   const isGlow = currentData.stepGlow !== false;
 
-  // تتبع النقاط
   let stepperHtml = `
     <div class="bg-white/5 rounded-2xl p-4 mb-5 border border-white/10">
-      <p class="text-xs text-orange-300 font-bold mb-3 text-center">مراحل الرحلة الحالية</p>
+      <p class="text-xs text-orange-300 font-bold mb-3 text-center">حالة ومراحل الرحلة الحالية</p>
       <div class="flex items-center justify-between relative px-2">
   `;
   steps.forEach((step, idx) => {
@@ -954,7 +937,6 @@ function renderFlightDetailTabContent(){
   });
   stepperHtml += `</div></div>`;
 
-  // بطاقات الرحلات
   function renderLegCard(leg, title){
     return `
       <div class="bg-white/5 rounded-3xl p-5 border border-white/10 relative">
@@ -965,13 +947,13 @@ function renderFlightDetailTabContent(){
         <div class="flex items-center justify-between my-3">
           <div class="text-right">
             <p class="en font-black text-2xl text-white">${leg.from}</p>
-            <p class="text-xs text-slate-400">${leg.fromCity}</p>
+            <p class="text-xs text-slate-400 font-semibold">${leg.fromCity}</p>
             ${leg.depTime ? `<p class="en text-xs text-orange-400 mt-1 font-bold">الانطلاق: ${leg.depTime}</p>` : ''}
           </div>
           <div class="route-line"><i data-lucide="plane" class="plane-icon w-4 h-4 text-orange-400"></i></div>
           <div class="text-left">
             <p class="en font-black text-2xl text-white">${leg.to}</p>
-            <p class="text-xs text-slate-400">${leg.toCity}</p>
+            <p class="text-xs text-slate-400 font-semibold">${leg.toCity}</p>
             ${leg.arrTime ? `<p class="en text-xs text-orange-400 mt-1 font-bold">الوصول: ${leg.arrTime}</p>` : ''}
           </div>
         </div>
@@ -983,7 +965,7 @@ function renderFlightDetailTabContent(){
 
   if(routeData.layover){
     content += `
-      <div class="my-3 py-2 px-4 rounded-2xl bg-orange-500/10 border border-orange-500/20 text-center flex items-center justify-center gap-2">
+      <div class="my-3 py-2.5 px-4 rounded-2xl bg-orange-500/10 border border-orange-500/20 text-center flex items-center justify-center gap-2">
         <i data-lucide="clock" class="w-4 h-4 text-orange-400 shrink-0"></i>
         <span class="text-xs text-orange-300 font-bold">مدة الانتظار والترانزيت: ${routeData.layover}</span>
       </div>
@@ -1006,26 +988,26 @@ function openHotelModal(){
       <i data-lucide="bed-double" class="w-6 h-6 text-orange-500"></i>
     </div>
     <h3 class="font-display font-extrabold text-xl text-[var(--navy)]">${h.name}</h3>
-    <p class="text-slate-500 text-sm mt-1 leading-relaxed">${h.address}</p>
+    <p class="text-slate-500 text-sm mt-1 leading-relaxed font-semibold">${h.address}</p>
 
     <div class="grid grid-cols-2 gap-3 mt-5">
-      <div class="bg-slate-50 rounded-2xl p-3.5">
-        <p class="text-[11px] text-slate-400 mb-1">وصول</p>
-        <p class="font-bold en">${h.checkIn}</p>
+      <div class="bg-slate-50 rounded-2xl p-3.5 border border-slate-100">
+        <p class="text-[11px] text-slate-400 mb-1 font-bold">ساعة الدخول (Check-In)</p>
+        <p class="font-bold en text-[var(--navy)]">${h.checkIn}</p>
       </div>
-      <div class="bg-slate-50 rounded-2xl p-3.5">
-        <p class="text-[11px] text-slate-400 mb-1">مغادرة</p>
-        <p class="font-bold en">${h.checkOut}</p>
+      <div class="bg-slate-50 rounded-2xl p-3.5 border border-slate-100">
+        <p class="text-[11px] text-slate-400 mb-1 font-bold">ساعة المغادرة (Check-Out)</p>
+        <p class="font-bold en text-[var(--navy)]">${h.checkOut}</p>
       </div>
     </div>
 
     <div class="mt-4 space-y-2">
       <a href="${h.mapUrl}" target="_blank" class="flex items-center justify-between bg-orange-50 hover:bg-orange-100 rounded-2xl px-4 py-3.5 transition-colors scale-tap">
-        <span class="flex items-center gap-2 font-bold text-sm text-orange-600"><i data-lucide="map-pin" class="w-4 h-4"></i> فتح في خرائط جوجل</span>
+        <span class="flex items-center gap-2 font-bold text-sm text-orange-600"><i data-lucide="map-pin" class="w-4 h-4"></i> فتح الموقع في خرائط Google</span>
         <i data-lucide="chevron-left" class="w-4 h-4 text-orange-400 rtl-flip"></i>
       </a>
-      <a href="tel:${h.phone}" class="flex items-center justify-between bg-slate-50 hover:bg-slate-100 rounded-2xl px-4 py-3.5 transition-colors scale-tap">
-        <span class="flex items-center gap-2 font-bold text-sm text-[var(--navy)]"><i data-lucide="phone" class="w-4 h-4 text-orange-500"></i> رقم هاتف السكن: ${h.phone}</span>
+      <a href="tel:${h.phone}" class="flex items-center justify-between bg-slate-50 hover:bg-slate-100 rounded-2xl px-4 py-3.5 transition-colors scale-tap border border-slate-100">
+        <span class="flex items-center gap-2 font-bold text-sm text-[var(--navy)]"><i data-lucide="phone" class="w-4 h-4 text-orange-500"></i> هاتف السكن: ${h.phone}</span>
         <i data-lucide="chevron-left" class="w-4 h-4 text-slate-400 rtl-flip"></i>
       </a>
     </div>
@@ -1033,6 +1015,7 @@ function openHotelModal(){
   lucide.createIcons();
   document.getElementById('hotel-backdrop').classList.add('open');
 }
+
 function closeHotelModal(){
   document.getElementById('hotel-backdrop').classList.remove('open');
 }
