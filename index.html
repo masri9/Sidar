@@ -1,738 +1,321 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-<title>Klick | كليك</title>
-<meta name="theme-color" content="#07090C" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atlanta's Best Barber</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet" />
-
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Montserrat:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
-  :root { --font-body: 'Inter', sans-serif; --font-arabic: 'IBM Plex Sans Arabic', sans-serif; --font-display: 'Manrope', sans-serif; }
-  html, body { background:#07090C; color:#EAF2ED; margin:0; padding:0; }
-  body[dir="rtl"] { font-family: var(--font-arabic); }
-  body[dir="ltr"] { font-family: var(--font-body); }
-  .font-display { font-family: var(--font-display); }
-  .bg-klick-radial { background: radial-gradient(circle at 50% 0%, rgba(0,255,102,0.14), transparent 60%); }
-  .glass-panel { background: linear-gradient(135deg, rgba(255,255,255,0.055), rgba(255,255,255,0.015)); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border: 1px solid rgba(255,255,255,0.08); }
-  .glass-strong { background: rgba(15,19,25,0.82); backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px); border: 1px solid rgba(0,255,102,0.12); }
-  .text-gradient-neon { background: linear-gradient(90deg,#00FF66,#10B981); -webkit-background-clip: text; background-clip:text; color: transparent; }
-  .shadow-neon { box-shadow: 0 0 15px #00FF66; }
-  .shadow-neon-sm { box-shadow: 0 0 8px rgba(0,255,102,0.55); }
-  .shadow-neon-lg { box-shadow: 0 0 35px rgba(0,255,102,0.45); }
-  .scrollbar-none::-webkit-scrollbar{display:none;} .scrollbar-none{-ms-overflow-style:none;scrollbar-width:none;}
-  :focus-visible { outline: 2px solid #00FF66; outline-offset: 2px; border-radius: 6px; }
+  :root{
+    --bg-dark: #0d0d0d;
+    --bg-charcoal: #2b2b2b;
+    --gold: #c9a24b;
+    --gold-soft: #e4c98a;
+    --ivory: #f3ede1;
+    --line: rgba(243,237,225,0.16);
+  }
 
-  @keyframes pulseGlow { 0%,100%{ box-shadow:0 0 8px rgba(0,255,102,.5); opacity:1;} 50%{ box-shadow:0 0 26px rgba(0,255,102,.95); opacity:.85;} }
-  .animate-pulse-glow { animation: pulseGlow 1.1s ease-in-out infinite; }
+  *{ box-sizing:border-box; margin:0; padding:0; }
 
-  @keyframes dashMove { to { stroke-dashoffset: -24; } }
-  .animate-dash-move { animation: dashMove 1.2s linear infinite; }
+  html{ scroll-behavior:smooth; }
 
-  @keyframes flyAlong { from { offset-distance: 0%; } to { offset-distance: 100%; } }
-  .plane-marker { offset-rotate: auto; animation: flyAlong 3.2s linear infinite; }
+  body{
+    font-family:'Inter', sans-serif;
+    color:var(--ivory);
+    background:
+      radial-gradient(circle at 50% 35%, var(--bg-charcoal) 0%, var(--bg-dark) 65%, #050505 100%);
+    min-height:100vh;
+    overflow-x:hidden;
+  }
 
-  @keyframes splashIn { from { opacity:0; transform: scale(.85);} to { opacity:1; transform: scale(1);} }
-  .animate-splash-in { animation: splashIn .9s cubic-bezier(.16,1,.3,1) both; }
+  a{ color:inherit; text-decoration:none; }
 
-  @keyframes drawerInRtl { from { transform: translateX(100%);} to { transform: translateX(0);} }
-  @keyframes drawerInLtr { from { transform: translateX(-100%);} to { transform: translateX(0);} }
+  /* ---------- HEADER ---------- */
+  header{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:2.5rem 1.5rem 1.5rem;
+  }
 
-  @media (prefers-reduced-motion: reduce) {
-    *,*::before,*::after { animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; }
+  .logo{
+    font-family:'UnifrakturMaguntia', serif;
+    font-size:2.4rem;
+    color:var(--gold-soft);
+    letter-spacing:1px;
+  }
+
+  nav{
+    margin-top:1.6rem;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:2.2rem;
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    padding:0.9rem 1rem;
+  }
+
+  nav a{
+    font-size:0.72rem;
+    letter-spacing:0.18em;
+    color:var(--ivory);
+    opacity:0.8;
+    transition:opacity 0.2s ease, color 0.2s ease;
+  }
+
+  nav a:hover{ opacity:1; color:var(--gold-soft); }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    align-items:center;
+    gap:3rem;
+    max-width:1200px;
+    margin:3.5rem auto 5rem;
+    padding:0 2rem;
+  }
+
+  .hero-copy .eyebrow{
+    font-size:0.75rem;
+    letter-spacing:0.22em;
+    color:var(--gold);
+    margin-bottom:1.1rem;
+    display:block;
+  }
+
+  .hero-copy h1{
+    font-family:'Montserrat', sans-serif;
+    font-weight:800;
+    font-size:clamp(2.4rem, 5vw, 4.2rem);
+    line-height:1.05;
+    color:var(--ivory);
+  }
+
+  .hero-copy .cta{
+    display:inline-block;
+    margin-top:2.2rem;
+    font-size:0.85rem;
+    letter-spacing:0.14em;
+    color:var(--gold-soft);
+    border-bottom:1px solid var(--gold-soft);
+    padding-bottom:4px;
+    transition:color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .hero-copy .cta:hover{ color:var(--ivory); border-color:var(--ivory); }
+
+  /* Layered photo collage */
+  .collage{
+    position:relative;
+    width:100%;
+    aspect-ratio:1/1;
+  }
+
+  .collage .frame{
+    border:6px solid var(--ivory);
+    box-shadow:0 20px 45px rgba(0,0,0,0.5);
+    overflow:hidden;
+  }
+
+  .collage img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+
+  .collage .top{
+    position:absolute;
+    top:0;
+    right:0;
+    width:68%;
+    height:60%;
+    z-index:2;
+  }
+
+  .collage .bottom{
+    position:absolute;
+    bottom:0;
+    left:0;
+    width:62%;
+    height:58%;
+    z-index:1;
+  }
+
+  /* ---------- ICON MENU ---------- */
+  .looking-for{
+    text-align:center;
+    padding:0 1.5rem 5rem;
+  }
+
+  .looking-for h2{
+    font-family:'Montserrat', sans-serif;
+    font-weight:700;
+    font-size:0.85rem;
+    letter-spacing:0.25em;
+    color:var(--ivory);
+    opacity:0.85;
+    margin-bottom:3rem;
+  }
+
+  .icon-grid{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:2.6rem;
+    max-width:900px;
+    margin:0 auto;
+  }
+
+  .icon-item{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:0.9rem;
+    width:110px;
+  }
+
+  .icon-circle{
+    width:72px;
+    height:72px;
+    border-radius:50%;
+    border:1px solid var(--line);
+    background:rgba(255,255,255,0.02);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:border-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .icon-item:hover .icon-circle{
+    border-color:var(--gold-soft);
+    transform:translateY(-3px);
+  }
+
+  .icon-circle svg{
+    width:26px;
+    height:26px;
+    stroke:var(--gold-soft);
+    fill:none;
+    stroke-width:1.6;
+  }
+
+  .icon-item span{
+    font-size:0.68rem;
+    letter-spacing:0.12em;
+    color:var(--ivory);
+    opacity:0.75;
+    text-align:center;
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 860px){
+    .hero{
+      grid-template-columns:1fr;
+      text-align:center;
+      margin-top:2rem;
+    }
+    .hero-copy .eyebrow{ text-align:center; }
+    .collage{
+      max-width:420px;
+      margin:0 auto;
+      aspect-ratio:4/3;
+    }
+    nav{ gap:1.2rem 1.6rem; }
+  }
+
+  @media (max-width: 480px){
+    .logo{ font-size:1.9rem; }
+    nav a{ font-size:0.65rem; }
+    .icon-item{ width:84px; }
+    .icon-circle{ width:60px; height:60px; }
+    .icon-circle svg{ width:22px; height:22px; }
   }
 </style>
 </head>
-<body dir="rtl" class="min-h-screen bg-klick-radial">
-<div id="root"></div>
+<body>
 
-<script type="text/babel" data-presets="react,stage-3">
-const { useState, useEffect, useMemo, useContext, createContext, useRef } = React;
+<header>
+  <div class="logo">mhmed barber</div>
+  <nav>
+    <a href="#work">اعمالي</a>
+    <a href="#hours">ساعات العمل</a>
+    <a href="#book">احجز الآن</a>
+  </nav>
+</header>
 
-/* ---------------------------------------------------------
-   Icons — Complete Stroke Set
---------------------------------------------------------- */
-const I = {
-  menu: "M4 7h16M4 12h16M4 17h16",
-  x: "M18 6L6 18M6 6l12 12",
-  home: "M3 12l9-9 9 9M4 10v10a1 1 0 001 1h3a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1h3a1 1 0 001-1V10",
-  plane: "M2 12l19-9-9 19-2-8-8-2z",
-  sparkles: "M12 2l1.6 5.6L19 9l-5.4 1.6L12 16l-1.6-5.4L5 9l5.4-1.4z",
-  user: "M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2 M12 11a4 4 0 100-8 4 4 0 000 8z",
-  support: "M18.364 5.636a9 9 0 010 12.728m-12.728 0a9 9 0 010-12.728M12 2a10 10 0 100 20 10 10 0 000-20z",
-  settings: "M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0z",
-  shield: "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z",
-  logout: "M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4 M16 17l5-5-5-5 M21 12H9",
-  globe: "M12 2a10 10 0 100 20 10 10 0 000-20z M2 12h20 M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z",
-  heart: "M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z",
-  pin: "M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z M12 10a3 3 0 100-6 3 3 0 000 6z",
-  plus: "M12 5v14M5 12h14",
-  clock: "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z",
-  search: "M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z",
-  send: "M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z",
-  trash: "M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"
-};
+<section class="hero">
+  <div class="hero-copy">
+    <span class="eyebrow">YOUR COMPANY NAME</span>
+    <h1>ATLANTA'S BEST<br>BARBER.</h1>
+    <a href="#book" class="cta">BOOK TODAY</a>
+  </div>
 
-const Icon = ({ path, size = 20, className = "", filled = false }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill={filled ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-    <path d={path || ""} />
-  </svg>
-);
-
-/* ---------------------------------------------------------
-   i18n
---------------------------------------------------------- */
-const dict = {
-  en: { appName:"Klick", home:"Home", myTrips:"My Trips", aiSupport:"AI Support", profile:"Profile", support:"Support",
-    settings:"Settings", adminDashboard:"Admin Dashboard", logOut:"Log out", welcomeBack:"Welcome back",
-    flightStatus:"Flight status", confirmed:"Confirmed", atAirport:"At airport", inFlight:"In flight", transit:"Transit",
-    arrived:"Arrived", communityFeed:"Community", sharePost:"Share your trip", viewDeal:"View deal", departure:"Departure",
-    arrival:"Arrival", seat:"Seat", flight:"Flight", transitAt:"Transit at", editProfile:"Edit profile", firstName:"First name",
-    lastName:"Last name", phoneNumber:"Phone number", save:"Save changes", saved:"Saved", loginTitle:"Log in to Klick",
-    loginSubtitle:"Enter your phone number to continue", continueLabel:"Continue", askAi:"Ask the Klick assistant about your trip...",
-    send:"Send", admin:"Admin", manageUsers:"Manage users", manageFlights:"Manage flights", statusTracker:"Status tracker",
-    searchByPhone:"Search by phone number", addFlight:"Add flight", noResults:"No results", language:"Language",
-    superAdmin:"Super-Admin", bookingRef:"Booking reference", noTrips:"No trips yet", loggedInAs:"Logged in as" },
-  ar: { appName:"كليك", home:"الرئيسية", myTrips:"رحلاتي", aiSupport:"مساعد AI", profile:"الملف الشخصي", support:"الدعم",
-    settings:"الإعدادات", adminDashboard:"لوحة التحكم", logOut:"تسجيل الخروج", welcomeBack:"أهلاً بعودتك",
-    flightStatus:"حالة الرحلة", confirmed:"مؤكدة", atAirport:"في المطار", inFlight:"في الجو", transit:"ترانزيت",
-    arrived:"وصلت", communityFeed:"المجتمع", sharePost:"شارك رحلتك", viewDeal:"عرض العرض", departure:"المغادرة",
-    arrival:"الوصول", seat:"المقعد", flight:"الرحلة", transitAt:"ترانزيت في", editProfile:"تعديل الملف الشخصي",
-    firstName:"الاسم الأول", lastName:"اسم العائلة", phoneNumber:"رقم الهاتف", save:"حفظ التغييرات", saved:"تم الحفظ",
-    loginTitle:"تسجيل الدخول إلى كليك", loginSubtitle:"أدخل رقم هاتفك للمتابعة", continueLabel:"متابعة",
-    askAi:"اسأل مساعد كليك عن رحلتك...", send:"إرسال", admin:"المشرف", manageUsers:"إدارة المستخدمين",
-    manageFlights:"إدارة الرحلات", statusTracker:"متتبع الحالة", searchByPhone:"ابحث برقم الهاتف", addFlight:"إضافة رحلة",
-    noResults:"لا توجد نتائج", language:"اللغة", superAdmin:"مشرف عام", bookingRef:"رقم الحجز", noTrips:"لا توجد رحلات بعد",
-    loggedInAs:"مسجل الدخول باسم" },
-};
-
-const LanguageContext = createContext(null);
-function LanguageProvider({ children }) {
-  const [locale, setLocale] = useState(() => localStorage.getItem("klick-locale") || "ar");
-  const dir = locale === "ar" ? "rtl" : "ltr";
-  useEffect(() => { 
-    document.documentElement.dir = dir; 
-    document.documentElement.lang = locale; 
-    document.body.dir = dir; 
-    localStorage.setItem("klick-locale", locale); 
-  }, [locale, dir]);
-  const value = useMemo(() => ({ locale, dir, t: (k) => dict[locale][k] || k, setLocale, toggleLocale: () => setLocale(l => l === "ar" ? "en" : "ar") }), [locale, dir]);
-  return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
-}
-const useLanguage = () => useContext(LanguageContext);
-
-/* ---------------------------------------------------------
-   Domain model / mock data
---------------------------------------------------------- */
-const FLIGHT_PHASES = ["confirmed", "at_airport", "in_flight", "transit", "arrived"];
-const phaseKey = { confirmed:"confirmed", at_airport:"atAirport", in_flight:"inFlight", transit:"transit", arrived:"arrived" };
-function isAdminPhone(phone) {
-  const digits = phone.replace(/[^\d]/g, "").replace(/^00/, "");
-  return digits.startsWith("9") || phone.trim().replace("+","").startsWith("9");
-}
-
-const initialUsers = [
-  { id:"u1", phone:"+962791234567", firstName:"Layla", lastName:"Haddad", avatarUrl:"https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200", isAdmin:false },
-  { id:"u2", phone:"+962961112233", firstName:"Omar", lastName:"Rashid", avatarUrl:"https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200", isAdmin:true },
-];
-const initialTrips = [
-  { id:"t1", userId:"u1", bookingReference:"KLK-48291", status:"in_flight", legs:[
-    { id:"l1", flightNumber:"RJ 631", departureAirport:"AMM", arrivalAirport:"DXB", departureCity:"Amman", arrivalCity:"Dubai",
-      departureTime:"2026-09-02T08:30:00+03:00", arrivalTime:"2026-09-02T13:10:00+04:00", seat:"14C", transit:null },
-    { id:"l2", flightNumber:"EK 862", departureAirport:"DXB", arrivalAirport:"KUL", departureCity:"Dubai", arrivalCity:"Kuala Lumpur",
-      departureTime:"2026-09-02T16:45:00+04:00", arrivalTime:"2026-09-03T05:30:00+08:00", seat:"27A",
-      transit:{ airport:"DXB", city:"Dubai", durationMinutes:215 } },
-  ]},
-];
-const banners = [
-  { id:"b1", title:"Bali, from $349", subtitle:"Round-trip fares this month only", imageUrl:"https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=1200" },
-  { id:"b2", title:"Welcome to Klick", subtitle:"Book smarter, travel further", imageUrl:"https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1200" },
-  { id:"b3", title:"Istanbul weekend", subtitle:"3 nights + flights from $259", imageUrl:"https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?w=1200" },
-];
-const posts = [
-  { id:"p1", authorName:"Layla Haddad", authorAvatar:"https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200",
-    imageUrl:"https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=900", caption:"Sunrise over the Dead Sea, still can't believe this view was real.",
-    location:"Dead Sea, Jordan", likes:128 },
-  { id:"p2", authorName:"Omar Rashid", authorAvatar:"https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200",
-    imageUrl:"https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=900", caption:"Layover turned into an impromptu food tour in Dubai.",
-    location:"Dubai, UAE", likes:74 },
-];
-
-/* ---------------------------------------------------------
-   Auth context
---------------------------------------------------------- */
-const AuthContext = createContext(null);
-function AuthProvider({ children }) {
-  const [users, setUsers] = useState(initialUsers);
-  const [trips, setTrips] = useState(initialTrips);
-  const [user, setUser] = useState(() => {
-    const stored = localStorage.getItem("klick-current-user");
-    return stored ? JSON.parse(stored) : null;
-  });
-  const persist = (next) => { setUser(next); if (next) localStorage.setItem("klick-current-user", JSON.stringify(next)); else localStorage.removeItem("klick-current-user"); };
-  const loginWithPhone = (phone) => {
-    const existing = users.find(u => u.phone === phone);
-    if (existing) { persist(existing); return; }
-    const newUser = { id:"u_"+Date.now(), phone, firstName:"Traveler", lastName:"", isAdmin:isAdminPhone(phone) };
-    setUsers(u => [...u, newUser]);
-    persist(newUser);
-  };
-  const updateProfile = (patch) => {
-    if (!user) return;
-    const next = { ...user, ...patch };
-    if (patch.phone) next.isAdmin = isAdminPhone(patch.phone);
-    setUsers(list => list.map(u => u.id === user.id ? next : u));
-    persist(next);
-  };
-  const logout = () => persist(null);
-  const value = { user, users, setUsers, trips, setTrips, isAdmin: !!user?.isAdmin, loginWithPhone, updateProfile, logout };
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-}
-const useAuth = () => useContext(AuthContext);
-
-/* ---------------------------------------------------------
-   Splash Screen
---------------------------------------------------------- */
-function SplashScreen() {
-  return (
-    <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#07090C] bg-klick-radial">
-      <div className="animate-splash-in flex flex-col items-center gap-8">
-        <span className="font-display text-4xl font-extrabold tracking-wide text-gradient-neon">Klick</span>
-        <div className="mt-2 flex items-center gap-2">
-          {[0,1,2].map(i => (
-            <span key={i} className="h-2.5 w-2.5 rounded-full bg-[#00FF66] animate-pulse-glow" style={{ animationDelay: `${i*0.18}s` }} />
-          ))}
-        </div>
-      </div>
+  <div class="collage">
+    <div class="frame top">
+      <img src="https://plain-eeur-prod-public.komododecks.com/202609/14/OpKbv9BQOJrZ7FmDnSBp/image.jpg" alt="Barber at work, top photo">
     </div>
-  );
-}
-
-/* ---------------------------------------------------------
-   Header + Side Drawer + Bottom Nav
---------------------------------------------------------- */
-function Header({ onOpenMenu }) {
-  const { t } = useLanguage();
-  return (
-    <header className="sticky top-0 z-30 border-b border-white/10 glass-strong">
-      <div className="mx-auto flex h-16 max-w-md items-center justify-between px-4 sm:max-w-2xl">
-        <div className="flex items-center gap-2">
-          <span className="font-display text-xl font-bold text-gradient-neon">{t("appName")}</span>
-        </div>
-        <button aria-label="Menu" onClick={onOpenMenu}
-          className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 transition hover:border-[#00FF66]/60 hover:shadow-neon-sm active:scale-95">
-          <Icon path={I.menu} size={20} />
-        </button>
-      </div>
-    </header>
-  );
-}
-
-function SideDrawer({ open, onClose, page, setPage }) {
-  const { t, dir, toggleLocale, locale } = useLanguage();
-  const { user, isAdmin, logout } = useAuth();
-  if (!open) return null;
-  const items = [
-    { key:"profile", label:t("profile"), icon:I.user },
-    { key:"trips", label:t("myTrips"), icon:I.plane },
-    { key:"support", label:t("support"), icon:I.support },
-    { key:"profile", label:t("settings"), icon:I.settings },
-  ];
-  const sideClass = dir === "rtl" ? "right-0 border-l" : "left-0 border-r";
-  const animName = dir === "rtl" ? "drawerInRtl" : "drawerInLtr";
-  return (
-    <div className="fixed inset-0 z-40">
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
-      <aside className={`absolute top-0 h-full w-72 glass-strong ${sideClass} border-white/10 p-5`} style={{ animation: `${animName} .32s cubic-bezier(.2,.8,.2,1) both` }}>
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="font-display text-base font-bold text-gradient-neon">{user ? `${user.firstName} ${user.lastName}`.trim() : t("appName")}</p>
-            {user && <p className="text-xs text-white/50">{user.phone}</p>}
-          </div>
-          <button aria-label="Close" onClick={onClose} className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 hover:border-[#00FF66]/60">
-            <Icon path={I.x} size={18} />
-          </button>
-        </div>
-
-        <nav className="mt-8 flex flex-col gap-1">
-          {items.map((it, idx) => (
-            <button key={idx} onClick={() => { setPage(it.key); onClose(); }}
-              className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-white/90 transition hover:bg-white/5 hover:text-[#00FF66]">
-              <Icon path={it.icon} size={18} />{it.label}
-            </button>
-          ))}
-          {isAdmin && (
-            <button onClick={() => { setPage("admin"); onClose(); }}
-              className="mt-2 flex items-center gap-3 rounded-xl border border-[#00FF66]/30 bg-[#00FF66]/10 px-3 py-3 text-sm font-semibold text-[#00FF66] shadow-neon-sm transition hover:shadow-neon">
-              <Icon path={I.shield} size={18} />{t("adminDashboard")}
-            </button>
-          )}
-        </nav>
-
-        <div className="mt-8 flex flex-col gap-1 border-t border-white/10 pt-4">
-          <button onClick={toggleLocale} className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm text-white/60 transition hover:bg-white/5 hover:text-white">
-            <Icon path={I.globe} size={18} />{t("language")}: {locale === "ar" ? "العربية" : "English"}
-          </button>
-          {user && (
-            <button onClick={() => { logout(); onClose(); setPage("home"); }} className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm text-red-400 transition hover:bg-red-500/10">
-              <Icon path={I.logout} size={18} />{t("logOut")}
-            </button>
-          )}
-        </div>
-      </aside>
+    <!-- Bottom photo -->
+    <div class="frame bottom">
+      <img src="https://plain-eeur-prod-public.komododecks.com/202609/14/xuD32Tvn13s7sgWPEzNV/image.jpg" alt="Barbershop interior, bottom photo">
     </div>
-  );
-}
+  </div>
+</section>
 
-function BottomNav({ page, setPage }) {
-  const { t } = useLanguage();
-  const tabs = [
-    { key:"home", label:t("home"), icon:I.home },
-    { key:"trips", label:t("myTrips"), icon:I.plane },
-    { key:"support", label:t("aiSupport"), icon:I.sparkles },
-  ];
-  return (
-    <nav className="fixed bottom-0 left-0 right-0 z-30 border-t border-white/10 glass-strong pb-[env(safe-area-inset-bottom)]">
-      <div className="mx-auto flex max-w-md items-stretch justify-around sm:max-w-2xl">
-        {tabs.map(tb => {
-          const active = page === tb.key;
-          return (
-            <button key={tb.key} onClick={() => setPage(tb.key)} className="relative flex flex-1 flex-col items-center gap-1 py-3 text-xs">
-              {active && <span className="absolute top-0 h-0.5 w-8 rounded-full bg-[#00FF66] shadow-neon-sm" />}
-              <Icon path={tb.icon} size={22} className={active ? "text-[#00FF66] drop-shadow-[0_0_6px_rgba(0,255,102,0.7)]" : "text-white/50"} />
-              <span className={active ? "text-[#00FF66] font-semibold" : "text-white/50"}>{tb.label}</span>
-            </button>
-          );
-        })}
-      </div>
-    </nav>
-  );
-}
+<section class="looking-for">
+  <h2>WHAT ARE YOU LOOKING FOR TODAY?</h2>
+  <div class="icon-grid">
 
-/* ---------------------------------------------------------
-   Flight Status Tracker
---------------------------------------------------------- */
-function FlightStatusTracker({ status, compact }) {
-  const { t } = useLanguage();
-  const currentIndex = FLIGHT_PHASES.indexOf(status);
-  return (
-    <div className="glass-panel rounded-2xl p-4">
-      {!compact && <p className="mb-4 text-sm font-semibold text-white/60">{t("flightStatus")}</p>}
-      <div className="flex items-center">
-        {FLIGHT_PHASES.map((phase, i) => {
-          const reached = i <= currentIndex;
-          const isCurrent = i === currentIndex;
-          const isLast = i === FLIGHT_PHASES.length - 1;
-          return (
-            <div key={phase} className="flex flex-1 items-center last:flex-none">
-              <div className="flex flex-col items-center gap-2">
-                <span className={`block h-3.5 w-3.5 rounded-full border ${reached ? "border-[#00FF66] bg-[#00FF66]" : "border-white/15 bg-[#141A22]"} ${isCurrent ? "animate-pulse-glow" : ""}`} />
-                {!compact && <span className={`whitespace-nowrap text-[10px] ${reached ? "text-[#00FF66]" : "text-white/40"}`}>{t(phaseKey[phase])}</span>}
-              </div>
-              {!isLast && (
-                <div className="mx-1 h-px flex-1 bg-white/10">
-                  <div className="h-px bg-[#00FF66] transition-all duration-700" style={{ width: reached ? "100%" : "0%" }} />
-                </div>
-              )}
-            </div>
-          );
-        })}
+    <div class="icon-item">
+      <div class="icon-circle">
+        <svg viewBox="0 0 24 24"><path d="M2 12l4-4 3 3 5-5 4 4M2 12v6a2 2 0 0 0 2 2h4M22 12v6a2 2 0 0 1-2 2h-4"/></svg>
       </div>
+      <span>MEET ME</span>
     </div>
-  );
-}
 
-/* ---------------------------------------------------------
-   Promo Carousel
---------------------------------------------------------- */
-function PromoCarousel() {
-  const [index, setIndex] = useState(0);
-  const { t } = useLanguage();
-  useEffect(() => { const timer = setInterval(() => setIndex(i => (i+1) % banners.length), 4500); return () => clearInterval(timer); }, []);
-  const banner = banners[index];
-  return (
-    <div className="relative h-44 w-full overflow-hidden rounded-2xl sm:h-56">
-      <img key={banner.id} src={banner.imageUrl} alt="" className="h-full w-full object-cover transition-opacity duration-500" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
-      <div className="absolute bottom-4 start-4 end-4">
-        <h3 className="font-display text-xl font-bold text-white">{banner.title}</h3>
-        <p className="mt-1 text-sm text-white/80">{banner.subtitle}</p>
-        <button className="mt-3 rounded-lg border border-[#00FF66]/50 bg-[#00FF66]/15 px-3 py-1.5 text-xs font-semibold text-[#00FF66] shadow-neon-sm">{t("viewDeal")}</button>
+    <div class="icon-item">
+      <div class="icon-circle">
+        <svg viewBox="0 0 24 24"><path d="M4 4h11a2 2 0 0 1 2 2v14H6a2 2 0 0 1-2-2V4z"/><path d="M17 4h1a2 2 0 0 1 2 2v14"/></svg>
       </div>
-      <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5">
-        {banners.map((b, i) => (
-          <button key={b.id} aria-label={`Slide ${i+1}`} onClick={() => setIndex(i)} className={`h-1.5 rounded-full transition-all ${i === index ? "w-5 bg-[#00FF66]" : "w-1.5 bg-white/40"}`} />
-        ))}
-      </div>
+      <span>MY STORY</span>
     </div>
-  );
-}
 
-/* ---------------------------------------------------------
-   Community Feed
---------------------------------------------------------- */
-function PostCard({ post }) {
-  const [liked, setLiked] = useState(false);
-  const [likes, setLikes] = useState(post.likes);
-  return (
-    <article className="glass-panel overflow-hidden rounded-2xl">
-      <img src={post.imageUrl} alt="" className="h-52 w-full object-cover" />
-      <div className="p-4">
-        <div className="flex items-center gap-2">
-          <img src={post.authorAvatar} alt="" className="h-8 w-8 rounded-full object-cover ring-1 ring-[#00FF66]/40" />
-          <div>
-            <p className="text-sm font-semibold">{post.authorName}</p>
-            {post.location && <p className="flex items-center gap-1 text-[11px] text-white/50"><Icon path={I.pin} size={11} />{post.location}</p>}
-          </div>
-        </div>
-        <p className="mt-3 text-sm text-white/90">{post.caption}</p>
-        <button onClick={() => { setLiked(v=>!v); setLikes(n => liked ? n-1 : n+1); }} className="mt-3 flex items-center gap-1.5 text-sm">
-          <Icon path={I.heart} size={17} filled={liked} className={liked ? "text-[#00FF66]" : "text-white/50"} />
-          <span className={liked ? "text-[#00FF66]" : "text-white/50"}>{likes}</span>
-        </button>
+    <div class="icon-item">
+      <div class="icon-circle">
+        <svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4L8.5 15.5M14.5 14.5L20 20M8.5 8.5L14.5 14.5"/></svg>
       </div>
-    </article>
-  );
-}
+      <span>MY WORK</span>
+    </div>
 
-function CommunityFeed() {
-  const { t } = useLanguage();
-  return (
-    <section>
-      <div className="mb-3 flex items-center justify-between">
-        <h2 className="font-display text-base font-bold">{t("communityFeed")}</h2>
-        <button className="flex items-center gap-1 rounded-lg border border-[#00FF66]/40 px-2.5 py-1.5 text-xs font-semibold text-[#00FF66]">
-          <Icon path={I.plus} size={14} />{t("sharePost")}
-        </button>
+    <div class="icon-item">
+      <div class="icon-circle">
+        <svg viewBox="0 0 24 24"><path d="M12 3v18M16 7.5c0-1.7-1.8-3-4-3s-4 1.3-4 3 1.8 2.6 4 3 4 1.3 4 3-1.8 3-4 3-4-1.3-4-3"/></svg>
       </div>
-      <div className="flex flex-col gap-4">{posts.map(p => <PostCard key={p.id} post={p} />)}</div>
-    </section>
-  );
-}
+      <span>PRICING</span>
+    </div>
 
-/* ---------------------------------------------------------
-   Flight Card — curved arc track + animated plane
---------------------------------------------------------- */
-function formatTime(iso){ return new Date(iso).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"}); }
-function formatDate(iso){ return new Date(iso).toLocaleDateString(undefined, {month:"short",day:"numeric"}); }
-
-function ArcTrack() {
-  const pathD = "M 12 44 Q 150 -14 288 44";
-  return (
-    <div className="relative h-14 w-full">
-      <svg viewBox="0 0 300 44" className="h-full w-full overflow-visible" preserveAspectRatio="none">
-        <path d={pathD} fill="none" stroke="#1F2A2E" strokeWidth="2" strokeDasharray="1 8" strokeLinecap="round" />
-        <path d={pathD} fill="none" stroke="#00FF66" strokeWidth="2" strokeDasharray="1 8" strokeLinecap="round" className="animate-dash-move" opacity="0.9" />
-      </svg>
-      <div className="plane-marker absolute left-0 top-0 h-4 w-4" style={{ offsetPath: `path("${pathD}")` }}>
-        <Icon path={I.plane} size={16} className="text-[#00FF66] drop-shadow-[0_0_6px_#00FF66]" />
+    <div class="icon-item">
+      <div class="icon-circle">
+        <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="1"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>
       </div>
+      <span>BOOK NOW</span>
     </div>
-  );
-}
 
-function FlightCard({ legs, status, bookingReference }) {
-  const { t } = useLanguage();
-  return (
-    <div className="glass-panel rounded-3xl p-5">
-      <div className="mb-4 flex items-center justify-between text-xs text-white/50">
-        <span>{bookingReference}</span>
-        <span>{legs.length > 1 ? `${legs.length - 1} ${t("transitAt").toLowerCase()}` : t("flight")} {legs[0].flightNumber}</span>
+    <div class="icon-item">
+      <div class="icon-circle">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/></svg>
       </div>
-      {legs.map((leg, idx) => (
-        <div key={leg.id} className={idx > 0 ? "mt-5 border-t border-white/10 pt-5" : ""}>
-          <div className="flex items-center justify-between">
-            <div className="text-start">
-              <p className="font-display text-2xl font-extrabold">{leg.departureAirport}</p>
-              <p className="text-xs text-white/50">{leg.departureCity}</p>
-              <p className="mt-1 text-sm font-medium text-[#00FF66]">{formatTime(leg.departureTime)}</p>
-            </div>
-            <div className="flex-1 px-3"><ArcTrack /></div>
-            <div className="text-end">
-              <p className="font-display text-2xl font-extrabold">{leg.arrivalAirport}</p>
-              <p className="text-xs text-white/50">{leg.arrivalCity}</p>
-              <p className="mt-1 text-sm font-medium text-[#00FF66]">{formatTime(leg.arrivalTime)}</p>
-            </div>
-          </div>
-          <div className="mt-3 flex items-center justify-between text-xs text-white/50">
-            <span>{t("flight")} <span className="text-white">{leg.flightNumber}</span></span>
-            <span>{formatDate(leg.departureTime)}</span>
-            {leg.seat && <span>{t("seat")} <span className="text-white">{leg.seat}</span></span>}
-          </div>
-          {leg.transit && (
-            <div className="mt-3 flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs text-white/60">
-              <Icon path={I.clock} size={14} className="text-[#00FF66]" />
-              {t("transitAt")} {leg.transit.airport} · {Math.floor(leg.transit.durationMinutes/60)}h {leg.transit.durationMinutes % 60}m
-            </div>
-          )}
-        </div>
-      ))}
-      <div className="mt-5"><FlightStatusTracker status={status} compact /></div>
+      <span>OUR HOURS</span>
     </div>
-  );
-}
 
-/* ---------------------------------------------------------
-   Phone Login
---------------------------------------------------------- */
-const COUNTRY_CODES = [
-  { code:"+962", label:"🇯🇴 +962" }, { code:"+966", label:"🇸🇦 +966" }, { code:"+971", label:"🇦🇪 +971" },
-  { code:"+20", label:"🇪🇬 +20" }, { code:"+1", label:"🇺🇸 +1" }, { code:"+44", label:"🇬🇧 +44" },
-];
+  </div>
+</section>
 
-function PhoneLogin() {
-  const { t } = useLanguage();
-  const { loginWithPhone } = useAuth();
-  const [cc, setCc] = useState(COUNTRY_CODES[0].code);
-  const [num, setNum] = useState("");
-  const submit = (e) => { e.preventDefault(); if (!num.trim()) return; loginWithPhone(`${cc}${num.replace(/\D/g,"")}`); };
-  return (
-    <div className="glass-panel mx-auto mt-10 max-w-sm rounded-3xl p-6">
-      <h1 className="font-display text-xl font-bold text-gradient-neon">{t("loginTitle")}</h1>
-      <p className="mt-1 text-sm text-white/50">{t("loginSubtitle")}</p>
-      <form onSubmit={submit} className="mt-6 flex flex-col gap-4">
-        <div className="flex gap-2">
-          <select value={cc} onChange={e=>setCc(e.target.value)} className="rounded-xl border border-white/10 bg-[#141A22] px-2 py-3 text-sm focus:border-[#00FF66]">
-            {COUNTRY_CODES.map(c => <option key={c.code} value={c.code}>{c.label}</option>)}
-          </select>
-          <input value={num} onChange={e=>setNum(e.target.value)} inputMode="numeric" placeholder="79 123 4567"
-            className="flex-1 rounded-xl border border-white/10 bg-[#141A22] px-3 py-3 text-sm placeholder:text-white/30 focus:border-[#00FF66]" />
-        </div>
-        <p className="text-[11px] text-white/40">{t("language") === "Language" ? "Tip: numbers starting with 9 unlock the admin dashboard." : "تلميح: الأرقام التي تبدأ بـ 9 تفتح لوحة تحكم المشرف."}</p>
-        <button type="submit" className="rounded-xl bg-[#00FF66] py-3 text-sm font-bold text-black shadow-neon transition hover:brightness-110 active:scale-[0.98]">{t("continueLabel")}</button>
-      </form>
-    </div>
-  );
-}
-
-/* ---------------------------------------------------------
-   Pages
---------------------------------------------------------- */
-function HomePage() {
-  const { t } = useLanguage();
-  const { user, trips } = useAuth();
-  const myTrip = trips.find(tr => tr.userId === user.id) || trips[0];
-  return (
-    <div className="flex flex-col gap-6">
-      <div>
-        <p className="text-sm text-white/50">{t("welcomeBack")}</p>
-        <h1 className="font-display text-2xl font-extrabold">{user.firstName} {user.lastName}</h1>
-      </div>
-      {myTrip && <FlightStatusTracker status={myTrip.status} />}
-      <PromoCarousel />
-      <CommunityFeed />
-    </div>
-  );
-}
-
-function TripsPage() {
-  const { t } = useLanguage();
-  const { user, trips } = useAuth();
-  const myTrips = trips.filter(tr => tr.userId === user.id);
-  return (
-    <div className="flex flex-col gap-5">
-      <h1 className="font-display text-xl font-bold">{t("myTrips")}</h1>
-      {myTrips.length === 0 && <p className="text-sm text-white/50">{t("noTrips")}</p>}
-      {myTrips.map(trip => <FlightCard key={trip.id} legs={trip.legs} status={trip.status} bookingReference={trip.bookingReference} />)}
-    </div>
-  );
-}
-
-function SupportPage() {
-  const { t } = useLanguage();
-  const [messages, setMessages] = useState([{ id:1, role:"assistant", text:"Hi! Ask me anything about your booking, baggage, or flight status." }]);
-  const [input, setInput] = useState("");
-  const send = (e) => {
-    e.preventDefault();
-    if (!input.trim()) return;
-    const userMsg = { id: Date.now(), role:"user", text: input };
-    const reply = { id: Date.now()+1, role:"assistant", text: "Thanks — a Klick travel specialist will follow up shortly. For urgent flight changes, check the Status tracker on Home." };
-    setMessages(m => [...m, userMsg, reply]);
-    setInput("");
-  };
-  return (
-    <div className="flex h-[70vh] flex-col">
-      <h1 className="font-display mb-3 text-xl font-bold">{t("aiSupport")}</h1>
-      <div className="glass-panel flex-1 overflow-y-auto rounded-2xl p-4">
-        <div className="flex flex-col gap-3">
-          {messages.map(m => (
-            <div key={m.id} className={`max-w-[80%] rounded-2xl px-3 py-2 text-sm ${m.role === "user" ? "self-end bg-[#00FF66]/15 text-[#00FF66]" : "self-start bg-white/5 text-white/85"}`}>
-              {m.text}
-            </div>
-          ))}
-        </div>
-      </div>
-      <form onSubmit={send} className="mt-3 flex gap-2">
-        <input value={input} onChange={e=>setInput(e.target.value)} placeholder={t("askAi")}
-          className="flex-1 rounded-xl border border-white/10 bg-[#141A22] px-3 py-3 text-sm placeholder:text-white/30 focus:border-[#00FF66]" />
-        <button type="submit" className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#00FF66] text-black shadow-neon-sm">
-          <Icon path={I.send} size={18} />
-        </button>
-      </form>
-    </div>
-  );
-}
-
-function ProfilePage() {
-  const { t } = useLanguage();
-  const { user, updateProfile } = useAuth();
-  const [firstName, setFirstName] = useState(user.firstName);
-  const [lastName, setLastName] = useState(user.lastName);
-  const [phone, setPhone] = useState(user.phone);
-  const [savedFlash, setSavedFlash] = useState(false);
-  const save = (e) => { e.preventDefault(); updateProfile({ firstName, lastName, phone }); setSavedFlash(true); setTimeout(()=>setSavedFlash(false), 1800); };
-  return (
-    <div className="flex flex-col gap-5">
-      <h1 className="font-display text-xl font-bold">{t("editProfile")}</h1>
-      <div className="glass-panel rounded-3xl p-5">
-        <div className="flex items-center gap-3">
-          <img src={user.avatarUrl || "https://api.dicebear.com/7.x/initials/svg?seed=" + firstName} alt="" className="h-16 w-16 rounded-full object-cover ring-2 ring-[#00FF66]/40" />
-          {user.isAdmin && <span className="rounded-full border border-[#00FF66]/40 bg-[#00FF66]/10 px-2 py-1 text-[11px] font-semibold text-[#00FF66]">{t("superAdmin")}</span>}
-        </div>
-        <form onSubmit={save} className="mt-5 flex flex-col gap-3">
-          <label className="text-xs text-white/50">{t("firstName")}
-            <input value={firstName} onChange={e=>setFirstName(e.target.value)} className="mt-1 w-full rounded-xl border border-white/10 bg-[#141A22] px-3 py-2.5 text-sm focus:border-[#00FF66]" />
-          </label>
-          <label className="text-xs text-white/50">{t("lastName")}
-            <input value={lastName} onChange={e=>setLastName(e.target.value)} className="mt-1 w-full rounded-xl border border-white/10 bg-[#141A22] px-3 py-2.5 text-sm focus:border-[#00FF66]" />
-          </label>
-          <label className="text-xs text-white/50">{t("phoneNumber")}
-            <input value={phone} onChange={e=>setPhone(e.target.value)} className="mt-1 w-full rounded-xl border border-white/10 bg-[#141A22] px-3 py-2.5 text-sm focus:border-[#00FF66]" />
-          </label>
-          <button type="submit" className="mt-2 rounded-xl bg-[#00FF66] py-3 text-sm font-bold text-black shadow-neon-sm transition hover:brightness-110">
-            {savedFlash ? t("saved") : t("save")}
-          </button>
-        </form>
-      </div>
-    </div>
-  );
-}
-
-function AdminPage() {
-  const { t } = useLanguage();
-  const { users, trips, setTrips, isAdmin } = useAuth();
-  const [query, setQuery] = useState("");
-  const [selectedUserId, setSelectedUserId] = useState(null);
-
-  if (!isAdmin) return <p className="text-sm text-white/50">Not authorized.</p>;
-
-  const filtered = users.filter(u => u.phone.includes(query));
-  const selectedTrip = trips.find(tr => tr.userId === selectedUserId);
-
-  const setStatus = (phase) => {
-    if (!selectedUserId) return;
-    setTrips(list => list.map(tr => tr.userId === selectedUserId ? { ...tr, status: phase } : tr));
-  };
-
-  const removeTrip = (tripId) => setTrips(list => list.filter(tr => tr.id !== tripId));
-
-  return (
-    <div className="flex flex-col gap-6">
-      <h1 className="font-display text-xl font-bold text-gradient-neon">{t("adminDashboard")}</h1>
-
-      <div className="glass-panel rounded-2xl p-4">
-        <p className="mb-2 text-sm font-semibold text-white/70">{t("manageUsers")}</p>
-        <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-[#141A22] px-3 py-2">
-          <Icon path={I.search} size={16} className="text-white/40" />
-          <input value={query} onChange={e=>setQuery(e.target.value)} placeholder={t("searchByPhone")} className="flex-1 bg-transparent text-sm focus:outline-none" />
-        </div>
-        <div className="mt-3 flex flex-col gap-2">
-          {filtered.length === 0 && <p className="text-xs text-white/40">{t("noResults")}</p>}
-          {filtered.map(u => (
-            <button key={u.id} onClick={() => setSelectedUserId(u.id)}
-              className={`flex items-center justify-between rounded-xl border px-3 py-2 text-sm transition ${selectedUserId === u.id ? "border-[#00FF66]/50 bg-[#00FF66]/10 text-[#00FF66]" : "border-white/10 bg-white/5 text-white/80"}`}>
-              <span>{u.firstName} {u.lastName} · {u.phone}</span>
-              {u.isAdmin && <Icon path={I.shield} size={14} />}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {selectedUserId && (
-        <div className="glass-panel rounded-2xl p-4">
-          <p className="mb-3 text-sm font-semibold text-white/70">{t("statusTracker")}</p>
-          <div className="flex flex-wrap gap-2">
-            {FLIGHT_PHASES.map(phase => (
-              <button key={phase} onClick={() => setStatus(phase)}
-                className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition ${selectedTrip?.status === phase ? "border-[#00FF66] bg-[#00FF66]/15 text-[#00FF66] shadow-neon-sm" : "border-white/10 text-white/60 hover:border-white/30"}`}>
-                {t(phaseKey[phase])}
-              </button>
-            ))}
-          </div>
-
-          <p className="mb-2 mt-5 text-sm font-semibold text-white/70">{t("manageFlights")}</p>
-          {!selectedTrip && <p className="text-xs text-white/40">{t("noTrips")}</p>}
-          {selectedTrip && (
-            <div className="flex flex-col gap-2">
-              {selectedTrip.legs.map(leg => (
-                <div key={leg.id} className="flex items-center justify-between rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs">
-                  <span>{leg.flightNumber} · {leg.departureAirport} → {leg.arrivalAirport} · {t("seat")} {leg.seat}</span>
-                </div>
-              ))}
-              <button onClick={() => removeTrip(selectedTrip.id)} className="mt-1 flex w-fit items-center gap-1 rounded-lg border border-red-500/30 px-2.5 py-1.5 text-xs text-red-400 hover:bg-red-500/10">
-                <Icon path={I.trash} size={13} />Remove trip
-              </button>
-            </div>
-          )}
-        </div>
-      )}
-    </div>
-  );
-}
-
-/* ---------------------------------------------------------
-   App Shell
---------------------------------------------------------- */
-function AppShell() {
-  const [showSplash, setShowSplash] = useState(true);
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const [page, setPage] = useState("home");
-  const { user } = useAuth();
-
-  useEffect(() => { const timer = setTimeout(() => setShowSplash(false), 2500); return () => clearTimeout(timer); }, []);
-
-  if (showSplash) return <SplashScreen />;
-
-  if (!user) {
-    return (
-      <div className="flex min-h-screen flex-col">
-        <Header onOpenMenu={() => {}} />
-        <main className="mx-auto w-full max-w-md flex-1 px-4 pb-10 pt-4 sm:max-w-2xl"><PhoneLogin /></main>
-      </div>
-    );
-  }
-
-  const pages = { home:<HomePage/>, trips:<TripsPage/>, support:<SupportPage/>, profile:<ProfilePage/>, admin:<AdminPage/> };
-
-  return (
-    <div className="flex min-h-screen flex-col">
-      <Header onOpenMenu={() => setDrawerOpen(true)} />
-      <SideDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} page={page} setPage={setPage} />
-      <main className="mx-auto w-full max-w-md flex-1 px-4 pb-24 pt-4 sm:max-w-2xl">{pages[page] || pages.home}</main>
-      <BottomNav page={page} setPage={setPage} />
-    </div>
-  );
-}
-
-function App() {
-  return (
-    <LanguageProvider>
-      <AuthProvider>
-        <AppShell />
-      </AuthProvider>
-    </LanguageProvider>
-  );
-}
-
-ReactDOM.createRoot(document.getElementById("root")).render(<App />);
-</script>
 </body>
 </html>
