@@ -1293,10 +1293,18 @@
       <button type="button" class="menu-close" id="menu-close">×</button>
 
       <div class="guest-view" id="guest-view">
-        <p class="menu-title">تسجيل الدخول برقم الهاتف</p>
-        <input type="text" id="menu-name" placeholder="الاسم">
-        <input type="tel" id="menu-phone" placeholder="رقم الهاتف">
-        <button onclick="handleMenuLogin()">دخول</button>
+        <div id="login-step-phone">
+          <p class="menu-title">تسجيل الدخول برقم الهاتف</p>
+          <input type="text" id="menu-name" placeholder="الاسم">
+          <input type="tel" id="menu-phone" placeholder="رقم الهاتف (مع كود الدولة)">
+          <button onclick="handleSendOtp()" id="send-otp-btn">إرسال كود التحقق عبر واتساب</button>
+        </div>
+        <div id="login-step-code" style="display:none;">
+          <p class="menu-title" id="otp-sent-label">تم إرسال كود التحقق</p>
+          <input type="text" id="menu-otp-code" placeholder="اكتبي الكود المكوّن من 6 أرقام" inputmode="numeric" maxlength="6">
+          <button onclick="handleVerifyOtp()" id="verify-otp-btn">تأكيد الكود</button>
+          <span class="logout-link" onclick="backToPhoneStep()" style="display:block; margin-top:0.6rem;">تعديل الرقم</span>
+        </div>
         <p class="menu-error" id="menu-error"></p>
       </div>
       <div class="logged-in-view" id="logged-in-view">
@@ -1367,44 +1375,23 @@
 
     <div class="icon-item">
       <div class="icon-circle">
-        <svg viewBox="0 0 24 24"><path d="M2 12l4-4 3 3 5-5 4 4M2 12v6a2 2 0 0 0 2 2h4M22 12v6a2 2 0 0 1-2 2h-4"/></svg>
-      </div>
-      <span>MEET ME</span>
-    </div>
-
-    <div class="icon-item">
-      <div class="icon-circle">
-        <svg viewBox="0 0 24 24"><path d="M4 4h11a2 2 0 0 1 2 2v14H6a2 2 0 0 1-2-2V4z"/><path d="M17 4h1a2 2 0 0 1 2 2v14"/></svg>
-      </div>
-      <span>MY STORY</span>
-    </div>
-
-    <div class="icon-item">
-      <div class="icon-circle">
-        <svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4L8.5 15.5M14.5 14.5L20 20M8.5 8.5L14.5 14.5"/></svg>
-      </div>
-      <span>MY WORK</span>
-    </div>
-
-    <div class="icon-item">
-      <div class="icon-circle">
-        <svg viewBox="0 0 24 24"><path d="M12 3v18M16 7.5c0-1.7-1.8-3-4-3s-4 1.3-4 3 1.8 2.6 4 3 4 1.3 4 3-1.8 3-4 3-4-1.3-4-3"/></svg>
-      </div>
-      <span>PRICING</span>
-    </div>
-
-    <div class="icon-item" id="icon-book-now" style="cursor:pointer;">
-      <div class="icon-circle">
-        <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="1"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>
-      </div>
-      <span>BOOK NOW</span>
-    </div>
-
-    <div class="icon-item">
-      <div class="icon-circle">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/></svg>
       </div>
       <span>OUR HOURS</span>
+    </div>
+
+    <div class="icon-item" id="icon-my-bookings" style="cursor:pointer;">
+      <div class="icon-circle">
+        <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="1"/><path d="M3 9h18M8 3v4M16 3v4"/><path d="M8 14l2.5 2.5L16 11"/></svg>
+      </div>
+      <span>MY BOOKINGS</span>
+    </div>
+
+    <div class="icon-item">
+      <div class="icon-circle">
+        <svg viewBox="0 0 24 24"><path d="M6 8V6a6 6 0 0 1 12 0v2"/><rect x="3" y="8" width="18" height="13" rx="2"/></svg>
+      </div>
+      <span>PRODUCTS</span>
     </div>
 
   </div>
@@ -1567,7 +1554,7 @@
     openBookModal();
   });
 
-  document.getElementById('icon-book-now').addEventListener('click', openBookModal);
+  document.getElementById('icon-my-bookings').addEventListener('click', openMenu);
   document.getElementById('book-modal-close').addEventListener('click', closeBookModal);
   bookModalOverlay.addEventListener('click', (e) => {
     if (e.target === bookModalOverlay) closeBookModal();
@@ -1895,10 +1882,18 @@
     catch(e){ return null; }
   }
 
-  function handleMenuLogin(){
+  // ============ تحقق عبر واتساب (WhatsApp OTP) ============
+  // بوضع التجربة: الكود دايماً 123456. بالوضع الحقيقي: بيتصل بـ Edge Functions
+  // send-otp / verify-otp يلي بترسل وتتحقق من كود واتساب فعلي (راجعي whatsapp-otp-setup.md).
+  const DEMO_OTP_CODE = '123456';
+  let pendingLoginName = '';
+  let pendingLoginPhone = '';
+
+  async function handleSendOtp(){
     const name = document.getElementById('menu-name').value.trim();
     const phone = document.getElementById('menu-phone').value.trim();
     const errorEl = document.getElementById('menu-error');
+    const btn = document.getElementById('send-otp-btn');
 
     if (!phone){
       errorEl.textContent = 'دخّلي رقم الهاتف';
@@ -1907,7 +1902,6 @@
     }
 
     const isBarber = phone === BARBER_PHONE;
-
     if (!isBarber && !name){
       errorEl.textContent = 'دخّلي اسمك';
       errorEl.style.display = 'block';
@@ -1915,9 +1909,114 @@
     }
 
     errorEl.style.display = 'none';
-    const user = { name: isBarber ? 'محمد' : name, phone, isBarber };
-    localStorage.setItem(LS_CURRENT_USER, JSON.stringify(user));
-    applyLoggedInState(user);
+    btn.disabled = true;
+    btn.textContent = 'جاري الإرسال...';
+
+    if (DEMO_MODE){
+      pendingLoginName = name;
+      pendingLoginPhone = phone;
+      document.getElementById('otp-sent-label').textContent = `الكود التجريبي: ${DEMO_OTP_CODE}`;
+      document.getElementById('login-step-phone').style.display = 'none';
+      document.getElementById('login-step-code').style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'إرسال كود التحقق عبر واتساب';
+      return;
+    }
+
+    try{
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/send-otp`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` },
+        body: JSON.stringify({ phone })
+      });
+      const result = await res.json();
+
+      if (!res.ok || result.error){
+        errorEl.textContent = 'صار خطأ بإرسال الكود، حاولي مرة ثانية';
+        errorEl.style.display = 'block';
+      } else {
+        pendingLoginName = name;
+        pendingLoginPhone = phone;
+        document.getElementById('otp-sent-label').textContent = 'تم إرسال كود التحقق عبر واتساب';
+        document.getElementById('login-step-phone').style.display = 'none';
+        document.getElementById('login-step-code').style.display = 'block';
+      }
+    } catch(e){
+      errorEl.textContent = 'صار خطأ بإرسال الكود، حاولي مرة ثانية';
+      errorEl.style.display = 'block';
+    }
+
+    btn.disabled = false;
+    btn.textContent = 'إرسال كود التحقق عبر واتساب';
+  }
+
+  async function handleVerifyOtp(){
+    const code = document.getElementById('menu-otp-code').value.trim();
+    const errorEl = document.getElementById('menu-error');
+    const btn = document.getElementById('verify-otp-btn');
+
+    if (!code){
+      errorEl.textContent = 'دخّلي الكود';
+      errorEl.style.display = 'block';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'جاري التحقق...';
+    errorEl.style.display = 'none';
+
+    let verified = false;
+
+    if (DEMO_MODE){
+      verified = code === DEMO_OTP_CODE;
+      if (!verified){
+        errorEl.textContent = 'الكود غلط';
+        errorEl.style.display = 'block';
+      }
+    } else {
+      try{
+        const res = await fetch(`${SUPABASE_URL}/functions/v1/verify-otp`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` },
+          body: JSON.stringify({ phone: pendingLoginPhone, code })
+        });
+        const result = await res.json();
+        verified = !!result.success;
+        if (!verified){
+          errorEl.textContent = result.message || 'الكود غلط';
+          errorEl.style.display = 'block';
+        }
+      } catch(e){
+        errorEl.textContent = 'صار خطأ بالتحقق، حاولي مرة ثانية';
+        errorEl.style.display = 'block';
+      }
+    }
+
+    btn.disabled = false;
+    btn.textContent = 'تأكيد الكود';
+
+    if (verified){
+      const isBarber = pendingLoginPhone === BARBER_PHONE;
+      const user = { name: isBarber ? 'محمد' : pendingLoginName, phone: pendingLoginPhone, isBarber };
+      localStorage.setItem(LS_CURRENT_USER, JSON.stringify(user));
+      resetLoginForm();
+      applyLoggedInState(user);
+    }
+  }
+
+  function backToPhoneStep(){
+    document.getElementById('login-step-code').style.display = 'none';
+    document.getElementById('login-step-phone').style.display = 'block';
+    document.getElementById('menu-otp-code').value = '';
+    document.getElementById('menu-error').style.display = 'none';
+  }
+
+  function resetLoginForm(){
+    document.getElementById('menu-name').value = '';
+    document.getElementById('menu-phone').value = '';
+    document.getElementById('menu-otp-code').value = '';
+    document.getElementById('login-step-code').style.display = 'none';
+    document.getElementById('login-step-phone').style.display = 'block';
   }
 
   function handleMenuLogout(){
@@ -1926,8 +2025,7 @@
     loggedInView.classList.remove('show');
     adminPanel.classList.remove('show');
     document.getElementById('my-bookings').classList.remove('show');
-    document.getElementById('menu-name').value = '';
-    document.getElementById('menu-phone').value = '';
+    resetLoginForm();
   }
 
   function applyLoggedInState(user){
