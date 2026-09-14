@@ -93,6 +93,12 @@
     /* Replace with your own hero background image */
     background: url('https://plain-eeur-prod-public.komododecks.com/202609/14/Ei1iXFkXhi2EMDC5ZT9E/image.jpg') center/cover no-repeat;
     z-index:0;
+    animation:kenBurns 18s ease-in-out infinite alternate;
+  }
+
+  @keyframes kenBurns{
+    from{ transform:scale(1); }
+    to{ transform:scale(1.08); }
   }
 
   .hero-section .overlay{
@@ -100,6 +106,13 @@
     inset:0;
     background:rgba(0,0,0,0.3);
     z-index:1;
+    opacity:0;
+    animation:overlayFade 1.4s ease forwards;
+  }
+
+  @keyframes overlayFade{
+    from{ opacity:0; }
+    to{ opacity:1; }
   }
 
   .hero{
