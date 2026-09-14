@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Montserrat:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
   :root{
@@ -321,6 +322,142 @@
     text-align:center;
   }
 
+  /* ---------- BOOKING ---------- */
+  .book-section{
+    max-width:560px;
+    margin:0 auto 5rem;
+    padding:0 1.5rem;
+  }
+
+  .book-section h2{
+    font-family:'Montserrat', sans-serif;
+    font-weight:700;
+    font-size:1.4rem;
+    text-align:center;
+    margin-bottom:0.4rem;
+  }
+
+  .book-section .book-sub{
+    text-align:center;
+    font-size:0.82rem;
+    opacity:0.65;
+    margin-bottom:2rem;
+  }
+
+  .book-day-group{ margin-bottom:1.5rem; }
+
+  .book-day-title{
+    font-size:0.78rem;
+    letter-spacing:0.08em;
+    color:var(--gold-soft);
+    margin-bottom:0.7rem;
+    border-bottom:1px solid var(--line);
+    padding-bottom:0.4rem;
+  }
+
+  .book-slots{
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.6rem;
+  }
+
+  .book-slot-btn{
+    padding:0.55rem 1rem;
+    border-radius:6px;
+    border:1px solid var(--line);
+    background:rgba(255,255,255,0.03);
+    color:var(--ivory);
+    font-size:0.85rem;
+    cursor:pointer;
+    transition:border-color 0.2s ease, background 0.2s ease;
+    font-family:'Inter', sans-serif;
+  }
+
+  .book-slot-btn:hover{ border-color:var(--gold-soft); }
+
+  .book-slot-btn.selected{
+    background:var(--gold-soft);
+    color:var(--bg-dark);
+    border-color:var(--gold-soft);
+    font-weight:600;
+  }
+
+  .book-slot-btn.taken{
+    opacity:0.35;
+    text-decoration:line-through;
+    cursor:not-allowed;
+  }
+
+  .book-empty{
+    font-size:0.85rem;
+    opacity:0.6;
+    padding:1rem 0;
+    text-align:center;
+  }
+
+  #book-form{
+    margin-top:1.6rem;
+    display:none;
+    flex-direction:column;
+    gap:0.9rem;
+    background:rgba(255,255,255,0.03);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:1.4rem;
+  }
+
+  #book-form.show{ display:flex; }
+
+  #book-form label{ font-size:0.78rem; opacity:0.8; }
+
+  #book-form input{
+    width:100%;
+    padding:0.7rem 0.9rem;
+    border-radius:6px;
+    border:1px solid var(--line);
+    background:rgba(0,0,0,0.3);
+    color:var(--ivory);
+    font-size:0.9rem;
+    font-family:'Inter', sans-serif;
+  }
+
+  #book-form input:focus{ outline:1px solid var(--gold-soft); }
+
+  .book-selected-line{
+    font-size:0.85rem;
+    opacity:0.75;
+  }
+
+  #book-submit-btn{
+    margin-top:0.4rem;
+    padding:0.85rem;
+    border-radius:6px;
+    border:none;
+    background:var(--gold-soft);
+    color:var(--bg-dark);
+    font-weight:700;
+    font-size:0.9rem;
+    letter-spacing:0.05em;
+    cursor:pointer;
+    transition:background 0.2s ease, transform 0.2s ease;
+    font-family:'Inter', sans-serif;
+  }
+
+  #book-submit-btn:hover{ background:var(--gold); transform:translateY(-2px); }
+  #book-submit-btn:disabled{ opacity:0.5; cursor:not-allowed; transform:none; }
+
+  #book-msg{
+    text-align:center;
+    margin-top:1rem;
+    font-size:0.85rem;
+    padding:0.8rem;
+    border-radius:6px;
+    display:none;
+  }
+
+  #book-msg.ok{ display:block; background:rgba(123,191,138,0.12); color:#7bbf8a; }
+  #book-msg.err{ display:block; background:rgba(220,90,90,0.12); color:#e08a8a; }
+
   /* ---------- RESPONSIVE ---------- */
   @media (max-width: 860px){
     .hero{
@@ -423,6 +560,30 @@
   </div>
 </section>
 
+<section class="book-section" id="book">
+  <h2>احجزي موعدك</h2>
+  <p class="book-sub">اختاري اليوم والساعة المناسبة</p>
+
+  <div id="book-slots-container">
+    <p class="book-empty">جاري تحميل المواعيد المتاحة...</p>
+  </div>
+
+  <form id="book-form">
+    <p class="book-selected-line">الموعد المختار: <strong id="book-selected-label">—</strong></p>
+    <div>
+      <label for="book-name">الاسم</label>
+      <input id="book-name" type="text" required placeholder="اسمك الكامل">
+    </div>
+    <div>
+      <label for="book-phone">رقم الهاتف</label>
+      <input id="book-phone" type="tel" required placeholder="07xxxxxxxx">
+    </div>
+    <button type="submit" id="book-submit-btn">تأكيد الحجز</button>
+  </form>
+
+  <div id="book-msg"></div>
+</section>
+
 <script>
   const io = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -434,6 +595,202 @@
   }, { threshold: 0.2 });
 
   document.querySelectorAll('.icon-item, #looking-title').forEach(el => io.observe(el));
+</script>
+
+<script>
+  // ============ وضع تجريبي / Demo mode ============
+  // شغال حالياً ببيانات وهمية محفوظة بالمتصفح (localStorage) بدون أي Supabase حقيقي.
+  // لما تجهزي، حطي بيانات مشروعك تحت وبدّلي DEMO_MODE لـ false.
+  const DEMO_MODE = true;
+
+  const SUPABASE_URL = "https://YOUR-PROJECT.supabase.co";
+  const SUPABASE_ANON_KEY = "YOUR-ANON-PUBLIC-KEY";
+
+  const sb = DEMO_MODE ? null : supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const LS_SLOTS = 'demo_slots_v1';
+  const LS_BOOKINGS = 'demo_bookings_v1';
+  const uid = () => 'id-' + Math.random().toString(36).slice(2, 10);
+
+  const demoGetSlots = () => JSON.parse(localStorage.getItem(LS_SLOTS) || '[]');
+  const demoSetSlots = (arr) => { localStorage.setItem(LS_SLOTS, JSON.stringify(arr)); window.dispatchEvent(new Event('demo-sync')); };
+  const demoGetBookings = () => JSON.parse(localStorage.getItem(LS_BOOKINGS) || '[]');
+  const demoSetBookings = (arr) => { localStorage.setItem(LS_BOOKINGS, JSON.stringify(arr)); window.dispatchEvent(new Event('demo-sync')); };
+
+  function demoSeedIfEmpty(){
+    if (demoGetSlots().length > 0) return;
+    const slots = [];
+    const today = new Date();
+    for (let dayOffset = 0; dayOffset < 5; dayOffset++){
+      const d = new Date(today);
+      d.setDate(d.getDate() + dayOffset);
+      const dateStr = d.toISOString().split('T')[0];
+      for (let h = 10; h < 18; h++){
+        slots.push({ id: uid(), slot_date: dateStr, slot_time: `${String(h).padStart(2,'0')}:00:00`, status: 'available' });
+        slots.push({ id: uid(), slot_date: dateStr, slot_time: `${String(h).padStart(2,'0')}:30:00`, status: 'available' });
+      }
+    }
+    if (slots[3]) slots[3].status = 'booked';
+    if (slots[9]) slots[9].status = 'booked';
+    demoSetSlots(slots);
+  }
+
+  function demoBookSlot(slotId, name, phone){
+    const slots = demoGetSlots();
+    const slot = slots.find(s => s.id === slotId);
+    if (!slot || slot.status !== 'available'){
+      return { success: false, message: 'هذه الساعة تم حجزها لتوّها من شخص آخر' };
+    }
+    slot.status = 'booked';
+    demoSetSlots(slots);
+    const bookings = demoGetBookings();
+    const booking = { id: uid(), slot_id: slotId, customer_name: name, customer_phone: phone, status: 'pending', created_at: new Date().toISOString() };
+    bookings.push(booking);
+    demoSetBookings(bookings);
+    return { success: true, message: 'تم الحجز بنجاح (تجريبي)، بانتظار تأكيد الحلاق' };
+  }
+
+  if (DEMO_MODE) demoSeedIfEmpty();
+
+  let selectedSlotId = null;
+
+  const bookContainer = document.getElementById('book-slots-container');
+  const bookForm = document.getElementById('book-form');
+  const bookMsg = document.getElementById('book-msg');
+  const bookSubmitBtn = document.getElementById('book-submit-btn');
+
+  const dayNames = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+
+  function formatSlotTime(t){
+    const [h, m] = t.split(':');
+    const hour = parseInt(h,10);
+    const period = hour >= 12 ? 'م' : 'ص';
+    const hour12 = ((hour % 12) || 12);
+    return `${hour12}:${m} ${period}`;
+  }
+
+  async function loadBookSlots(){
+    let data, error;
+
+    if (DEMO_MODE){
+      const today = new Date().toISOString().split('T')[0];
+      data = demoGetSlots()
+        .filter(s => s.slot_date >= today)
+        .sort((a,b) => (a.slot_date + a.slot_time).localeCompare(b.slot_date + b.slot_time));
+    } else {
+      const today = new Date().toISOString().split('T')[0];
+      const res = await sb.from('slots').select('*')
+        .gte('slot_date', today)
+        .order('slot_date', { ascending: true })
+        .order('slot_time', { ascending: true });
+      data = res.data; error = res.error;
+    }
+
+    if (error){
+      bookContainer.innerHTML = `<p class="book-empty">صار خطأ بتحميل المواعيد. تأكدي من إعداد Supabase.</p>`;
+      console.error(error);
+      return;
+    }
+
+    if (!data || data.length === 0){
+      bookContainer.innerHTML = `<p class="book-empty">ما في مواعيد متاحة حالياً، تواصلي معنا مباشرة.</p>`;
+      return;
+    }
+
+    const byDay = {};
+    data.forEach(slot => {
+      if (!byDay[slot.slot_date]) byDay[slot.slot_date] = [];
+      byDay[slot.slot_date].push(slot);
+    });
+
+    bookContainer.innerHTML = '';
+    Object.keys(byDay).forEach(date => {
+      const d = new Date(date + 'T00:00:00');
+      const dayLabel = `${dayNames[d.getDay()]} — ${date}`;
+
+      const group = document.createElement('div');
+      group.className = 'book-day-group';
+      group.innerHTML = `<div class="book-day-title">${dayLabel}</div>`;
+
+      const slotsWrap = document.createElement('div');
+      slotsWrap.className = 'book-slots';
+
+      byDay[date].forEach(slot => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'book-slot-btn' + (slot.status === 'booked' ? ' taken' : '');
+        btn.textContent = formatSlotTime(slot.slot_time);
+        btn.disabled = slot.status === 'booked';
+        btn.onclick = () => selectBookSlot(slot.id, `${dayLabel} — ${formatSlotTime(slot.slot_time)}`, btn);
+        slotsWrap.appendChild(btn);
+      });
+
+      group.appendChild(slotsWrap);
+      bookContainer.appendChild(group);
+    });
+  }
+
+  function selectBookSlot(id, label, btnEl){
+    document.querySelectorAll('.book-slot-btn.selected').forEach(b => b.classList.remove('selected'));
+    btnEl.classList.add('selected');
+    selectedSlotId = id;
+    document.getElementById('book-selected-label').textContent = label;
+    bookForm.classList.add('show');
+    bookMsg.className = '';
+    bookMsg.textContent = '';
+  }
+
+  bookForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!selectedSlotId) return;
+
+    const name = document.getElementById('book-name').value.trim();
+    const phone = document.getElementById('book-phone').value.trim();
+    if (!name || !phone) return;
+
+    bookSubmitBtn.disabled = true;
+    bookSubmitBtn.textContent = 'جاري الحجز...';
+
+    let result;
+    if (DEMO_MODE){
+      result = demoBookSlot(selectedSlotId, name, phone);
+    } else {
+      const { data, error } = await sb.rpc('book_slot', {
+        p_slot_id: selectedSlotId,
+        p_customer_name: name,
+        p_customer_phone: phone
+      });
+      result = (!error && data && data[0]) ? data[0] : { success: false, message: 'صار خطأ، حاولي مرة ثانية' };
+    }
+
+    bookSubmitBtn.disabled = false;
+    bookSubmitBtn.textContent = 'تأكيد الحجز';
+
+    if (!result.success){
+      bookMsg.className = 'err';
+      bookMsg.textContent = result.message;
+      loadBookSlots();
+      return;
+    }
+
+    bookMsg.className = 'ok';
+    bookMsg.textContent = result.message;
+    bookForm.classList.remove('show');
+    bookForm.reset();
+    selectedSlotId = null;
+    loadBookSlots();
+  });
+
+  if (DEMO_MODE){
+    window.addEventListener('demo-sync', loadBookSlots);
+    window.addEventListener('storage', loadBookSlots);
+  } else {
+    sb.channel('slots-realtime')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'slots' }, loadBookSlots)
+      .subscribe();
+  }
+
+  loadBookSlots();
 </script>
 </body>
 </html>
