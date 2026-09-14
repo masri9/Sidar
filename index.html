@@ -1487,6 +1487,7 @@
 
   <div class="admin-card">
     <h3>طلبات الحجز</h3>
+    <button type="button" id="notify-permission-btn" class="admin-action-btn" style="margin-bottom:0.8rem;" onclick="requestNotificationPermission()">فعّلي إشعارات المتصفح</button>
     <a id="whatsapp-remind" class="whatsapp-btn" href="#" target="_blank">أرسلي تذكير عبر واتساب</a>
     <div id="bookings-list"></div>
   </div>
@@ -1938,6 +1939,8 @@
     if (user.isBarber){
       adminPanel.classList.add('show');
       initAdminPanel();
+      seedNotifiedBaselineIfNeeded();
+      requestNotificationPermission();
       loadAdminBookings();
       renderGalleryAdminList();
     } else {
@@ -2112,6 +2115,67 @@
   // ⚠️ رقمك على واتساب (بالصيغة الدولية بدون +) لاستقبال التذكيرات
   const BARBER_WHATSAPP = "9627xxxxxxxx";
 
+  // ============ إشعارات المتصفح (Push) لطلبات الحجز الجديدة ============
+  const LS_NOTIFIED = 'notified_booking_ids_v1';
+
+  function getNotifiedIds(){
+    try{ return new Set(JSON.parse(localStorage.getItem(LS_NOTIFIED) || '[]')); }
+    catch(e){ return new Set(); }
+  }
+
+  function addNotifiedId(id){
+    const s = getNotifiedIds();
+    s.add(id);
+    localStorage.setItem(LS_NOTIFIED, JSON.stringify([...s]));
+  }
+
+  function seedNotifiedBaselineIfNeeded(){
+    if (localStorage.getItem('notif_baseline_set_v1')) return;
+    const pending = (DEMO_MODE ? demoGetBookings() : []).filter(b => b.status === 'pending');
+    pending.forEach(b => addNotifiedId(b.id));
+    localStorage.setItem('notif_baseline_set_v1', '1');
+  }
+
+  function requestNotificationPermission(){
+    if (!('Notification' in window)) return;
+    if (Notification.permission === 'default'){
+      Notification.requestPermission().then(updateNotifyBtnLabel);
+    }
+    updateNotifyBtnLabel();
+  }
+
+  function updateNotifyBtnLabel(){
+    const btn = document.getElementById('notify-permission-btn');
+    if (!btn || !('Notification' in window)) return;
+    if (Notification.permission === 'granted'){
+      btn.textContent = 'إشعارات المتصفح مفعّلة ✓';
+      btn.disabled = true;
+    } else if (Notification.permission === 'denied'){
+      btn.textContent = 'الإشعارات محظورة من إعدادات المتصفح';
+      btn.disabled = true;
+    } else {
+      btn.textContent = 'فعّلي إشعارات المتصفح';
+      btn.disabled = false;
+    }
+  }
+
+  function notifyNewBookings(bookings){
+    if (!('Notification' in window) || Notification.permission !== 'granted') return;
+    const notified = getNotifiedIds();
+    bookings
+      .filter(b => b.status === 'pending' && !notified.has(b.id))
+      .forEach(b => {
+        const dateLabel = b.slots ? `${b.slots.slot_date} — ${b.slots.slot_time.slice(0,5)}` : '';
+        try{
+          new Notification('طلب حجز جديد 💈', {
+            body: `${b.customer_name} — ${dateLabel}`,
+            tag: b.id
+          });
+        } catch(e){ /* ignore */ }
+        addNotifiedId(b.id);
+      });
+  }
+
   async function loadAdminBookings(){
     let data, error;
 
@@ -2132,6 +2196,8 @@
     const list = document.getElementById('bookings-list');
     if (error){ list.innerHTML = '<p class="admin-empty">صار خطأ بتحميل الحجوزات</p>'; return; }
     if (!data || data.length === 0){ list.innerHTML = '<p class="admin-empty">ما في طلبات حجز حالياً</p>'; return; }
+
+    notifyNewBookings(data);
 
     list.innerHTML = '';
     data.forEach(b => {
