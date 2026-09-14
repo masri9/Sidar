@@ -452,64 +452,145 @@
   #book-msg.ok{ display:block; background:rgba(123,191,138,0.12); color:#7bbf8a; }
   #book-msg.err{ display:block; background:rgba(220,90,90,0.12); color:#e08a8a; }
 
-  /* ---------- LOGIN GATE (barber vs customer, by phone) ---------- */
-  .login-gate{
-    max-width:340px;
-    margin:0 auto 5rem;
-    padding:0 1.5rem;
-    text-align:center;
+  /* ---------- HEADER MENU (phone login + contact) ---------- */
+  header{
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:space-between;
+    padding:1.5rem 1.5rem 0;
   }
 
-  .login-gate .toggle-link{
-    font-size:0.78rem;
-    color:var(--gold-soft);
-    opacity:0.7;
-    cursor:pointer;
-    letter-spacing:0.04em;
-  }
+  .header-spacer{ width:34px; }
 
-  .login-gate .toggle-link:hover{ opacity:1; }
+  .menu-wrap{ position:relative; }
 
-  .login-box{
-    display:none;
+  .menu-btn{
+    display:flex;
     flex-direction:column;
-    gap:0.7rem;
-    margin-top:1rem;
-    background:rgba(255,255,255,0.03);
+    align-items:flex-end;
+    gap:6px;
+    cursor:pointer;
+    padding:6px;
+  }
+
+  .menu-btn .bar{
+    height:6px;
+    border-radius:3px;
+    background:var(--ivory);
+    transition:background 0.2s ease;
+  }
+
+  .menu-btn:hover .bar{ background:var(--gold-soft); }
+
+  .menu-btn .bar1{ width:22px; }
+  .menu-btn .bar2{ width:30px; }
+  .menu-btn .bar3{ width:16px; }
+
+  .menu-dropdown{
+    display:none;
+    position:absolute;
+    top:calc(100% + 14px);
+    right:0;
+    width:260px;
+    background:#161616;
     border:1px solid var(--line);
     border-radius:10px;
-    padding:1.2rem;
+    padding:1.1rem;
+    box-shadow:0 20px 45px rgba(0,0,0,0.5);
+    z-index:200;
   }
 
-  .login-box.show{ display:flex; }
+  .menu-dropdown.show{ display:block; }
 
-  .login-box input{
-    padding:0.65rem 0.9rem;
+  .menu-dropdown .menu-title{
+    font-size:0.78rem;
+    color:var(--gold-soft);
+    margin-bottom:0.8rem;
+    letter-spacing:0.03em;
+  }
+
+  .menu-dropdown input{
+    width:100%;
+    padding:0.6rem 0.8rem;
+    margin-bottom:0.6rem;
     border-radius:6px;
     border:1px solid var(--line);
     background:rgba(0,0,0,0.3);
     color:var(--ivory);
-    font-size:0.85rem;
+    font-size:0.82rem;
     font-family:'Inter', sans-serif;
-    text-align:center;
   }
 
-  .login-box button{
-    padding:0.7rem;
+  .menu-dropdown button{
+    width:100%;
+    padding:0.65rem;
     border-radius:6px;
     border:none;
     background:var(--gold-soft);
     color:var(--bg-dark);
     font-weight:700;
-    font-size:0.85rem;
+    font-size:0.82rem;
     cursor:pointer;
     font-family:'Inter', sans-serif;
   }
 
-  .login-box .login-error{
-    font-size:0.75rem;
+  .menu-dropdown .menu-error{
+    font-size:0.72rem;
     color:#e08a8a;
     display:none;
+    margin-top:0.5rem;
+    text-align:center;
+  }
+
+  .menu-dropdown .logged-in-view{ display:none; text-align:center; }
+  .menu-dropdown .logged-in-view.show{ display:block; }
+  .menu-dropdown .guest-view.hide{ display:none; }
+
+  .menu-dropdown .welcome-name{
+    font-size:0.85rem;
+    margin-bottom:0.8rem;
+  }
+
+  .menu-dropdown .logout-link{
+    font-size:0.75rem;
+    opacity:0.6;
+    cursor:pointer;
+  }
+
+  .menu-dropdown .logout-link:hover{ opacity:1; }
+
+  .menu-divider{
+    border:none;
+    border-top:1px solid var(--line);
+    margin:1rem 0;
+  }
+
+  .menu-contact{
+    display:flex;
+    flex-direction:column;
+    gap:0.7rem;
+  }
+
+  .menu-contact a{
+    display:flex;
+    align-items:center;
+    gap:0.6rem;
+    font-size:0.8rem;
+    color:var(--ivory);
+    opacity:0.85;
+    transition:opacity 0.2s ease, color 0.2s ease;
+  }
+
+  .menu-contact a:hover{ opacity:1; color:var(--gold-soft); }
+
+  .menu-contact svg{
+    width:16px;
+    height:16px;
+    stroke:var(--gold-soft);
+    fill:none;
+    stroke-width:1.8;
+    flex-shrink:0;
   }
 
   /* ---------- ADMIN PANEL ---------- */
@@ -872,7 +953,47 @@
 <body>
 
 <header>
+  <div class="header-spacer" aria-hidden="true"></div>
   <div class="logo">mhmed barber</div>
+
+  <div class="menu-wrap">
+    <div class="menu-btn" id="menu-btn">
+      <div class="bar bar1"></div>
+      <div class="bar bar2"></div>
+      <div class="bar bar3"></div>
+    </div>
+
+    <div class="menu-dropdown" id="menu-dropdown">
+      <div class="guest-view" id="guest-view">
+        <p class="menu-title">تسجيل الدخول برقم الهاتف</p>
+        <input type="text" id="menu-name" placeholder="الاسم">
+        <input type="tel" id="menu-phone" placeholder="رقم الهاتف">
+        <button onclick="handleMenuLogin()">دخول</button>
+        <p class="menu-error" id="menu-error"></p>
+      </div>
+      <div class="logged-in-view" id="logged-in-view">
+        <p class="welcome-name" id="welcome-name"></p>
+        <span class="logout-link" onclick="handleMenuLogout()">تسجيل خروج</span>
+      </div>
+
+      <hr class="menu-divider">
+
+      <div class="menu-contact">
+        <a href="tel:+972548896678">
+          <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          اتصال +972 54-889-6678
+        </a>
+        <a href="https://wa.me/972548896678" target="_blank">
+          <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+          واتساب
+        </a>
+        <a href="https://instagram.com/mhmd_msree77" target="_blank">
+          <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.8" fill="var(--gold-soft)" stroke="none"/></svg>
+          instagram.com/mhmd_msree77
+        </a>
+      </div>
+    </div>
+  </div>
 </header>
 
 <section class="hero-section">
@@ -988,15 +1109,6 @@
   </div>
 </div>
 
-<div class="login-gate">
-  <span class="toggle-link" id="login-toggle">تسجيل دخول الحلاق</span>
-  <div class="login-box" id="login-box">
-    <input type="tel" id="admin-phone" placeholder="رقم هاتفك">
-    <button onclick="loginAsBarber()">دخول</button>
-    <span class="login-error" id="login-error">هذا الرقم مش مسجل كمسؤول</span>
-  </div>
-</div>
-
 <section id="admin-panel">
   <h2>لوحة التحكم</h2>
   <p class="admin-sub">أهلاً محمد، هون بتدير مواعيدك وطلبات الحجز</p>
@@ -1036,24 +1148,10 @@
     <div id="bookings-list"></div>
   </div>
 
-  <span class="admin-logout" onclick="logoutBarber()">تسجيل خروج</span>
+  <span class="admin-logout" onclick="handleMenuLogout()">تسجيل خروج</span>
 </section>
 
 <footer>
-  <div class="footer-contact">
-    <a href="tel:+972548896678">
-      <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-      اتصال
-    </a>
-    <a href="https://wa.me/972548896678" target="_blank">
-      <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-      واتساب
-    </a>
-    <a href="https://instagram.com/mhmd_msree77" target="_blank">
-      <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.8" fill="var(--gold-soft)" stroke="none"/></svg>
-      انستقرام
-    </a>
-  </div>
   <p class="copyright">© 2026 mhmed barber. جميع الحقوق محفوظة.</p>
 </footer>
 
@@ -1074,6 +1172,15 @@
 
   function openBookModal(){
     bookModalOverlay.classList.add('show');
+    const user = typeof getCurrentUser === 'function' ? getCurrentUser() : null;
+    if (user){
+      const nameInput = document.getElementById('book-name');
+      const phoneInput = document.getElementById('book-phone');
+      if (nameInput && phoneInput){
+        nameInput.value = user.name;
+        phoneInput.value = user.phone;
+      }
+    }
   }
 
   function closeBookModal(){
@@ -1358,47 +1465,91 @@
 
   loadBookSlots();
 
-  // ============ تمييز الحلاق (admin) عن الزبون عن طريق رقم الهاتف ============
-  // ⚠️ حطي رقم هاتف الحلاق الحقيقي هون. أي رقم غيره بيضل زبون عادي.
+  // ============ تسجيل الدخول برقم الهاتف (من قائمة الهيدر) ============
+  // ⚠️ حطي رقم هاتف الحلاق الحقيقي هون — أي رقم غيره بيسجل كزبون عادي.
   const BARBER_PHONE = "0791234567";
-  const LS_SESSION = 'barber_session_v1';
+  const LS_CURRENT_USER = 'current_user_v1'; // { name, phone, isBarber }
 
-  const loginToggle = document.getElementById('login-toggle');
-  const loginBox = document.getElementById('login-box');
+  const menuBtn = document.getElementById('menu-btn');
+  const menuDropdown = document.getElementById('menu-dropdown');
+  const guestView = document.getElementById('guest-view');
+  const loggedInView = document.getElementById('logged-in-view');
   const adminPanel = document.getElementById('admin-panel');
-  const loginGate = document.querySelector('.login-gate');
 
-  loginToggle.addEventListener('click', () => loginBox.classList.toggle('show'));
+  menuBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    menuDropdown.classList.toggle('show');
+  });
 
-  function loginAsBarber(){
-    const phone = document.getElementById('admin-phone').value.trim();
-    const errorEl = document.getElementById('login-error');
+  document.addEventListener('click', (e) => {
+    if (!menuDropdown.contains(e.target) && e.target !== menuBtn){
+      menuDropdown.classList.remove('show');
+    }
+  });
 
-    if (phone !== BARBER_PHONE){
+  function getCurrentUser(){
+    try{ return JSON.parse(localStorage.getItem(LS_CURRENT_USER) || 'null'); }
+    catch(e){ return null; }
+  }
+
+  function handleMenuLogin(){
+    const name = document.getElementById('menu-name').value.trim();
+    const phone = document.getElementById('menu-phone').value.trim();
+    const errorEl = document.getElementById('menu-error');
+
+    if (!phone){
+      errorEl.textContent = 'دخّلي رقم الهاتف';
+      errorEl.style.display = 'block';
+      return;
+    }
+
+    const isBarber = phone === BARBER_PHONE;
+
+    if (!isBarber && !name){
+      errorEl.textContent = 'دخّلي اسمك';
       errorEl.style.display = 'block';
       return;
     }
 
     errorEl.style.display = 'none';
-    localStorage.setItem(LS_SESSION, '1');
-    enterAdminMode();
+    const user = { name: isBarber ? 'محمد' : name, phone, isBarber };
+    localStorage.setItem(LS_CURRENT_USER, JSON.stringify(user));
+    applyLoggedInState(user);
   }
 
-  function logoutBarber(){
-    localStorage.removeItem(LS_SESSION);
+  function handleMenuLogout(){
+    localStorage.removeItem(LS_CURRENT_USER);
+    guestView.classList.remove('hide');
+    loggedInView.classList.remove('show');
     adminPanel.classList.remove('show');
-    loginGate.style.display = 'block';
+    document.getElementById('menu-name').value = '';
+    document.getElementById('menu-phone').value = '';
   }
 
-  function enterAdminMode(){
-    loginGate.style.display = 'none';
-    adminPanel.classList.add('show');
-    initAdminPanel();
-    loadAdminBookings();
+  function applyLoggedInState(user){
+    guestView.classList.add('hide');
+    loggedInView.classList.add('show');
+    document.getElementById('welcome-name').textContent = `أهلاً ${user.name}`;
+    menuDropdown.classList.remove('show');
+
+    if (user.isBarber){
+      adminPanel.classList.add('show');
+      initAdminPanel();
+      loadAdminBookings();
+    }
+
+    // pre-fill booking form with the logged-in identity
+    const nameInput = document.getElementById('book-name');
+    const phoneInput = document.getElementById('book-phone');
+    if (nameInput && phoneInput){
+      nameInput.value = user.name;
+      phoneInput.value = user.phone;
+    }
   }
 
   // stay logged in across refreshes (same browser)
-  if (localStorage.getItem(LS_SESSION) === '1') enterAdminMode();
+  const existingUser = getCurrentUser();
+  if (existingUser) applyLoggedInState(existingUser);
 
   let adminInitDone = false;
   let selectedDays = new Set([0,1,2,3,4,5,6]);
