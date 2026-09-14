@@ -367,6 +367,7 @@
   .icon-item.in-view:nth-child(6){ transition-delay:0.5s; }
 
   .icon-circle{
+    position:relative;
     width:72px;
     height:72px;
     border-radius:50%;
@@ -376,6 +377,43 @@
     align-items:center;
     justify-content:center;
     transition:border-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .notif-dot{
+    display:none;
+    position:absolute;
+    top:2px;
+    right:2px;
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    background:#e05555;
+    border:2px solid var(--bg-dark);
+  }
+
+  .notif-dot.show{ display:block; }
+
+  .toast-message{
+    position:fixed;
+    bottom:2rem;
+    left:50%;
+    transform:translateX(-50%);
+    background:#161616;
+    border:1px solid var(--line);
+    color:var(--ivory);
+    padding:0.8rem 1.4rem;
+    border-radius:30px;
+    font-size:0.82rem;
+    z-index:500;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity 0.25s ease, transform 0.25s ease;
+    white-space:nowrap;
+  }
+
+  .toast-message.show{
+    opacity:1;
+    transform:translateX(-50%) translateY(-8px);
   }
 
   .icon-item:hover .icon-circle{
@@ -1444,22 +1482,16 @@
     <div class="icon-item" id="icon-hours" style="cursor:pointer;">
       <div class="icon-circle">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/></svg>
+        <span class="notif-dot" id="hours-notif-dot"></span>
       </div>
       <span>OUR HOURS</span>
     </div>
 
-    <div class="icon-item" id="icon-my-bookings" style="cursor:pointer;">
-      <div class="icon-circle">
-        <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="1"/><path d="M3 9h18M8 3v4M16 3v4"/><path d="M8 14l2.5 2.5L16 11"/></svg>
-      </div>
-      <span>MY BOOKINGS</span>
-    </div>
-
-    <div class="icon-item">
+    <div class="icon-item" id="icon-services" style="cursor:pointer;">
       <div class="icon-circle">
         <svg viewBox="0 0 24 24"><path d="M6 8V6a6 6 0 0 1 12 0v2"/><rect x="3" y="8" width="18" height="13" rx="2"/></svg>
       </div>
-      <span>PRODUCTS</span>
+      <span>SERVICES</span>
     </div>
 
   </div>
@@ -1594,8 +1626,16 @@
       <li><span>الجمعة</span><span>11:00 ص – 9:00 م</span></li>
       <li><span>السبت</span><span>1:30 م – 9:00 م</span></li>
     </ul>
+
+    <div class="my-bookings" id="hours-my-bookings">
+      <hr class="menu-divider">
+      <h4>حجوزاتي</h4>
+      <div id="hours-my-bookings-list"></div>
+    </div>
   </div>
 </div>
+
+<div class="toast-message" id="toast-message"></div>
 
 <footer>
   <p class="copyright">© 2026 mhmed barber. جميع الحقوق محفوظة.</p>
@@ -1638,13 +1678,19 @@
     openBookModal();
   });
 
-  document.getElementById('icon-my-bookings').addEventListener('click', openMenu);
-
-  // ---- hours modal ----
+  // ---- hours modal (also shows "my bookings" for logged-in customers) ----
   const hoursModalOverlay = document.getElementById('hours-modal-overlay');
 
   document.getElementById('icon-hours').addEventListener('click', () => {
     hoursModalOverlay.classList.add('show');
+    const user = typeof getCurrentUser === 'function' ? getCurrentUser() : null;
+    const hoursBookingsBlock = document.getElementById('hours-my-bookings');
+    if (user && !user.isBarber){
+      hoursBookingsBlock.classList.add('show');
+      if (typeof loadMyBookings === 'function') loadMyBookings();
+    } else {
+      hoursBookingsBlock.classList.remove('show');
+    }
   });
 
   document.getElementById('hours-modal-close').addEventListener('click', () => {
@@ -1654,6 +1700,15 @@
   hoursModalOverlay.addEventListener('click', (e) => {
     if (e.target === hoursModalOverlay) hoursModalOverlay.classList.remove('show');
   });
+
+  // ---- services icon: coming soon ----
+  document.getElementById('icon-services').addEventListener('click', () => {
+    const toast = document.getElementById('toast-message');
+    toast.textContent = 'قريباً 💈';
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2000);
+  });
+
   document.getElementById('book-modal-close').addEventListener('click', closeBookModal);
   bookModalOverlay.addEventListener('click', (e) => {
     if (e.target === bookModalOverlay) closeBookModal();
@@ -1661,13 +1716,15 @@
 </script>
 
 <script>
-  // ============ وضع تجريبي / Demo mode ============
-  // شغال حالياً ببيانات وهمية محفوظة بالمتصفح (localStorage) بدون أي Supabase حقيقي.
-  // لما تجهزي، حطي بيانات مشروعك تحت وبدّلي DEMO_MODE لـ false.
-  const DEMO_MODE = true;
+  // ============ Supabase متصل — بيانات المواعيد والحجوزات حقيقية ============
+  const DEMO_MODE = false;
 
-  const SUPABASE_URL = "https://YOUR-PROJECT.supabase.co";
-  const SUPABASE_ANON_KEY = "YOUR-ANON-PUBLIC-KEY";
+  // تسجيل الدخول لسا بوضع تجريبي (الكود دايماً 123456) لحد ما نفعّل واتساب Business
+  const OTP_DEMO_MODE = true;
+
+  // معرض الأعمال لسا بوضع تجريبي (مش له جدول حقيقي بقاعدة البيانات بعد)
+  const GALLERY_DEMO_MODE = true;
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpybnN3c3ZvcmNrcmJvanBoc2FvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk0MTIzMTcsImV4cCI6MjEwNDk4ODMxN30.VFZbgCalfEvzYFJFob4bfmfFjVM-j01rwY7MeeEpsOc";
 
   const sb = DEMO_MODE ? null : supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -1725,7 +1782,7 @@
   }
 
   if (DEMO_MODE) demoSeedIfEmpty();
-  if (DEMO_MODE) demoSeedGalleryIfEmpty();
+  if (GALLERY_DEMO_MODE) demoSeedGalleryIfEmpty();
 
   let selectedSlotId = null;
   let allSlotsData = [];
@@ -2011,7 +2068,7 @@
     btn.disabled = true;
     btn.textContent = 'جاري الإرسال...';
 
-    if (DEMO_MODE){
+    if (OTP_DEMO_MODE){
       pendingLoginName = name;
       pendingLoginPhone = phone;
       document.getElementById('otp-sent-label').textContent = `الكود التجريبي: ${DEMO_OTP_CODE}`;
@@ -2066,7 +2123,7 @@
 
     let verified = false;
 
-    if (DEMO_MODE){
+    if (OTP_DEMO_MODE){
       verified = code === DEMO_OTP_CODE;
       if (!verified){
         errorEl.textContent = 'الكود غلط';
@@ -2154,17 +2211,8 @@
     }
   }
 
-  function loadMyBookings(){
-    const user = getCurrentUser();
-    const listEl = document.getElementById('my-bookings-list');
-    if (!user || user.isBarber || !listEl) return;
-
-    const slots = DEMO_MODE ? demoGetSlots() : [];
-    const myBookings = (DEMO_MODE ? demoGetBookings() : [])
-      .filter(b => b.customer_phone === user.phone && b.status !== 'cancelled')
-      .sort((a,b) => new Date(b.created_at) - new Date(a.created_at))
-      .map(b => ({ ...b, slots: slots.find(s => s.id === b.slot_id) || null }));
-
+  function renderBookingsInto(listEl, myBookings){
+    if (!listEl) return;
     if (myBookings.length === 0){
       listEl.innerHTML = '<p class="my-bookings-empty">ما عندك مواعيد حالياً</p>';
       return;
@@ -2193,7 +2241,41 @@
     });
   }
 
-  function customerCancelBooking(id){
+  async function loadMyBookings(){
+    const user = getCurrentUser();
+    const listEl = document.getElementById('my-bookings-list');
+    const hoursListEl = document.getElementById('hours-my-bookings-list');
+    const notifDot = document.getElementById('hours-notif-dot');
+    if (!user || user.isBarber){
+      if (notifDot) notifDot.classList.remove('show');
+      return;
+    }
+
+    let myBookings;
+
+    if (DEMO_MODE){
+      const slots = demoGetSlots();
+      myBookings = demoGetBookings()
+        .filter(b => b.customer_phone === user.phone && b.status !== 'cancelled')
+        .sort((a,b) => new Date(b.created_at) - new Date(a.created_at))
+        .map(b => ({ ...b, slots: slots.find(s => s.id === b.slot_id) || null }));
+    } else {
+      const { data, error } = await sb.from('bookings')
+        .select('*, slots(slot_date, slot_time)')
+        .eq('customer_phone', user.phone)
+        .neq('status', 'cancelled')
+        .order('created_at', { ascending: false });
+      myBookings = error ? [] : data;
+    }
+
+    renderBookingsInto(listEl, myBookings);
+    renderBookingsInto(hoursListEl, myBookings);
+
+    const hasActive = myBookings.some(b => b.status === 'pending' || b.status === 'confirmed');
+    if (notifDot) notifDot.classList.toggle('show', hasActive);
+  }
+
+  async function customerCancelBooking(id){
     if (DEMO_MODE){
       const bookings = demoGetBookings();
       const b = bookings.find(x => x.id === id);
@@ -2205,12 +2287,16 @@
       if (slot) slot.status = 'available';
       demoSetSlots(slots);
       loadMyBookings();
+      return;
     }
+
+    const { error } = await sb.rpc('cancel_booking', { p_booking_id: id, p_new_status: 'cancelled' });
+    if (!error) loadMyBookings();
   }
 
-  function customerEditBooking(id){
+  async function customerEditBooking(id){
     // free the current slot and cancel this booking, then let them pick a new time
-    customerCancelBooking(id);
+    await customerCancelBooking(id);
     closeMenu();
     openBookModal();
   }
@@ -2462,7 +2548,7 @@
   function renderGallery(){
     const grid = document.getElementById('gallery-grid');
     if (!grid) return;
-    const items = DEMO_MODE ? demoGetGallery() : [];
+    const items = GALLERY_DEMO_MODE ? demoGetGallery() : [];
 
     if (!items || items.length === 0){
       grid.innerHTML = '<p class="gallery-empty">ما في أعمال مضافة بعد</p>';
@@ -2517,7 +2603,7 @@
       return;
     }
 
-    if (DEMO_MODE){
+    if (GALLERY_DEMO_MODE){
       const items = demoGetGallery();
       items.unshift({ id: uid(), type, url });
       demoSetGallery(items);
@@ -2529,7 +2615,7 @@
   }
 
   function deleteGalleryItem(id){
-    if (DEMO_MODE){
+    if (GALLERY_DEMO_MODE){
       const items = demoGetGallery().filter(i => i.id !== id);
       demoSetGallery(items);
       renderGalleryAdminList();
@@ -2539,7 +2625,7 @@
   function renderGalleryAdminList(){
     const list = document.getElementById('gallery-admin-list');
     if (!list) return;
-    const items = DEMO_MODE ? demoGetGallery() : [];
+    const items = GALLERY_DEMO_MODE ? demoGetGallery() : [];
 
     if (!items || items.length === 0){
       list.innerHTML = '<p class="admin-empty">ما في عناصر بالمعرض</p>';
@@ -2564,7 +2650,7 @@
 
   renderGallery();
 
-  if (DEMO_MODE){
+  if (GALLERY_DEMO_MODE){
     window.addEventListener('demo-sync', renderGallery);
     window.addEventListener('storage', renderGallery);
   }
