@@ -458,6 +458,200 @@
   #book-msg.ok{ display:block; background:rgba(123,191,138,0.12); color:#7bbf8a; }
   #book-msg.err{ display:block; background:rgba(220,90,90,0.12); color:#e08a8a; }
 
+  /* ---------- LOGIN GATE (barber vs customer, by phone) ---------- */
+  .login-gate{
+    max-width:340px;
+    margin:0 auto 5rem;
+    padding:0 1.5rem;
+    text-align:center;
+  }
+
+  .login-gate .toggle-link{
+    font-size:0.78rem;
+    color:var(--gold-soft);
+    opacity:0.7;
+    cursor:pointer;
+    letter-spacing:0.04em;
+  }
+
+  .login-gate .toggle-link:hover{ opacity:1; }
+
+  .login-box{
+    display:none;
+    flex-direction:column;
+    gap:0.7rem;
+    margin-top:1rem;
+    background:rgba(255,255,255,0.03);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:1.2rem;
+  }
+
+  .login-box.show{ display:flex; }
+
+  .login-box input{
+    padding:0.65rem 0.9rem;
+    border-radius:6px;
+    border:1px solid var(--line);
+    background:rgba(0,0,0,0.3);
+    color:var(--ivory);
+    font-size:0.85rem;
+    font-family:'Inter', sans-serif;
+    text-align:center;
+  }
+
+  .login-box button{
+    padding:0.7rem;
+    border-radius:6px;
+    border:none;
+    background:var(--gold-soft);
+    color:var(--bg-dark);
+    font-weight:700;
+    font-size:0.85rem;
+    cursor:pointer;
+    font-family:'Inter', sans-serif;
+  }
+
+  .login-box .login-error{
+    font-size:0.75rem;
+    color:#e08a8a;
+    display:none;
+  }
+
+  /* ---------- ADMIN PANEL ---------- */
+  #admin-panel{
+    display:none;
+    max-width:560px;
+    margin:0 auto 5rem;
+    padding:0 1.5rem;
+  }
+
+  #admin-panel.show{ display:block; }
+
+  #admin-panel h2{
+    font-family:'Montserrat', sans-serif;
+    font-weight:700;
+    font-size:1.3rem;
+    text-align:center;
+    margin-bottom:0.3rem;
+  }
+
+  #admin-panel .admin-sub{
+    text-align:center;
+    font-size:0.8rem;
+    opacity:0.65;
+    margin-bottom:1.6rem;
+  }
+
+  .admin-card{
+    background:rgba(255,255,255,0.03);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:1.2rem;
+    margin-bottom:1.4rem;
+  }
+
+  .admin-card h3{
+    font-size:0.9rem;
+    color:var(--gold-soft);
+    margin-bottom:1rem;
+    font-weight:600;
+  }
+
+  .days-picker{ display:flex; flex-wrap:wrap; gap:0.5rem; margin-bottom:0.9rem; }
+
+  .day-chip{
+    padding:0.45rem 0.9rem;
+    border-radius:20px;
+    border:1px solid var(--line);
+    font-size:0.78rem;
+    cursor:pointer;
+    user-select:none;
+  }
+
+  .day-chip.active{ background:var(--gold-soft); color:var(--bg-dark); border-color:var(--gold-soft); font-weight:600; }
+
+  .admin-row{ display:flex; gap:0.6rem; flex-wrap:wrap; margin-bottom:0.8rem; }
+  .admin-row .field{ flex:1; min-width:110px; }
+  .admin-row label{ font-size:0.75rem; opacity:0.75; display:block; margin-bottom:0.3rem; }
+  .admin-row input, .admin-row select{
+    width:100%;
+    padding:0.6rem 0.8rem;
+    border-radius:6px;
+    border:1px solid var(--line);
+    background:rgba(0,0,0,0.3);
+    color:var(--ivory);
+    font-size:0.85rem;
+    font-family:'Inter', sans-serif;
+  }
+
+  .admin-action-btn{
+    padding:0.7rem 1.4rem;
+    border-radius:6px;
+    border:none;
+    background:var(--gold-soft);
+    color:var(--bg-dark);
+    font-weight:700;
+    font-size:0.85rem;
+    cursor:pointer;
+    font-family:'Inter', sans-serif;
+  }
+
+  .admin-action-btn:hover{ background:var(--gold); }
+
+  .admin-empty{ font-size:0.85rem; opacity:0.6; padding:0.6rem 0; }
+
+  .booking-item{
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:0.9rem;
+    margin-bottom:0.7rem;
+  }
+
+  .booking-item .top-row{ display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem; }
+  .booking-item .name{ font-weight:600; }
+  .booking-item .meta{ font-size:0.78rem; opacity:0.7; margin-bottom:0.6rem; }
+
+  .badge{ font-size:0.68rem; padding:0.2rem 0.6rem; border-radius:20px; letter-spacing:0.04em; }
+  .badge.pending{ background:rgba(228,201,138,0.15); color:var(--gold-soft); }
+  .badge.confirmed{ background:rgba(123,191,138,0.15); color:#7bbf8a; }
+
+  .booking-actions{ display:flex; gap:0.5rem; }
+  .btn-sm{
+    flex:1;
+    padding:0.5rem;
+    border-radius:6px;
+    border:1px solid var(--line);
+    background:transparent;
+    color:var(--ivory);
+    font-size:0.78rem;
+    cursor:pointer;
+    font-family:'Inter', sans-serif;
+  }
+  .btn-sm.confirm{ border-color:#7bbf8a; color:#7bbf8a; }
+  .btn-sm.reject{ border-color:#e08a8a; color:#e08a8a; }
+
+  .whatsapp-btn{
+    display:inline-block;
+    margin-bottom:0.6rem;
+    padding:0.7rem 1.2rem;
+    border-radius:6px;
+    background:#25D366;
+    color:#0d0d0d;
+    font-weight:700;
+    font-size:0.82rem;
+    text-decoration:none;
+  }
+
+  .admin-logout{
+    display:block;
+    text-align:center;
+    font-size:0.75rem;
+    opacity:0.6;
+    cursor:pointer;
+    margin-top:0.5rem;
+  }
+
   /* ---------- RESPONSIVE ---------- */
   @media (max-width: 860px){
     .hero{
@@ -582,6 +776,57 @@
   </form>
 
   <div id="book-msg"></div>
+</section>
+
+<div class="login-gate">
+  <span class="toggle-link" id="login-toggle">تسجيل دخول الحلاق</span>
+  <div class="login-box" id="login-box">
+    <input type="tel" id="admin-phone" placeholder="رقم هاتفك">
+    <button onclick="loginAsBarber()">دخول</button>
+    <span class="login-error" id="login-error">هذا الرقم مش مسجل كمسؤول</span>
+  </div>
+</div>
+
+<section id="admin-panel">
+  <h2>لوحة التحكم</h2>
+  <p class="admin-sub">أهلاً محمد، هون بتدير مواعيدك وطلبات الحجز</p>
+
+  <div class="admin-card">
+    <h3>إضافة مواعيد للأسبوع</h3>
+    <div class="days-picker" id="days-picker"></div>
+    <div class="admin-row">
+      <div class="field">
+        <label>من أي تاريخ</label>
+        <input type="date" id="start-date">
+      </div>
+      <div class="field">
+        <label>من ساعة</label>
+        <input type="time" id="start-time" value="10:00">
+      </div>
+      <div class="field">
+        <label>لحد ساعة</label>
+        <input type="time" id="end-time" value="20:00">
+      </div>
+      <div class="field">
+        <label>مدة الموعد (دقيقة)</label>
+        <select id="duration">
+          <option value="30">30</option>
+          <option value="45">45</option>
+          <option value="60">60</option>
+        </select>
+      </div>
+    </div>
+    <button class="admin-action-btn" onclick="generateSlots()">إنشاء المواعيد</button>
+    <p id="generate-msg" class="admin-empty"></p>
+  </div>
+
+  <div class="admin-card">
+    <h3>طلبات الحجز</h3>
+    <a id="whatsapp-remind" class="whatsapp-btn" href="#" target="_blank">أرسلي تذكير عبر واتساب</a>
+    <div id="bookings-list"></div>
+  </div>
+
+  <span class="admin-logout" onclick="logoutBarber()">تسجيل خروج</span>
 </section>
 
 <script>
@@ -791,6 +1036,224 @@
   }
 
   loadBookSlots();
+
+  // ============ تمييز الحلاق (admin) عن الزبون عن طريق رقم الهاتف ============
+  // ⚠️ حطي رقم هاتف الحلاق الحقيقي هون. أي رقم غيره بيضل زبون عادي.
+  const BARBER_PHONE = "0791234567";
+  const LS_SESSION = 'barber_session_v1';
+
+  const loginToggle = document.getElementById('login-toggle');
+  const loginBox = document.getElementById('login-box');
+  const adminPanel = document.getElementById('admin-panel');
+  const loginGate = document.querySelector('.login-gate');
+
+  loginToggle.addEventListener('click', () => loginBox.classList.toggle('show'));
+
+  function loginAsBarber(){
+    const phone = document.getElementById('admin-phone').value.trim();
+    const errorEl = document.getElementById('login-error');
+
+    if (phone !== BARBER_PHONE){
+      errorEl.style.display = 'block';
+      return;
+    }
+
+    errorEl.style.display = 'none';
+    localStorage.setItem(LS_SESSION, '1');
+    enterAdminMode();
+  }
+
+  function logoutBarber(){
+    localStorage.removeItem(LS_SESSION);
+    adminPanel.classList.remove('show');
+    loginGate.style.display = 'block';
+  }
+
+  function enterAdminMode(){
+    loginGate.style.display = 'none';
+    adminPanel.classList.add('show');
+    initAdminPanel();
+    loadAdminBookings();
+  }
+
+  // stay logged in across refreshes (same browser)
+  if (localStorage.getItem(LS_SESSION) === '1') enterAdminMode();
+
+  let adminInitDone = false;
+  let selectedDays = new Set([0,1,2,3,4,5,6]);
+
+  function initAdminPanel(){
+    if (adminInitDone) return;
+    adminInitDone = true;
+
+    const dayNamesShort = ['أحد','إثنين','ثلاثاء','أربعاء','خميس','جمعة','سبت'];
+    const picker = document.getElementById('days-picker');
+    dayNamesShort.forEach((name, i) => {
+      const chip = document.createElement('div');
+      chip.className = 'day-chip active';
+      chip.textContent = name;
+      chip.onclick = () => {
+        if (selectedDays.has(i)){ selectedDays.delete(i); chip.classList.remove('active'); }
+        else { selectedDays.add(i); chip.classList.add('active'); }
+      };
+      picker.appendChild(chip);
+    });
+    document.getElementById('start-date').valueAsDate = new Date();
+
+    if (DEMO_MODE){
+      window.addEventListener('demo-sync', () => {
+        if (adminPanel.classList.contains('show')) loadAdminBookings();
+      });
+      window.addEventListener('storage', () => {
+        if (adminPanel.classList.contains('show')) loadAdminBookings();
+      });
+    } else {
+      sb.channel('bookings-realtime')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'bookings' }, () => {
+          if (adminPanel.classList.contains('show')) loadAdminBookings();
+        })
+        .subscribe();
+    }
+  }
+
+  async function generateSlots(){
+    const startDate = document.getElementById('start-date').value;
+    const startTime = document.getElementById('start-time').value;
+    const endTime = document.getElementById('end-time').value;
+    const duration = parseInt(document.getElementById('duration').value, 10);
+    const msgEl = document.getElementById('generate-msg');
+
+    if (!startDate || selectedDays.size === 0){
+      msgEl.textContent = 'اختاري تاريخ البداية وأيام الدوام';
+      return;
+    }
+
+    const rows = [];
+    const base = new Date(startDate + 'T00:00:00');
+
+    for (let dayOffset = 0; dayOffset < 7; dayOffset++){
+      const d = new Date(base);
+      d.setDate(d.getDate() + dayOffset);
+      if (!selectedDays.has(d.getDay())) continue;
+
+      const dateStr = d.toISOString().split('T')[0];
+      let [h, m] = startTime.split(':').map(Number);
+      const [endH, endM] = endTime.split(':').map(Number);
+
+      while (h < endH || (h === endH && m < endM)){
+        const timeStr = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:00`;
+        rows.push({ slot_date: dateStr, slot_time: timeStr });
+        m += duration;
+        while (m >= 60){ m -= 60; h += 1; }
+      }
+    }
+
+    if (rows.length === 0){
+      msgEl.textContent = 'ما في مواعيد لإنشائها بهالإعدادات';
+      return;
+    }
+
+    if (DEMO_MODE){
+      const slots = demoGetSlots();
+      let added = 0;
+      rows.forEach(r => {
+        const exists = slots.some(s => s.slot_date === r.slot_date && s.slot_time === r.slot_time);
+        if (!exists){ slots.push({ id: uid(), slot_date: r.slot_date, slot_time: r.slot_time, status: 'available' }); added++; }
+      });
+      demoSetSlots(slots);
+      msgEl.textContent = `تم إنشاء ${added} موعد بنجاح (تجريبي)`;
+      return;
+    }
+
+    const { error } = await sb.from('slots').upsert(rows, { onConflict: 'slot_date,slot_time', ignoreDuplicates: true });
+    msgEl.textContent = error ? 'صار خطأ: ' + error.message : `تم إنشاء ${rows.length} موعد بنجاح`;
+  }
+
+  // ⚠️ رقمك على واتساب (بالصيغة الدولية بدون +) لاستقبال التذكيرات
+  const BARBER_WHATSAPP = "9627xxxxxxxx";
+
+  async function loadAdminBookings(){
+    let data, error;
+
+    if (DEMO_MODE){
+      const slots = demoGetSlots();
+      data = demoGetBookings()
+        .filter(b => b.status === 'pending' || b.status === 'confirmed')
+        .sort((a,b) => new Date(b.created_at) - new Date(a.created_at))
+        .map(b => ({ ...b, slots: slots.find(s => s.id === b.slot_id) || null }));
+    } else {
+      const res = await sb.from('bookings')
+        .select('*, slots(slot_date, slot_time)')
+        .in('status', ['pending','confirmed'])
+        .order('created_at', { ascending: false });
+      data = res.data; error = res.error;
+    }
+
+    const list = document.getElementById('bookings-list');
+    if (error){ list.innerHTML = '<p class="admin-empty">صار خطأ بتحميل الحجوزات</p>'; return; }
+    if (!data || data.length === 0){ list.innerHTML = '<p class="admin-empty">ما في طلبات حجز حالياً</p>'; return; }
+
+    list.innerHTML = '';
+    data.forEach(b => {
+      const div = document.createElement('div');
+      div.className = 'booking-item';
+      const dayLabel = b.slots ? `${b.slots.slot_date} — ${b.slots.slot_time.slice(0,5)}` : '—';
+      div.innerHTML = `
+        <div class="top-row">
+          <span class="name">${b.customer_name}</span>
+          <span class="badge ${b.status}">${b.status === 'pending' ? 'بانتظار الرد' : 'مؤكد'}</span>
+        </div>
+        <div class="meta">${dayLabel} · ${b.customer_phone}</div>
+        <div class="booking-actions">
+          ${b.status === 'pending' ? `<button class="btn-sm confirm" onclick="confirmBookingAdmin('${b.id}')">تأكيد</button>` : ''}
+          <button class="btn-sm reject" onclick="rejectBookingAdmin('${b.id}')">${b.status === 'pending' ? 'رفض' : 'إلغاء'}</button>
+        </div>
+      `;
+      list.appendChild(div);
+    });
+
+    const pending = data.filter(b => b.status === 'pending');
+    const lines = pending.map(b => {
+      const t = b.slots ? `${b.slots.slot_date} ${b.slots.slot_time.slice(0,5)}` : '';
+      return `- ${b.customer_name} (${b.customer_phone}) — ${t}`;
+    }).join('\n');
+    const text = pending.length
+      ? `طلبات حجز جديدة بانتظار الرد:\n${lines}`
+      : 'ما في طلبات جديدة حالياً';
+    document.getElementById('whatsapp-remind').href =
+      `https://wa.me/${BARBER_WHATSAPP}?text=${encodeURIComponent(text)}`;
+  }
+
+  async function confirmBookingAdmin(id){
+    if (DEMO_MODE){
+      const bookings = demoGetBookings();
+      const b = bookings.find(x => x.id === id);
+      if (b) b.status = 'confirmed';
+      demoSetBookings(bookings);
+      loadAdminBookings();
+      return;
+    }
+    const { error } = await sb.from('bookings').update({ status: 'confirmed' }).eq('id', id);
+    if (!error) loadAdminBookings();
+  }
+
+  async function rejectBookingAdmin(id){
+    if (DEMO_MODE){
+      const bookings = demoGetBookings();
+      const b = bookings.find(x => x.id === id);
+      if (!b) return;
+      b.status = 'rejected';
+      demoSetBookings(bookings);
+      const slots = demoGetSlots();
+      const slot = slots.find(s => s.id === b.slot_id);
+      if (slot) slot.status = 'available';
+      demoSetSlots(slots);
+      loadAdminBookings();
+      return;
+    }
+    const { error } = await sb.rpc('cancel_booking', { p_booking_id: id, p_new_status: 'rejected' });
+    if (!error) loadAdminBookings();
+  }
 </script>
 </body>
 </html>
