@@ -468,7 +468,7 @@
   .menu-btn{
     display:flex;
     flex-direction:column;
-    align-items:flex-end;
+    align-items:flex-start;
     gap:6px;
     cursor:pointer;
     padding:6px;
@@ -491,17 +491,17 @@
     display:none;
     position:fixed;
     top:0;
-    right:0;
+    left:0;
     height:100vh;
-    width:280px;
-    max-width:82vw;
+    width:380px;
+    max-width:92vw;
     background:#161616;
-    border-left:1px solid var(--line);
-    padding:4.2rem 1.4rem 1.5rem;
-    box-shadow:-16px 0 40px rgba(0,0,0,0.55);
+    border-right:1px solid var(--line);
+    padding:4.4rem 1.6rem 2rem;
+    box-shadow:16px 0 40px rgba(0,0,0,0.55);
     z-index:300;
     overflow-y:auto;
-    transform:translateX(100%);
+    transform:translateX(-100%);
     transition:transform 0.3s ease;
   }
 
@@ -523,7 +523,7 @@
   .menu-close{
     position:absolute;
     top:1.2rem;
-    left:1.2rem;
+    right:1.2rem;
     width:32px;
     height:32px;
     border-radius:50%;
@@ -593,6 +593,70 @@
   }
 
   .menu-dropdown .logout-link:hover{ opacity:1; }
+
+  .my-bookings{ display:none; }
+  .my-bookings.show{ display:block; }
+
+  .my-bookings h4{
+    font-size:0.82rem;
+    color:var(--gold-soft);
+    margin-bottom:0.8rem;
+    font-weight:600;
+  }
+
+  .my-booking-item{
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:0.85rem;
+    margin-bottom:0.7rem;
+  }
+
+  .my-booking-item .mb-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:0.35rem;
+  }
+
+  .my-booking-item .mb-date{ font-size:0.82rem; font-weight:600; }
+
+  .mb-badge{
+    font-size:0.65rem;
+    padding:0.2rem 0.55rem;
+    border-radius:20px;
+    letter-spacing:0.03em;
+  }
+
+  .mb-badge.pending{ background:rgba(228,201,138,0.15); color:var(--gold-soft); }
+  .mb-badge.confirmed{ background:rgba(123,191,138,0.15); color:#7bbf8a; }
+  .mb-badge.rejected{ background:rgba(224,138,138,0.15); color:#e08a8a; }
+  .mb-badge.cancelled{ background:rgba(255,255,255,0.06); color:var(--ivory); opacity:0.5; }
+
+  .my-booking-item .mb-actions{
+    display:flex;
+    gap:0.5rem;
+    margin-top:0.5rem;
+  }
+
+  .mb-btn{
+    flex:1;
+    padding:0.45rem;
+    border-radius:6px;
+    border:1px solid var(--line);
+    background:transparent;
+    color:var(--ivory);
+    font-size:0.72rem;
+    cursor:pointer;
+    font-family:'Inter', sans-serif;
+  }
+
+  .mb-btn.edit{ border-color:var(--gold-soft); color:var(--gold-soft); }
+  .mb-btn.cancel{ border-color:#e08a8a; color:#e08a8a; }
+
+  .my-bookings-empty{
+    font-size:0.78rem;
+    opacity:0.55;
+  }
 
   .menu-divider{
     border:none;
@@ -987,9 +1051,6 @@
 <body>
 
 <header>
-  <div class="header-spacer" aria-hidden="true"></div>
-  <div class="logo">mhmed barber</div>
-
   <div class="menu-wrap">
     <div class="menu-btn" id="menu-btn">
       <div class="bar bar1"></div>
@@ -1014,6 +1075,12 @@
         <span class="logout-link" onclick="handleMenuLogout()">تسجيل خروج</span>
       </div>
 
+      <div class="my-bookings" id="my-bookings">
+        <hr class="menu-divider">
+        <h4>مواعيدي</h4>
+        <div id="my-bookings-list"></div>
+      </div>
+
       <hr class="menu-divider">
 
       <div class="menu-contact">
@@ -1032,6 +1099,9 @@
       </div>
     </div>
   </div>
+
+  <div class="logo">mhmed barber</div>
+  <div class="header-spacer" aria-hidden="true"></div>
 </header>
 
 <section class="hero-section">
@@ -1495,6 +1565,10 @@
   if (DEMO_MODE){
     window.addEventListener('demo-sync', loadBookSlots);
     window.addEventListener('storage', loadBookSlots);
+    window.addEventListener('demo-sync', () => {
+      const user = getCurrentUser();
+      if (user && !user.isBarber) loadMyBookings();
+    });
   } else {
     sb.channel('slots-realtime')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'slots' }, loadBookSlots)
@@ -1519,6 +1593,8 @@
   function openMenu(){
     menuDropdown.classList.add('show');
     menuOverlay.classList.add('show');
+    const user = getCurrentUser();
+    if (user && !user.isBarber) loadMyBookings();
   }
 
   function closeMenu(){
@@ -1570,6 +1646,7 @@
     guestView.classList.remove('hide');
     loggedInView.classList.remove('show');
     adminPanel.classList.remove('show');
+    document.getElementById('my-bookings').classList.remove('show');
     document.getElementById('menu-name').value = '';
     document.getElementById('menu-phone').value = '';
   }
@@ -1584,6 +1661,9 @@
       adminPanel.classList.add('show');
       initAdminPanel();
       loadAdminBookings();
+    } else {
+      document.getElementById('my-bookings').classList.add('show');
+      loadMyBookings();
     }
 
     // pre-fill booking form with the logged-in identity
@@ -1593,6 +1673,67 @@
       nameInput.value = user.name;
       phoneInput.value = user.phone;
     }
+  }
+
+  function loadMyBookings(){
+    const user = getCurrentUser();
+    const listEl = document.getElementById('my-bookings-list');
+    if (!user || user.isBarber || !listEl) return;
+
+    const slots = DEMO_MODE ? demoGetSlots() : [];
+    const myBookings = (DEMO_MODE ? demoGetBookings() : [])
+      .filter(b => b.customer_phone === user.phone && b.status !== 'cancelled')
+      .sort((a,b) => new Date(b.created_at) - new Date(a.created_at))
+      .map(b => ({ ...b, slots: slots.find(s => s.id === b.slot_id) || null }));
+
+    if (myBookings.length === 0){
+      listEl.innerHTML = '<p class="my-bookings-empty">ما عندك مواعيد حالياً</p>';
+      return;
+    }
+
+    const statusLabel = { pending: 'بانتظار موافقة الحلاق', confirmed: 'تم التأكيد', rejected: 'تم الرفض من الحلاق' };
+
+    listEl.innerHTML = '';
+    myBookings.forEach(b => {
+      const dateLabel = b.slots ? `${b.slots.slot_date} — ${b.slots.slot_time.slice(0,5)}` : '—';
+      const canEdit = b.status === 'pending' || b.status === 'confirmed';
+      const div = document.createElement('div');
+      div.className = 'my-booking-item';
+      div.innerHTML = `
+        <div class="mb-top">
+          <span class="mb-date">${dateLabel}</span>
+          <span class="mb-badge ${b.status}">${statusLabel[b.status] || b.status}</span>
+        </div>
+        ${canEdit ? `
+        <div class="mb-actions">
+          <button class="mb-btn edit" onclick="customerEditBooking('${b.id}')">تعديل الموعد</button>
+          <button class="mb-btn cancel" onclick="customerCancelBooking('${b.id}')">إلغاء</button>
+        </div>` : ''}
+      `;
+      listEl.appendChild(div);
+    });
+  }
+
+  function customerCancelBooking(id){
+    if (DEMO_MODE){
+      const bookings = demoGetBookings();
+      const b = bookings.find(x => x.id === id);
+      if (!b) return;
+      b.status = 'cancelled';
+      demoSetBookings(bookings);
+      const slots = demoGetSlots();
+      const slot = slots.find(s => s.id === b.slot_id);
+      if (slot) slot.status = 'available';
+      demoSetSlots(slots);
+      loadMyBookings();
+    }
+  }
+
+  function customerEditBooking(id){
+    // free the current slot and cancel this booking, then let them pick a new time
+    customerCancelBooking(id);
+    closeMenu();
+    openBookModal();
   }
 
   // stay logged in across refreshes (same browser)
