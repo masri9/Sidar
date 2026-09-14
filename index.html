@@ -1724,6 +1724,8 @@
 
   // معرض الأعمال لسا بوضع تجريبي (مش له جدول حقيقي بقاعدة البيانات بعد)
   const GALLERY_DEMO_MODE = true;
+
+  const SUPABASE_URL = "https://jrnswsvorckrbojphsao.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpybnN3c3ZvcmNrcmJvanBoc2FvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk0MTIzMTcsImV4cCI6MjEwNDk4ODMxN30.VFZbgCalfEvzYFJFob4bfmfFjVM-j01rwY7MeeEpsOc";
 
   const sb = DEMO_MODE ? null : supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
