@@ -1057,6 +1057,66 @@
 
   .book-modal-close:hover{ border-color:var(--gold-soft); }
 
+  /* ---------- HOURS MODAL ---------- */
+  .hours-modal-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.72);
+    backdrop-filter:blur(3px);
+    z-index:100;
+    align-items:center;
+    justify-content:center;
+    padding:1.2rem;
+  }
+
+  .hours-modal-overlay.show{ display:flex; }
+
+  .hours-modal-card{
+    position:relative;
+    width:100%;
+    max-width:360px;
+    background:#161616;
+    border:1px solid var(--line);
+    border-radius:14px;
+    box-shadow:0 30px 70px rgba(0,0,0,0.6);
+    padding:1.8rem 1.5rem;
+    animation:modalPop 0.25s ease;
+  }
+
+  .hours-modal-card h2{
+    font-family:'Montserrat', sans-serif;
+    font-weight:700;
+    font-size:1.2rem;
+    text-align:center;
+    margin-bottom:1.4rem;
+  }
+
+  .hours-list{
+    list-style:none;
+  }
+
+  .hours-list li{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:0.6rem 0;
+    border-bottom:1px solid var(--line);
+    font-size:0.85rem;
+  }
+
+  .hours-list li:last-child{ border-bottom:none; }
+
+  .hours-list li span:first-child{
+    color:var(--gold-soft);
+    font-weight:600;
+  }
+
+  .hours-list li span:last-child{
+    opacity:0.85;
+    direction:ltr;
+  }
+
   /* ---------- FOOTER ---------- */
   footer{
     border-top:1px solid var(--line);
@@ -1373,7 +1433,7 @@
   <h2 id="looking-title">WHAT ARE YOU LOOKING FOR TODAY?</h2>
   <div class="icon-grid">
 
-    <div class="icon-item">
+    <div class="icon-item" id="icon-hours" style="cursor:pointer;">
       <div class="icon-circle">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/></svg>
       </div>
@@ -1513,6 +1573,22 @@
   <div class="lightbox-content" id="lightbox-content"></div>
 </div>
 
+<div class="hours-modal-overlay" id="hours-modal-overlay">
+  <div class="hours-modal-card">
+    <button type="button" class="book-modal-close" id="hours-modal-close">×</button>
+    <h2>ساعات العمل</h2>
+    <ul class="hours-list">
+      <li><span>الأحد</span><span>11:00 ص – 9:00 م</span></li>
+      <li><span>الإثنين</span><span>1:30 م – 9:00 م</span></li>
+      <li><span>الثلاثاء</span><span>1:30 م – 9:00 م</span></li>
+      <li><span>الأربعاء</span><span>1:30 م – 9:00 م</span></li>
+      <li><span>الخميس</span><span>1:30 م – 9:00 م</span></li>
+      <li><span>الجمعة</span><span>11:00 ص – 9:00 م</span></li>
+      <li><span>السبت</span><span>1:30 م – 9:00 م</span></li>
+    </ul>
+  </div>
+</div>
+
 <footer>
   <p class="copyright">© 2026 mhmed barber. جميع الحقوق محفوظة.</p>
 </footer>
@@ -1555,6 +1631,21 @@
   });
 
   document.getElementById('icon-my-bookings').addEventListener('click', openMenu);
+
+  // ---- hours modal ----
+  const hoursModalOverlay = document.getElementById('hours-modal-overlay');
+
+  document.getElementById('icon-hours').addEventListener('click', () => {
+    hoursModalOverlay.classList.add('show');
+  });
+
+  document.getElementById('hours-modal-close').addEventListener('click', () => {
+    hoursModalOverlay.classList.remove('show');
+  });
+
+  hoursModalOverlay.addEventListener('click', (e) => {
+    if (e.target === hoursModalOverlay) hoursModalOverlay.classList.remove('show');
+  });
   document.getElementById('book-modal-close').addEventListener('click', closeBookModal);
   bookModalOverlay.addEventListener('click', (e) => {
     if (e.target === bookModalOverlay) closeBookModal();
