@@ -893,6 +893,44 @@
 
   .admin-action-btn:hover{ background:var(--gold); }
 
+  .upload-btn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:0.6rem;
+    width:100%;
+    padding:0.9rem;
+    border-radius:8px;
+    border:1px dashed var(--gold-soft);
+    background:rgba(228,201,138,0.06);
+    color:var(--gold-soft);
+    font-size:0.85rem;
+    font-weight:600;
+    cursor:pointer;
+    font-family:'Inter', sans-serif;
+    transition:background 0.2s ease;
+  }
+
+  .upload-btn:hover{ background:rgba(228,201,138,0.12); }
+
+  .upload-btn svg{
+    width:18px;
+    height:18px;
+    stroke:var(--gold-soft);
+    fill:none;
+    stroke-width:2;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    flex-shrink:0;
+  }
+
+  .admin-divider-text{
+    text-align:center;
+    font-size:0.72rem;
+    opacity:0.5;
+    margin:1rem 0;
+  }
+
   .admin-empty{ font-size:0.85rem; opacity:0.6; padding:0.6rem 0; }
 
   .booking-item{
@@ -1581,6 +1619,16 @@
 
   <div class="admin-card">
     <h3>معرض الأعمال</h3>
+
+    <label class="upload-btn" for="gallery-file">
+      <svg viewBox="0 0 24 24"><path d="M12 16V4M12 4l-4 4M12 4l4 4"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
+      اختاري من معرض الهاتف (صورة أو فيديو)
+    </label>
+    <input type="file" id="gallery-file" accept="image/*,video/*" style="display:none;">
+    <p id="gallery-upload-msg" class="admin-empty"></p>
+
+    <div class="admin-divider-text">أو ألصقي رابط</div>
+
     <div class="admin-row">
       <div class="field" style="max-width:110px;">
         <label>النوع</label>
@@ -2595,6 +2643,17 @@
     if (e.target.id === 'gallery-lightbox') closeLightbox();
   });
 
+  function saveGalleryItem(type, url){
+    if (GALLERY_DEMO_MODE){
+      const items = demoGetGallery();
+      items.unshift({ id: uid(), type, url });
+      demoSetGallery(items);
+      renderGalleryAdminList();
+      return true;
+    }
+    return false;
+  }
+
   function addGalleryItem(){
     const type = document.getElementById('gallery-type').value;
     const url = document.getElementById('gallery-url').value.trim();
@@ -2605,16 +2664,49 @@
       return;
     }
 
-    if (GALLERY_DEMO_MODE){
-      const items = demoGetGallery();
-      items.unshift({ id: uid(), type, url });
-      demoSetGallery(items);
+    if (saveGalleryItem(type, url)){
       msgEl.textContent = 'تمت الإضافة';
       document.getElementById('gallery-url').value = '';
-      renderGalleryAdminList();
-      return;
     }
   }
+
+  // ---- رفع من معرض الهاتف مباشرة ----
+  const MAX_UPLOAD_MB = 8;
+
+  document.getElementById('gallery-file').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    const uploadMsg = document.getElementById('gallery-upload-msg');
+    if (!file) return;
+
+    const isVideo = file.type.startsWith('video/');
+    const isImage = file.type.startsWith('image/');
+
+    if (!isVideo && !isImage){
+      uploadMsg.textContent = 'اختاري صورة أو فيديو بس';
+      return;
+    }
+
+    const sizeMB = file.size / (1024 * 1024);
+    if (sizeMB > MAX_UPLOAD_MB){
+      uploadMsg.textContent = `الملف كبير (${sizeMB.toFixed(1)}MB) — بوضع التجربة الحد الأقصى ${MAX_UPLOAD_MB}MB. لما نربط تخزين حقيقي (Supabase Storage) هالحد بيروح.`;
+      e.target.value = '';
+      return;
+    }
+
+    uploadMsg.textContent = 'جاري الرفع...';
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const saved = saveGalleryItem(isVideo ? 'video' : 'image', reader.result);
+      uploadMsg.textContent = saved ? 'تمت الإضافة ✓' : 'صار خطأ بالرفع';
+      e.target.value = '';
+    };
+    reader.onerror = () => {
+      uploadMsg.textContent = 'صار خطأ بقراءة الملف';
+      e.target.value = '';
+    };
+    reader.readAsDataURL(file);
+  });
 
   function deleteGalleryItem(id){
     if (GALLERY_DEMO_MODE){
