@@ -243,9 +243,69 @@
 
   /* ---------- ICON MENU ---------- */
   .looking-for{
+    position:relative;
+    overflow:hidden;
     text-align:center;
     padding:2rem 1.5rem 5rem;
     margin-top:6rem;
+  }
+
+  .looking-for > *{
+    position:relative;
+    z-index:1;
+  }
+
+  .floating-orb{
+    position:absolute;
+    border-radius:50%;
+    filter:blur(55px);
+    pointer-events:none;
+    z-index:0;
+  }
+
+  .orb1{
+    width:220px;
+    height:220px;
+    background:var(--gold-soft);
+    opacity:0.16;
+    top:-30px;
+    left:8%;
+    animation:orbFloat1 16s ease-in-out infinite alternate;
+  }
+
+  .orb2{
+    width:180px;
+    height:180px;
+    background:var(--gold);
+    opacity:0.14;
+    bottom:-20px;
+    right:6%;
+    animation:orbFloat2 20s ease-in-out infinite alternate;
+  }
+
+  .orb3{
+    width:140px;
+    height:140px;
+    background:var(--gold-soft);
+    opacity:0.1;
+    top:40%;
+    left:45%;
+    animation:orbFloat3 24s ease-in-out infinite alternate;
+  }
+
+  @keyframes orbFloat1{
+    from{ transform:translate(0,0) scale(1); }
+    to{ transform:translate(35px,45px) scale(1.15); }
+  }
+
+  @keyframes orbFloat2{
+    from{ transform:translate(0,0) scale(1); }
+    to{ transform:translate(-30px,-40px) scale(1.1); }
+  }
+
+  @keyframes orbFloat3{
+    from{ transform:translate(0,0) scale(1); }
+    to{ transform:translate(-45px,30px) scale(1.2); }
   }
 
   .looking-for h2{
@@ -1038,6 +1098,160 @@
     letter-spacing:0.02em;
   }
 
+  /* ---------- GALLERY ---------- */
+  .gallery-section{
+    max-width:640px;
+    margin:0 auto 4rem;
+    padding:0 1.5rem;
+    text-align:center;
+  }
+
+  .gallery-section h2{
+    font-family:'Montserrat', sans-serif;
+    font-weight:700;
+    font-size:1.3rem;
+    margin-bottom:0.3rem;
+  }
+
+  .gallery-sub{
+    font-size:0.8rem;
+    opacity:0.65;
+    margin-bottom:1.6rem;
+  }
+
+  .gallery-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:0.7rem;
+  }
+
+  .gallery-item{
+    position:relative;
+    aspect-ratio:9/16;
+    border-radius:10px;
+    overflow:hidden;
+    border:1px solid var(--line);
+    cursor:pointer;
+    background:rgba(255,255,255,0.03);
+    transition:transform 0.2s ease, border-color 0.2s ease;
+  }
+
+  .gallery-item:hover{ transform:translateY(-3px); border-color:var(--gold-soft); }
+
+  .gallery-item img,
+  .gallery-item video{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+
+  .gallery-item .play-badge{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:rgba(0,0,0,0.25);
+  }
+
+  .gallery-item .play-badge svg{
+    width:28px;
+    height:28px;
+    fill:var(--ivory);
+    filter:drop-shadow(0 2px 6px rgba(0,0,0,0.5));
+  }
+
+  .gallery-empty{
+    grid-column:1 / -1;
+    font-size:0.82rem;
+    opacity:0.55;
+    padding:1.5rem 0;
+  }
+
+  .gallery-lightbox{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.9);
+    z-index:400;
+    align-items:center;
+    justify-content:center;
+    padding:2rem 1rem;
+  }
+
+  .gallery-lightbox.show{ display:flex; }
+
+  .lightbox-content{
+    max-width:92vw;
+    max-height:88vh;
+  }
+
+  .lightbox-content img,
+  .lightbox-content video{
+    max-width:92vw;
+    max-height:88vh;
+    border-radius:8px;
+    display:block;
+  }
+
+  .lightbox-close{
+    position:absolute;
+    top:1.3rem;
+    right:1.5rem;
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    border:1px solid var(--line);
+    background:rgba(255,255,255,0.06);
+    color:var(--ivory);
+    font-size:1.3rem;
+    cursor:pointer;
+    line-height:1;
+  }
+
+  .lightbox-close:hover{ border-color:var(--gold-soft); }
+
+  /* gallery admin list */
+  .gallery-admin-item{
+    display:flex;
+    align-items:center;
+    gap:0.7rem;
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:0.5rem;
+    margin-bottom:0.5rem;
+  }
+
+  .gallery-admin-item .thumb{
+    width:44px;
+    height:44px;
+    border-radius:6px;
+    object-fit:cover;
+    flex-shrink:0;
+    background:rgba(255,255,255,0.05);
+  }
+
+  .gallery-admin-item .g-label{
+    flex:1;
+    font-size:0.72rem;
+    opacity:0.7;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+
+  .gallery-admin-item .g-delete{
+    padding:0.35rem 0.7rem;
+    border-radius:6px;
+    border:1px solid #e08a8a;
+    color:#e08a8a;
+    background:transparent;
+    font-size:0.7rem;
+    cursor:pointer;
+    font-family:'Inter', sans-serif;
+  }
+
   /* ---------- RESPONSIVE ---------- */
   @media (max-width: 860px){
     .hero{
@@ -1144,6 +1358,10 @@
 </section>
 
 <section class="looking-for">
+  <div class="floating-orb orb1"></div>
+  <div class="floating-orb orb2"></div>
+  <div class="floating-orb orb3"></div>
+
   <h2 id="looking-title">WHAT ARE YOU LOOKING FOR TODAY?</h2>
   <div class="icon-grid">
 
@@ -1273,8 +1491,39 @@
     <div id="bookings-list"></div>
   </div>
 
+  <div class="admin-card">
+    <h3>معرض الأعمال</h3>
+    <div class="admin-row">
+      <div class="field" style="max-width:110px;">
+        <label>النوع</label>
+        <select id="gallery-type">
+          <option value="image">صورة</option>
+          <option value="video">فيديو</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>رابط الصورة أو الفيديو</label>
+        <input type="text" id="gallery-url" placeholder="https://...">
+      </div>
+    </div>
+    <button class="admin-action-btn" onclick="addGalleryItem()">إضافة للمعرض</button>
+    <p id="gallery-admin-msg" class="admin-empty"></p>
+    <div id="gallery-admin-list" style="margin-top:1rem;"></div>
+  </div>
+
   <span class="admin-logout" onclick="handleMenuLogout()">تسجيل خروج</span>
 </section>
+
+<section class="gallery-section" id="gallery">
+  <h2>أعمالي</h2>
+  <p class="gallery-sub">شوفي آخر أعمالنا</p>
+  <div class="gallery-grid" id="gallery-grid"></div>
+</section>
+
+<div class="gallery-lightbox" id="gallery-lightbox">
+  <button type="button" class="lightbox-close" id="lightbox-close">×</button>
+  <div class="lightbox-content" id="lightbox-content"></div>
+</div>
 
 <footer>
   <p class="copyright">© 2026 mhmed barber. جميع الحقوق محفوظة.</p>
@@ -1337,12 +1586,23 @@
 
   const LS_SLOTS = 'demo_slots_v1';
   const LS_BOOKINGS = 'demo_bookings_v1';
+  const LS_GALLERY = 'demo_gallery_v1';
   const uid = () => 'id-' + Math.random().toString(36).slice(2, 10);
 
   const demoGetSlots = () => JSON.parse(localStorage.getItem(LS_SLOTS) || '[]');
   const demoSetSlots = (arr) => { localStorage.setItem(LS_SLOTS, JSON.stringify(arr)); window.dispatchEvent(new Event('demo-sync')); };
   const demoGetBookings = () => JSON.parse(localStorage.getItem(LS_BOOKINGS) || '[]');
   const demoSetBookings = (arr) => { localStorage.setItem(LS_BOOKINGS, JSON.stringify(arr)); window.dispatchEvent(new Event('demo-sync')); };
+  const demoGetGallery = () => JSON.parse(localStorage.getItem(LS_GALLERY) || '[]');
+  const demoSetGallery = (arr) => { localStorage.setItem(LS_GALLERY, JSON.stringify(arr)); window.dispatchEvent(new Event('demo-sync')); };
+
+  function demoSeedGalleryIfEmpty(){
+    if (demoGetGallery().length > 0) return;
+    demoSetGallery([
+      { id: uid(), type: 'image', url: 'https://plain-eeur-prod-public.komododecks.com/202609/14/OpKbv9BQOJrZ7FmDnSBp/image.jpg' },
+      { id: uid(), type: 'image', url: 'https://plain-eeur-prod-public.komododecks.com/202609/14/xuD32Tvn13s7sgWPEzNV/image.jpg' }
+    ]);
+  }
 
   function demoSeedIfEmpty(){
     if (demoGetSlots().length > 0) return;
@@ -1378,6 +1638,7 @@
   }
 
   if (DEMO_MODE) demoSeedIfEmpty();
+  if (DEMO_MODE) demoSeedGalleryIfEmpty();
 
   let selectedSlotId = null;
   let allSlotsData = [];
@@ -1678,6 +1939,7 @@
       adminPanel.classList.add('show');
       initAdminPanel();
       loadAdminBookings();
+      renderGalleryAdminList();
     } else {
       document.getElementById('my-bookings').classList.add('show');
       loadMyBookings();
@@ -1931,6 +2193,117 @@
     }
     const { error } = await sb.rpc('cancel_booking', { p_booking_id: id, p_new_status: 'rejected' });
     if (!error) loadAdminBookings();
+  }
+
+  // ============ معرض الأعمال (صور وفيديوهات) ============
+  function renderGallery(){
+    const grid = document.getElementById('gallery-grid');
+    if (!grid) return;
+    const items = DEMO_MODE ? demoGetGallery() : [];
+
+    if (!items || items.length === 0){
+      grid.innerHTML = '<p class="gallery-empty">ما في أعمال مضافة بعد</p>';
+      return;
+    }
+
+    grid.innerHTML = '';
+    items.forEach(item => {
+      const cell = document.createElement('div');
+      cell.className = 'gallery-item';
+      cell.onclick = () => openLightbox(item);
+
+      if (item.type === 'video'){
+        cell.innerHTML = `
+          <video src="${item.url}" muted loop autoplay playsinline></video>
+          <div class="play-badge"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        `;
+      } else {
+        cell.innerHTML = `<img src="${item.url}" alt="عمل من أعمال الحلاق" loading="lazy">`;
+      }
+      grid.appendChild(cell);
+    });
+  }
+
+  function openLightbox(item){
+    const lightbox = document.getElementById('gallery-lightbox');
+    const content = document.getElementById('lightbox-content');
+    content.innerHTML = item.type === 'video'
+      ? `<video src="${item.url}" controls autoplay></video>`
+      : `<img src="${item.url}" alt="عمل من أعمال الحلاق">`;
+    lightbox.classList.add('show');
+  }
+
+  function closeLightbox(){
+    const lightbox = document.getElementById('gallery-lightbox');
+    document.getElementById('lightbox-content').innerHTML = '';
+    lightbox.classList.remove('show');
+  }
+
+  document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+  document.getElementById('gallery-lightbox').addEventListener('click', (e) => {
+    if (e.target.id === 'gallery-lightbox') closeLightbox();
+  });
+
+  function addGalleryItem(){
+    const type = document.getElementById('gallery-type').value;
+    const url = document.getElementById('gallery-url').value.trim();
+    const msgEl = document.getElementById('gallery-admin-msg');
+
+    if (!url){
+      msgEl.textContent = 'دخّلي رابط الصورة أو الفيديو';
+      return;
+    }
+
+    if (DEMO_MODE){
+      const items = demoGetGallery();
+      items.unshift({ id: uid(), type, url });
+      demoSetGallery(items);
+      msgEl.textContent = 'تمت الإضافة';
+      document.getElementById('gallery-url').value = '';
+      renderGalleryAdminList();
+      return;
+    }
+  }
+
+  function deleteGalleryItem(id){
+    if (DEMO_MODE){
+      const items = demoGetGallery().filter(i => i.id !== id);
+      demoSetGallery(items);
+      renderGalleryAdminList();
+    }
+  }
+
+  function renderGalleryAdminList(){
+    const list = document.getElementById('gallery-admin-list');
+    if (!list) return;
+    const items = DEMO_MODE ? demoGetGallery() : [];
+
+    if (!items || items.length === 0){
+      list.innerHTML = '<p class="admin-empty">ما في عناصر بالمعرض</p>';
+      return;
+    }
+
+    list.innerHTML = '';
+    items.forEach(item => {
+      const row = document.createElement('div');
+      row.className = 'gallery-admin-item';
+      const thumb = item.type === 'image'
+        ? `<img class="thumb" src="${item.url}" alt="">`
+        : `<video class="thumb" src="${item.url}" muted></video>`;
+      row.innerHTML = `
+        ${thumb}
+        <span class="g-label">${item.type === 'video' ? 'فيديو' : 'صورة'} — ${item.url}</span>
+        <button class="g-delete" onclick="deleteGalleryItem('${item.id}')">حذف</button>
+      `;
+      list.appendChild(row);
+    });
+  }
+
+  renderGallery();
+
+  if (DEMO_MODE){
+    window.addEventListener('demo-sync', renderGallery);
+    window.addEventListener('storage', renderGallery);
   }
 </script>
 </body>
