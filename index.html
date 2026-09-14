@@ -489,19 +489,53 @@
 
   .menu-dropdown{
     display:none;
-    position:absolute;
-    top:calc(100% + 14px);
+    position:fixed;
+    top:0;
     right:0;
-    width:260px;
+    height:100vh;
+    width:280px;
+    max-width:82vw;
     background:#161616;
-    border:1px solid var(--line);
-    border-radius:10px;
-    padding:1.1rem;
-    box-shadow:0 20px 45px rgba(0,0,0,0.5);
-    z-index:200;
+    border-left:1px solid var(--line);
+    padding:4.2rem 1.4rem 1.5rem;
+    box-shadow:-16px 0 40px rgba(0,0,0,0.55);
+    z-index:300;
+    overflow-y:auto;
+    transform:translateX(100%);
+    transition:transform 0.3s ease;
   }
 
-  .menu-dropdown.show{ display:block; }
+  .menu-dropdown.show{
+    display:block;
+    transform:translateX(0);
+  }
+
+  .menu-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.55);
+    z-index:290;
+  }
+
+  .menu-overlay.show{ display:block; }
+
+  .menu-close{
+    position:absolute;
+    top:1.2rem;
+    left:1.2rem;
+    width:32px;
+    height:32px;
+    border-radius:50%;
+    border:1px solid var(--line);
+    background:rgba(255,255,255,0.03);
+    color:var(--ivory);
+    font-size:1.1rem;
+    cursor:pointer;
+    line-height:1;
+  }
+
+  .menu-close:hover{ border-color:var(--gold-soft); }
 
   .menu-dropdown .menu-title{
     font-size:0.78rem;
@@ -963,7 +997,11 @@
       <div class="bar bar3"></div>
     </div>
 
+    <div class="menu-overlay" id="menu-overlay"></div>
+
     <div class="menu-dropdown" id="menu-dropdown">
+      <button type="button" class="menu-close" id="menu-close">×</button>
+
       <div class="guest-view" id="guest-view">
         <p class="menu-title">تسجيل الدخول برقم الهاتف</p>
         <input type="text" id="menu-name" placeholder="الاسم">
@@ -1472,20 +1510,30 @@
 
   const menuBtn = document.getElementById('menu-btn');
   const menuDropdown = document.getElementById('menu-dropdown');
+  const menuOverlay = document.getElementById('menu-overlay');
+  const menuClose = document.getElementById('menu-close');
   const guestView = document.getElementById('guest-view');
   const loggedInView = document.getElementById('logged-in-view');
   const adminPanel = document.getElementById('admin-panel');
 
+  function openMenu(){
+    menuDropdown.classList.add('show');
+    menuOverlay.classList.add('show');
+  }
+
+  function closeMenu(){
+    menuDropdown.classList.remove('show');
+    menuOverlay.classList.remove('show');
+  }
+
   menuBtn.addEventListener('click', (e) => {
     e.stopPropagation();
-    menuDropdown.classList.toggle('show');
+    if (menuDropdown.classList.contains('show')) closeMenu();
+    else openMenu();
   });
 
-  document.addEventListener('click', (e) => {
-    if (!menuDropdown.contains(e.target) && e.target !== menuBtn){
-      menuDropdown.classList.remove('show');
-    }
-  });
+  menuClose.addEventListener('click', closeMenu);
+  menuOverlay.addEventListener('click', closeMenu);
 
   function getCurrentUser(){
     try{ return JSON.parse(localStorage.getItem(LS_CURRENT_USER) || 'null'); }
@@ -1530,7 +1578,7 @@
     guestView.classList.add('hide');
     loggedInView.classList.add('show');
     document.getElementById('welcome-name').textContent = `أهلاً ${user.name}`;
-    menuDropdown.classList.remove('show');
+    closeMenu();
 
     if (user.isBarber){
       adminPanel.classList.add('show');
