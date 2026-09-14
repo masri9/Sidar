@@ -323,13 +323,7 @@
   }
 
   /* ---------- BOOKING ---------- */
-  .book-section{
-    max-width:560px;
-    margin:0 auto 5rem;
-    padding:0 1.5rem;
-  }
-
-  .book-section h2{
+  .book-modal-card h2{
     font-family:'Montserrat', sans-serif;
     font-weight:700;
     font-size:1.4rem;
@@ -337,11 +331,11 @@
     margin-bottom:0.4rem;
   }
 
-  .book-section .book-sub{
+  .book-modal-card .book-sub{
     text-align:center;
     font-size:0.82rem;
     opacity:0.65;
-    margin-bottom:2rem;
+    margin-bottom:1.6rem;
   }
 
   .book-day-group{ margin-bottom:1.5rem; }
@@ -652,6 +646,204 @@
     margin-top:0.5rem;
   }
 
+  /* ---------- BOOKING CALENDAR ---------- */
+  .cal-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:1rem;
+  }
+
+  .cal-header button{
+    width:32px;
+    height:32px;
+    border-radius:50%;
+    border:1px solid var(--line);
+    background:rgba(255,255,255,0.03);
+    color:var(--ivory);
+    font-size:1rem;
+    cursor:pointer;
+    transition:border-color 0.2s ease;
+  }
+
+  .cal-header button:hover{ border-color:var(--gold-soft); }
+  .cal-header button:disabled{ opacity:0.3; cursor:not-allowed; }
+
+  .cal-header span{
+    font-size:0.9rem;
+    font-weight:600;
+    color:var(--gold-soft);
+  }
+
+  .cal-weekdays{
+    display:grid;
+    grid-template-columns:repeat(7, 1fr);
+    text-align:center;
+    font-size:0.68rem;
+    opacity:0.55;
+    letter-spacing:0.04em;
+    margin-bottom:0.5rem;
+  }
+
+  .cal-grid{
+    display:grid;
+    grid-template-columns:repeat(7, 1fr);
+    gap:0.35rem;
+  }
+
+  .cal-day{
+    aspect-ratio:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:8px;
+    border:1px solid transparent;
+    font-size:0.82rem;
+    color:var(--ivory);
+    position:relative;
+  }
+
+  .cal-day.empty{ visibility:hidden; }
+
+  .cal-day.disabled{
+    opacity:0.28;
+  }
+
+  .cal-day.has-slots{
+    border:1px solid var(--line);
+    background:rgba(255,255,255,0.03);
+    cursor:pointer;
+    transition:border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+  }
+
+  .cal-day.has-slots::after{
+    content:'';
+    position:absolute;
+    bottom:5px;
+    width:4px;
+    height:4px;
+    border-radius:50%;
+    background:var(--gold-soft);
+  }
+
+  .cal-day.has-slots:hover{
+    border-color:var(--gold-soft);
+    transform:translateY(-2px);
+  }
+
+  #book-times-view{ display:none; }
+  #book-times-view.show{ display:block; }
+
+  .times-back{
+    display:inline-flex;
+    align-items:center;
+    gap:0.3rem;
+    font-size:0.78rem;
+    color:var(--gold-soft);
+    opacity:0.8;
+    cursor:pointer;
+    margin-bottom:1rem;
+    background:none;
+    border:none;
+    font-family:'Inter', sans-serif;
+  }
+
+  .times-back:hover{ opacity:1; }
+
+  #book-calendar-view.hide{ display:none; }
+
+  /* ---------- BOOKING MODAL ---------- */
+  .book-modal-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.72);
+    backdrop-filter:blur(3px);
+    z-index:100;
+    align-items:center;
+    justify-content:center;
+    padding:1.2rem;
+  }
+
+  .book-modal-overlay.show{ display:flex; }
+
+  .book-modal-card{
+    position:relative;
+    width:100%;
+    max-width:460px;
+    max-height:88vh;
+    overflow-y:auto;
+    background:#161616;
+    border:1px solid var(--line);
+    border-radius:14px;
+    box-shadow:0 30px 70px rgba(0,0,0,0.6);
+    padding:1.8rem 1.5rem;
+    animation:modalPop 0.25s ease;
+  }
+
+  @keyframes modalPop{
+    from{ opacity:0; transform:scale(0.96) translateY(10px); }
+    to{ opacity:1; transform:scale(1) translateY(0); }
+  }
+
+  .book-modal-close{
+    position:absolute;
+    top:0.9rem;
+    left:0.9rem;
+    width:30px;
+    height:30px;
+    border-radius:50%;
+    border:1px solid var(--line);
+    background:rgba(255,255,255,0.03);
+    color:var(--ivory);
+    font-size:1rem;
+    cursor:pointer;
+    line-height:1;
+  }
+
+  .book-modal-close:hover{ border-color:var(--gold-soft); }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    border-top:1px solid var(--line);
+    padding:2.2rem 1.5rem 2.5rem;
+    text-align:center;
+  }
+
+  footer .footer-contact{
+    display:flex;
+    justify-content:center;
+    gap:1.4rem;
+    flex-wrap:wrap;
+    margin-bottom:1.2rem;
+  }
+
+  footer .footer-contact a{
+    display:inline-flex;
+    align-items:center;
+    gap:0.4rem;
+    font-size:0.8rem;
+    color:var(--ivory);
+    opacity:0.8;
+    transition:opacity 0.2s ease, color 0.2s ease;
+  }
+
+  footer .footer-contact a:hover{ opacity:1; color:var(--gold-soft); }
+
+  footer .footer-contact svg{
+    width:16px;
+    height:16px;
+    stroke:var(--gold-soft);
+    fill:none;
+    stroke-width:1.8;
+  }
+
+  footer .copyright{
+    font-size:0.72rem;
+    opacity:0.5;
+    letter-spacing:0.02em;
+  }
+
   /* ---------- RESPONSIVE ---------- */
   @media (max-width: 860px){
     .hero{
@@ -690,7 +882,7 @@
   <div class="hero-copy">
     <span class="eyebrow">YOUR COMPANY NAME</span>
     <h1>ATLANTA'S BEST<br>BARBER.</h1>
-    <a href="#book" class="cta">BOOK TODAY</a>
+    <a href="#" class="cta" id="hero-book-btn">BOOK TODAY</a>
   </div>
 
   <div class="collage">
@@ -737,7 +929,7 @@
       <span>PRICING</span>
     </div>
 
-    <div class="icon-item">
+    <div class="icon-item" id="icon-book-now" style="cursor:pointer;">
       <div class="icon-circle">
         <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="1"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>
       </div>
@@ -754,29 +946,47 @@
   </div>
 </section>
 
-<section class="book-section" id="book">
-  <h2>احجزي موعدك</h2>
-  <p class="book-sub">اختاري اليوم والساعة المناسبة</p>
+<div class="book-modal-overlay" id="book-modal-overlay">
+  <div class="book-modal-card">
+    <button type="button" class="book-modal-close" id="book-modal-close">×</button>
 
-  <div id="book-slots-container">
-    <p class="book-empty">جاري تحميل المواعيد المتاحة...</p>
+    <h2>احجزي موعدك</h2>
+    <p class="book-sub">اختاري التاريخ من الروزنامة</p>
+
+    <div id="book-calendar-view">
+      <div class="cal-header">
+        <button id="cal-prev" type="button">‹</button>
+        <span id="cal-month-label"></span>
+        <button id="cal-next" type="button">›</button>
+      </div>
+      <div class="cal-weekdays">
+        <span>أحد</span><span>إثنين</span><span>ثلاثاء</span><span>أربعاء</span><span>خميس</span><span>جمعة</span><span>سبت</span>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+    </div>
+
+    <div id="book-times-view">
+      <button type="button" class="times-back" id="times-back">‹ رجوع للروزنامة</button>
+      <div class="book-day-title" id="times-date-label"></div>
+      <div class="book-slots" id="times-slots"></div>
+    </div>
+
+    <form id="book-form">
+      <p class="book-selected-line">الموعد المختار: <strong id="book-selected-label">—</strong></p>
+      <div>
+        <label for="book-name">الاسم</label>
+        <input id="book-name" type="text" required placeholder="اسمك الكامل">
+      </div>
+      <div>
+        <label for="book-phone">رقم الهاتف</label>
+        <input id="book-phone" type="tel" required placeholder="07xxxxxxxx">
+      </div>
+      <button type="submit" id="book-submit-btn">تأكيد الحجز</button>
+    </form>
+
+    <div id="book-msg"></div>
   </div>
-
-  <form id="book-form">
-    <p class="book-selected-line">الموعد المختار: <strong id="book-selected-label">—</strong></p>
-    <div>
-      <label for="book-name">الاسم</label>
-      <input id="book-name" type="text" required placeholder="اسمك الكامل">
-    </div>
-    <div>
-      <label for="book-phone">رقم الهاتف</label>
-      <input id="book-phone" type="tel" required placeholder="07xxxxxxxx">
-    </div>
-    <button type="submit" id="book-submit-btn">تأكيد الحجز</button>
-  </form>
-
-  <div id="book-msg"></div>
-</section>
+</div>
 
 <div class="login-gate">
   <span class="toggle-link" id="login-toggle">تسجيل دخول الحلاق</span>
@@ -829,6 +1039,24 @@
   <span class="admin-logout" onclick="logoutBarber()">تسجيل خروج</span>
 </section>
 
+<footer>
+  <div class="footer-contact">
+    <a href="tel:+972548896678">
+      <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      اتصال
+    </a>
+    <a href="https://wa.me/972548896678" target="_blank">
+      <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+      واتساب
+    </a>
+    <a href="https://instagram.com/mhmd_msree77" target="_blank">
+      <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.8" fill="var(--gold-soft)" stroke="none"/></svg>
+      انستقرام
+    </a>
+  </div>
+  <p class="copyright">© 2026 mhmed barber. جميع الحقوق محفوظة.</p>
+</footer>
+
 <script>
   const io = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -840,6 +1068,28 @@
   }, { threshold: 0.2 });
 
   document.querySelectorAll('.icon-item, #looking-title').forEach(el => io.observe(el));
+
+  // ---- booking modal open/close ----
+  const bookModalOverlay = document.getElementById('book-modal-overlay');
+
+  function openBookModal(){
+    bookModalOverlay.classList.add('show');
+  }
+
+  function closeBookModal(){
+    bookModalOverlay.classList.remove('show');
+  }
+
+  document.getElementById('hero-book-btn').addEventListener('click', (e) => {
+    e.preventDefault();
+    openBookModal();
+  });
+
+  document.getElementById('icon-book-now').addEventListener('click', openBookModal);
+  document.getElementById('book-modal-close').addEventListener('click', closeBookModal);
+  bookModalOverlay.addEventListener('click', (e) => {
+    if (e.target === bookModalOverlay) closeBookModal();
+  });
 </script>
 
 <script>
@@ -898,13 +1148,20 @@
   if (DEMO_MODE) demoSeedIfEmpty();
 
   let selectedSlotId = null;
+  let allSlotsData = [];
+  let selectedDate = null;
+  let calMonth, calYear;
 
-  const bookContainer = document.getElementById('book-slots-container');
   const bookForm = document.getElementById('book-form');
   const bookMsg = document.getElementById('book-msg');
   const bookSubmitBtn = document.getElementById('book-submit-btn');
+  const calendarView = document.getElementById('book-calendar-view');
+  const timesView = document.getElementById('book-times-view');
+  const calGrid = document.getElementById('cal-grid');
+  const calMonthLabel = document.getElementById('cal-month-label');
 
   const dayNames = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+  const monthNames = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
 
   function formatSlotTime(t){
     const [h, m] = t.split(':');
@@ -932,48 +1189,112 @@
     }
 
     if (error){
-      bookContainer.innerHTML = `<p class="book-empty">صار خطأ بتحميل المواعيد. تأكدي من إعداد Supabase.</p>`;
+      calGrid.innerHTML = '';
+      calMonthLabel.textContent = 'صار خطأ بتحميل المواعيد';
       console.error(error);
       return;
     }
 
-    if (!data || data.length === 0){
-      bookContainer.innerHTML = `<p class="book-empty">ما في مواعيد متاحة حالياً، تواصلي معنا مباشرة.</p>`;
-      return;
+    allSlotsData = data || [];
+    renderCalendar();
+
+    // if we're currently viewing a date's times, refresh that view too
+    if (selectedDate && timesView.classList.contains('show')) renderTimesForDate(selectedDate);
+  }
+
+  function renderCalendar(){
+    if (calMonth === undefined){
+      const now = new Date();
+      calMonth = now.getMonth();
+      calYear = now.getFullYear();
     }
 
-    const byDay = {};
-    data.forEach(slot => {
-      if (!byDay[slot.slot_date]) byDay[slot.slot_date] = [];
-      byDay[slot.slot_date].push(slot);
-    });
+    const availableDates = new Set(
+      allSlotsData.filter(s => s.status === 'available').map(s => s.slot_date)
+    );
 
-    bookContainer.innerHTML = '';
-    Object.keys(byDay).forEach(date => {
-      const d = new Date(date + 'T00:00:00');
-      const dayLabel = `${dayNames[d.getDay()]} — ${date}`;
+    calMonthLabel.textContent = `${monthNames[calMonth]} ${calYear}`;
 
-      const group = document.createElement('div');
-      group.className = 'book-day-group';
-      group.innerHTML = `<div class="book-day-title">${dayLabel}</div>`;
+    const firstOfMonth = new Date(calYear, calMonth, 1);
+    const startOffset = firstOfMonth.getDay();
+    const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+    const todayStr = new Date().toISOString().split('T')[0];
 
-      const slotsWrap = document.createElement('div');
-      slotsWrap.className = 'book-slots';
+    calGrid.innerHTML = '';
 
-      byDay[date].forEach(slot => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'book-slot-btn' + (slot.status === 'booked' ? ' taken' : '');
-        btn.textContent = formatSlotTime(slot.slot_time);
-        btn.disabled = slot.status === 'booked';
-        btn.onclick = () => selectBookSlot(slot.id, `${dayLabel} — ${formatSlotTime(slot.slot_time)}`, btn);
-        slotsWrap.appendChild(btn);
-      });
+    for (let i = 0; i < startOffset; i++){
+      const empty = document.createElement('div');
+      empty.className = 'cal-day empty';
+      calGrid.appendChild(empty);
+    }
 
-      group.appendChild(slotsWrap);
-      bookContainer.appendChild(group);
+    for (let day = 1; day <= daysInMonth; day++){
+      const dateStr = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+      const cell = document.createElement('div');
+      cell.textContent = day;
+
+      if (availableDates.has(dateStr) && dateStr >= todayStr){
+        cell.className = 'cal-day has-slots';
+        cell.onclick = () => showTimesForDate(dateStr);
+      } else {
+        cell.className = 'cal-day disabled';
+      }
+      calGrid.appendChild(cell);
+    }
+
+    // disable prev-month arrow before current month
+    const now = new Date();
+    const isCurrentMonth = calYear === now.getFullYear() && calMonth === now.getMonth();
+    document.getElementById('cal-prev').disabled = isCurrentMonth;
+  }
+
+  document.getElementById('cal-prev').addEventListener('click', () => {
+    calMonth--;
+    if (calMonth < 0){ calMonth = 11; calYear--; }
+    renderCalendar();
+  });
+
+  document.getElementById('cal-next').addEventListener('click', () => {
+    calMonth++;
+    if (calMonth > 11){ calMonth = 0; calYear++; }
+    renderCalendar();
+  });
+
+  function showTimesForDate(dateStr){
+    selectedDate = dateStr;
+    renderTimesForDate(dateStr);
+    calendarView.classList.add('hide');
+    timesView.classList.add('show');
+  }
+
+  function renderTimesForDate(dateStr){
+    const d = new Date(dateStr + 'T00:00:00');
+    document.getElementById('times-date-label').textContent = `${dayNames[d.getDay()]} — ${dateStr}`;
+
+    const slotsForDay = allSlotsData
+      .filter(s => s.slot_date === dateStr)
+      .sort((a,b) => a.slot_time.localeCompare(b.slot_time));
+
+    const wrap = document.getElementById('times-slots');
+    wrap.innerHTML = '';
+
+    slotsForDay.forEach(slot => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'book-slot-btn' + (slot.status === 'booked' ? ' taken' : '');
+      btn.textContent = formatSlotTime(slot.slot_time);
+      btn.disabled = slot.status === 'booked';
+      btn.onclick = () => selectBookSlot(slot.id, `${dayNames[d.getDay()]} — ${dateStr} — ${formatSlotTime(slot.slot_time)}`, btn);
+      wrap.appendChild(btn);
     });
   }
+
+  document.getElementById('times-back').addEventListener('click', () => {
+    timesView.classList.remove('show');
+    calendarView.classList.remove('hide');
+    bookForm.classList.remove('show');
+    selectedSlotId = null;
+  });
 
   function selectBookSlot(id, label, btnEl){
     document.querySelectorAll('.book-slot-btn.selected').forEach(b => b.classList.remove('selected'));
