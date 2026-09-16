@@ -602,7 +602,51 @@
     padding:1.5rem 1.5rem 0;
   }
 
-  .header-spacer{ width:34px; }
+  .header-bell-wrap{ width:34px; display:flex; justify-content:center; }
+
+  .header-bell-btn{
+    position:relative;
+    width:34px;
+    height:34px;
+    border-radius:50%;
+    border:1px solid var(--line);
+    background:rgba(255,255,255,0.03);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    padding:0;
+  }
+
+  .header-bell-btn:hover{ border-color:var(--gold-soft); }
+
+  .header-bell-btn svg{
+    width:17px;
+    height:17px;
+    stroke:var(--ivory);
+    fill:none;
+    stroke-width:2;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+  }
+
+  .header-bell-badge{
+    position:absolute;
+    top:-4px;
+    right:-4px;
+    min-width:16px;
+    height:16px;
+    padding:0 3px;
+    border-radius:8px;
+    background:#e05555;
+    color:#fff;
+    font-size:10px;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:2px solid var(--bg-dark);
+  }
 
   .logo-block{
     display:flex;
@@ -933,6 +977,35 @@
     margin-bottom:1.6rem;
   }
 
+  .admin-quicknav{
+    display:flex;
+    gap:0.6rem;
+    position:sticky;
+    top:0.8rem;
+    z-index:20;
+    background:var(--bg-dark);
+    padding:0.6rem 0 1.2rem;
+  }
+
+  .admin-quicknav-btn{
+    flex:1;
+    text-align:center;
+    padding:0.6rem 0.4rem;
+    border-radius:8px;
+    border:1px solid var(--line);
+    background:rgba(255,255,255,0.03);
+    color:var(--ivory);
+    font-size:0.72rem;
+    font-weight:600;
+    transition:border-color 0.2s ease, background 0.2s ease;
+  }
+
+  .admin-quicknav-btn:hover{
+    border-color:var(--gold-soft);
+    background:rgba(228,201,138,0.08);
+    color:var(--gold-soft);
+  }
+
   .admin-card{
     background:rgba(255,255,255,0.035);
     border:1px solid var(--line);
@@ -940,6 +1013,7 @@
     padding:1.3rem;
     margin-bottom:1.5rem;
     transition:border-color 0.2s ease;
+    scroll-margin-top:4.5rem;
   }
 
   .admin-card:hover{ border-color:rgba(228,201,138,0.3); }
@@ -1676,7 +1750,13 @@
   <div class="logo-block">
     <div class="logo" id="site-logo-text">mhmed barber</div>
   </div>
-  <div class="header-spacer" aria-hidden="true"></div>
+
+  <div class="header-bell-wrap" id="header-bell-wrap">
+    <button type="button" class="header-bell-btn" id="header-bell-btn" style="visibility:hidden;">
+      <svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <span class="header-bell-badge" id="header-bell-badge" style="display:none;">0</span>
+    </button>
+  </div>
 </header>
 
 <section class="hero-section">
@@ -1802,7 +1882,13 @@
   <h2>لوحة التحكم</h2>
   <p class="admin-sub" id="admin-welcome-text">أهلاً محمد، هون بتدير مواعيدك وطلبات الحجز</p>
 
-  <div class="admin-card">
+  <div class="admin-quicknav">
+    <a href="#admin-section-hours" class="admin-quicknav-btn">📅 المواعيد</a>
+    <a href="#admin-section-bookings" class="admin-quicknav-btn">📋 الطلبات</a>
+    <a href="#admin-section-gallery" class="admin-quicknav-btn">🖼️ المعرض</a>
+  </div>
+
+  <div class="admin-card" id="admin-section-hours">
     <h3>📅 إضافة مواعيد</h3>
 
     <div class="admin-row">
@@ -1823,14 +1909,14 @@
     <p id="generate-msg" class="admin-empty"></p>
   </div>
 
-  <div class="admin-card">
+  <div class="admin-card" id="admin-section-bookings">
     <h3>📋 طلبات الحجز</h3>
     <button type="button" id="notify-permission-btn" class="admin-action-btn" style="margin-bottom:0.8rem;" onclick="requestNotificationPermission()">فعّلي إشعارات المتصفح</button>
     <a id="whatsapp-remind" class="whatsapp-btn" href="#" target="_blank">أرسلي تذكير عبر واتساب</a>
     <div id="bookings-list"></div>
   </div>
 
-  <div class="admin-card">
+  <div class="admin-card" id="admin-section-gallery">
     <h3>🖼️ معرض الأعمال</h3>
 
     <label class="upload-btn" for="gallery-file">
@@ -2511,6 +2597,7 @@
     loggedInView.classList.remove('show');
     adminPanel.classList.remove('show');
     document.getElementById('my-bookings').classList.remove('show');
+    document.getElementById('header-bell-btn').style.visibility = 'hidden';
     resetLoginForm();
   }
 
@@ -2519,6 +2606,23 @@
     if (session && !getCurrentUser()){
       onAuthSessionReady(session);
     }
+  });
+
+  function updateHeaderBellCount(bookings){
+    const badge = document.getElementById('header-bell-badge');
+    const pendingCount = bookings.filter(b => b.status === 'pending').length;
+    if (pendingCount > 0){
+      badge.textContent = pendingCount > 99 ? '99+' : String(pendingCount);
+      badge.style.display = 'flex';
+    } else {
+      badge.style.display = 'none';
+    }
+  }
+
+  document.getElementById('header-bell-btn').addEventListener('click', () => {
+    openMenu();
+    document.getElementById('admin-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    loadAdminBookings();
   });
 
   function applyLoggedInState(user){
@@ -2530,6 +2634,7 @@
 
     if (user.isBarber){
       adminPanel.classList.add('show');
+      document.getElementById('header-bell-btn').style.visibility = 'visible';
       initAdminPanel();
       seedNotifiedBaselineIfNeeded();
       requestNotificationPermission();
@@ -2885,6 +2990,9 @@
 
     const list = document.getElementById('bookings-list');
     if (error){ list.innerHTML = '<p class="admin-empty">صار خطأ بتحميل الحجوزات</p>'; return; }
+
+    updateHeaderBellCount(data || []);
+
     if (!data || data.length === 0){ list.innerHTML = '<p class="admin-empty">ما في طلبات حجز حالياً</p>'; return; }
 
     notifyNewBookings(data);
