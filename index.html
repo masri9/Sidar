@@ -537,7 +537,8 @@
     opacity:0.75;
   }
 
-  #book-submit-btn{
+  #book-submit-btn,
+  #book-go-login-btn{
     margin-top:0.4rem;
     padding:0.85rem;
     border-radius:6px;
@@ -550,9 +551,11 @@
     cursor:pointer;
     transition:background 0.2s ease, transform 0.2s ease;
     font-family:'Inter', sans-serif;
+    width:100%;
   }
 
-  #book-submit-btn:hover{ background:var(--gold); transform:translateY(-2px); }
+  #book-submit-btn:hover,
+  #book-go-login-btn:hover{ background:var(--gold); transform:translateY(-2px); }
   #book-submit-btn:disabled{ opacity:0.5; cursor:not-allowed; transform:none; }
 
   #book-msg{
@@ -702,8 +705,51 @@
   .menu-dropdown .logged-in-view.show{ display:block; }
   .menu-dropdown .guest-view.hide{ display:none; }
 
-  .menu-dropdown .welcome-name{
-    font-size:0.85rem;
+  .profile-card{
+    display:flex;
+    align-items:center;
+    gap:0.9rem;
+    background:rgba(228,201,138,0.06);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:0.9rem;
+    margin-bottom:0.8rem;
+    text-align:right;
+  }
+
+  .profile-avatar{
+    width:44px;
+    height:44px;
+    border-radius:50%;
+    background:rgba(228,201,138,0.15);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:1.3rem;
+    flex-shrink:0;
+  }
+
+  .profile-info{ flex:1; min-width:0; }
+
+  .profile-name{
+    font-size:0.9rem;
+    font-weight:700;
+    color:var(--gold-soft);
+    margin-bottom:0.2rem;
+  }
+
+  .profile-phone{
+    font-size:0.78rem;
+    opacity:0.65;
+    direction:ltr;
+    text-align:right;
+    unicode-bidi:plaintext;
+  }
+
+  .menu-section-title{
+    font-size:0.82rem;
+    color:var(--gold-soft);
+    font-weight:600;
     margin-bottom:0.8rem;
   }
 
@@ -838,21 +884,30 @@
   }
 
   .admin-card{
-    background:rgba(255,255,255,0.03);
+    background:rgba(255,255,255,0.035);
     border:1px solid var(--line);
-    border-radius:10px;
-    padding:1.2rem;
-    margin-bottom:1.4rem;
+    border-radius:12px;
+    padding:1.3rem;
+    margin-bottom:1.5rem;
+    transition:border-color 0.2s ease;
   }
+
+  .admin-card:hover{ border-color:rgba(228,201,138,0.3); }
 
   .admin-card h3{
-    font-size:0.9rem;
+    display:flex;
+    align-items:center;
+    gap:0.5rem;
+    font-size:0.92rem;
     color:var(--gold-soft);
-    margin-bottom:1rem;
-    font-weight:600;
+    margin-bottom:1.1rem;
+    font-weight:700;
+    letter-spacing:0.01em;
+    padding-bottom:0.7rem;
+    border-bottom:1px solid var(--line);
   }
 
-  .days-picker{ display:flex; flex-wrap:wrap; gap:0.5rem; margin-bottom:0.9rem; }
+  .days-picker{ display:flex; flex-wrap:wrap; gap:0.5rem; margin-bottom:1.1rem; }
 
   .day-chip{
     padding:0.45rem 0.9rem;
@@ -861,27 +916,33 @@
     font-size:0.78rem;
     cursor:pointer;
     user-select:none;
+    transition:border-color 0.2s ease, background 0.2s ease;
   }
 
+  .day-chip:hover{ border-color:var(--gold-soft); }
   .day-chip.active{ background:var(--gold-soft); color:var(--bg-dark); border-color:var(--gold-soft); font-weight:600; }
 
-  .admin-row{ display:flex; gap:0.6rem; flex-wrap:wrap; margin-bottom:0.8rem; }
+  .admin-row{ display:flex; gap:0.7rem; flex-wrap:wrap; margin-bottom:1rem; }
   .admin-row .field{ flex:1; min-width:110px; }
-  .admin-row label{ font-size:0.75rem; opacity:0.75; display:block; margin-bottom:0.3rem; }
+  .admin-row label{ font-size:0.75rem; opacity:0.75; display:block; margin-bottom:0.35rem; }
   .admin-row input, .admin-row select{
     width:100%;
-    padding:0.6rem 0.8rem;
-    border-radius:6px;
+    padding:0.65rem 0.8rem;
+    border-radius:7px;
     border:1px solid var(--line);
     background:rgba(0,0,0,0.3);
     color:var(--ivory);
     font-size:0.85rem;
     font-family:'Inter', sans-serif;
+    transition:border-color 0.2s ease;
   }
 
+  .admin-row input:focus, .admin-row select:focus{ outline:none; border-color:var(--gold-soft); }
+
   .admin-action-btn{
-    padding:0.7rem 1.4rem;
-    border-radius:6px;
+    width:100%;
+    padding:0.8rem 1.4rem;
+    border-radius:7px;
     border:none;
     background:var(--gold-soft);
     color:var(--bg-dark);
@@ -889,9 +950,11 @@
     font-size:0.85rem;
     cursor:pointer;
     font-family:'Inter', sans-serif;
+    transition:background 0.2s ease, transform 0.15s ease;
   }
 
-  .admin-action-btn:hover{ background:var(--gold); }
+  .admin-action-btn:hover{ background:var(--gold); transform:translateY(-1px); }
+  .admin-action-btn:active{ transform:translateY(0); }
 
   .upload-btn{
     display:flex;
@@ -1109,11 +1172,14 @@
     position:relative;
     width:100%;
     max-width:460px;
-    max-height:88vh;
+    max-height:94vh;
+    min-height:70vh;
+    display:flex;
+    flex-direction:column;
     overflow-y:auto;
     background:#161616;
     border:1px solid var(--line);
-    border-radius:14px;
+    border-radius:16px;
     box-shadow:0 30px 70px rgba(0,0,0,0.6);
     padding:1.8rem 1.5rem;
     animation:modalPop 0.25s ease;
@@ -1140,6 +1206,23 @@
   }
 
   .book-modal-close:hover{ border-color:var(--gold-soft); }
+
+  .book-cancel-btn{
+    margin-top:1rem;
+    width:100%;
+    padding:0.75rem;
+    border-radius:7px;
+    border:1px solid var(--line);
+    background:transparent;
+    color:var(--ivory);
+    opacity:0.75;
+    font-size:0.82rem;
+    cursor:pointer;
+    font-family:'Inter', sans-serif;
+    transition:border-color 0.2s ease, opacity 0.2s ease;
+  }
+
+  .book-cancel-btn:hover{ border-color:#e08a8a; color:#e08a8a; opacity:1; }
 
   /* ---------- HOURS MODAL ---------- */
   .hours-modal-overlay{
@@ -1468,58 +1551,65 @@
         <p class="menu-error" id="menu-error"></p>
       </div>
       <div class="logged-in-view" id="logged-in-view">
-        <p class="welcome-name" id="welcome-name"></p>
+        <div class="profile-card">
+          <div class="profile-avatar">👤</div>
+          <div class="profile-info">
+            <p class="profile-name" id="welcome-name"></p>
+            <p class="profile-phone" id="welcome-phone"></p>
+          </div>
+        </div>
         <span class="logout-link" onclick="handleMenuLogout()">تسجيل خروج</span>
       </div>
 
       <div class="my-bookings" id="my-bookings">
         <hr class="menu-divider">
-        <h4>مواعيدي</h4>
+        <h4>📅 مواعيدي</h4>
         <div id="my-bookings-list"></div>
       </div>
 
       <hr class="menu-divider">
 
+      <h4 class="menu-section-title">📞 تواصل معنا</h4>
       <div class="menu-contact">
-        <a href="tel:+972548896678">
+        <a href="tel:+972548896678" id="contact-call-link">
           <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          اتصال +972 54-889-6678
+          <span id="contact-call-text">اتصال +972 54-889-6678</span>
         </a>
-        <a href="https://wa.me/972548896678" target="_blank">
+        <a href="https://wa.me/972548896678" target="_blank" id="contact-whatsapp-link">
           <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
           واتساب
         </a>
-        <a href="https://instagram.com/mhmd_msree77" target="_blank">
+        <a href="https://instagram.com/mhmd_msree77" target="_blank" id="contact-instagram-link">
           <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.8" fill="var(--gold-soft)" stroke="none"/></svg>
-          instagram.com/mhmd_msree77
+          <span id="contact-instagram-text">instagram.com/mhmd_msree77</span>
         </a>
       </div>
     </div>
   </div>
 
   <div class="logo-block">
-    <div class="logo">mhmed barber</div>
+    <div class="logo" id="site-logo-text">mhmed barber</div>
   </div>
   <div class="header-spacer" aria-hidden="true"></div>
 </header>
 
 <section class="hero-section">
-  <div class="bg-image"></div>
+  <div class="bg-image" id="hero-bg-image"></div>
   <div class="overlay"></div>
   <section class="hero">
   <div class="hero-copy">
-    <span class="eyebrow">YOUR COMPANY NAME</span>
-    <h1>ATLANTA'S BEST<br>BARBER.</h1>
+    <span class="eyebrow" id="hero-eyebrow">YOUR COMPANY NAME</span>
+    <h1 id="hero-headline">ATLANTA'S BEST<br>BARBER.</h1>
     <a href="#" class="cta" id="hero-book-btn">BOOK TODAY</a>
   </div>
 
   <div class="collage">
     <div class="frame top">
-      <img src="https://plain-eeur-prod-public.komododecks.com/202609/14/OpKbv9BQOJrZ7FmDnSBp/image.jpg" alt="Barber at work, top photo">
+      <img src="https://plain-eeur-prod-public.komododecks.com/202609/14/OpKbv9BQOJrZ7FmDnSBp/image.jpg" alt="Barber at work, top photo" id="img-collage-top">
     </div>
     <!-- Bottom photo -->
     <div class="frame bottom">
-      <img src="https://plain-eeur-prod-public.komododecks.com/202609/14/xuD32Tvn13s7sgWPEzNV/image.jpg" alt="Barbershop interior, bottom photo">
+      <img src="https://plain-eeur-prod-public.komododecks.com/202609/14/xuD32Tvn13s7sgWPEzNV/image.jpg" alt="Barbershop interior, bottom photo" id="img-collage-bottom">
     </div>
   </div>
 </section>
@@ -1578,27 +1668,42 @@
 
     <form id="book-form">
       <p class="book-selected-line">الموعد المختار: <strong id="book-selected-label">—</strong></p>
-      <div>
-        <label for="book-name">الاسم</label>
-        <input id="book-name" type="text" required placeholder="اسمك الكامل">
+
+      <div id="book-guest-fields">
+        <div>
+          <label for="book-name">الاسم</label>
+          <input id="book-name" type="text" placeholder="اسمك الكامل">
+        </div>
+        <div>
+          <label for="book-phone">رقم الهاتف</label>
+          <input id="book-phone" type="tel" placeholder="07xxxxxxxx">
+        </div>
       </div>
-      <div>
-        <label for="book-phone">رقم الهاتف</label>
-        <input id="book-phone" type="tel" required placeholder="07xxxxxxxx">
+
+      <div id="book-logged-in-info" style="display:none;">
+        <p class="book-selected-line">الحجز باسم: <strong id="book-as-name">—</strong></p>
       </div>
+
+      <div id="book-login-required" style="display:none; text-align:center;">
+        <p class="book-selected-line" style="margin-bottom:0.8rem;">لازم تسجل دخول الأول لتأكيد الحجز</p>
+        <button type="button" id="book-go-login-btn">تسجيل الدخول</button>
+      </div>
+
       <button type="submit" id="book-submit-btn">تأكيد الحجز</button>
     </form>
 
     <div id="book-msg"></div>
+
+    <button type="button" class="book-cancel-btn" id="book-cancel-btn">إلغاء</button>
   </div>
 </div>
 
 <section id="admin-panel">
   <h2>لوحة التحكم</h2>
-  <p class="admin-sub">أهلاً محمد، هون بتدير مواعيدك وطلبات الحجز</p>
+  <p class="admin-sub" id="admin-welcome-text">أهلاً محمد، هون بتدير مواعيدك وطلبات الحجز</p>
 
   <div class="admin-card">
-    <h3>إضافة مواعيد للأسبوع</h3>
+    <h3>📅 إضافة مواعيد للأسبوع</h3>
     <div class="days-picker" id="days-picker"></div>
     <div class="admin-row">
       <div class="field">
@@ -1627,14 +1732,14 @@
   </div>
 
   <div class="admin-card">
-    <h3>طلبات الحجز</h3>
+    <h3>📋 طلبات الحجز</h3>
     <button type="button" id="notify-permission-btn" class="admin-action-btn" style="margin-bottom:0.8rem;" onclick="requestNotificationPermission()">فعّلي إشعارات المتصفح</button>
     <a id="whatsapp-remind" class="whatsapp-btn" href="#" target="_blank">أرسلي تذكير عبر واتساب</a>
     <div id="bookings-list"></div>
   </div>
 
   <div class="admin-card">
-    <h3>معرض الأعمال</h3>
+    <h3>🖼️ معرض الأعمال</h3>
 
     <label class="upload-btn" for="gallery-file">
       <svg viewBox="0 0 24 24"><path d="M12 16V4M12 4l-4 4M12 4l4 4"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
@@ -1681,7 +1786,7 @@
   <div class="hours-modal-card">
     <button type="button" class="book-modal-close" id="hours-modal-close">×</button>
     <h2>ساعات العمل</h2>
-    <ul class="hours-list">
+    <ul class="hours-list" id="hours-list-container">
       <li><span>الأحد</span><span>11:00 ص – 9:00 م</span></li>
       <li><span>الإثنين</span><span>1:30 م – 9:00 م</span></li>
       <li><span>الثلاثاء</span><span>1:30 م – 9:00 م</span></li>
@@ -1702,7 +1807,7 @@
 <div class="toast-message" id="toast-message"></div>
 
 <footer>
-  <p class="copyright">© 2026 mhmed barber. جميع الحقوق محفوظة.</p>
+  <p class="copyright" id="footer-copyright">© 2026 mhmed barber. جميع الحقوق محفوظة.</p>
   <p class="powered-by">Crafted by <span>MMM LABS</span></p>
 </footer>
 
@@ -1723,15 +1828,6 @@
 
   function openBookModal(){
     bookModalOverlay.classList.add('show');
-    const user = typeof getCurrentUser === 'function' ? getCurrentUser() : null;
-    if (user){
-      const nameInput = document.getElementById('book-name');
-      const phoneInput = document.getElementById('book-phone');
-      if (nameInput && phoneInput){
-        nameInput.value = user.name;
-        phoneInput.value = user.phone;
-      }
-    }
   }
 
   function closeBookModal(){
@@ -1775,9 +1871,9 @@
   });
 
   document.getElementById('book-modal-close').addEventListener('click', closeBookModal);
-  bookModalOverlay.addEventListener('click', (e) => {
-    if (e.target === bookModalOverlay) closeBookModal();
-  });
+  document.getElementById('book-cancel-btn').addEventListener('click', closeBookModal);
+  // ملاحظة: تم عمداً عدم إغلاق البطاقة بالضغط برّا (على الخلفية) —
+  // الخروج بس عبر زر × أو زر إلغاء، حسب الطلب.
 </script>
 
 <script>
@@ -1799,6 +1895,17 @@
   const LS_BOOKINGS = 'demo_bookings_v1';
   const LS_GALLERY = 'demo_gallery_v1';
   const uid = () => 'id-' + Math.random().toString(36).slice(2, 10);
+
+  // تنسيق رقم الهاتف للعرض بشكل مقروء أكتر (بدون تغيير القيمة الفعلية المخزّنة)
+  function formatPhoneDisplay(phone){
+    if (!phone) return '';
+    const digits = phone.replace(/\D/g, '');
+    if (digits.length <= 4) return digits;
+    const last = digits.slice(-4);
+    const middle = digits.slice(-7, -4);
+    const rest = digits.slice(0, -7);
+    return [rest, middle, last].filter(Boolean).join(' ');
+  }
 
   const demoGetSlots = () => JSON.parse(localStorage.getItem(LS_SLOTS) || '[]');
   const demoSetSlots = (arr) => { localStorage.setItem(LS_SLOTS, JSON.stringify(arr)); window.dispatchEvent(new Event('demo-sync')); };
@@ -1869,10 +1976,7 @@
 
   function formatSlotTime(t){
     const [h, m] = t.split(':');
-    const hour = parseInt(h,10);
-    const period = hour >= 12 ? 'م' : 'ص';
-    const hour12 = ((hour % 12) || 12);
-    return `${hour12}:${m} ${period}`;
+    return `${h.padStart(2,'0')}:${m}`;
   }
 
   async function loadBookSlots(){
@@ -2000,38 +2104,99 @@
     selectedSlotId = null;
   });
 
+  let selectedSlotLabel = '';
+
   function selectBookSlot(id, label, btnEl){
     document.querySelectorAll('.book-slot-btn.selected').forEach(b => b.classList.remove('selected'));
     btnEl.classList.add('selected');
     selectedSlotId = id;
+    selectedSlotLabel = label;
     document.getElementById('book-selected-label').textContent = label;
     bookForm.classList.add('show');
     bookMsg.className = '';
     bookMsg.textContent = '';
+    refreshBookFormState();
+  }
+
+  function refreshBookFormState(){
+    const guestFields = document.getElementById('book-guest-fields');
+    const loggedInInfo = document.getElementById('book-logged-in-info');
+    const loginRequired = document.getElementById('book-login-required');
+    const user = typeof getCurrentUser === 'function' ? getCurrentUser() : null;
+
+    if (user){
+      guestFields.style.display = 'none';
+      loginRequired.style.display = 'none';
+      loggedInInfo.style.display = 'block';
+      bookSubmitBtn.style.display = 'block';
+      document.getElementById('book-as-name').textContent = `${user.name} — ${formatPhoneDisplay(user.phone)}`;
+    } else {
+      guestFields.style.display = 'none';
+      loggedInInfo.style.display = 'none';
+      loginRequired.style.display = 'block';
+      bookSubmitBtn.style.display = 'none';
+    }
+  }
+
+  let pendingBookingSlotId = null;
+  let pendingBookingSlotLabel = '';
+
+  document.getElementById('book-go-login-btn').addEventListener('click', () => {
+    pendingBookingSlotId = selectedSlotId;
+    pendingBookingSlotLabel = selectedSlotLabel;
+    closeBookModal();
+    openMenu();
+  });
+
+  async function submitBooking(slotId, name, phone){
+    if (DEMO_MODE){
+      return demoBookSlot(slotId, name, phone);
+    }
+    const { data, error } = await sb.rpc('book_slot', {
+      p_slot_id: slotId,
+      p_customer_name: name,
+      p_customer_phone: phone
+    });
+    return (!error && data && data[0]) ? data[0] : { success: false, message: 'صار خطأ، حاولي مرة ثانية' };
+  }
+
+  async function completePendingBookingIfAny(){
+    if (!pendingBookingSlotId) return;
+    const user = getCurrentUser();
+    if (!user) return;
+
+    const slotId = pendingBookingSlotId;
+    const label = pendingBookingSlotLabel;
+    pendingBookingSlotId = null;
+    pendingBookingSlotLabel = '';
+
+    const result = await submitBooking(slotId, user.name, user.phone);
+    const toast = document.getElementById('toast-message');
+    toast.textContent = result.success ? `تم تأكيد حجزك: ${label} ✓` : (result.message || 'صار خطأ بالحجز');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3000);
+    loadBookSlots();
   }
 
   bookForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     if (!selectedSlotId) return;
 
-    const name = document.getElementById('book-name').value.trim();
-    const phone = document.getElementById('book-phone').value.trim();
-    if (!name || !phone) return;
+    const user = getCurrentUser();
+    let name, phone;
+
+    if (user){
+      name = user.name;
+      phone = user.phone;
+    } else {
+      // guest fields are hidden/unused now — this path shouldn't normally be reached
+      return;
+    }
 
     bookSubmitBtn.disabled = true;
     bookSubmitBtn.textContent = 'جاري الحجز...';
 
-    let result;
-    if (DEMO_MODE){
-      result = demoBookSlot(selectedSlotId, name, phone);
-    } else {
-      const { data, error } = await sb.rpc('book_slot', {
-        p_slot_id: selectedSlotId,
-        p_customer_name: name,
-        p_customer_phone: phone
-      });
-      result = (!error && data && data[0]) ? data[0] : { success: false, message: 'صار خطأ، حاولي مرة ثانية' };
-    }
+    const result = await submitBooking(selectedSlotId, name, phone);
 
     bookSubmitBtn.disabled = false;
     bookSubmitBtn.textContent = 'تأكيد الحجز';
@@ -2254,7 +2419,8 @@
   function applyLoggedInState(user){
     guestView.classList.add('hide');
     loggedInView.classList.add('show');
-    document.getElementById('welcome-name').textContent = `أهلاً ${user.name}`;
+    document.getElementById('welcome-name').textContent = user.name;
+    document.getElementById('welcome-phone').textContent = formatPhoneDisplay(user.phone);
     closeMenu();
 
     if (user.isBarber){
@@ -2267,14 +2433,8 @@
     } else {
       document.getElementById('my-bookings').classList.add('show');
       loadMyBookings();
-    }
-
-    // pre-fill booking form with the logged-in identity
-    const nameInput = document.getElementById('book-name');
-    const phoneInput = document.getElementById('book-phone');
-    if (nameInput && phoneInput){
-      nameInput.value = user.name;
-      phoneInput.value = user.phone;
+      if (typeof refreshBookFormState === 'function') refreshBookFormState();
+      if (typeof completePendingBookingIfAny === 'function') completePendingBookingIfAny();
     }
   }
 
@@ -2559,7 +2719,7 @@
           <span class="name">${b.customer_name}</span>
           <span class="badge ${b.status}">${b.status === 'pending' ? 'بانتظار الرد' : 'مؤكد'}</span>
         </div>
-        <div class="meta">${dayLabel} · ${b.customer_phone}</div>
+        <div class="meta">${dayLabel} · ${formatPhoneDisplay(b.customer_phone)}</div>
         <div class="booking-actions">
           ${b.status === 'pending' ? `<button class="btn-sm confirm" onclick="confirmBookingAdmin('${b.id}')">تأكيد</button>` : ''}
           <button class="btn-sm reject" onclick="rejectBookingAdmin('${b.id}')">${b.status === 'pending' ? 'رفض' : 'إلغاء'}</button>
@@ -2571,7 +2731,7 @@
     const pending = data.filter(b => b.status === 'pending');
     const lines = pending.map(b => {
       const t = b.slots ? `${b.slots.slot_date} ${b.slots.slot_time.slice(0,5)}` : '';
-      return `- ${b.customer_name} (${b.customer_phone}) — ${t}`;
+      return `- ${b.customer_name} (${formatPhoneDisplay(b.customer_phone)}) — ${t}`;
     }).join('\n');
     const text = pending.length
       ? `طلبات حجز جديدة بانتظار الرد:\n${lines}`
