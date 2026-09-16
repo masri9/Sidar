@@ -357,11 +357,12 @@
   }
 
   .icon-grid{
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
-    gap:2.6rem;
-    max-width:900px;
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    justify-items:center;
+    row-gap:2.4rem;
+    column-gap:2.6rem;
+    max-width:340px;
     margin:0 auto;
   }
 
@@ -765,7 +766,7 @@
     opacity:0.65;
     direction:ltr;
     text-align:right;
-    unicode-bidi:plaintext;
+    unicode-bidi:isolate;
   }
 
   .menu-section-title{
@@ -953,6 +954,54 @@
   }
 
   .days-picker{ display:flex; flex-wrap:wrap; gap:0.5rem; margin-bottom:1.1rem; }
+
+  .day-group-row{
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:1rem;
+    margin-bottom:1rem;
+    background:rgba(255,255,255,0.02);
+  }
+
+  .day-group-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:0.8rem;
+  }
+
+  .day-group-title{
+    font-size:0.8rem;
+    color:var(--gold-soft);
+    font-weight:600;
+  }
+
+  .remove-group-btn{
+    font-size:0.7rem;
+    color:#e08a8a;
+    background:none;
+    border:none;
+    cursor:pointer;
+    font-family:'Inter', sans-serif;
+    opacity:0.75;
+  }
+
+  .remove-group-btn:hover{ opacity:1; }
+
+  .add-group-btn{
+    width:100%;
+    padding:0.7rem;
+    border-radius:8px;
+    border:1px dashed var(--gold-soft);
+    background:transparent;
+    color:var(--gold-soft);
+    font-size:0.8rem;
+    cursor:pointer;
+    font-family:'Inter', sans-serif;
+    transition:background 0.2s ease;
+  }
+
+  .add-group-btn:hover{ background:rgba(228,201,138,0.06); }
 
   .day-chip{
     padding:0.45rem 0.9rem;
@@ -1600,7 +1649,7 @@
           <div class="profile-avatar">👤</div>
           <div class="profile-info">
             <p class="profile-name" id="welcome-name"></p>
-            <p class="profile-phone" id="welcome-phone"></p>
+            <p class="profile-phone" id="welcome-phone" dir="ltr"></p>
           </div>
         </div>
         <span class="logout-link" onclick="handleMenuLogout()">تسجيل خروج</span>
@@ -1744,31 +1793,23 @@
   <p class="admin-sub" id="admin-welcome-text">أهلاً محمد، هون بتدير مواعيدك وطلبات الحجز</p>
 
   <div class="admin-card">
-    <h3>📅 إضافة مواعيد للأسبوع</h3>
-    <div class="days-picker" id="days-picker"></div>
+    <h3>📅 إضافة مواعيد</h3>
+
     <div class="admin-row">
       <div class="field">
-        <label>من أي تاريخ</label>
-        <input type="date" id="start-date">
+        <label>من تاريخ</label>
+        <input type="date" id="range-start-date">
       </div>
       <div class="field">
-        <label>من ساعة</label>
-        <input type="time" id="start-time" value="10:00">
-      </div>
-      <div class="field">
-        <label>لحد ساعة</label>
-        <input type="time" id="end-time" value="20:00">
-      </div>
-      <div class="field">
-        <label>مدة الموعد (دقيقة)</label>
-        <select id="duration">
-          <option value="30">30</option>
-          <option value="45">45</option>
-          <option value="60">60</option>
-        </select>
+        <label>إلى تاريخ</label>
+        <input type="date" id="range-end-date">
       </div>
     </div>
-    <button class="admin-action-btn" onclick="generateSlots()">إنشاء المواعيد</button>
+
+    <div id="day-groups-container"></div>
+
+    <button type="button" class="add-group-btn" id="add-day-group-btn">+ إضافة مجموعة أيام بساعات مختلفة</button>
+    <button class="admin-action-btn" onclick="generateSlots()" style="margin-top:0.9rem;">توليد المواعيد</button>
     <p id="generate-msg" class="admin-empty"></p>
   </div>
 
@@ -1828,13 +1869,13 @@
     <button type="button" class="book-modal-close" id="hours-modal-close">×</button>
     <h2>ساعات العمل</h2>
     <ul class="hours-list" id="hours-list-container">
-      <li><span>الأحد</span><span>11:00 ص – 9:00 م</span></li>
-      <li><span>الإثنين</span><span>1:30 م – 9:00 م</span></li>
-      <li><span>الثلاثاء</span><span>1:30 م – 9:00 م</span></li>
-      <li><span>الأربعاء</span><span>1:30 م – 9:00 م</span></li>
-      <li><span>الخميس</span><span>1:30 م – 9:00 م</span></li>
-      <li><span>الجمعة</span><span>11:00 ص – 9:00 م</span></li>
-      <li><span>السبت</span><span>1:30 م – 9:00 م</span></li>
+      <li><span>الأحد</span><span dir="ltr">11:00 – 21:00</span></li>
+      <li><span>الإثنين</span><span dir="ltr">13:30 – 21:00</span></li>
+      <li><span>الثلاثاء</span><span dir="ltr">13:30 – 21:00</span></li>
+      <li><span>الأربعاء</span><span dir="ltr">13:30 – 21:00</span></li>
+      <li><span>الخميس</span><span dir="ltr">13:30 – 21:00</span></li>
+      <li><span>الجمعة</span><span dir="ltr">11:00 – 21:00</span></li>
+      <li><span>السبت</span><span dir="ltr">13:30 – 21:00</span></li>
     </ul>
 
     <div class="my-bookings" id="hours-my-bookings">
@@ -2202,7 +2243,7 @@
       loginRequired.style.display = 'none';
       loggedInInfo.style.display = 'block';
       bookSubmitBtn.style.display = 'block';
-      document.getElementById('book-as-name').textContent = `${user.name} — ${formatPhoneDisplay(user.phone)}`;
+      document.getElementById('book-as-name').innerHTML = `${user.name} — <span dir="ltr" style="unicode-bidi:isolate;">${formatPhoneDisplay(user.phone)}</span>`;
     } else {
       guestFields.style.display = 'none';
       loggedInInfo.style.display = 'none';
@@ -2528,7 +2569,7 @@
       div.className = 'my-booking-item';
       div.innerHTML = `
         <div class="mb-top">
-          <span class="mb-date">${dateLabel}</span>
+          <span class="mb-date" dir="ltr" style="unicode-bidi:isolate;">${dateLabel}</span>
           <span class="mb-badge ${b.status}">${statusLabel[b.status] || b.status}</span>
         </div>
         ${canEdit ? `
@@ -2606,25 +2647,23 @@
   if (existingUser) applyLoggedInState(existingUser);
 
   let adminInitDone = false;
-  let selectedDays = new Set([0,1,2,3,4,5,6]);
+
+  let dayGroupCounter = 0;
+  const dayGroups = []; // { id, selectedDays: Set }
+  const dayNamesShort = ['أحد','إثنين','ثلاثاء','أربعاء','خميس','جمعة','سبت'];
 
   function initAdminPanel(){
     if (adminInitDone) return;
     adminInitDone = true;
 
-    const dayNamesShort = ['أحد','إثنين','ثلاثاء','أربعاء','خميس','جمعة','سبت'];
-    const picker = document.getElementById('days-picker');
-    dayNamesShort.forEach((name, i) => {
-      const chip = document.createElement('div');
-      chip.className = 'day-chip active';
-      chip.textContent = name;
-      chip.onclick = () => {
-        if (selectedDays.has(i)){ selectedDays.delete(i); chip.classList.remove('active'); }
-        else { selectedDays.add(i); chip.classList.add('active'); }
-      };
-      picker.appendChild(chip);
-    });
-    document.getElementById('start-date').valueAsDate = new Date();
+    const today = new Date();
+    document.getElementById('range-start-date').valueAsDate = today;
+    const in30 = new Date(today);
+    in30.setDate(in30.getDate() + 30);
+    document.getElementById('range-end-date').valueAsDate = in30;
+
+    document.getElementById('add-day-group-btn').addEventListener('click', () => addDayGroup());
+    addDayGroup(); // start with one group
 
     if (DEMO_MODE){
       window.addEventListener('demo-sync', () => {
@@ -2642,25 +2681,102 @@
     }
   }
 
+  function addDayGroup(){
+    dayGroupCounter++;
+    const id = 'grp-' + dayGroupCounter;
+    const group = { id, selectedDays: new Set() };
+    dayGroups.push(group);
+
+    const row = document.createElement('div');
+    row.className = 'day-group-row';
+    row.dataset.groupId = id;
+    row.innerHTML = `
+      <div class="day-group-header">
+        <span class="day-group-title">مجموعة أيام ${dayGroups.length}</span>
+        <button type="button" class="remove-group-btn">حذف المجموعة</button>
+      </div>
+      <div class="days-picker"></div>
+      <div class="admin-row">
+        <div class="field">
+          <label>من ساعة</label>
+          <input type="time" class="group-start-time" value="13:30">
+        </div>
+        <div class="field">
+          <label>لحد ساعة</label>
+          <input type="time" class="group-end-time" value="21:00">
+        </div>
+        <div class="field">
+          <label>مدة الموعد (دقيقة)</label>
+          <select class="group-duration">
+            <option value="30">30</option>
+            <option value="45">45</option>
+            <option value="60">60</option>
+          </select>
+        </div>
+      </div>
+    `;
+
+    const picker = row.querySelector('.days-picker');
+    dayNamesShort.forEach((name, i) => {
+      const chip = document.createElement('div');
+      chip.className = 'day-chip';
+      chip.textContent = name;
+      chip.onclick = () => {
+        if (group.selectedDays.has(i)){ group.selectedDays.delete(i); chip.classList.remove('active'); }
+        else { group.selectedDays.add(i); chip.classList.add('active'); }
+      };
+      picker.appendChild(chip);
+    });
+
+    row.querySelector('.remove-group-btn').addEventListener('click', () => {
+      const idx = dayGroups.findIndex(g => g.id === id);
+      if (idx > -1) dayGroups.splice(idx, 1);
+      row.remove();
+      renumberDayGroups();
+    });
+
+    document.getElementById('day-groups-container').appendChild(row);
+    renumberDayGroups();
+  }
+
+  function renumberDayGroups(){
+    const rows = document.querySelectorAll('.day-group-row');
+    rows.forEach((row, i) => {
+      row.querySelector('.day-group-title').textContent = `مجموعة أيام ${i + 1}`;
+      row.querySelector('.remove-group-btn').style.display = rows.length > 1 ? 'block' : 'none';
+    });
+  }
+
   async function generateSlots(){
-    const startDate = document.getElementById('start-date').value;
-    const startTime = document.getElementById('start-time').value;
-    const endTime = document.getElementById('end-time').value;
-    const duration = parseInt(document.getElementById('duration').value, 10);
+    const rangeStart = document.getElementById('range-start-date').value;
+    const rangeEnd = document.getElementById('range-end-date').value;
     const msgEl = document.getElementById('generate-msg');
 
-    if (!startDate || selectedDays.size === 0){
-      msgEl.textContent = 'اختاري تاريخ البداية وأيام الدوام';
+    if (!rangeStart || !rangeEnd){
+      msgEl.textContent = 'اختاري من تاريخ وإلى تاريخ';
+      return;
+    }
+
+    const groupsWithDays = dayGroups.filter(g => g.selectedDays.size > 0);
+    if (groupsWithDays.length === 0){
+      msgEl.textContent = 'اختاري أيام لمجموعة وحدة على الأقل';
       return;
     }
 
     const rows = [];
-    const base = new Date(startDate + 'T00:00:00');
+    const start = new Date(rangeStart + 'T00:00:00');
+    const end = new Date(rangeEnd + 'T00:00:00');
 
-    for (let dayOffset = 0; dayOffset < 7; dayOffset++){
-      const d = new Date(base);
-      d.setDate(d.getDate() + dayOffset);
-      if (!selectedDays.has(d.getDay())) continue;
+    for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)){
+      const weekday = d.getDay();
+      // أول مجموعة بتحدد هاليوم هي يلي بتحكم بساعاته
+      const matchedGroup = groupsWithDays.find(g => g.selectedDays.has(weekday));
+      if (!matchedGroup) continue;
+
+      const row = document.querySelector(`.day-group-row[data-group-id="${matchedGroup.id}"]`);
+      const startTime = row.querySelector('.group-start-time').value;
+      const endTime = row.querySelector('.group-end-time').value;
+      const duration = parseInt(row.querySelector('.group-duration').value, 10);
 
       const dateStr = d.toISOString().split('T')[0];
       let [h, m] = startTime.split(':').map(Number);
@@ -2792,7 +2908,7 @@
           <span class="name">${b.customer_name}</span>
           <span class="badge ${b.status}">${b.status === 'pending' ? 'بانتظار الرد' : 'مؤكد'}</span>
         </div>
-        <div class="meta">${dayLabel} · ${formatPhoneDisplay(b.customer_phone)}</div>
+        <div class="meta"><span dir="ltr" style="unicode-bidi:isolate;">${dayLabel}</span> · <span dir="ltr" style="unicode-bidi:isolate;">${formatPhoneDisplay(b.customer_phone)}</span></div>
         <div class="booking-actions">
           ${b.status === 'pending' ? `<button class="btn-sm confirm" onclick="confirmBookingAdmin('${b.id}')">تأكيد</button>` : ''}
           <button class="btn-sm reject" onclick="rejectBookingAdmin('${b.id}')">${b.status === 'pending' ? 'رفض' : 'إلغاء'}</button>
