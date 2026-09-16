@@ -703,7 +703,7 @@
     font-family:'Inter', sans-serif;
   }
 
-  .menu-dropdown button{
+  .menu-dropdown .guest-view button{
     width:100%;
     padding:0.65rem;
     border-radius:6px;
@@ -830,18 +830,22 @@
 
   .mb-btn{
     flex:1;
-    padding:0.45rem;
-    border-radius:6px;
+    padding:0.55rem;
+    border-radius:7px;
     border:1px solid var(--line);
-    background:transparent;
+    background:rgba(255,255,255,0.03);
     color:var(--ivory);
-    font-size:0.72rem;
+    font-size:0.75rem;
+    font-weight:600;
     cursor:pointer;
     font-family:'Inter', sans-serif;
+    transition:background 0.2s ease, border-color 0.2s ease;
   }
 
   .mb-btn.edit{ border-color:var(--gold-soft); color:var(--gold-soft); }
+  .mb-btn.edit:hover{ background:rgba(228,201,138,0.12); }
   .mb-btn.cancel{ border-color:#e08a8a; color:#e08a8a; }
+  .mb-btn.cancel:hover{ background:rgba(224,138,138,0.12); }
 
   .my-bookings-empty{
     font-size:0.78rem;
