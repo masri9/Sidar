@@ -1996,7 +1996,7 @@
 
 <script>
   // ============ Supabase متصل — بيانات المواعيد والحجوزات حقيقية ============
-  const DEMO_MODE = true;
+  const DEMO_MODE = false;
 
   // تسجيل الدخول لسا بوضع تجريبي (الكود دايماً 123456) لحد ما نفعّل واتساب Business
   const OTP_DEMO_MODE = true;
@@ -2004,8 +2004,8 @@
   // معرض الأعمال لسا بوضع تجريبي (مش له جدول حقيقي بقاعدة البيانات بعد)
   const GALLERY_DEMO_MODE = true;
 
-  const SUPABASE_URL = "https://jrnswsvorckrbojphsao.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpybnN3c3ZvcmNrcmJvanBoc2FvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk0MTIzMTcsImV4cCI6MjEwNDk4ODMxN30.VFZbgCalfEvzYFJFob4bfmfFjVM-j01rwY7MeeEpsOc";
+  const SUPABASE_URL = "https://veukvntwbptxsyamgqbk.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZldWt2bnR3YnB0eHN5YW1ncWJrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk1NTcxNTUsImV4cCI6MjEwNTEzMzE1NX0.u9MNk5PZoqd1_QST2f2vTk4QZrzv7psz2xtnOOM29QQ";
 
   const sb = DEMO_MODE ? null : supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
