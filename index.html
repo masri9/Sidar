@@ -1634,17 +1634,23 @@
       <button type="button" class="menu-close" id="menu-close">×</button>
 
       <div class="guest-view" id="guest-view">
-        <div id="login-step-phone">
-          <p class="menu-title">تسجيل الدخول برقم الهاتف</p>
-          <input type="text" id="menu-name" placeholder="الاسم">
-          <input type="tel" id="menu-phone" placeholder="رقم الهاتف (مع كود الدولة)">
-          <button onclick="handleSendOtp()" id="send-otp-btn">إرسال كود التحقق عبر واتساب</button>
+        <div id="login-step-email">
+          <p class="menu-title">تسجيل الدخول</p>
+          <input type="email" id="menu-email" placeholder="الإيميل">
+          <input type="password" id="menu-password" placeholder="كلمة السر">
+          <button onclick="handleEmailSignIn()" id="email-signin-btn">دخول</button>
+          <button onclick="handleEmailSignUp()" id="email-signup-btn" style="margin-top:0.5rem; background:transparent; border:1px solid var(--gold-soft); color:var(--gold-soft);">إنشاء حساب جديد</button>
+          <div style="text-align:center; font-size:0.72rem; opacity:0.5; margin:0.9rem 0;">أو</div>
+          <button onclick="handleGoogleSignIn()" id="google-signin-btn" style="background:#fff; color:#1a1a1a; display:flex; align-items:center; justify-content:center; gap:0.5rem;">
+            <svg viewBox="0 0 24 24" width="16" height="16"><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.7-2.4 3.6v3h3.9c2.3-2.1 3.5-5.2 3.5-8.8z"/><path fill="#34A853" d="M12 24c3.2 0 5.9-1.1 7.9-2.9l-3.9-3c-1.1.7-2.4 1.2-4 1.2-3.1 0-5.7-2.1-6.6-4.9H1.4v3.1C3.4 21.3 7.4 24 12 24z"/><path fill="#FBBC05" d="M5.4 14.4c-.2-.7-.4-1.5-.4-2.4s.1-1.6.4-2.4V6.5H1.4C.5 8.2 0 10.1 0 12s.5 3.8 1.4 5.5l4-3.1z"/><path fill="#EA4335" d="M12 4.8c1.7 0 3.3.6 4.5 1.7l3.4-3.4C17.9 1.2 15.2 0 12 0 7.4 0 3.4 2.7 1.4 6.5l4 3.1c.9-2.8 3.5-4.8 6.6-4.8z"/></svg>
+            المتابعة عبر جوجل
+          </button>
         </div>
-        <div id="login-step-code" style="display:none;">
-          <p class="menu-title" id="otp-sent-label">تم إرسال كود التحقق</p>
-          <input type="text" id="menu-otp-code" placeholder="اكتبي الكود المكوّن من 6 أرقام" inputmode="numeric" maxlength="6">
-          <button onclick="handleVerifyOtp()" id="verify-otp-btn">تأكيد الكود</button>
-          <span class="logout-link" onclick="backToPhoneStep()" style="display:block; margin-top:0.6rem;">تعديل الرقم</span>
+        <div id="login-step-profile" style="display:none;">
+          <p class="menu-title">أكملي بياناتك</p>
+          <input type="text" id="profile-name" placeholder="الاسم الكامل">
+          <input type="tel" id="profile-phone" placeholder="رقم الهاتف">
+          <button onclick="handleCompleteProfile()" id="complete-profile-btn">متابعة</button>
         </div>
         <p class="menu-error" id="menu-error"></p>
       </div>
@@ -1998,9 +2004,6 @@
   // ============ Supabase متصل — بيانات المواعيد والحجوزات حقيقية ============
   const DEMO_MODE = false;
 
-  // تسجيل الدخول لسا بوضع تجريبي (الكود دايماً 123456) لحد ما نفعّل واتساب Business
-  const OTP_DEMO_MODE = true;
-
   // معرض الأعمال لسا بوضع تجريبي (مش له جدول حقيقي بقاعدة البيانات بعد)
   const GALLERY_DEMO_MODE = true;
 
@@ -2349,9 +2352,9 @@
 
   loadBookSlots();
 
-  // ============ تسجيل الدخول برقم الهاتف (من قائمة الهيدر) ============
-  // ⚠️ حطي رقم هاتف الحلاق الحقيقي هون — أي رقم غيره بيسجل كزبون عادي.
-  const BARBER_PHONE = "0791234567";
+  // ============ تسجيل الدخول (إيميل / جوجل — Supabase Auth حقيقي) ============
+  // ⚠️ حطي إيميل الحلاق الحقيقي هون — أي حساب غيره بيسجل كزبون عادي.
+  const BARBER_EMAIL = "mohammed@example.com";
   const LS_CURRENT_USER = 'current_user_v1'; // { name, phone, isBarber }
 
   const menuBtn = document.getElementById('menu-btn');
@@ -2388,144 +2391,121 @@
     catch(e){ return null; }
   }
 
-  // ============ تحقق عبر واتساب (WhatsApp OTP) ============
-  // بوضع التجربة: الكود دايماً 123456. بالوضع الحقيقي: بيتصل بـ Edge Functions
-  // send-otp / verify-otp يلي بترسل وتتحقق من كود واتساب فعلي (راجعي whatsapp-otp-setup.md).
-  const DEMO_OTP_CODE = '123456';
-  let pendingLoginName = '';
-  let pendingLoginPhone = '';
-
-  async function handleSendOtp(){
-    const name = document.getElementById('menu-name').value.trim();
-    const phone = document.getElementById('menu-phone').value.trim();
+  function showError(msg){
     const errorEl = document.getElementById('menu-error');
-    const btn = document.getElementById('send-otp-btn');
-
-    if (!phone){
-      errorEl.textContent = 'دخّلي رقم الهاتف';
-      errorEl.style.display = 'block';
-      return;
-    }
-
-    const isBarber = phone === BARBER_PHONE;
-    if (!isBarber && !name){
-      errorEl.textContent = 'دخّلي اسمك';
-      errorEl.style.display = 'block';
-      return;
-    }
-
-    errorEl.style.display = 'none';
-    btn.disabled = true;
-    btn.textContent = 'جاري الإرسال...';
-
-    if (OTP_DEMO_MODE){
-      pendingLoginName = name;
-      pendingLoginPhone = phone;
-      document.getElementById('otp-sent-label').textContent = `الكود التجريبي: ${DEMO_OTP_CODE}`;
-      document.getElementById('login-step-phone').style.display = 'none';
-      document.getElementById('login-step-code').style.display = 'block';
-      btn.disabled = false;
-      btn.textContent = 'إرسال كود التحقق عبر واتساب';
-      return;
-    }
-
-    try{
-      const res = await fetch(`${SUPABASE_URL}/functions/v1/send-otp`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` },
-        body: JSON.stringify({ phone })
-      });
-      const result = await res.json();
-
-      if (!res.ok || result.error){
-        errorEl.textContent = 'صار خطأ بإرسال الكود، حاولي مرة ثانية';
-        errorEl.style.display = 'block';
-      } else {
-        pendingLoginName = name;
-        pendingLoginPhone = phone;
-        document.getElementById('otp-sent-label').textContent = 'تم إرسال كود التحقق عبر واتساب';
-        document.getElementById('login-step-phone').style.display = 'none';
-        document.getElementById('login-step-code').style.display = 'block';
-      }
-    } catch(e){
-      errorEl.textContent = 'صار خطأ بإرسال الكود، حاولي مرة ثانية';
-      errorEl.style.display = 'block';
-    }
-
-    btn.disabled = false;
-    btn.textContent = 'إرسال كود التحقق عبر واتساب';
+    errorEl.textContent = msg;
+    errorEl.style.display = 'block';
   }
 
-  async function handleVerifyOtp(){
-    const code = document.getElementById('menu-otp-code').value.trim();
-    const errorEl = document.getElementById('menu-error');
-    const btn = document.getElementById('verify-otp-btn');
-
-    if (!code){
-      errorEl.textContent = 'دخّلي الكود';
-      errorEl.style.display = 'block';
-      return;
-    }
-
-    btn.disabled = true;
-    btn.textContent = 'جاري التحقق...';
-    errorEl.style.display = 'none';
-
-    let verified = false;
-
-    if (OTP_DEMO_MODE){
-      verified = code === DEMO_OTP_CODE;
-      if (!verified){
-        errorEl.textContent = 'الكود غلط';
-        errorEl.style.display = 'block';
-      }
-    } else {
-      try{
-        const res = await fetch(`${SUPABASE_URL}/functions/v1/verify-otp`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` },
-          body: JSON.stringify({ phone: pendingLoginPhone, code })
-        });
-        const result = await res.json();
-        verified = !!result.success;
-        if (!verified){
-          errorEl.textContent = result.message || 'الكود غلط';
-          errorEl.style.display = 'block';
-        }
-      } catch(e){
-        errorEl.textContent = 'صار خطأ بالتحقق، حاولي مرة ثانية';
-        errorEl.style.display = 'block';
-      }
-    }
-
-    btn.disabled = false;
-    btn.textContent = 'تأكيد الكود';
-
-    if (verified){
-      const isBarber = pendingLoginPhone === BARBER_PHONE;
-      const user = { name: isBarber ? 'محمد' : pendingLoginName, phone: pendingLoginPhone, isBarber };
-      localStorage.setItem(LS_CURRENT_USER, JSON.stringify(user));
-      resetLoginForm();
-      applyLoggedInState(user);
-    }
-  }
-
-  function backToPhoneStep(){
-    document.getElementById('login-step-code').style.display = 'none';
-    document.getElementById('login-step-phone').style.display = 'block';
-    document.getElementById('menu-otp-code').value = '';
+  function clearError(){
     document.getElementById('menu-error').style.display = 'none';
   }
 
-  function resetLoginForm(){
-    document.getElementById('menu-name').value = '';
-    document.getElementById('menu-phone').value = '';
-    document.getElementById('menu-otp-code').value = '';
-    document.getElementById('login-step-code').style.display = 'none';
-    document.getElementById('login-step-phone').style.display = 'block';
+  async function handleEmailSignUp(){
+    const email = document.getElementById('menu-email').value.trim();
+    const password = document.getElementById('menu-password').value;
+    if (!email || !password){ showError('دخّلي الإيميل وكلمة السر'); return; }
+    clearError();
+    const btn = document.getElementById('email-signup-btn');
+    btn.disabled = true; btn.textContent = 'جاري إنشاء الحساب...';
+
+    const { data, error } = await sb.auth.signUp({ email, password });
+
+    btn.disabled = false; btn.textContent = 'إنشاء حساب جديد';
+
+    if (error){ showError(error.message); return; }
+    // إذا التحقق من الإيميل مفعّل بمشروعك، المستخدم لازم يفتح إيميله يأكد أول
+    if (data.session) onAuthSessionReady(data.session);
+    else showError('تحققي من إيميلك لتأكيد الحساب، وبعدها سجّلي دخول');
   }
 
-  function handleMenuLogout(){
+  async function handleEmailSignIn(){
+    const email = document.getElementById('menu-email').value.trim();
+    const password = document.getElementById('menu-password').value;
+    if (!email || !password){ showError('دخّلي الإيميل وكلمة السر'); return; }
+    clearError();
+    const btn = document.getElementById('email-signin-btn');
+    btn.disabled = true; btn.textContent = 'جاري الدخول...';
+
+    const { data, error } = await sb.auth.signInWithPassword({ email, password });
+
+    btn.disabled = false; btn.textContent = 'دخول';
+
+    if (error){ showError('الإيميل أو كلمة السر غلط'); return; }
+    if (data.session) onAuthSessionReady(data.session);
+  }
+
+  async function handleGoogleSignIn(){
+    clearError();
+    await sb.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: window.location.href }
+    });
+    // الصفحة رح تتنقل لجوجل وترجع؛ onAuthStateChange رح يلتقط الجلسة لما ترجع
+  }
+
+  // localStorage profile keyed per Supabase auth user id (name + phone we still need for bookings)
+  function getStoredProfile(userId){
+    try{ return JSON.parse(localStorage.getItem('profile_' + userId) || 'null'); }
+    catch(e){ return null; }
+  }
+  function setStoredProfile(userId, profile){
+    localStorage.setItem('profile_' + userId, JSON.stringify(profile));
+  }
+
+  let pendingAuthUser = null;
+
+  async function onAuthSessionReady(session){
+    const authUser = session.user;
+    const email = authUser.email;
+    const isBarber = email === BARBER_EMAIL;
+
+    if (isBarber){
+      const user = { name: 'محمد', phone: '', email, isBarber: true, id: authUser.id };
+      localStorage.setItem(LS_CURRENT_USER, JSON.stringify(user));
+      applyLoggedInState(user);
+      return;
+    }
+
+    const stored = getStoredProfile(authUser.id);
+    if (stored){
+      const user = { name: stored.name, phone: stored.phone, email, isBarber: false, id: authUser.id };
+      localStorage.setItem(LS_CURRENT_USER, JSON.stringify(user));
+      applyLoggedInState(user);
+    } else {
+      // أول مرة يسجل دخول — نطلب الاسم ورقم الهاتف قبل ما نكمل
+      pendingAuthUser = authUser;
+      document.getElementById('login-step-email').style.display = 'none';
+      document.getElementById('login-step-profile').style.display = 'block';
+    }
+  }
+
+  async function handleCompleteProfile(){
+    const name = document.getElementById('profile-name').value.trim();
+    const phone = document.getElementById('profile-phone').value.trim();
+    if (!name || !phone){ showError('دخّلي الاسم ورقم الهاتف'); return; }
+    clearError();
+
+    setStoredProfile(pendingAuthUser.id, { name, phone });
+    const user = { name, phone, email: pendingAuthUser.email, isBarber: false, id: pendingAuthUser.id };
+    localStorage.setItem(LS_CURRENT_USER, JSON.stringify(user));
+
+    document.getElementById('login-step-profile').style.display = 'none';
+    document.getElementById('login-step-email').style.display = 'block';
+    pendingAuthUser = null;
+
+    applyLoggedInState(user);
+  }
+
+  function resetLoginForm(){
+    document.getElementById('menu-email').value = '';
+    document.getElementById('menu-password').value = '';
+    document.getElementById('login-step-profile').style.display = 'none';
+    document.getElementById('login-step-email').style.display = 'block';
+  }
+
+  async function handleMenuLogout(){
+    await sb.auth.signOut();
     localStorage.removeItem(LS_CURRENT_USER);
     guestView.classList.remove('hide');
     loggedInView.classList.remove('show');
@@ -2533,6 +2513,13 @@
     document.getElementById('my-bookings').classList.remove('show');
     resetLoginForm();
   }
+
+  // يلتقط الجلسة تلقائياً (تسجيل دخول عادي، أو رجوع من تحويلة جوجل)
+  sb.auth.onAuthStateChange((event, session) => {
+    if (session && !getCurrentUser()){
+      onAuthSessionReady(session);
+    }
+  });
 
   function applyLoggedInState(user){
     guestView.classList.add('hide');
